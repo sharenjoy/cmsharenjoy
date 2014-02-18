@@ -1,10 +1,12 @@
 # This is a cms.
 --------------------------------------
 
+This is a laravel cms which based on davzie/laravel-bootstrap.
+
 ### Composer Require
 <!-- Nice and simple -->
 
-    "sharenjoy/cmsharenjoy": "1.*"
+    "sharenjoy/cmsharenjoy": "dev-develop"
 
 ### Linking The Service Provider To Your Installation
 <!-- Add this string to your array of providers in app/config/app.php -->

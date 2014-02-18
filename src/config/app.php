@@ -8,12 +8,12 @@ return array(
     /**
      * The name of the application, will be used in the main management areas of the application
      */
-    'name' => 'Sharenjoy CMS',
+    'name' => 'Your Fantastic CMS',
 
     /**
      * The email address associated with support enquires on a technical basis
      */
-    'support_email' => 'ronald.jian@gmail.com',
+    'support_email' => 'example@example.com',
 
     /**
      * The base path to put uploads into
@@ -24,6 +24,11 @@ return array(
      * The URL key to access the main admin area
      */
     'access_url'=>'admin',
+
+    /**
+     * The array of language
+     */
+    'locales' => array('en', 'tw'),
 
     /**
      * The menu items shown at the top and side of the application
