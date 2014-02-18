@@ -1,7 +1,7 @@
-## This is a cms
+# This is a cms
 --------------------------------------
 
-## Composer Require
+### Composer Require
 Nice and simple
 
     "sharenjoy/cmsharenjoy": "1.*"
