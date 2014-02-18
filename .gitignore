@@ -1,0 +1,5 @@
+/vendor
+/public/admin
+composer.phar
+composer.lock
+.DS_Store
