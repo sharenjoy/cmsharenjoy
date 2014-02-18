@@ -6,7 +6,7 @@
 return array(
 
     'email'         =>  'example@example.com',
-    'first-name'    =>  'David',
+    'first-name'    =>  'Example',
     'last-name'     =>  'Example',
     'password'      =>  'password',
 

@@ -20,7 +20,7 @@
     <div class="form-group">
         {{ Form::label( "content" , 'Post Content' , array( 'class'=>'col-sm-2 control-label' ) ) }}
         <div class="col-sm-6">
-            {{ Form::textarea( "content" , Input::old( "content" ) , array( 'class'=>'form-control wysihtml5' , 'data-stylesheet-url'=>'/packages/davzie/cmsharenjoy/css/wysihtml5-color.css' , 'width'=>'100%' , 'placeholder'=>'Post Content' ) ) }}
+            {{ Form::textarea( "content" , Input::old( "content" ) , array( 'class'=>'form-control wysihtml5' , 'data-stylesheet-url'=>'/packages/sharenjoy/cmsharenjoy/css/wysihtml5-color.css' , 'width'=>'100%' , 'placeholder'=>'Post Content' ) ) }}
         </div>
     </div>
     
@@ -29,8 +29,8 @@
 
 @section('scripts')
     @parent
-    <link rel="stylesheet" href="{{ asset('packages/davzie/cmsharenjoy/js/wysihtml5/bootstrap-wysihtml5.css') }}">
-    <script src="{{ asset('packages/davzie/cmsharenjoy/js/bootstrap-tagsinput.min.js') }}"></script>
-    <script src="{{ asset('packages/davzie/cmsharenjoy/js/wysihtml5/wysihtml5-0.4.0pre.min.js') }}"></script>
-    <script src="{{ asset('packages/davzie/cmsharenjoy/js/wysihtml5/bootstrap-wysihtml5.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('packages/sharenjoy/cmsharenjoy/js/wysihtml5/bootstrap-wysihtml5.css') }}">
+    <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/bootstrap-tagsinput.min.js') }}"></script>
+    <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/wysihtml5/wysihtml5-0.4.0pre.min.js') }}"></script>
+    <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/wysihtml5/bootstrap-wysihtml5.js') }}"></script>
 @stop

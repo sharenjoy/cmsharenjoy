@@ -11,7 +11,7 @@ class Locale {
     {
         $lang = Request::segment(2);
 
-        if ( in_array($lang, Config::get('app.locales')) ) {
+        if ( in_array($lang, Config::get('cmsharenjoy::app.locales')) ) {
             Session::put('locale', $lang);
 
             return Redirect::back();

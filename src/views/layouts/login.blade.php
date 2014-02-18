@@ -9,14 +9,14 @@
         <meta name="author" content="" />
         
         @section('css')
-        <link rel="stylesheet" href="{{ asset('packages/davzie/cmsharenjoy/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('packages/davzie/cmsharenjoy/css/font-icons/entypo/css/entypo.css') }}">
-        <link rel="stylesheet" href="{{ asset('packages/davzie/cmsharenjoy/css/font-icons/entypo/css/animation.css') }}">
+        <link rel="stylesheet" href="{{ asset('packages/sharenjoy/cmsharenjoy/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('packages/sharenjoy/cmsharenjoy/css/font-icons/entypo/css/entypo.css') }}">
+        <link rel="stylesheet" href="{{ asset('packages/sharenjoy/cmsharenjoy/css/font-icons/entypo/css/animation.css') }}">
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic">
-        <link rel="stylesheet" href="{{ asset('packages/davzie/cmsharenjoy/css/neon.css') }}">
-        <link rel="stylesheet" href="{{ asset('packages/davzie/cmsharenjoy/css/custom.css') }}">
+        <link rel="stylesheet" href="{{ asset('packages/sharenjoy/cmsharenjoy/css/neon.css') }}">
+        <link rel="stylesheet" href="{{ asset('packages/sharenjoy/cmsharenjoy/css/custom.css') }}">
 
-        <script src="{{ asset('packages/davzie/cmsharenjoy/js/jquery-1.10.2.min.js') }}"></script>
+        <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/jquery-1.10.2.min.js') }}"></script>
         @show
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -37,7 +37,7 @@
                 <div class="login-content">
                     
                     <a href="#" class="logo">
-                        <img src="{{ asset('packages/davzie/cmsharenjoy/images/logo.png') }}" alt="" />
+                        <img src="{{ asset('packages/sharenjoy/cmsharenjoy/images/logo.png') }}" alt="" />
                     </a>
                     
                     <p class="description">Dear user, log in to access the admin area!</p>
@@ -118,15 +118,15 @@
 
         @section('scripts')
         <!-- Bottom Scripts -->
-        <script src="{{ asset('packages/davzie/cmsharenjoy/js/gsap/main-gsap.js') }}"></script>
-        <script src="{{ asset('packages/davzie/cmsharenjoy/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js') }}"></script>
-        <script src="{{ asset('packages/davzie/cmsharenjoy/js/bootstrap.min.js') }}"></script>
-        <script src="{{ asset('packages/davzie/cmsharenjoy/js/joinable.js') }}"></script>
-        <script src="{{ asset('packages/davzie/cmsharenjoy/js/resizeable.js') }}"></script>
-        <script src="{{ asset('packages/davzie/cmsharenjoy/js/neon-api.js') }}"></script>
-        <script src="{{ asset('packages/davzie/cmsharenjoy/js/jquery.validate.min.js') }}"></script>
-        <script src="{{ asset('packages/davzie/cmsharenjoy/js/neon-login.js') }}"></script>
-        <script src="{{ asset('packages/davzie/cmsharenjoy/js/neon-custom.js') }}"></script>
+        <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/gsap/main-gsap.js') }}"></script>
+        <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js') }}"></script>
+        <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/joinable.js') }}"></script>
+        <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/resizeable.js') }}"></script>
+        <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/neon-api.js') }}"></script>
+        <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/jquery.validate.min.js') }}"></script>
+        <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/neon-login.js') }}"></script>
+        <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/neon-custom.js') }}"></script>
         @show
 
     </body>
