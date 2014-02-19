@@ -27,4 +27,4 @@ This is a laravel cms which based on davzie/laravel-bootstrap.
 <!-- Seed the database, this pretty much just seeds an example user and settings. Migration is pretty simple, ensure your database config is setup and run this: -->
 
     php artisan migrate --package="sharenjoy/cmsharenjoy"
-    php artisan db:seed --class="Sharenjoy\\Cmsharenjoy\\Seeds\\DatabaseSeeder"
+    php artisan db:seed --class="Sharenjoy\Cmsharenjoy\Seeds\DatabaseSeeder"
