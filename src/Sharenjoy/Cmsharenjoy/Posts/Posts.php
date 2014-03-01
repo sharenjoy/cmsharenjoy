@@ -1,14 +1,9 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Posts;
+
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseModel;
-use Sharenjoy\Cmsharenjoy\Abstracts\Traits\TaggableRelationship;
-use Sharenjoy\Cmsharenjoy\Abstracts\Traits\UploadableRelationship;
 use Str, Input;
 
-class Posts extends EloquentBaseModel
-{
-
-    use TaggableRelationship; // Enable The Tags Relationships
-    use UploadableRelationship; // Enable The Uploads Relationships
+class Posts extends EloquentBaseModel {
 
     /**
      * The table to get the data from
@@ -22,6 +17,17 @@ class Posts extends EloquentBaseModel
      */
     protected $fillable = array('title', 'slug', 'content');
 
+    /**
+     * Indicates if the model should soft delete.
+     *
+     * @var bool
+     */
+    protected $softDelete = true;
+
+    /**
+     * Validation some rules
+     * @var array
+     */
     protected $validationRules = [
         'title'     => 'required',
         'slug'      => 'required|unique:posts,id,<id>',
@@ -33,10 +39,30 @@ class Posts extends EloquentBaseModel
      * @param  array $array The array of data, this is usually Input::all();
      * @return void
      */
-    public function fill( array $attributes )
+    public function fill(array $attributes)
     {
-        parent::fill( $attributes );
-        $this->slug = Str::slug( $this->title , '-' );
+        parent::fill($attributes);
+        $this->slug = Str::slug($this->title , '-');
     }
+
+    /**
+     * Define a many-to-many relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function tags()
+    {
+        return $this->belongsToMany('Sharenjoy\Cmsharenjoy\Repo\Tag\Tag', 'posts_tags', 'post_id', 'tag_id')
+                    ->withTimestamps();
+    }
+
+    /**
+     * The relationship setup for taggable classes
+     * @return Eloquent
+     */
+    // public function tags()
+    // {
+    //     return $this->morphMany( 'Sharenjoy\Cmsharenjoy\Tags\Tags' , 'taggable' );
+    // }
 
 }

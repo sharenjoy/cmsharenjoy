@@ -1,4 +1,4 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Core\Exceptions;
+<?php namespace Sharenjoy\Cmsharenjoy\Exception;
 use Exception;
 
 class NoValidationRulesFoundException extends Exception

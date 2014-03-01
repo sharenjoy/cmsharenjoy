@@ -1,11 +1,11 @@
 @extends('cmsharenjoy::layouts.interface-new')
 
 @section('title')
-    Create New {{ $application_name }}
+    Create New {{ $appName }}
 @stop
 
 @section('heading')
-    Create New {{ $application_name }}
+    Create New {{ $appName }}
 @stop
 
 @section('form-items')
@@ -14,6 +14,14 @@
         {{ Form::label( "title" , 'Post Title' , array( 'class'=>'col-sm-2 control-label' ) ) }}
         <div class="col-sm-5">
             {{ Form::text( "title" , Input::old( "title" ) , array( 'class'=>'form-control' , 'placeholder'=>'Post Title' ) ) }}
+        </div>
+    </div>
+
+    <div class="form-group">
+        {{ Form::label( "tags" , 'Tags' , array( 'class'=>'col-sm-2 control-label' ) ) }}
+        <div class="col-sm-5">
+            {{ Form::text( "tags" , Input::old( "tags" ) , array( 'class'=>'form-control tagsinput' , 'placeholder'=>'Comma Separated Tags' ) ) }}
+            <span class="help-block">Press enter or type a comma after each tag to set it.</span>
         </div>
     </div>
 

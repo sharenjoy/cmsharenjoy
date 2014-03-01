@@ -22,9 +22,10 @@ class CreatePostsTable extends Migration {
                 $table->string('slug',255);
                 $table->unique('slug');
                 $table->text('content');
-                $table->integer('sort');
+                $table->integer('sort')->nullable();
                 $table->unique('sort');
                 $table->index('id');
+                $table->softDeletes();
                 $table->timestamps();
 
             });

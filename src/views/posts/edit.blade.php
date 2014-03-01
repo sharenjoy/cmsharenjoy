@@ -1,11 +1,11 @@
 @extends('cmsharenjoy::layouts.interface-edit')
 
 @section('title')
-    Edit {{ $application_name }}: {{ $item->title }}
+    Edit {{ $appName }}: {{ $item->title }}
 @stop
 
 @section('heading')
-    Edit {{ $application_name }}: <small>{{ $item->title }}</small>
+    Edit {{ $appName }}: <small>{{ $item->title }}</small>
 @stop
 
 @section('form-items')
@@ -18,7 +18,7 @@
     </div>
 
     <div class="form-group">
-        {{ Form::label( "tags" , 'Object Tags' , array( 'class'=>'col-sm-2 control-label' ) ) }}
+        {{ Form::label( "tags" , 'Tags' , array( 'class'=>'col-sm-2 control-label' ) ) }}
         <div class="col-sm-5">
             {{ Form::text( "tags" , Input::old( "tags" , $item->tags_csv ) , array( 'class'=>'form-control tagsinput' , 'placeholder'=>'Comma Separated Tags' ) ) }}
             <span class="help-block">Press enter or type a comma after each tag to set it.</span>

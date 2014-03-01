@@ -1,19 +1,20 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Posts;
+
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
-use Sharenjoy\Cmsharenjoy\Abstracts\Traits\TaggableRepository;
+use Sharenjoy\Cmsharenjoy\Repo\Tag\TagInterface;
 
-class PostsRepository extends EloquentBaseRepository implements PostsInterface
-{
+class PostsRepository extends EloquentBaseRepository implements PostsInterface {
 
-    use TaggableRepository;
+    protected $tag;
 
     /**
      * Construct Shit
      * @param Posts $posts
      */
-    public function __construct( Posts $posts )
+    public function __construct(Posts $posts, TagInterface $tag)
     {
         $this->model = $posts;
+        $this->tag = $tag;
     }
 
     /**

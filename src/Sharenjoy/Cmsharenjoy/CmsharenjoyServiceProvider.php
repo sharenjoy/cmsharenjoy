@@ -19,7 +19,15 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
 	public function boot()
 	{
 		$this->package('sharenjoy/cmsharenjoy');
-		include __DIR__.'/../../routes.php'; // Do some routing here specific to this package
+
+		// Get the URL segment to use for routing
+        $urlSegment = $this->app['config']->get('cmsharenjoy::app.access_url');
+
+		// Do some routing here specific to this package
+		include __DIR__.'/../../routes.php'; 
+
+		// Include IOC Bindings
+		include __DIR__.'/../../bindings.php';
 	}
 
 	/**

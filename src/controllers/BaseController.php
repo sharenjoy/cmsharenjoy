@@ -1,9 +1,14 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Controllers;
+
 use Illuminate\Routing\Controller;
 use View, Config;
 
-abstract class BaseController extends Controller{
+abstract class BaseController extends Controller {
 
+    /**
+     * This is the whitelist which allow some entries can enter.
+     * @var array
+     */
     protected $whitelist = array();
 
     /**
@@ -13,6 +18,18 @@ abstract class BaseController extends Controller{
     protected $urlSegment;
 
     /**
+     * The application name and also is view name
+     * @var string
+     */
+    protected $appName;
+
+    /**
+     * The URL to get the root of this object ( /admin/posts for example )
+     * @var string
+     */
+    protected $objectUrl;
+
+    /**
      * Initializer.
      *
      * @access   public
@@ -20,15 +37,23 @@ abstract class BaseController extends Controller{
      */
     public function __construct()
     {
+        // Setup composed views and the variables that they require
+        $this->beforeFilter('adminFilter' , array('except' => $this->whitelist));
+
+        // This is a filter which configure the language
+        $this->beforeFilter('localeFilter');
+
         // Achieve that segment
         $this->urlSegment = Config::get('cmsharenjoy::app.access_url');
 
-        // Setup composed views and the variables that they require
-        $this->beforeFilter( 'adminFilter' , array('except' => $this->whitelist) );
+        if(is_null($this->objectUrl))
+        {
+            $this->objectUrl = url($this->urlSegment.'/'.$this->appName);
+        }
 
-        // This is a filter which configure the language
-        $this->beforeFilter( 'localeFilter' );
-
+        // Share some variables to views
+        View::share('appName' , $this->appName);
+        View::share('objectUrl', $this->objectUrl);
         $composed_views = array( 'cmsharenjoy::*' );
         View::composer($composed_views, 'Sharenjoy\Cmsharenjoy\Composers\Page');
     }

@@ -28,7 +28,7 @@
                 
                 <div class="panel-body">
                     
-                    {{ Form::open( array( 'url'=>$new_url, 'class'=>'form-horizontal form-groups-bordered', 'role'=>'form' ) ) }}
+                    {{ Form::open( array( 'url'=>$newUrl, 'class'=>'form-horizontal form-groups-bordered', 'role'=>'form' ) ) }}
 
                         @yield('form-items')
                         
