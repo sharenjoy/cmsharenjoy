@@ -17,6 +17,8 @@ class CreateTagsTable extends Migration {
 			$table->increments('id');
 			$table->string('tag');
 			$table->string('slug');
+			$table->integer('taggable_id')->unsigned();
+            $table->string('taggable_type',255);
 			$table->timestamps();
 		});
 	}

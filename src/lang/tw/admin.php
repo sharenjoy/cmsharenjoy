@@ -13,6 +13,7 @@ return array(
     'edit'                                  => '編輯',
     'delete'                                => '刪除',
     'search'                                => '搜尋',
+    'filter'                                => '篩選',
     'pagination_desc'                       => '顯示 :from 至 :to 筆，總計 :total 筆',
 
 

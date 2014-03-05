@@ -27,3 +27,11 @@
     @endif
 
 @stop
+
+
+@section('scripts')
+    @parent
+    <link rel="stylesheet" href="{{ asset('packages/sharenjoy/cmsharenjoy/js/daterangepicker/daterangepicker-bs3.css') }}">
+    <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/daterangepicker/moment.min.js') }}"></script>
+    <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/daterangepicker/daterangepicker.js') }}"></script>
+@stop

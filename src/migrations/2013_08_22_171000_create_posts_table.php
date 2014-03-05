@@ -17,14 +17,11 @@ class CreatePostsTable extends Migration {
 
                 $table->engine = 'InnoDB';
 
-                $table->increments('id');
+                $table->increments('id')->index();
                 $table->string('title',255);
-                $table->string('slug',255);
-                $table->unique('slug');
+                $table->string('slug',255)->unique();
                 $table->text('content');
                 $table->integer('sort')->nullable();
-                $table->unique('sort');
-                $table->index('id');
                 $table->softDeletes();
                 $table->timestamps();
 

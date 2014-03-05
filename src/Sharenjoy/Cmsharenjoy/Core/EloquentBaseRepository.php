@@ -1,6 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Core;
 
 use Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException;
+use Debugbar, StdClass;
 
 /**
  * Base Eloquent Repository Class Built On From Shawn McCool <-- This guy is pretty amazing
@@ -13,9 +14,24 @@ class EloquentBaseRepository {
      */
     protected $model;
 
-    public function __construct($model = null)
+    /**
+     * The instance of tag
+     * @var Object
+     */
+    protected $tag;
+    public $taggable;
+    
+    /**
+     * The instance of upload
+     * @var Object
+     */
+    protected $upload;
+    public $uploadable;
+
+    public function __construct()
     {
-        $this->model = $model;
+        $this->taggable   = is_null($this->tag) ? false : true;
+        $this->uploadable = is_null($this->upload) ? false : true;
     }
 
     /**
@@ -33,31 +49,13 @@ class EloquentBaseRepository {
     }
 
     /**
-     * Get everything (active only)
+     * Get an instance of Eloquent
+     * @param  array  $attributes The data of array
      * @return Eloquent
      */
-    public function getAll()
+    public function getNewEloquent(array $attributes)
     {
-        return $this->model->all();
-    }
-
-    /**
-     * Get only deleted items
-     * @return Eloquent
-     */
-    public function getAllTrashed()
-    {
-        return $this->model->onlyTrashed()->get();
-    }
-
-    /**
-     * Get an Eloquent object for pagination
-     * @param  int $count How many rows per page
-     * @return Eloquent
-     */
-    public function getAllPaginated($count)
-    {
-        return $this->model->orderBy('sort', 'desc')->paginate($count);
+        return $this->model->newInstance($attributes);
     }
 
     /**
@@ -65,36 +63,44 @@ class EloquentBaseRepository {
      * @param  integer $id The ID of the record
      * @return Eloquent
      */
-    public function getById($id)
+    public function byId($id)
     {
-        return $this->model->with('tags')->find($id);
-    }
-
-    /**
-     * Get an Eloquent object if entity exist
-     * @param  int $id The id of data
-     * @return Eloquent
-     */
-    public function requireById($id)
-    {
-        $model = $this->getById($id);
-
-        if ( ! $model)
+        if ($this->taggable)
         {
-            throw new EntityNotFoundException;
+            return $this->model->with('tags')->find($id);
         }
-
-        return $model;
+        else
+        {
+            return $this->model->find($id);
+        }
     }
 
     /**
-     * Get a record by its ID even if it is trashed
-     * @param  integer $id The ID of the record
-     * @return Eloquent
+     * Get paginated articles
+     *
+     * @param int $page Number of articles per page
+     * @param int $limit Results per page
+     * @param boolean $all Show published or all
+     * @return StdClass Object with $items and $totalItems for pagination
      */
-    public function getByIdWithTrashed($id)
+    public function byPage($page = 1, $limit, $model)
     {
-        return $this->model->withTrashed()->find($id);
+        $result             = new StdClass;
+        $result->page       = $page;
+        $result->limit      = $limit;
+        $result->totalItems = 0;
+        $result->items      = array();
+
+        $query = $model->orderBy('sort', 'desc');
+
+        $rows = $query->skip($limit * ($page-1))
+                      ->take($limit)
+                      ->get();
+
+        $result->totalItems = $this->totalRows($model);
+        $result->items = $rows->all();
+
+        return $result;
     }
 
     /**
@@ -102,53 +108,86 @@ class EloquentBaseRepository {
      * @param  string $slug The slug name
      * @return Eloquent
      */
-    public function getBySlug($slug)
+    public function bySlug($slug)
     {
         return $this->model->where('slug','=',$slug)->first();
     }
 
     /**
-     * Get all posts that have a tag of the type passed in
-     * @return Eloquent
+     * Get articles by their tag
+     *
+     * @param string  URL slug of tag
+     * @param int Number of articles per page
+     * @return StdClass Object with $items and $totalItems for pagination
      */
-    public function getAllByTag($tag)
+    public function byTag($tag, $page=1, $limit=10)
     {
-        $table = $this->model->getTableName();
+        $foundTag = $this->tag->where('slug', $tag)->first();
 
-        return $this->model->join('tags', 'tags.taggable_id', '=', $table.'.id')->where('tag','=',$tag)->get();
-    }
+        $result = new \StdClass;
+        $result->page = $page;
+        $result->limit = $limit;
+        $result->totalItems = 0;
+        $result->items = array();
 
-    /**
-     * Thranform an array to an Eloquent object
-     * @param  array  $attributes
-     * @return Eloquent
-     */
-    public function getNew($attributes = array())
-    {
-        return $this->model->newInstance($attributes);
-    }
-
-    /**
-     * It depends on what type of data to store
-     * @param  mixed $data Could be an array or Eloquent object
-     * @return void
-     */
-    public function store($data)
-    {
-        if ($data instanceOf \Eloquent)
+        if( !$foundTag )
         {
-            $this->storeEloquentModel($data);
+            return $result;
         }
-        elseif (is_array($data))
-        {
-            $this->storeArray($data);
-        }
+
+        $articles = $this->tag->articles()
+                        ->where('articles.status_id', 1)
+                        ->orderBy('articles.created_at', 'desc')
+                        ->skip( $limit * ($page-1) )
+                        ->take($limit)
+                        ->get();
+
+        $result->totalItems = $this->totalByTag();
+        $result->items = $articles->all();
+
+        return $result;
     }
 
     /**
-     * Store an array data to database by an id
-     * @param  int $id   The id need to store
-     * @param  array $data The data need to store
+     * Create a new Article
+     *
+     * @param array  Data to create a new object
+     * @return boolean
+     */
+    public function create(array $data)
+    {
+        if (! $this->valid($data)) return false;
+
+        // Create the model
+        $model = $this->model->create($data);
+        $this->storeById($model->id, array('sort' => $model->id));
+
+        is_null($data['tags']) ?: $this->syncTags($model, $data['tags']);
+
+        return true;
+    }
+
+    /**
+     * Update an existing Article
+     *
+     * @param array  Data to update an Article
+     * @return boolean
+     */
+    public function update($id, array $data)
+    {
+        if (! $this->valid($data)) return false;
+
+        $model = $this->model->find($id)->fill($data);
+        is_null($data['tags']) ?: $this->syncTags($model, $data['tags']);
+        $model->save();
+
+        return true;
+    }
+
+    /**
+     * Store data by id
+     * @param  int $id
+     * @param  array $data
      * @return void
      */
     public function storeById($id, $data)
@@ -157,41 +196,25 @@ class EloquentBaseRepository {
     }
 
     /**
-     * Store the eloquent model that is passed in
-     * @param  Eloquent $model The Eloquent Model
+     * Delete the model passed in
+     * @param  Eloquent $model The description
      * @return void
      */
-    protected function storeEloquentModel($model)
+    public function delete()
     {
-        if ($model->getDirty())
-        {
-            $model->save();
-        }
-        else
-        {
-            $model->touch();
-        }
+        $this->model->delete();
     }
 
     /**
-     * Store an array of data
-     * @param  array $data The Data Array
+     * Sync tags
+     * @param \Illuminate\Database\Eloquent\Model
+     * @param mixed  $tags can be array or string
      * @return void
      */
-    protected function storeArray($data)
+    public function syncTags($model, $tags)
     {
-        $model = $this->getNew($data);
-        $this->storeEloquentModel($model);
-    }
+        $tags = $this->tag->getTagsArray($tags);
 
-    /**
-     * Sync tags for article
-     * @param \Illuminate\Database\Eloquent\Model  $article
-     * @param array  $tags
-     * @return void
-     */
-    public function syncTags($model, array $tags)
-    {
         // Create or add tags and return an Elqquent object
         $found = $this->tag->findOrCreate($tags);
 
@@ -207,13 +230,35 @@ class EloquentBaseRepository {
     }
 
     /**
-     * Delete the model passed in
-     * @param  Eloquent $model The description
-     * @return void
+     * Get total count
+     *
+     * @todo I hate that this is public for the decorators.
+     *       Perhaps interface it?
+     * @return int  Total articles
      */
-    public function delete($model)
+    protected function totalRows($model)
     {
-        $model->delete();
+        return $model->count();
+    }
+
+    /**
+     * Test if form validator passes
+     *
+     * @return boolean
+     */
+    protected function valid(array $input)
+    {
+        return $this->validator->with($input)->passes();
+    }
+
+    /**
+     * Return any validation errors
+     *
+     * @return array
+     */
+    public function errors()
+    {
+        return $this->validator->errors();
     }
 
 }

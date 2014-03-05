@@ -1,7 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Controllers;
 
 use Illuminate\Routing\Controller;
-use View, Config;
+use App, View, Config;
 
 abstract class BaseController extends Controller {
 
@@ -52,8 +52,12 @@ abstract class BaseController extends Controller {
         }
 
         // Share some variables to views
+        $settings = App::make('Sharenjoy\Cmsharenjoy\Settings\SettingsInterface');
+        View::share('app_name', $settings->getAppName());
         View::share('appName' , $this->appName);
         View::share('objectUrl', $this->objectUrl);
+        View::share('filterable', false);
+
         $composed_views = array( 'cmsharenjoy::*' );
         View::composer($composed_views, 'Sharenjoy\Cmsharenjoy\Composers\Page');
     }

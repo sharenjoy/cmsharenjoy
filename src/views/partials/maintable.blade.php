@@ -13,6 +13,7 @@
                 </div>
             </div>
         </div>
+
          
         <table class="table table-bordered table-hover datatable table-responsive" @if($sortable == true)id="sortable"@endif>
             <thead>
@@ -44,8 +45,8 @@
                     </tr>
                 @endforeach
 
-                @if($items->count() < $pagination_count)
-                     @for($i=0; $i < $pagination_count - $items->count(); $i++)
+                @if($items->count() < $paginationCount)
+                     @for($i=0; $i < $paginationCount - $items->count(); $i++)
                         <tr>
                             <td>&nbsp;</td>
                             @foreach( $fieldsAry as $item )

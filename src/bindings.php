@@ -1,11 +1,12 @@
 <?php
 
 // The Posts Bindings
-App::bind('Sharenjoy\Cmsharenjoy\Posts\PostsInterface', function()
+App::bind('Sharenjoy\Cmsharenjoy\Post\PostInterface', function($app)
 {
-    return new Sharenjoy\Cmsharenjoy\Posts\PostsRepository(
-        new Sharenjoy\Cmsharenjoy\Posts\Posts,
-        App::make('Sharenjoy\Cmsharenjoy\Repo\Tag\TagInterface')
+    return new Sharenjoy\Cmsharenjoy\Post\PostRepository(
+        new Sharenjoy\Cmsharenjoy\Post\Post,
+        App::make('Sharenjoy\Cmsharenjoy\Repo\Tag\TagInterface'),
+        new Sharenjoy\Cmsharenjoy\Post\PostValidator($app['validator'])
     );
 });
 

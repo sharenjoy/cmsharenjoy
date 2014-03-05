@@ -1,17 +1,14 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Repo\Tag;
 
-use Sharenjoy\Cmsharenjoy\Repo\RepoAbstract;
-use Illuminate\Database\Eloquent\Model;
+use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
 use Str, Input;
 
-class EloquentTag implements TagInterface {
-
-    protected $tag;
+class EloquentTag extends EloquentBaseRepository implements TagInterface {
 
     // Class expects an Eloquent model
-    public function __construct(Model $tag)
+    public function __construct(Tag $tag)
     {
-        $this->tag = $tag;
+        $this->model = $tag;
     }
 
     /**
@@ -22,18 +19,18 @@ class EloquentTag implements TagInterface {
      */
     public function findOrCreate(array $tags)
     {
-        $foundTags = $this->tag->whereIn('tag', $tags)->get();
+        $foundTags = $this->model->whereIn('tag', $tags)->get();
 
         $returnTags = array();
 
-        if( $foundTags )
+        if ($foundTags)
         {
-            foreach( $foundTags as $tag )
+            foreach ($foundTags as $tag)
             {
                 $pos = array_search($tag->tag, $tags);
 
                 // Add returned tags to array
-                if( $pos !== false )
+                if($pos !== false)
                 {
                     $returnTags[] = $tag;
                     unset($tags[$pos]);
@@ -42,9 +39,9 @@ class EloquentTag implements TagInterface {
         }
 
         // Add remainings tags as new
-        foreach( $tags as $tag )
+        foreach ($tags as $tag)
         {
-            $returnTags[] = $this->tag->create(array(
+            $returnTags[] = $this->model->create(array(
                                 'tag' => $tag,
                                 'slug' => Str::slug($tag, '-'),
                             ));
@@ -69,21 +66,32 @@ class EloquentTag implements TagInterface {
     }
 
     /**
-     * Convert string of tags to
-     * array of tags
+     * Convert string to an array and trim
      * @param  string
      * @return array
      */
     public function getTagsArray($tags)
     {
-        $tags = explode(',', $tags);
+        $ary = array();
 
-        foreach( $tags as $key => $tag )
+        if(is_string($tags))
         {
-            $tags[$key] = trim($tag);
-        }
+            $tags = explode(',', $tags);
 
-        return $tags;
+            foreach($tags as $tag)
+            {
+                $ary[] = trim($tag);
+            }
+        }
+        elseif(is_array($tags))
+        {
+            foreach($tags as $tag)
+            {
+                $ary[] = trim($tag);
+            }
+        }
+        
+        return $ary;
     }
 
 }

@@ -13,6 +13,7 @@ return array(
     'edit'                                  => 'Edit',
     'delete'                                => 'Delete',
     'search'                                => 'Search',
+    'filter'                                => 'Filter',
     'pagination_desc'                       => 'Showing :from to :to of :total entries',
 
 

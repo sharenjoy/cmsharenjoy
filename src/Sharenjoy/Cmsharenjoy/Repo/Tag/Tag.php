@@ -19,13 +19,18 @@ class Tag extends Eloquent {
         'slug',
     );
 
+    public function taggable()
+    {
+        return $this->morphTo();
+    }
+
     /**
      * Define a many-to-many relationship.
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function posts()
     {
-        return $this->belongsToMany('Sharenjoy\Cmsharenjoy\Posts\Posts', 'posts_tags', 'tag_id', 'post_id');
+        return $this->belongsToMany('Sharenjoy\Cmsharenjoy\Post\Post', 'posts_tags', 'tag_id', 'post_id');
     }
 
 }

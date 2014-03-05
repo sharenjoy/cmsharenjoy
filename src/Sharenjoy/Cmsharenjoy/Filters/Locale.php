@@ -1,4 +1,5 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Filters;
+
 use Config, Redirect, Request, Session, App;
 
 class Locale {
@@ -11,16 +12,20 @@ class Locale {
     {
         $lang = Request::segment(2);
 
-        if ( in_array($lang, Config::get('cmsharenjoy::app.locales')) ) {
+        if (in_array($lang, Config::get('cmsharenjoy::app.locales')))
+        {
             Session::put('locale', $lang);
 
             return Redirect::back();
         }
 
-        if ( Session::has('locale') ) {
+        if (Session::has('locale'))
+        {
             App::setLocale(Session::get('locale'));
             $lang = Session::get('locale');
-        } else {
+        }
+        else
+        {
             $lang = Config::get('app.locale');
         }
     }

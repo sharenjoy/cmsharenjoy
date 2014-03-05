@@ -1,4 +1,4 @@
-<?php namespace Impl\Service\Validation;
+<?php namespace Sharenjoy\Cmsharenjoy\Service\Validation;
 
 use Illuminate\Validation\Factory;
 
@@ -40,7 +40,7 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
     /**
      * Set data to validate
      *
-     * @return \Impl\Service\Validation\AbstractLaravelValidator
+     * @return \Sharenjoy\Cmsharenjoy\Service\Validation\AbstractLaravelValidator
      */
     public function with(array $data)
     {
@@ -58,7 +58,7 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
     {
         $validator = $this->validator->make($this->data, $this->rules);
 
-        if( $validator->fails() )
+        if ($validator->fails())
         {
             $this->errors = $validator->messages();
             return false;

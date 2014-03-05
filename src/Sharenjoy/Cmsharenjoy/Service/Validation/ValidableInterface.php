@@ -1,4 +1,4 @@
-<?php namespace Impl\Service\Validation;
+<?php namespace Sharenjoy\Cmsharenjoy\Service\Validation;
 
 interface ValidableInterface {
 
@@ -6,7 +6,7 @@ interface ValidableInterface {
      * Add data to validation against
      *
      * @param array
-     * @return \Impl\Service\Validation\ValidableInterface  $this
+     * @return \Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface  $this
      */
     public function with(array $input);
 

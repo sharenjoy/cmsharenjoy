@@ -10,9 +10,10 @@ class Admin {
     public function filter()
     {
 
-        if ( Auth::guest() )
+        if (Auth::guest())
+        {
             return Redirect::guest( Config::get('cmsharenjoy::app.access_url').'/login');
-
+        }
     }
 
 }

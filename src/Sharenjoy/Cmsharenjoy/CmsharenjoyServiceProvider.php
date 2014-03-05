@@ -1,6 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy;
-use App;
+
 use Illuminate\Support\ServiceProvider;
+use App;
 
 class CmsharenjoyServiceProvider extends ServiceProvider {
 
@@ -18,6 +19,8 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
+		// $app = $this->app;
+		
 		$this->package('sharenjoy/cmsharenjoy');
 
 		// Get the URL segment to use for routing

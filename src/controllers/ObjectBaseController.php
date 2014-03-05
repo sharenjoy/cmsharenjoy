@@ -2,14 +2,15 @@
 
 use Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException;
 use Illuminate\Support\MessageBag;
-use View, Redirect, Input, App, ReflectionClass, Request, Config, Response, URL, Lang;
+use View, Redirect, Input, App, ReflectionClass, Request, Config;
+use Response, URL, Lang, Debugbar, Paginator, Str;
 
 abstract class ObjectBaseController extends BaseController {
 
     /**
      * The model to work with for editing stuff
      */
-    protected $model;
+    protected $repo;
 
     /**
      * The URL that is used to edit shit
@@ -28,24 +29,6 @@ abstract class ObjectBaseController extends BaseController {
      * @var string
      */
     protected $deleteUrl;
-
-    /**
-     * Is the controller allowed to upload images?
-     * @var boolean
-     */
-    protected $uploadable;
-
-    /**
-     * Is the controller allowed to have tags?
-     * @var boolean
-     */
-    protected $taggable;
-
-    /**
-     * Can items be deleted?
-     * @var boolean
-     */
-    protected $deletable = true;
 
     /**
      * The uploads model
@@ -68,7 +51,7 @@ abstract class ObjectBaseController extends BaseController {
      * 
      * @var integer
      */
-    protected $pagination_count = 15;
+    protected $paginationCount = 15;
 
     /**
      * ObjectBaseController construct
@@ -81,6 +64,8 @@ abstract class ObjectBaseController extends BaseController {
         $this->shareHandyUrls();
 
         $this->uploads_model = App::make('Sharenjoy\Cmsharenjoy\Uploads\UploadsInterface');
+
+        $this->composeFilterform();
     }
 
     /**
@@ -90,18 +75,9 @@ abstract class ObjectBaseController extends BaseController {
      */
     private function setHandyUrls()
     {
-        if(is_null($this->editUrl))
-        {
-            $this->editUrl = $this->objectUrl.'/edit/';
-        }
-        if(is_null($this->newUrl))
-        {
-            $this->newUrl = $this->objectUrl.'/new';
-        }
-        if(is_null($this->deleteUrl))
-        {
-            $this->deleteUrl = $this->objectUrl.'/delete/';
-        }
+        $this->editUrl   = is_null($this->editUrl) ? $this->objectUrl.'/edit/' : null;
+        $this->newUrl    = is_null($this->newUrl) ? $this->objectUrl.'/new' : null;
+        $this->deleteUrl = is_null($this->deleteUrl) ? $this->objectUrl.'/delete/' : null;
     }
 
     /**
@@ -119,6 +95,31 @@ abstract class ObjectBaseController extends BaseController {
         View::share('deleteUrl', $this->deleteUrl);
     }
 
+    private function composeFilterForm()
+    {
+        if (is_array($this->filterAry))
+        {
+            $data = array();
+            foreach ($this->filterAry as $key => $value)
+            {
+                $data[$key] = $value;
+
+                if ($value['source'] == 'database')
+                {
+                    $model = $this->tag->getModel();
+                    $query = $model->with('posts')->get();
+                    Debugbar::info($query->toArray());
+                }
+                else
+                {
+                    $data[$key]['option'] = Config::get('cmsharenjoy::'.$value['source']);
+                }
+            }
+            Debugbar::info($data);
+            // View::share('filterForm', $data);
+        }
+    }
+
     /**
      * Main users page.
      *
@@ -127,19 +128,31 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function getIndex($sort = '')
     {
-        $pnum = Input::get('pnum');
-
-        if(empty($pnum) || $pnum == '') {
-            $pnum = $this->pagination_count;
-        }
+        $perPage    = Input::get('perPage');
+        $page       = Input::get('page', 1);
+        $query      = Request::query();
         
-        $sortable = $sort == 'sort' ? true : false;
+        $perPage    = empty($perPage) || $perPage == '' ? $this->paginationCount : $perPage;
+        $sortable   = $sort == 'sort' ? true : false;
+        $filterable = $sort == 'sort' ? false : true;
+        
+        $model = $this->repo->getModel();
+
+        if (Input::get('filter'))
+        {
+            $filter = array_except($query, array('filter', 'perPage', 'page'));
+            $model = $this->setFilterQuery($model, $filter);
+        }
+
+        $result = $this->repo->byPage($page, $perPage, $model);
+        $items = Paginator::make($result->items, $result->totalItems, $perPage)->appends($query);
 
         return View::make('cmsharenjoy::'.$this->appName.'.index')
-                   ->with('pagination_count', $pnum)
+                   ->with('paginationCount', $perPage)
                    ->with('sortable', $sortable)
+                   ->with('filterable', $filterable)
                    ->with('fieldsAry', $this->fieldsAry)
-                   ->with('items', $this->model->getAllPaginated($pnum));
+                   ->with('items', $items);
     }
 
     /**
@@ -165,21 +178,15 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function getEdit($id)
     {
-        try {
-            $item = $this->model->requireById($id);
-        } catch (EntityNotFoundException $e){
-            return Redirect::to($this->objectUrl)->with('errors', new MessageBag(
-                array("An item with the ID:$id could not be found.")
-            ));
-        }
-        $item->tags_csv = $this->tag->getTagsCsv($item->tags);
-        print_r(DB::getQueryLog());
-        // if( ! View::exists('cmsharenjoy::'.$this->appName.'.edit'))
-        // {
-        //     return App::abort(404, 'Page not found');
-        // }
+        $item = $this->repo->byId($id);
+        $item->tags_csv = implode(',', array_pluck($item->tags->toArray(), 'tag'));
 
-        // return View::make('cmsharenjoy::'.$this->appName.'.edit')->with('item' , $item);
+        if( ! View::exists('cmsharenjoy::'.$this->appName.'.edit'))
+        {
+            return App::abort(404, 'Page not found');
+        }
+
+        return View::make('cmsharenjoy::'.$this->appName.'.edit')->with('item' , $item);
     }
 
     /**
@@ -190,16 +197,10 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function getDelete($id)
     {
-        if($this->deletable == false)
-        {
-            return App::abort(404, 'Page not found');
-        }
-
-        $model = $this->model->getById($id)->delete();
+        $model = $this->repo->byId($id)->delete();
 
         $message = 'The item was successfully removed.';
-        return Redirect::to($this->objectUrl)
-                     ->with('success', new MessageBag(array($message)));
+        return Redirect::to($this->objectUrl)->with('success', new MessageBag(array($message)));
     }
 
     /**
@@ -210,29 +211,25 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function postNew()
     {
-        $record = $this->model->getNew(Input::all());
-
-        $valid = $this->validateWithInput === true ? $record->isValid(Input::all()) : $record->isValid();
-
-        if( ! $valid)
+        if ($this->slug)
         {
-            return Redirect::to($this->newUrl)->with('errors', $record->getErrors())->withInput();
+            $input = $this->composeSlugInputData(Input::all(), '-');
         }
+        else
+        {
+            $input = Input::all();
+        }
+        
+        $result = $this->repo->create($input);
 
-        // Run the hydration method that populates anything else that is required / runs any other
-        // model interactions and save it.
-        $record->save();
-
-        // insert id
-        $insertId = $record->id;
-        $this->model->storeById($insertId, array('sort' => $insertId));
-
-        // save tags
-        $tags = $this->tag->getTagsArray(Input::get('tags'));
-        $this->model->syncTags($record, $tags);
-
-        // Redirect that shit man! You did good! Validated and saved, man mum would be proud!
-        return Redirect::to($this->objectUrl)->with('success', new MessageBag(array('Item Created')));
+        if ( ! $result)
+        {
+            return Redirect::to($this->newUrl)->with('errors', $this->repo->errors())->withInput();
+        }
+        else
+        {
+            return Redirect::to($this->objectUrl)->with('success', new MessageBag(array('Item Created')));
+        }
     }
 
     /**
@@ -243,26 +240,25 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function postEdit($id)
     {
-        $record = $this->model->requireById($id);
-        $record->fill(Input::all());
-
-        $valid = $this->validateWithInput === true ? $record->isValid(Input::all()) : $record->isValid();
-
-        if( ! $valid)
+        if ($this->slug)
         {
-            return Redirect::to($this->editUrl.$id)->with('errors', $record->getErrors())->withInput();
+            $input = $this->composeSlugInputData(Input::all(), '-');
+        }
+        else
+        {
+            $input = Input::all();
         }
 
-        // Run the hydration method that populates anything else that is required / runs any other
-        // model interactions and save it.
-        $record->save();
+        $result = $this->repo->update($id, $input);
 
-        // save tags
-        $tags = $this->tag->getTagsArray(Input::get('tags'));
-        $this->model->syncTags($record, $tags);
-
-        // Redirect that shit man! You did good! Validated and saved, man mum would be proud!
-        return Redirect::to($this->editUrl.$id)->with('success', new MessageBag(array('Item Saved')));
+        if ( ! $result)
+        {
+            return Redirect::to($this->editUrl.$id)->with('errors', $this->repo->errors())->withInput();
+        }
+        else
+        {
+            return Redirect::to($this->editUrl.$id)->with('success', new MessageBag(array('Item Saved')));
+        }
     }
 
     /**
@@ -286,7 +282,7 @@ abstract class ObjectBaseController extends BaseController {
             if($id != '')
             {
                 $sort = $sort_value[$key];
-                $this->model->storeById($id, array('sort' => $sort));
+                $this->repo->storeById($id, array('sort' => $sort));
             }
         }
 
@@ -302,13 +298,13 @@ abstract class ObjectBaseController extends BaseController {
     {
 
         // This should only be accessible via AJAX you know...
-        if( ! Request::ajax() or !$this->model->getById($id))
+        if( ! Request::ajax() or !$this->repo->getById($id))
         {
             Response::json('error', 400);
         }
         
-        $key = $this->model->getModel()->getTableName();
-        $type = get_class($this->model->getModel());
+        $key = $this->repo->getModel()->getTableName();
+        $type = get_class($this->repo->getModel());
         $success = $this->uploads_model->doUpload($id, $type, $key);
 
         if( ! $success)
@@ -336,6 +332,13 @@ abstract class ObjectBaseController extends BaseController {
         $this->uploads_model->setOrder(Input::get('data'));
 
         return Response::json('success', 200);
+    }
+
+    protected function composeSlugInputData(array $data, $separator = '-')
+    {
+        $input = array_merge($data, array('slug' => Str::slug($data[$this->slug], $separator)));
+        
+        return $input;
     }
     
 }

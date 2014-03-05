@@ -15,5 +15,5 @@ Route::controller( $urlSegment.'/users'     , 'Sharenjoy\Cmsharenjoy\Controllers
 Route::controller( $urlSegment.'/galleries' , 'Sharenjoy\Cmsharenjoy\Controllers\GalleriesController' );
 Route::controller( $urlSegment.'/settings'  , 'Sharenjoy\Cmsharenjoy\Controllers\SettingsController' );
 Route::controller( $urlSegment.'/blocks'    , 'Sharenjoy\Cmsharenjoy\Controllers\BlocksController' );
-Route::controller( $urlSegment.'/posts'     , 'Sharenjoy\Cmsharenjoy\Controllers\PostsController' );
+Route::controller( $urlSegment.'/posts'     , 'Sharenjoy\Cmsharenjoy\Controllers\PostController' );
 Route::controller( $urlSegment              , 'Sharenjoy\Cmsharenjoy\Controllers\DashController'  );
