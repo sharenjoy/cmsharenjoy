@@ -2,12 +2,12 @@
 
 return array(
 	
-	/*
-	 * --------------------------------------------------------------------------
-	 *  How to use
-	 * --------------------------------------------------------------------------
-	 * 
-	 * {{Formaker::title()}}
+    /*
+     * --------------------------------------------------------------------------
+     *  How to use
+     * --------------------------------------------------------------------------
+     * 
+     * {{Formaker::title()}}
      * {{Formaker::email()}}
      * {{Formaker::url()}}
      * {{Formaker::description(['value'=>'This is value'])}}
@@ -21,31 +21,30 @@ return array(
      * {{Formaker::colorpicker(['type'=>'colorpicker'])}}
      * {{Formaker::file(['type'=>'file'])}}
      * 
-	 * {{Formaker::custom('list-filter')->title()}}
-	 */
+     * {{Formaker::custom('list-filter')->title()}}
+     */
+    
+    /*
+     * --------------------------------------------------------------------------
+     *  Default Formaker Driver
+     * --------------------------------------------------------------------------
+     * 
+     *  This option controls the formaker driver that will be utilized.
+     * 
+     *  Supported: 
+     *  back-end: "bootstrap-v3"
+     *  fore-end: "bootstrap-v3"
+     * 
+    */
+
+    // back-end
+    'driver-back'  => 'bootstrap-v3',
+
+    // fore-end
+    'driver-front' => 'bootstrap-v3',
 
 
-	/*
-	 * --------------------------------------------------------------------------
-	 *  Default Formaker Driver
-	 * --------------------------------------------------------------------------
-	 * 
-	 *  This option controls the formaker driver that will be utilized.
-	 * 
-	 *  Supported: 
-	 *  back-end: "bootstrap-v3"
-	 *  fore-end: "bootstrap-v3"
-	 * 
-	*/
-
-	// back-end
-	'driver-back'  => 'bootstrap-v3',
-	
-	// fore-end
-	'driver-front' => 'bootstrap-v3',
-
-
-	/**
+    /**
      * Frequent input names can map
      * to their respective input types.
      *
@@ -56,49 +55,48 @@ return array(
      */
     'commonInputsLookup' =>
     [
-    	// For email
-		'email'                => 'email',
-		'emailAddress'         => 'email',
-		
-		// For textarea
-		'description'          => 'textarea',
-		'bio'                  => 'textarea',
-		'body'                 => 'textarea',
+        // For email
+        'email'                => 'email',
+        'emailAddress'         => 'email',
 
-		// For wysihtml5
-		'content'              => 'wysihtml5',
-		
-		// For password
-		'password'             => 'password',
-		'passwordConfirmation' => 'password',
-		
-		// For tag
-		'tag'                  => 'tag',
-		'related'              => 'tag',
+        // For textarea
+        'description'          => 'textarea',
+        'bio'                  => 'textarea',
+        'body'                 => 'textarea',
 
-		// For select
-		'status'               => 'select',
+        // For wysihtml5
+        'content'              => 'wysihtml5',
 
-		// For url
-		'url'                  => 'url',
-		
-		// For file
-		'file'                 => 'file',
+        // For password
+        'password'             => 'password',
+        'passwordConfirmation' => 'password',
+
+        // For tag
+        'tag'                  => 'tag',
+        'related'              => 'tag',
+
+        // For select
+        'status'               => 'select',
+
+        // For url
+        'url'                  => 'url',
+
+        // For file
+        'file'                 => 'file',
     ],
 
 
     /**
-     * Frequent option value can map
-     * to their respective input types.
-     */
+    * Frequent option value can map
+    * to their respective input types.
+    */
     'commonOption' =>
     [
-		'status' => [
-			'0' => Lang::get('cmsharenjoy::option.pleaseSelect'),
-	        '1' => Lang::get('cmsharenjoy::option.enable'),
-	        '2' => Lang::get('cmsharenjoy::option.disable'),
-		],
+        'status' => [
+            '0' => Lang::get('cmsharenjoy::option.pleaseSelect'),
+            '1' => Lang::get('cmsharenjoy::option.enable'),
+            '2' => Lang::get('cmsharenjoy::option.disable'),
+        ],
     ],
-
 
 );
