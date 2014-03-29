@@ -1,13 +1,13 @@
-<?php namespace Impl\Exception;
+<?php namespace Sharenjoy\Cmsharenjoy\Exception;
 
 interface HandlerInterface {
 
     /**
-     * Handle Impl Exceptions
+     * Handle Sharenjoy Exceptions
      *
-     * @param \Impl\Exception\ImplException
+     * @param \Sharenjoy\Cmsharenjoy\Exception\SharenjoyException
      * @return void
      */
-    public function handle(ImplException $exception);
+    public function handle(SharenjoyException $exception);
 
 }

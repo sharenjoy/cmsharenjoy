@@ -6,28 +6,24 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
 
     /**
      * Validator
-     *
      * @var \Illuminate\Validation\Factory
      */
     protected $validator;
 
     /**
      * Validation data key => value array
-     *
      * @var Array
      */
     protected $data = array();
 
     /**
      * Validation errors
-     *
      * @var Array
      */
     protected $errors = array();
 
     /**
      * Validation rules
-     *
      * @var Array
      */
     protected $rules = array();
@@ -39,7 +35,6 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
 
     /**
      * Set data to validate
-     *
      * @return \Sharenjoy\Cmsharenjoy\Service\Validation\AbstractLaravelValidator
      */
     public function with(array $data)
@@ -51,7 +46,6 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
 
     /**
      * Validation passes or fails
-     *
      * @return Boolean
      */
     public function passes()
@@ -69,12 +63,20 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
 
     /**
      * Return errors, if any
-     *
-     * @return array
+     * @return MessageBag
      */
     public function errors()
     {
         return $this->errors;
+    }
+
+    /**
+     * Return an array of errors
+     * @return array
+     */
+    public function getErrorsToArray()
+    {
+        return $this->errors()->toArray();
     }
 
 }

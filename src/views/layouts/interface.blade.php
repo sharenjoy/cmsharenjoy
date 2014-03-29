@@ -127,7 +127,7 @@
                                     @if($user->img != '')
                                         <img src="{{ storage_path( $user->img ) }}" alt="" class="img-circle" />
                                     @else
-                                        <img src="{{ asset('packages/sharenjoy/cmsharenjoy/images/thumb-1.png') }}" alt="" class="img-circle" />
+                                        <img src="{{ asset('packages/sharenjoy/cmsharenjoy/images/thumb-1.jpg') }}" alt="" class="img-circle" />
                                     @endif
                                     {{ $user->first_name.' '.$user->last_name }}
                                     <b class="caret"></b>
@@ -233,17 +233,15 @@
                         
                             <ul class="list-inline links-list pull-right">
                                 <li>
-                                    {{ Form::open( array('method'=>'post', 'id'=>'language-form') ) }}
-                                        {{ Form::select(
-                                            'language', 
-                                            array(
-                                                'en' => 'English',
-                                                'tw' => '繁體中文'
-                                            ), 
-                                            $active_language,
-                                            array('class'=>'form-control', 'id'=>'language')
-                                        )}}
-                                    {{ Form::close() }}
+                                    {{ Form::select(
+                                        'language', 
+                                        array(
+                                            'en' => 'English',
+                                            'tw' => '繁體中文'
+                                        ), 
+                                        $active_language,
+                                        array('class'=>'form-control', 'id'=>'language')
+                                    )}}
                                 </li>
 
                                 <!-- <li class="sep"></li>

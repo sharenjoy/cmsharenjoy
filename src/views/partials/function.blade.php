@@ -14,51 +14,45 @@
     </div>
     
     <!-- panel body -->
-    <div class="panel-body">
-        <a href="{{ $objectUrl }}" class="btn btn-default btn-icon icon-left">
-            <i class="fa fa-bars"></i>{{ Lang::get('cmsharenjoy::admin.show_list') }}
-        </a>
-        &nbsp;&nbsp;&nbsp;
-        <a href="{{ $newUrl }}" class="btn btn-default btn-icon icon-left">
-            <i class="fa fa-plus"></i>{{ Lang::get('cmsharenjoy::admin.new_item') }}
-        </a>
-        &nbsp;&nbsp;&nbsp;
-        <a href="{{ $objectUrl }}/index/sort" class="btn btn-default btn-icon icon-left">
-            <i class="fa fa-sort"></i>{{ Lang::get('cmsharenjoy::admin.sort_list') }}
-        </a>
+    <div class="panel-body fun-box">
+
+        <div class="pull-left">
+            <a href="{{ $objectUrl }}" class="btn btn-default btn-icon icon-left">
+                <i class="fa fa-bars"></i>{{ Lang::get('cmsharenjoy::admin.show_list') }}
+            </a>
+        </div>
+
+        <div class="pull-left">
+            <a href="{{ $createUrl }}" class="btn btn-default btn-icon icon-left">
+                <i class="fa fa-plus"></i>{{ Lang::get('cmsharenjoy::admin.new_item') }}
+            </a>
+        </div>
+        
+        <div class="pull-left">
+            <a href="{{ $objectUrl }}/index/sort" class="btn btn-default btn-icon icon-left">
+                <i class="fa fa-sort"></i>{{ Lang::get('cmsharenjoy::admin.sort_list') }}
+            </a>
+        </div>
+
     </div>
 
-    @if($filterable)
+    @if(isset($filterable) && $filterable === true && isset($filterForm))
     <div class="panel-body filter-box">
         {{Form::open(array('url'=>$objectUrl, 'role'=>'form', 'method'=>'GET'))}}
             <div class="row">
-                <div class="col-md-3 col-sm-6">
-                    {{Form::label('ststus', 'Status')}}<br>
-                    {{Form::select('status',
-                    Config::get('cmsharenjoy::option.statusOption'), 
-                    Input::get('status'),
-                    array('class'=>'form-control'))}}
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    {{Form::label('keyword', 'Keyword')}}<br>
-                    {{Form::text('keyword', Input::get("keyword"), array('class'=>'form-control', 'placeholder'=>'Keyword'))}}
-                </div>
-                <div class="col-md-3 col-sm-6">
-                    <i class="entypo-calendar"></i>{{Form::label('dateRange', 'Date Range')}}<br>
-                    {{Form::text('dateRange', Input::get("dateRange"),
-                    array(
-                        'class'=>'form-control daterange daterange-inline add-ranges',
-                        'placeholder'=>'Date Range',
-                        'data-format'=>'YYYY-MM-DD',
-                        'data-start-date'=>date('Y-m-d', time() - 86400),
-                        'data-end-date'=>date('Y-m-d', time()),
-                        'data-separator'=>' ~ '
-                    ))}}
-                </div>
-                <div class="col-md-3 col-sm-6">
+
+                @foreach($filterForm as $key => $value)
+                    @if(isset($value['field']))
+                        {{$value['field']}}
+                    @endif
+                @endforeach
+
+                <div class="list-filter col-md-3 col-sm-6">
                     {{Form::hidden('filter', 'true')}}
-                    {{Form::submit(Lang::get('cmsharenjoy::admin.filter'), array('class'=>'btn btn-blue btn-sm'))}}
+                    {{Form::label('')}}<br>
+                    {{Form::submit(Lang::get('cmsharenjoy::admin.filter'), array('class'=>'btn btn-blue'))}}
                 </div>
+
             </div>
         {{Form::close()}}
     </div>

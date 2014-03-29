@@ -1,7 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Composers;
 
 use Illuminate\Support\MessageBag;
-use Auth, Session, Config;
+use Session, Config;
 
 class Page {
 
@@ -12,11 +12,10 @@ class Page {
      */
     public function compose($view)
     {
-        $view->with('user', Auth::user())
-             ->with('urlSegment', Config::get('cmsharenjoy::app.access_url'))
+        $view->with('urlSegment', Config::get('cmsharenjoy::app.access_url'))
              ->with('menu_items', Config::get('cmsharenjoy::app.menu_items'))
              ->with('success', Session::get('success', new MessageBag))
-             ->with('active_language', Session::get('locale'));
+             ->with('active_language', Session::get('admin-locale'));
     }
 
 }

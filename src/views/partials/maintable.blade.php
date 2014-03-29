@@ -19,7 +19,7 @@
             <thead>
                 <tr>
                     <th>&nbsp;</th>
-                    @foreach( $fieldsAry as $item )
+                    @foreach($listConfig as $item)
                         <th align="center">{{ Lang::get("cmsharenjoy::app.$item[name]") }}</th>
                     @endforeach
                 </tr>
@@ -30,7 +30,7 @@
                     <tr id="{{ $item->id }}">
                         <td width="15%">
                             <div class="text-center">
-                                <a href="{{ $editUrl.$item->id }}" class="tooltip-primary" data-toggle="tooltip" data-placement="top" title="{{ Lang::get('cmsharenjoy::admin.edit') }}" data-original-title="{{ Lang::get('cmsharenjoy::admin.edit') }}">
+                                <a href="{{ $updateUrl.$item->id }}" class="tooltip-primary" data-toggle="tooltip" data-placement="top" title="{{ Lang::get('cmsharenjoy::admin.edit') }}" data-original-title="{{ Lang::get('cmsharenjoy::admin.edit') }}">
                                     <i class="fa fa-pencil-square-o fa-lg"></i>
                                 </a>
                                 &nbsp;&nbsp;
@@ -39,7 +39,7 @@
                                 </a>
                             </div>
                         </td>
-                        @foreach( $fieldsAry as $key => $value )
+                        @foreach($listConfig as $key => $value)
                             <td align="{{ $value['align'] }}" width="{{ $value['width'] }}">{{ $item->$key }}</td>
                         @endforeach
                     </tr>
@@ -49,7 +49,7 @@
                      @for($i=0; $i < $paginationCount - $items->count(); $i++)
                         <tr>
                             <td>&nbsp;</td>
-                            @foreach( $fieldsAry as $item )
+                            @foreach($listConfig as $item)
                                 <td>&nbsp;</td>
                             @endforeach
                         </tr>

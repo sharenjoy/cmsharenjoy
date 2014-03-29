@@ -1,4 +1,5 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Utilities;
+
 use Sharenjoy\Cmsharenjoy\Uploads\Uploads;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Image;

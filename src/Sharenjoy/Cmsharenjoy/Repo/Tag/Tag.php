@@ -15,22 +15,27 @@ class Tag extends Eloquent {
      * @var array
      */
     protected $fillable = array(
+        'user_id',
         'tag',
-        'slug',
+        'slug'
     );
 
-    public function taggable()
+    /**
+     * Indicates if the model should soft delete.
+     * @var bool
+     */
+    protected $softDelete = false;
+
+    public $formConfig = [];
+
+    public function author()
     {
-        return $this->morphTo();
+        return $this->belongsTo('Sharenjoy\Cmsharenjoy\User\User', 'user_id');
     }
 
-    /**
-     * Define a many-to-many relationship.
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
     public function posts()
     {
-        return $this->belongsToMany('Sharenjoy\Cmsharenjoy\Post\Post', 'posts_tags', 'tag_id', 'post_id');
+        return $this->belongsToMany('Sharenjoy\Cmsharenjoy\Repo\Post\Post', 'posts_tags', 'tag_id', 'post_id');
     }
 
 }

@@ -39,6 +39,11 @@ return array(
             'icon'=>'list',
             'top'=>true
         ),
+        'tags'=>array(
+            'name'=>'Tags',
+            'icon'=>'th-large',
+            'top'=>true
+        ),
         'blocks'=>array(
             'name'=>'Content Blocks',
             'icon'=>'th-large',

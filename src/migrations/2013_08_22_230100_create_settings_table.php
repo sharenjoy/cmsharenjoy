@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 
 class CreateSettingsTable extends Migration {
@@ -14,17 +15,13 @@ class CreateSettingsTable extends Migration {
         {
             Schema::create('settings', function($table)
             {
-
                 $table->engine = 'InnoDB';
 
-                $table->increments('id');
-                $table->string('key',255);
-                $table->string('label',255);
-                $table->string('value',255);
-                $table->unique('key');
-                $table->index('id');
+                $table->increments('id')->index();
+                $table->string('key', 255)->unique();
+                $table->string('label', 255);
+                $table->string('value', 255);
                 $table->timestamps();
-
             });
         }
     }

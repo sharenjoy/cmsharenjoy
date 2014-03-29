@@ -1,12 +1,13 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Core;
 
 use Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException;
-use Debugbar, StdClass;
+use Sharenjoy\Cmsharenjoy\Exception\ComposeFormException;
+use Debugbar, StdClass, Str, Session, Message, Lang, Formaker;
 
 /**
  * Base Eloquent Repository Class Built On From Shawn McCool <-- This guy is pretty amazing
  */
-class EloquentBaseRepository {
+abstract class EloquentBaseRepository implements EloquentBaseInterface {
 
     /**
      * The instance of model
@@ -15,24 +16,10 @@ class EloquentBaseRepository {
     protected $model;
 
     /**
-     * The instance of tag
-     * @var Object
+     * The instance of Vaildator
+     * @var ValidableInterface
      */
-    protected $tag;
-    public $taggable;
-    
-    /**
-     * The instance of upload
-     * @var Object
-     */
-    protected $upload;
-    public $uploadable;
-
-    public function __construct()
-    {
-        $this->taggable   = is_null($this->tag) ? false : true;
-        $this->uploadable = is_null($this->upload) ? false : true;
-    }
+    protected $validator;
 
     /**
      * Return a instance of model
@@ -43,6 +30,10 @@ class EloquentBaseRepository {
         return $this->model;
     }
 
+    /**
+     * Set an object from outside
+     * @param Eloqunet $model
+     */
     public function setModel($model)
     {
         $this->model = $model;
@@ -65,19 +56,41 @@ class EloquentBaseRepository {
      */
     public function byId($id)
     {
-        if ($this->taggable)
+        $model = $this->model->find($id);
+
+        if ( ! $model)
         {
-            return $this->model->with('tags')->find($id);
+            Message::merge(array(
+                'errors' => Lang::get('cmsharenjoy::exception.not_found', array('id' => $id))
+            ))->flash();
+            throw new EntityNotFoundException();
         }
-        else
+
+        // Do some final things in the repository
+        $model = $this->finalProcess(Session::get('onAction'), $model);
+
+        return $model;
+    }
+
+    /**
+     * Get a record by it's slug
+     * @param  string $slug The slug name
+     * @return Eloquent
+     */
+    public function bySlug($slug)
+    {
+        $model = $this->model->where('slug', $slug)->first();
+
+        if ( ! $model)
         {
-            return $this->model->find($id);
+            throw new EntityNotFoundException;
         }
+
+        return $model;
     }
 
     /**
      * Get paginated articles
-     *
      * @param int $page Number of articles per page
      * @param int $limit Results per page
      * @param boolean $all Show published or all
@@ -104,27 +117,16 @@ class EloquentBaseRepository {
     }
 
     /**
-     * Get a record by it's slug
-     * @param  string $slug The slug name
-     * @return Eloquent
-     */
-    public function bySlug($slug)
-    {
-        return $this->model->where('slug','=',$slug)->first();
-    }
-
-    /**
      * Get articles by their tag
-     *
      * @param string  URL slug of tag
      * @param int Number of articles per page
      * @return StdClass Object with $items and $totalItems for pagination
      */
-    public function byTag($tag, $page=1, $limit=10)
+    public function byTag($tag, $page = 1, $limit)
     {
-        $foundTag = $this->tag->where('slug', $tag)->first();
+        $foundTag = $this->model->where('slug', $tag)->first();
 
-        $result = new \StdClass;
+        $result = new StdClass;
         $result->page = $page;
         $result->limit = $limit;
         $result->totalItems = 0;
@@ -150,35 +152,47 @@ class EloquentBaseRepository {
 
     /**
      * Create a new Article
-     *
      * @param array  Data to create a new object
-     * @return boolean
+     * @return string The insert id
      */
-    public function create(array $data)
+    public function createOne(array $input)
     {
-        if (! $this->valid($data)) return false;
+        $data = $this->composeInputData($input);
+
+        if ( ! $this->valid($data))
+        {
+            $this->getErrorsToFlashMessageBag();
+            return false;
+        }
 
         // Create the model
         $model = $this->model->create($data);
         $this->storeById($model->id, array('sort' => $model->id));
+        
+        $model = $this->finalProcess(Session::get('onAction'), $model, $data);
 
-        is_null($data['tags']) ?: $this->syncTags($model, $data['tags']);
-
-        return true;
+        return $model->id;
     }
 
     /**
      * Update an existing Article
-     *
      * @param array  Data to update an Article
      * @return boolean
      */
-    public function update($id, array $data)
+    public function updateOne($id, array $input)
     {
-        if (! $this->valid($data)) return false;
+        $data = $this->composeInputData($input);
+
+        if ( ! $this->valid($data))
+        {
+            $this->getErrorsToFlashMessageBag();
+            return false;
+        }
 
         $model = $this->model->find($id)->fill($data);
-        is_null($data['tags']) ?: $this->syncTags($model, $data['tags']);
+
+        $model = $this->finalProcess(Session::get('onAction'), $model, $data);
+        
         $model->save();
 
         return true;
@@ -192,46 +206,40 @@ class EloquentBaseRepository {
      */
     public function storeById($id, $data)
     {
-        $this->model->where('id', '=', $id)->update($data);
+        $model = $this->model->where('id', $id)->update($data);
+        
+        if ( ! $model) {
+            throw new EntityNotFoundException;
+        }
     }
 
     /**
      * Delete the model passed in
-     * @param  Eloquent $model The description
+     * @param  int This is the id that needs to delete
      * @return void
      */
-    public function delete()
+    public function deleteOne($id)
     {
-        $this->model->delete();
-    }
+        $model = $this->model->find($id);
 
-    /**
-     * Sync tags
-     * @param \Illuminate\Database\Eloquent\Model
-     * @param mixed  $tags can be array or string
-     * @return void
-     */
-    public function syncTags($model, $tags)
-    {
-        $tags = $this->tag->getTagsArray($tags);
-
-        // Create or add tags and return an Elqquent object
-        $found = $this->tag->findOrCreate($tags);
-
-        $tagIds = array();
-
-        foreach($found as $tag)
-        {
-            $tagIds[] = $tag->id;
+        if ( ! $model) {
+            Message::merge(array(
+                'errors' => Lang::get('cmsharenjoy::exception.not_found', array('id' => $id))
+            ))->flash();
+            throw new EntityNotFoundException;
         }
 
-        // Assign set tags to model
-        $model->tags()->sync($tagIds);
+        $model->delete();
+    }
+
+    protected function lists($title, $id = 'id', $model = null)
+    {
+        $model = $model ?: $this->model;
+        return $model->lists($title, $id);
     }
 
     /**
      * Get total count
-     *
      * @todo I hate that this is public for the decorators.
      *       Perhaps interface it?
      * @return int  Total articles
@@ -243,7 +251,7 @@ class EloquentBaseRepository {
 
     /**
      * Test if form validator passes
-     *
+     * @param  array The input needs to valid
      * @return boolean
      */
     protected function valid(array $input)
@@ -253,12 +261,121 @@ class EloquentBaseRepository {
 
     /**
      * Return any validation errors
-     *
      * @return array
      */
     public function errors()
     {
         return $this->validator->errors();
+    }
+
+    /**
+     * Merge message to flashMessageBag
+     * @return void
+     */
+    public function getErrorsToFlashMessageBag()
+    {
+        if ($this->validator->getErrorsToArray())
+        {
+            foreach ($this->validator->getErrorsToArray() as $value)
+            {
+                Message::merge(array('errors'=>$value))->flash();
+            }
+        }
+    }
+
+    /**
+     * Compose some of useful form fields
+     * @param  array  $config The config
+     * @param  string $type  The type of form fields
+     * @return array
+     */
+    public function composeForm(array $config, $type, $input = array())
+    {
+        if (is_array($config) && count($config))
+        {
+            foreach ($config as $key => $value)
+            {
+                if (isset($value['model']) && isset($value['item']))
+                {
+                    $config[$key]['option'] = $this->$value['model']->lists($value['item']);
+                }
+
+                // If use custom key of value otherwise use the $key
+                if (isset($value['input']) && isset($input[$value['input']]))
+                {
+                    $config[$key]['value'] = $input[$value['input']];
+                }
+                elseif(isset($input[$key]))
+                {
+                    $config[$key]['value'] = $input[$key];
+                }
+            }
+            
+            // Compose form fields from Formaker
+            $fieldsForm = Formaker::composeForm($config, $type);
+
+            if( ! $fieldsForm)
+            {
+                throw new ComposeFormException;
+            }
+
+            return $fieldsForm;
+        }
+
+        return false;
+    }
+
+    public function setModelForm($type, $input = array())
+    {
+        $formConfig = $this->model->formConfig;
+
+        if ($type)
+        {
+            switch ($type)
+            {
+                case 'create-form':
+                    $typeConfig = $this->model->createFormConfig;
+                    break;
+
+                case 'update-form':
+                    $typeConfig = $this->model->updateFormConfig;
+                    break;
+            }
+            $formConfig = array_merge($formConfig, $typeConfig);
+        }
+
+        $formConfig = array_sort($formConfig, function($value)
+        {
+            return $value['order'];
+        });
+        
+        $fieldsForm = $this->composeForm($formConfig, $type, $input);
+
+        return $fieldsForm;
+    }
+
+    /**
+     * Compose input data and slug to an array
+     * @param  array  $data      Input data
+     * @param  string $separator separator
+     * @return array
+     */
+    protected function composeInputData(array $data)
+    {
+        // slug
+        if (isset($this->slug) && !is_null($this->slug))
+        {
+            $data = array_merge($data, array(
+                'slug' => Str::slug($data[$this->slug], '-')
+            ));
+        }
+
+        // Author
+        $data = array_merge($data, array(
+            'user_id' => Session::get('user')->id
+        ));
+        
+        return $data;
     }
 
 }

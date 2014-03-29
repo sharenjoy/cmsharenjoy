@@ -1,6 +1,7 @@
-<?php namespace Impl\Exception;
+<?php namespace Sharenjoy\Cmsharenjoy\Exception;
 
-use Impl\Service\Notification\NotifierInterface;
+use Sharenjoy\Cmsharenjoy\Service\Notification\NotifierInterface;
+use Exception, Config;
 
 class NotifyHandler implements HandlerInterface {
 
@@ -12,12 +13,12 @@ class NotifyHandler implements HandlerInterface {
     }
 
     /**
-     * Handle Impl Exceptions
+     * Handle Sharenjoy Exceptions
      *
-     * @param \Impl\Exception\ImplException
+     * @param \Sharenjoy\Cmsharenjoy\Exception\SharenjoyException
      * @return void
      */
-    public function handle(ImplException $exception)
+    public function handle(SharenjoyException $exception)
     {
         $this->sendException($exception);
     }
@@ -27,9 +28,10 @@ class NotifyHandler implements HandlerInterface {
      * @param  \Exception $exception Send notification of exception
      * @return void
      */
-    protected function sendException(\Exception $e)
+    protected function sendException(Exception $e)
     {
-        $this->notifier->notify('Error: '.get_class($e), $e->getMessage());
+        $this->notifier->to(Config::get('cmsharenjoy::twilio.to'))
+                       ->notify('Error: '.get_class($e), $e->getMessage());
     }
 
 }

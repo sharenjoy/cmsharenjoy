@@ -36,4 +36,10 @@ class SettingsRepository extends EloquentBaseRepository implements SettingsInter
         return Config::get('cmsharenjoy::app.name');
     }
 
+    public function setFilterQuery($model = null, $query)
+    {
+        return;        
+    }
+    public function finalProcess($action, $model = null, $data = null){}
+
 }

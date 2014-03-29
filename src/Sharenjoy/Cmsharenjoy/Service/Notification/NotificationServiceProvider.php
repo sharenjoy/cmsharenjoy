@@ -1,4 +1,4 @@
-<?php namespace Impl\Service\Notification;
+<?php namespace Sharenjoy\Cmsharenjoy\Service\Notification;
 
 use Services_Twilio;
 use Illuminate\Support\ServiceProvider;
@@ -14,19 +14,18 @@ class NotificationServiceProvider extends ServiceProvider {
     {
         $app = $this->app;
 
-        $app['impl.notifier'] = $app->share(function() use ($app)
+        $app['sharenjoy.notifier'] = $app->share(function() use ($app)
         {
             $config = $app['config'];
 
             $twilio = new Services_Twilio(
-                $config->get('twilio.account_id'),
-                $config->get('twilio.auth_token')
+                $config->get('cmsharenjoy::twilio.account_id'),
+                $config->get('cmsharenjoy::twilio.auth_token')
             );
 
-            $notifier = new SmsNotifier( $twilio );
+            $notifier = new SmsNotifier($twilio);
 
-            $notifier->from( $config['twilio.from'] )
-                    ->to( $config['twilio.to'] );
+            $notifier->from($config['cmsharenjoy::twilio.from']);
 
             return $notifier;
         });
@@ -34,7 +33,7 @@ class NotificationServiceProvider extends ServiceProvider {
 
     public function provides()
     {
-        return array('impl.notifier');
+        return array('sharenjoy.notifier');
     }
 
 }

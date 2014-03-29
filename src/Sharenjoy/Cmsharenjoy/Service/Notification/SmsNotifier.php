@@ -1,4 +1,4 @@
-<?php namespace Impl\Service\Notification;
+<?php namespace Sharenjoy\Cmsharenjoy\Service\Notification;
 
 use Services_Twilio;
 
@@ -55,8 +55,8 @@ class SmsNotifier implements NotifierInterface {
     {
         $sms = $this->twilio
             ->account
-            ->sms_messages
-            ->create(
+            ->messages
+            ->sendMessage(
                 $this->from,
                 $this->to,
                 $subject."\n".$message

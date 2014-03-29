@@ -1,7 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Controllers;
 
 use Illuminate\Routing\Controller;
-use App, View, Config;
+use Auth, Session, App, View, Config, Str, Route, Request;
 
 abstract class BaseController extends Controller {
 
@@ -30,36 +30,132 @@ abstract class BaseController extends Controller {
     protected $objectUrl;
 
     /**
+     * The URL to create a new entry
+     * @var string
+     */
+    protected $createUrl;
+
+    /**
+     * The URL that is used to edit shit
+     * @var string
+     */
+    protected $updateUrl;
+
+    /**
+     * The URL to delete an entry
+     * @var string
+     */
+    protected $deleteUrl;
+
+    /**
+     * The controller active right away
+     * @var string
+     */
+    protected $onController;
+
+    /**
+     * The action active right away
+     * @var string
+     */
+    protected $onAction;
+
+    /**
      * Initializer.
-     *
      * @access   public
      * @return   void
      */
     public function __construct()
     {
+        $this->filterProcess();
+        $this->setCommonVariable();
+        $this->setHandyUrls();
+        $this->shareHandyUrls();
+    }
+
+    protected function filterProcess()
+    {
         // Setup composed views and the variables that they require
         $this->beforeFilter('adminFilter' , array('except' => $this->whitelist));
 
-        // This is a filter which configure the language
-        $this->beforeFilter('localeFilter');
+        // csrf
+        $this->beforeFilter('csrf', array('on' => 'post'));
+    }
 
+    protected function setCommonVariable()
+    {
         // Achieve that segment
         $this->urlSegment = Config::get('cmsharenjoy::app.access_url');
 
-        if(is_null($this->objectUrl))
+        // Get the action name
+        $routeArray = Str::parseCallback(Route::currentRouteAction(), null);
+        
+        if (last($routeArray) != null)
         {
-            $this->objectUrl = url($this->urlSegment.'/'.$this->appName);
+            // Remove 'controller' from the controller name.
+            $controller = str_replace('Controller', '', class_basename(head($routeArray)));
+
+            // Take out the method from the action.
+            $action = str_replace(array('get', 'post', 'patch', 'put', 'delete'), '', last($routeArray));
+
+            $this->onController = $controller;
+            $this->onAction = Str::slug(Request::method(). '-' .$action);
+            Session::put('onAction', $this->onAction);
         }
+
+        // Get the login user
+        $user = Auth::user();
+        Session::put('user', $user);
 
         // Share some variables to views
         $settings = App::make('Sharenjoy\Cmsharenjoy\Settings\SettingsInterface');
         View::share('app_name', $settings->getAppName());
         View::share('appName' , $this->appName);
-        View::share('objectUrl', $this->objectUrl);
-        View::share('filterable', false);
+        View::share('user', $user);
 
-        $composed_views = array( 'cmsharenjoy::*' );
+        $composed_views = array('cmsharenjoy::*');
         View::composer($composed_views, 'Sharenjoy\Cmsharenjoy\Composers\Page');
+    }
+
+    /**
+     * Set the URL's to be used in the views
+     * @return void
+     */
+    private function setHandyUrls()
+    {
+        $this->objectUrl = is_null($this->objectUrl) ? url($this->urlSegment.'/'.$this->appName) : null;
+        $this->updateUrl = is_null($this->updateUrl) ? $this->objectUrl.'/update/' : null;
+        $this->createUrl = is_null($this->createUrl) ? $this->objectUrl.'/create' : null;
+        $this->deleteUrl = is_null($this->deleteUrl) ? $this->objectUrl.'/delete/' : null;
+    }
+
+    /**
+     * Set the view to have variables detailing
+     * some of the key URL's used in the views
+     * Trying to keep views generic...
+     * @return void
+     */
+    private function shareHandyUrls()
+    {
+        // Share these variables with any views
+        View::share('objectUrl', $this->objectUrl);
+        View::share('createUrl', $this->createUrl);
+        View::share('updateUrl', $this->updateUrl);
+        View::share('deleteUrl', $this->deleteUrl);
+    }
+
+    protected function setupLayout()
+    {
+        $action = array_get(explode('-', $this->onAction), 1);
+        $commonRepoLayout = Config::get('cmsharenjoy::app.commonRepoLayoutDirectory');
+        
+        if (View::exists('cmsharenjoy::'.$this->appName.'.'.$action))
+        {
+            $this->layout = View::make('cmsharenjoy::'.$this->appName.'.'.$action);
+        }
+        else if(View::exists('cmsharenjoy::'.$commonRepoLayout.'.'.$action))
+        {
+            $this->layout = View::make('cmsharenjoy::'.$commonRepoLayout.'.'.$action);
+        }
     }
 
 }

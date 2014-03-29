@@ -1,54 +1,43 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Controllers;
 
 use Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException;
-use Illuminate\Support\MessageBag;
-use View, Redirect, Input, App, ReflectionClass, Request, Config;
-use Response, URL, Lang, Debugbar, Paginator, Str;
+use View, Redirect, Input, App, Request, Config, Response, Lang, Paginator;
+use Session, Debugbar, Message;
 
 abstract class ObjectBaseController extends BaseController {
 
     /**
      * The model to work with for editing stuff
      */
-    protected $repo;
-
-    /**
-     * The URL that is used to edit shit
-     * @var string
-     */
-    protected $editUrl;
-
-    /**
-     * The URL to create a new entry
-     * @var string
-     */
-    protected $newUrl;
-
-    /**
-     * The URL to delete an entry
-     * @var string
-     */
-    protected $deleteUrl;
-
-    /**
-     * The uploads model
-     * @var UploadsInterface
-     */
-    protected $uploads_model;
+    protected $repository;
 
     /**
      * By default a mass assignment is used to validate things on a model
      * Sometimes you want to confirm inputs (such as password confirmations)
      * that you don't want to be necessarily stored on the model. This will validate
      * inputs from Input::all() not from $model->fill();
-     * 
      * @var boolean
      */
     protected $validateWithInput = false;
 
     /**
+     * This is the MessageBag instance
+     * @var MessageBag
+     */
+    protected $messages;
+
+    /**
+     * These are the data of array that don't need to filter
+     * @var array
+     */
+    protected $filterExcept = array(
+        'filter',
+        'perPage', 
+        'page'
+    );
+
+    /**
      * The default number of pagination
-     * 
      * @var integer
      */
     protected $paginationCount = 15;
@@ -60,70 +49,17 @@ abstract class ObjectBaseController extends BaseController {
     {
         parent::__construct();
 
-        $this->setHandyUrls();
-        $this->shareHandyUrls();
+        $filterForm = $this->repository->composeForm($this->filterFormConfig, 'list-filter', Input::all());
+        $filterForm ? View::share('filterForm', $filterForm) : '';
 
-        $this->uploads_model = App::make('Sharenjoy\Cmsharenjoy\Uploads\UploadsInterface');
+        // Debugbar::info($filterForm);
+        // Debugbar::info(Input::all());
+        // Message::add('info', 'test')->flash();
 
-        $this->composeFilterform();
-    }
-
-    /**
-     * Set the URL's to be used in the views
-     * 
-     * @return void
-     */
-    private function setHandyUrls()
-    {
-        $this->editUrl   = is_null($this->editUrl) ? $this->objectUrl.'/edit/' : null;
-        $this->newUrl    = is_null($this->newUrl) ? $this->objectUrl.'/new' : null;
-        $this->deleteUrl = is_null($this->deleteUrl) ? $this->objectUrl.'/delete/' : null;
-    }
-
-    /**
-     * Set the view to have variables detailing
-     * some of the key URL's used in the views
-     * Trying to keep views generic...
-     * 
-     * @return void
-     */
-    private function shareHandyUrls()
-    {
-        // Share these variables with any views
-        View::share('editUrl', $this->editUrl);
-        View::share('newUrl', $this->newUrl);
-        View::share('deleteUrl', $this->deleteUrl);
-    }
-
-    private function composeFilterForm()
-    {
-        if (is_array($this->filterAry))
-        {
-            $data = array();
-            foreach ($this->filterAry as $key => $value)
-            {
-                $data[$key] = $value;
-
-                if ($value['source'] == 'database')
-                {
-                    $model = $this->tag->getModel();
-                    $query = $model->with('posts')->get();
-                    Debugbar::info($query->toArray());
-                }
-                else
-                {
-                    $data[$key]['option'] = Config::get('cmsharenjoy::'.$value['source']);
-                }
-            }
-            Debugbar::info($data);
-            // View::share('filterForm', $data);
-        }
     }
 
     /**
      * Main users page.
-     *
-     * @access   public
      * @return   View
      */
     public function getIndex($sort = '')
@@ -136,134 +72,137 @@ abstract class ObjectBaseController extends BaseController {
         $sortable   = $sort == 'sort' ? true : false;
         $filterable = $sort == 'sort' ? false : true;
         
-        $model = $this->repo->getModel();
+        // Get the model from repositroy
+        $model = $this->repository->getModel();
 
+        // If we get the request of get contains filter
+        // We will do some filter things
         if (Input::get('filter'))
         {
-            $filter = array_except($query, array('filter', 'perPage', 'page'));
-            $model = $this->setFilterQuery($model, $filter);
+            $filter = array_except($query, $this->filterExcept);
+            $model = $this->repository->setFilterQuery($model, $filter, $this->filterFormConfig);
         }
 
-        $result = $this->repo->byPage($page, $perPage, $model);
+        $result = $this->repository->byPage($page, $perPage, $model);
+
+        // Do some final things process
+        $result->items = $this->repository->finalProcess($this->onAction, $result->items);
+
+        // Set Pagination of data 
         $items = Paginator::make($result->items, $result->totalItems, $perPage)->appends($query);
 
-        return View::make('cmsharenjoy::'.$this->appName.'.index')
-                   ->with('paginationCount', $perPage)
-                   ->with('sortable', $sortable)
-                   ->with('filterable', $filterable)
-                   ->with('fieldsAry', $this->fieldsAry)
-                   ->with('items', $items);
+        $this->layout->with('paginationCount', $perPage)
+                     ->with('sortable', $sortable)
+                     ->with('filterable', $filterable)
+                     ->with('listConfig', $this->listConfig)
+                     ->with('items', $items)
+                     ->with('messages', Message::getMessageBag());
     }
 
     /**
      * The new object
-     * 
-     * @access public
      * @return View
      */
-    public function getNew()
+    public function getCreate()
     {
-        if( ! View::exists('cmsharenjoy::'.$this->appName.'.new'))
-        {
-            return App::abort(404, 'Page not found');
-        }
-
-        return View::make('cmsharenjoy::'.$this->appName.'.new');
+        $this->layout->with('fieldsForm', $this->repository->setModelForm('create-form'))
+                     ->with('messages', Message::getMessageBag());
     }
 
     /**
      * The generic method for the start of editing something
-     * 
      * @return View
      */
-    public function getEdit($id)
+    public function getUpdate($id)
     {
-        $item = $this->repo->byId($id);
-        $item->tags_csv = implode(',', array_pluck($item->tags->toArray(), 'tag'));
-
-        if( ! View::exists('cmsharenjoy::'.$this->appName.'.edit'))
+        // Catch some validation if can't get the data
+        try {
+            $item = $this->repository->byId($id);
+        }
+        catch(EntityNotFoundException $e)
         {
-            return App::abort(404, 'Page not found');
+            return Redirect::to($this->objectUrl);
         }
 
-        return View::make('cmsharenjoy::'.$this->appName.'.edit')->with('item' , $item);
+        $fieldsForm = $this->repository->setModelForm('update-form', $item);
+
+        $this->layout->with('item' , $item)
+                     ->with('fieldsForm', $fieldsForm)
+                     ->with('messages', Message::getMessageBag());
     }
 
     /**
      * Delete an object based on the ID passed in
-     * 
      * @param  integer $id The object ID
      * @return Redirect
      */
     public function getDelete($id)
     {
-        $model = $this->repo->byId($id)->delete();
+        try {
+            $this->repository->deleteOne($id);
+        }
+        catch(EntityNotFoundException $e)
+        {
+            return Redirect::to($this->objectUrl);
+        }
 
-        $message = 'The item was successfully removed.';
-        return Redirect::to($this->objectUrl)->with('success', new MessageBag(array($message)));
+        // delete success message
+        Message::merge(array('success'=>'The item was successfully removed.'))->flash();
+
+        return Redirect::to($this->objectUrl)
+                    ->with('messages', Message::getMessageBag());
     }
 
     /**
      * The new object method, very generic, 
      * just allows mass assignable stuff to be filled and saved
-     * 
      * @return Redirect
      */
-    public function postNew()
-    {
-        if ($this->slug)
-        {
-            $input = $this->composeSlugInputData(Input::all(), '-');
-        }
-        else
-        {
-            $input = Input::all();
-        }
-        
-        $result = $this->repo->create($input);
+    public function postCreate()
+    {   
+        // To create data
+        $result = $this->repository->createOne(Input::all());
 
         if ( ! $result)
-        {
-            return Redirect::to($this->newUrl)->with('errors', $this->repo->errors())->withInput();
+        {   
+            return Redirect::to($this->createUrl)
+                        ->with('messages', Message::getMessageBag())
+                        ->withInput();
         }
         else
         {
-            return Redirect::to($this->objectUrl)->with('success', new MessageBag(array('Item Created')));
+            Message::merge(array('success'=>'Item Created'))->flash();
+            return Redirect::to($this->objectUrl)
+                        ->with('messages', Message::getMessageBag());
         }
     }
 
     /**
      * The method to handle the posted data
-     * 
      * @param  integer $id The ID of the object
      * @return Redirect
      */
-    public function postEdit($id)
+    public function postUpdate($id)
     {
-        if ($this->slug)
-        {
-            $input = $this->composeSlugInputData(Input::all(), '-');
-        }
-        else
-        {
-            $input = Input::all();
-        }
-
-        $result = $this->repo->update($id, $input);
+        // To update data
+        $result = $this->repository->updateOne($id, Input::all());
 
         if ( ! $result)
         {
-            return Redirect::to($this->editUrl.$id)->with('errors', $this->repo->errors())->withInput();
+            return Redirect::to($this->updateUrl.$id)
+                        ->with('messages', Message::getMessageBag())
+                        ->withInput();
         }
         else
         {
-            return Redirect::to($this->editUrl.$id)->with('success', new MessageBag(array('Item Saved')));
+            Message::merge(array('success'=>'Item Saved'))->flash();
+            return Redirect::to($this->updateUrl.$id)
+                        ->with('messages', Message::getMessageBag());
         }
     }
 
     /**
      * Set the order of the list
-     * 
      * @return Response
      */
     public function postOrder()
@@ -279,66 +218,14 @@ abstract class ObjectBaseController extends BaseController {
         
         foreach($id_value as $key => $id)
         {
-            if($id != '')
+            if($id)
             {
                 $sort = $sort_value[$key];
-                $this->repo->storeById($id, array('sort' => $sort));
+                $this->repository->storeById($id, array('sort' => $sort));
             }
         }
 
         return Response::json('success', 200);
-    }
-
-    /**
-     * Upload an image for this product ID
-     * 
-     * @return Response
-     */
-    public function postUpload($id)
-    {
-
-        // This should only be accessible via AJAX you know...
-        if( ! Request::ajax() or !$this->repo->getById($id))
-        {
-            Response::json('error', 400);
-        }
-        
-        $key = $this->repo->getModel()->getTableName();
-        $type = get_class($this->repo->getModel());
-        $success = $this->uploads_model->doUpload($id, $type, $key);
-
-        if( ! $success)
-        {
-            Response::json('error', 400);
-        }
-
-        return Response::json('success', 200);
-    }
-
-    /**
-     * Set the order of the images
-     * 
-     * @return Response
-     */
-    public function postOrderImages()
-    {
-        // This should only be accessible via AJAX you know...
-        if( ! Request::ajax())
-        {
-            Response::json('error', 400);
-        }
-
-        // Ensure that the product images that need to be deleted get deleted
-        $this->uploads_model->setOrder(Input::get('data'));
-
-        return Response::json('success', 200);
-    }
-
-    protected function composeSlugInputData(array $data, $separator = '-')
-    {
-        $input = array_merge($data, array('slug' => Str::slug($data[$this->slug], $separator)));
-        
-        return $input;
     }
     
 }

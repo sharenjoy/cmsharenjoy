@@ -1,4 +1,5 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Controllers;
+
 use Illuminate\Support\MessageBag;
 use Sharenjoy\Cmsharenjoy\Validators\Login;
 use View, Auth, Redirect, Validator, Session, Input;
@@ -25,7 +26,7 @@ class DashController extends BaseController {
      */
     public function getIndex()
     {
-        return View::make( 'cmsharenjoy::dashboard' );
+        return View::make('cmsharenjoy::dashboard');
     }
 
     /**

@@ -2,7 +2,4 @@
 
 use Exception;
 
-class EntityNotFoundException extends Exception
-{
-    
-}
+class EntityNotFoundException extends SharenjoyException {}

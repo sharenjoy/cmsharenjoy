@@ -1,17 +1,16 @@
-<?php namespace Impl\Exception;
+<?php namespace Sharenjoy\Cmsharenjoy\Exception;
 
 use Illuminate\Support\ServiceProvider;
 
-class ExceptionServiceProvider extends ServiceProvider
-{
+class ExceptionServiceProvider extends ServiceProvider {
 
     public function register()
     {
         $app = $this->app;
 
-        $app['impl.exception'] = $app->share(function($app)
+        $app['sharenjoy.exception'] = $app->share(function($app)
         {
-            return new NotifyHandler( $app['impl.notifier'] );
+            // return new NotifyHandler($app['sharenjoy.notifier']);
         });
     }
 
@@ -24,9 +23,9 @@ class ExceptionServiceProvider extends ServiceProvider
     {
         $app = $this->app;
 
-        $app->error(function(ImplException $e) use ($app)
+        $app->error(function(SharenjoyException $e) use ($app)
         {
-            $app['impl.exception']->handle($e);
+            // $app['sharenjoy.exception']->handle($e);
         });
     }
 }

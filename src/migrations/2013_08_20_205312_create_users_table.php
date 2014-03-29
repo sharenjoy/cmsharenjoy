@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 
 class CreateUsersTable extends Migration {
@@ -14,8 +15,8 @@ class CreateUsersTable extends Migration {
         {
             Schema::create('users', function($table)
             {
-
                 $table->engine = 'InnoDB';
+                
                 $table->increments('id');
                 $table->string('email',255);
                 $table->string('password',255);
