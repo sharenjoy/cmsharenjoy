@@ -31,6 +31,11 @@ return array(
     'locales' => array('en', 'tw'),
 
     /**
+     * The common directory of layout
+     */
+    'commonRepoLayoutDirectory' => 'repo',
+
+    /**
      * The menu items shown at the top and side of the application
      */
     'menu_items'=>array(

@@ -60,6 +60,12 @@ abstract class BaseController extends Controller {
     protected $onAction;
 
     /**
+     * The layout
+     * @var string
+     */
+    protected $layout;
+
+    /**
      * Initializer.
      * @access   public
      * @return   void
@@ -120,7 +126,7 @@ abstract class BaseController extends Controller {
      * Set the URL's to be used in the views
      * @return void
      */
-    private function setHandyUrls()
+    protected function setHandyUrls()
     {
         $this->objectUrl = is_null($this->objectUrl) ? url($this->urlSegment.'/'.$this->appName) : null;
         $this->updateUrl = is_null($this->updateUrl) ? $this->objectUrl.'/update/' : null;
@@ -134,7 +140,7 @@ abstract class BaseController extends Controller {
      * Trying to keep views generic...
      * @return void
      */
-    private function shareHandyUrls()
+    protected function shareHandyUrls()
     {
         // Share these variables with any views
         View::share('objectUrl', $this->objectUrl);
