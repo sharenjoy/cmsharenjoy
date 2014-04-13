@@ -14,7 +14,7 @@
         "barryvdh/laravel-debugbar": "1.5.*",
         "twilio/sdk": "3.12.*",
         "teepluss/theme": "1.1.*",
-        "zizaco/confide": "3.2.*"
+        "zizaco/confide": "3.1.*"
     },
     "autoload": {
         "classmap": [
