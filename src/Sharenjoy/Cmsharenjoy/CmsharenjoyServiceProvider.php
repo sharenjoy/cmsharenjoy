@@ -1,7 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy;
 
 use Illuminate\Support\ServiceProvider;
-use Response, Session, Route;
+use Response, Session, Route, Request, Input;
 
 class CmsharenjoyServiceProvider extends ServiceProvider {
 

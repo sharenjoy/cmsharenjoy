@@ -39,34 +39,42 @@ return array(
      * The menu items shown at the top and side of the application
      */
     'menu_items'=>array(
-        'posts'=>array(
+        'post'=>array(
             'name'=>'Posts',
-            'icon'=>'list',
+            'icon'=>'entypo-chart-bar',
             'top'=>true
         ),
-        'tags'=>array(
+        'category'=>array(
+            'name' =>'Categories',
+            'icon' =>'entypo-chart-bar',
+            'top'  =>true,
+            'sub'  => array(
+                'category/index/product' => array(
+                    'name' => 'Product Categories'
+                ),
+                'category/index/post' => array(
+                    'name' => 'Post Categories'
+                ),
+            )
+        ),
+        'tag'=>array(
             'name'=>'Tags',
-            'icon'=>'th-large',
+            'icon'=>'entypo-chart-bar',
             'top'=>true
         ),
-        'blocks'=>array(
-            'name'=>'Content Blocks',
-            'icon'=>'th-large',
+        'gallery'=>array(
+            'name'=>'Gallery',
+            'icon'=>'entypo-chart-bar',
             'top'=>true
         ),
-        'galleries'=>array(
-            'name'=>'Galleries',
-            'icon'=>'picture',
-            'top'=>true
-        ),
-        'users'=>array(
+        'user'=>array(
             'name'=>'Users',
-            'icon'=>'user',
+            'icon'=>'entypo-chart-bar',
             'top'=>true
         ),
-        'settings'=>array(
+        'setting'=>array(
             'name'=>'Settings',
-            'icon'=>'cog',
+            'icon'=>'entypo-chart-bar',
             'top'=>true
         )
     )

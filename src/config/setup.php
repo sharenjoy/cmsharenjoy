@@ -9,5 +9,6 @@ return array(
     'first-name'    =>  'Example',
     'last-name'     =>  'Example',
     'password'      =>  'password',
+    'phone'         =>  '0939999999',
 
 );

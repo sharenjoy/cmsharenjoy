@@ -1,9 +1,10 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Controllers;
+
 use Illuminate\Support\MessageBag;
 use Sharenjoy\Cmsharenjoy\Settings\SettingsInterface;
 use Input, Redirect;
 
-class SettingsController extends ObjectBaseController {
+class SettingController extends ObjectBaseController {
 
     /**
      * Make the controller enabled image uploads

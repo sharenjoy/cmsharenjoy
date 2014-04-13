@@ -11,6 +11,12 @@ class Tag extends Eloquent {
     protected $table = 'tags';
 
     /**
+     * It's the unique fields
+     * @var array
+     */
+    public $uniqueFields = ['slug'];
+
+    /**
      * The attributes that are mass assignable.
      * @var array
      */
@@ -26,7 +32,12 @@ class Tag extends Eloquent {
      */
     protected $softDelete = false;
 
-    public $formConfig = [];
+    public $formConfig = [
+        'tag' => [
+            'type'  => 'text',
+            'order' => '10'
+        ]
+    ];
 
     public function author()
     {

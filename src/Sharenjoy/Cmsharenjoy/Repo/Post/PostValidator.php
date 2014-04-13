@@ -11,7 +11,7 @@ class PostValidator extends AbstractLaravelValidator {
      */
     protected $rules = [
         'title'     => 'required',
-        'slug'      => 'required|unique:posts,id,<id>',
+        'slug'      => 'required|unique:posts,slug',
         'content'   => 'required'
     ];
 

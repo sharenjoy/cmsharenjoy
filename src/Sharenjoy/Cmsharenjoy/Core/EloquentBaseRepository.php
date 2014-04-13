@@ -49,6 +49,26 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
         return $this->model->newInstance($attributes);
     }
 
+    public function pushFormConfig($type = 'list', $data)
+    {
+        
+        switch ($type)
+        {
+            case 'list':
+                if (isset($this->model->formConfig))
+                    $this->model->formConfig = array_merge($this->model->formConfig, $data);
+                break;
+            case 'create':
+                if (isset($this->model->createFormConfig))
+                    $this->model->createFormConfig = array_merge($this->model->createFormConfig, $data);
+                break;
+            case 'update':
+                if (isset($this->model->updateFormConfig))
+                    $this->model->updateFormConfig = array_merge($this->model->updateFormConfig, $data);
+                break;
+        }
+    }
+
     /**
      * Get a record by its ID
      * @param  integer $id The ID of the record
@@ -155,7 +175,7 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
      * @param array  Data to create a new object
      * @return string The insert id
      */
-    public function createOne(array $input)
+    public function create(array $input)
     {
         $data = $this->composeInputData($input);
 
@@ -179,10 +199,15 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
      * @param array  Data to update an Article
      * @return boolean
      */
-    public function updateOne($id, array $input)
+    public function update($id, array $input)
     {
         $data = $this->composeInputData($input);
 
+        if(isset($this->model->uniqueFields) && count($this->model->uniqueFields))
+        {
+            $this->validator->setUniqueUpdateFields($this->model->uniqueFields, $id);
+        }
+        
         if ( ! $this->valid($data))
         {
             $this->getErrorsToFlashMessageBag();
@@ -218,7 +243,7 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
      * @param  int This is the id that needs to delete
      * @return void
      */
-    public function deleteOne($id)
+    public function delete($id)
     {
         $model = $this->model->find($id);
 
@@ -334,16 +359,17 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
             switch ($type)
             {
                 case 'create-form':
-                    $typeConfig = $this->model->createFormConfig;
+                    $typeConfig = $this->model->createFormConfig ?: [];
                     break;
 
                 case 'update-form':
-                    $typeConfig = $this->model->updateFormConfig;
+                    $typeConfig = $this->model->updateFormConfig ?: [];
                     break;
             }
             $formConfig = array_merge($formConfig, $typeConfig);
         }
 
+        // To order the form config
         $formConfig = array_sort($formConfig, function($value)
         {
             return $value['order'];

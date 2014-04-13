@@ -11,6 +11,12 @@ class Post extends Eloquent {
     protected $table    = 'posts';
 
     /**
+     * It's the unique fields
+     * @var array
+     */
+    public $uniqueFields = ['slug'];
+
+    /**
      * These are the mass-assignable keys
      * @var array
      */
@@ -46,7 +52,6 @@ class Post extends Eloquent {
     ];
 
     public $createFormConfig = [];
-
     public $updateFormConfig = [];
 
     /**

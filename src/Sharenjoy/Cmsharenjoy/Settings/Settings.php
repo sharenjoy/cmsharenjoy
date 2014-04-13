@@ -1,7 +1,8 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Settings;
-use Sharenjoy\Cmsharenjoy\Core\EloquentBaseModel;
 
-class Settings extends EloquentBaseModel
+use Eloquent;
+
+class Settings extends Eloquent
 {
 
     /**

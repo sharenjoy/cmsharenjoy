@@ -1,6 +1,6 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Formaker;
 
-use Form, Lang;
+use Form, Lang, Theme, Config;
 
 class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface {
 
@@ -14,6 +14,8 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
      * @var string
      */
     private $fieldPrefix = '';
+
+    private $assets = array();
 
     /**
      * Composing the arguments to some data
@@ -110,7 +112,6 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
 
     /**
      * Create the form field
-     *
      * @param string $name
      * @param array $args
      */
@@ -158,9 +159,9 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
     private function createInput($type, $value)
     {
         // Add prefix
-        $name  = $this->fieldPrefix.$this->name;
-        $args  = $this->args;
-        $input = '';
+        $name    = $this->fieldPrefix.$this->name;
+        $args    = $this->args;
+        $input   = '';
 
         switch ($type)
         {
@@ -184,6 +185,7 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
                 // Overwrite a class element to array
                 $args['class'] = 'form-control tagsinput';
                 $input = Form::text($name, $value, $args);
+                $this->assets[] = ['asset'=>'tag-input-js', 'type'=>'script', 'queue'=>false];
                 break;
 
             case 'textarea':
@@ -198,6 +200,9 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
                         'data-stylesheet-url'=>'/packages/sharenjoy/cmsharenjoy/css/wysihtml5-color.css'
                     ), $args);
                 $input = Form::textarea($name, $value, $args);
+                $this->assets[] = ['asset'=>'bootstrap-wysihtml5-css', 'type'=>'style', 'queue'=>false];
+                $this->assets[] = ['asset'=>'wysihtml5-js', 'type'=>'script', 'queue'=>false];
+                $this->assets[] = ['asset'=>'bootstrap-wysihtml5-js', 'type'=>'script', 'queue'=>false];
                 break;
 
             case 'select':
@@ -251,6 +256,7 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
                 $input .= '<div class="input-group"><div class="input-group-addon"><i class="entypo-calendar"></i></div>';
                 $input .= Form::text($name, $value, $args);
                 $input .= '</div>';
+                $this->assets[] = ['asset'=>'bootstrap-datepicker-js', 'type'=>'script', 'queue'=>false];
                 break;
 
             case 'daterange':
@@ -266,6 +272,9 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
                 $input .= '<div class="input-group"><div class="input-group-addon"><i class="entypo-calendar"></i></div>';
                 $input .= Form::text($name, $value, $args);
                 $input .= '</div>';
+                $this->assets[] = ['asset'=>'daterangepicker-css', 'type'=>'style', 'queue'=>false];
+                $this->assets[] = ['asset'=>'moment-js', 'type'=>'script', 'queue'=>false];
+                $this->assets[] = ['asset'=>'daterangepicker-js', 'type'=>'script', 'queue'=>false];
                 break;
 
             case 'colorpicker':
@@ -275,6 +284,7 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
                 $input .= '<div class="input-group"><div class="input-group-addon"><i class="color-preview"></i></div>';
                 $input .= Form::text($name, $value, $args);
                 $input .= '</div>';
+                $this->assets[] = ['asset'=>'bootstrap-colorpicker-js', 'type'=>'script', 'queue'=>false];
                 break;
 
             case 'file':
@@ -294,6 +304,7 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
                         <a href="#" class="btn btn-orange fileinput-exists" data-dismiss="fileinput">Remove</a>
                     </div>
                 </div>';
+                $this->assets[] = ['asset'=>'file-input-js', 'type'=>'script', 'queue'=>false];
                 break;
 
             default:
@@ -301,6 +312,28 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
         }
 
         return $input;
+    }
+
+    protected function setThemeAssets()
+    {
+        $package = 'packages/sharenjoy/cmsharenjoy/';
+        $assetsConfig  = Config::get('cmsharenjoy::assets');
+
+        if (count($this->assets))
+        {
+            foreach ($this->assets as $key => $value)
+            {
+                if ($value['queue'])
+                {
+                    Theme::asset()->queue($value['type'])
+                                  ->add($value['asset'], $package.$assetsConfig[$value['asset']]);
+                }
+                else
+                {
+                    Theme::asset()->add($value['asset'], $package.$assetsConfig[$value['asset']]);
+                }
+            }
+        }
     }
 
     /**
@@ -329,6 +362,9 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
                      ->wrapper(['class'=>'list-filter col-md-3 col-sm-6']);
                 break;
         }
+
+        // Set assets
+        $this->setThemeAssets();
 
         return $this->inputData;
     }

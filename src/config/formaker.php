@@ -56,33 +56,34 @@ return array(
     'commonInputsLookup' =>
     [
         // For email
-        'email'                => 'email',
-        'emailAddress'         => 'email',
-
+        'email'                 => 'email',
+        'emailAddress'          => 'email',
+        
         // For textarea
-        'description'          => 'textarea',
-        'bio'                  => 'textarea',
-        'body'                 => 'textarea',
-
+        'description'           => 'textarea',
+        'bio'                   => 'textarea',
+        'body'                  => 'textarea',
+        
         // For wysihtml5
-        'content'              => 'wysihtml5',
-
+        'content'               => 'wysihtml5',
+        
         // For password
-        'password'             => 'password',
-        'passwordConfirmation' => 'password',
-
+        'password'              => 'password',
+        'passwordConfirmation'  => 'password',
+        'password_confirmation' => 'password',
+        
         // For tag
-        'tag'                  => 'tag',
-        'related'              => 'tag',
-
+        'tag'                   => 'tag',
+        'related'               => 'tag',
+        
         // For select
-        'status'               => 'select',
-
+        'status'                => 'select',
+        
         // For url
-        'url'                  => 'url',
-
+        'url'                   => 'url',
+        
         // For file
-        'file'                 => 'file',
+        'file'                  => 'file',
     ],
 
 

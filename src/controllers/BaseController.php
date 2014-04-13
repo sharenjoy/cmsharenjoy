@@ -1,7 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Controllers;
 
 use Illuminate\Routing\Controller;
-use Auth, Session, App, View, Config, Str, Route, Request;
+use Auth, Session, App, View, Config, Str, Route, Request, Theme, Message;
 
 abstract class BaseController extends Controller {
 
@@ -22,6 +22,12 @@ abstract class BaseController extends Controller {
      * @var string
      */
     protected $appName;
+
+    /**
+     * To manage some function that can open or not
+     * @var array
+     */
+    protected $functionRules;
 
     /**
      * The URL to get the root of this object ( /admin/posts for example )
@@ -48,6 +54,12 @@ abstract class BaseController extends Controller {
     protected $deleteUrl;
 
     /**
+     * The URL to sort page
+     * @var string
+     */
+    protected $sortUrl;
+
+    /**
      * The controller active right away
      * @var string
      */
@@ -64,6 +76,12 @@ abstract class BaseController extends Controller {
      * @var string
      */
     protected $layout;
+
+    /**
+     * The theme instancd
+     * @var object
+     */
+    protected $theme;
 
     /**
      * Initializer.
@@ -83,8 +101,8 @@ abstract class BaseController extends Controller {
         // Setup composed views and the variables that they require
         $this->beforeFilter('adminFilter' , array('except' => $this->whitelist));
 
-        // csrf
-        $this->beforeFilter('csrf', array('on' => 'post'));
+        // csrf and include ajax
+        $this->beforeFilter('csrfFilter', array('on' => 'post'));
     }
 
     protected function setCommonVariable()
@@ -116,10 +134,17 @@ abstract class BaseController extends Controller {
         $settings = App::make('Sharenjoy\Cmsharenjoy\Settings\SettingsInterface');
         View::share('app_name', $settings->getAppName());
         View::share('appName' , $this->appName);
+        View::share('functionRules', $this->functionRules);
         View::share('user', $user);
 
         $composed_views = array('cmsharenjoy::*');
         View::composer($composed_views, 'Sharenjoy\Cmsharenjoy\Composers\Page');
+
+        // Set the theme
+        $this->theme = Theme::uses('admin');
+
+        // Message
+        View::share('messages', Message::getMessageBag());
     }
 
     /**
@@ -132,6 +157,7 @@ abstract class BaseController extends Controller {
         $this->updateUrl = is_null($this->updateUrl) ? $this->objectUrl.'/update/' : null;
         $this->createUrl = is_null($this->createUrl) ? $this->objectUrl.'/create' : null;
         $this->deleteUrl = is_null($this->deleteUrl) ? $this->objectUrl.'/delete/' : null;
+        $this->sortUrl   = is_null($this->sortUrl)   ? $this->objectUrl.'/sort/' : null;
     }
 
     /**
@@ -147,21 +173,7 @@ abstract class BaseController extends Controller {
         View::share('createUrl', $this->createUrl);
         View::share('updateUrl', $this->updateUrl);
         View::share('deleteUrl', $this->deleteUrl);
-    }
-
-    protected function setupLayout()
-    {
-        $action = array_get(explode('-', $this->onAction), 1);
-        $commonRepoLayout = Config::get('cmsharenjoy::app.commonRepoLayoutDirectory');
-        
-        if (View::exists('cmsharenjoy::'.$this->appName.'.'.$action))
-        {
-            $this->layout = View::make('cmsharenjoy::'.$this->appName.'.'.$action);
-        }
-        else if(View::exists('cmsharenjoy::'.$commonRepoLayout.'.'.$action))
-        {
-            $this->layout = View::make('cmsharenjoy::'.$commonRepoLayout.'.'.$action);
-        }
+        View::share('sortUrl',   $this->sortUrl);
     }
 
 }

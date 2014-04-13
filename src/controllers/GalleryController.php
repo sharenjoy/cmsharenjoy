@@ -1,7 +1,8 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Controllers;
+
 use Sharenjoy\Cmsharenjoy\Galleries\GalleriesInterface;
 
-class GalleriesController extends ObjectBaseController {
+class GalleryController extends ObjectBaseController {
 
     /**
      * The place to find the views / URL keys for this controller

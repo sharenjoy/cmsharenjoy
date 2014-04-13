@@ -15,24 +15,30 @@
     
     <!-- panel body -->
     <div class="panel-body fun-box">
-
+    
+        @if($functionRules['list'] == true || !isset($functionRules))
         <div class="pull-left">
             <a href="{{ $objectUrl }}" class="btn btn-default btn-icon icon-left">
                 <i class="fa fa-bars"></i>{{ Lang::get('cmsharenjoy::admin.show_list') }}
             </a>
         </div>
+        @endif
 
+        @if($functionRules['create'] == true || !isset($functionRules))
         <div class="pull-left">
             <a href="{{ $createUrl }}" class="btn btn-default btn-icon icon-left">
                 <i class="fa fa-plus"></i>{{ Lang::get('cmsharenjoy::admin.new_item') }}
             </a>
         </div>
+        @endif
         
+        @if($functionRules['order'] == true || !isset($functionRules))
         <div class="pull-left">
-            <a href="{{ $objectUrl }}/index/sort" class="btn btn-default btn-icon icon-left">
+            <a href="{{ $sortUrl }}" class="btn btn-default btn-icon icon-left">
                 <i class="fa fa-sort"></i>{{ Lang::get('cmsharenjoy::admin.sort_list') }}
             </a>
         </div>
+        @endif
 
     </div>
 

@@ -4,16 +4,8 @@ use Sharenjoy\Cmsharenjoy\Repo\Post\PostInterface;
 
 class PostController extends ObjectBaseController {
 
-    /**
-     * The application name and also is view name
-     * @var string
-     */
-    protected $appName = 'posts';
+    protected $appName = 'post';
 
-    /**
-     * This array are fileds of setting data which show the table list.
-     * @var array
-     */
     protected $listConfig = [
         'title' => [
             'name'  => 'title',
@@ -27,11 +19,6 @@ class PostController extends ObjectBaseController {
         ],
     ];
 
-    /**
-     * If filter's data from database, It should be use App::make
-     * an instance of object what we need.
-     * @var array
-     */
     protected $filterFormConfig = [
         'tag' => [
             'type'  => 'select',
@@ -49,22 +36,16 @@ class PostController extends ObjectBaseController {
         ],
         'dateRange' => [
             'type' => 'daterange',
-            'args' => ['placeholder'=>'Please enter the keyword that you want to search.']
         ],
         'startTime' => [
             'type' => 'datepicker',
-            'args' => ['placeholder'=>'Please enter the keyword that you want to search.']
         ],
         'color' => [
             'type' => 'colorpicker',
-            'args' => ['placeholder'=>'Please enter the keyword that you want to search.']
         ],
 
     ];
 
-    /**
-     * Construct Shit
-     */
     public function __construct(PostInterface $post)
     {
         $this->repository = $post;

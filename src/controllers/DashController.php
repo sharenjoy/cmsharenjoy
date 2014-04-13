@@ -2,7 +2,7 @@
 
 use Illuminate\Support\MessageBag;
 use Sharenjoy\Cmsharenjoy\Validators\Login;
-use View, Auth, Redirect, Validator, Session, Input;
+use View, Auth, Redirect, Validator, Session, Input, Config, Message;
 
 class DashController extends BaseController {
 
@@ -37,8 +37,8 @@ class DashController extends BaseController {
     {
         Auth::logout();
         Session::flush();
-        return Redirect::to($this->urlSegment.'/login')
-                ->with('success', new MessageBag(array('Succesfully logged out.')));
+        Message::merge(array('success' => 'Succesfully logged out.'))->flash();
+        return Redirect::to($this->urlSegment.'/login');
     }
 
     /**
@@ -86,12 +86,12 @@ class DashController extends BaseController {
                 $user->save();
 
                 // Redirect to the users page.
-                return Redirect::to( $this->urlSegment )
-                        ->with('success', new MessageBag( array('You have logged in successfully') ) );
+                Message::merge(array('success' => 'You have logged in successfully !'))->flash();
+                return Redirect::to( $this->urlSegment );
             }else{
                 // Redirect to the login page.
-                return Redirect::to($this->urlSegment.'/login')
-                            ->with('errors', new MessageBag( array( 'Invalid Email &amp; Password' ) ) );
+                Message::merge(array('errors' => 'Invalid Email &amp; Password !'))->flash();
+                return Redirect::to($this->urlSegment.'/login');
             }
         }
 

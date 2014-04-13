@@ -1,80 +1,57 @@
 <?php namespace Sharenjoy\Cmsharenjoy\User;
 
-use Sharenjoy\Cmsharenjoy\Core\EloquentBaseModel;
-use Illuminate\Auth\UserInterface as LaravelUserInterface;
-use Illuminate\Auth\Reminders\RemindableInterface;
-use Hash;
+use Zizaco\Confide\ConfideUser;
 
-class User extends EloquentBaseModel implements LaravelUserInterface, RemindableInterface
-{
-    // The Tables
-    protected $table    = 'users';
+class User extends ConfideUser {
 
-    /**
-     * The attributes excluded from the model's JSON form.
-     *
-     * @var array
-     */
-    protected $hidden = array('password');
+    protected $table  = 'users';
 
-    /**
-     * These are the mass-assignable keys
-     * @var array
-     */
-    protected $fillable = array('first_name', 'last_name', 'email', 'password');
+    protected $fillable = array(
+        'email',
+        'password'
+    );
 
-    protected $validationRules = [
-        'first_name' => 'required',
-        'last_name'  => 'required',
-        'email'      => 'required|email',
-        'password'   => 'confirmed|min:5'
+    public static $rules = array(
+        'email'                 => 'required|email|unique:users',
+        'password'              => 'required|min:6|confirmed',
+        'password_confirmation' => 'min:6',
+    );
+
+    public $uniqueFields = ['email'];
+
+    public $formConfig = [
+        'first_name' => [
+            'args' => [
+                'placeholder'=>'Your first name',
+            ],
+            'order' => '10'
+        ],
+        'last_name' => [
+            'args' => [
+                'placeholder'=>'Your last name',
+            ],
+            'order' => '20'
+        ],
+        'email' => [
+            'args' => [
+                'placeholder'=>'Your email',
+            ],
+            'order' => '30'
+        ],
+        'phone' => [
+            'args' => [
+                'placeholder'=>'Your cell phone',
+            ],
+            'order' => '35'
+        ],
+        'password' => ['order' => '40'],
+        'password_confirmation' => ['order' => '50'],
+
     ];
 
-    /**
-     * Get the unique identifier for the user.
-     *
-     * @return mixed
-     */
-    public function getAuthIdentifier()
+    public function account()
     {
-        return $this->getKey();
-    }
-
-    /**
-     * Get the full name of the user
-     * @return string
-     */
-    public function getFullNameAttribute(){
-        return $this->first_name.' '.$this->last_name;
-    }
-
-    /**
-     * Get the password for the user.
-     *
-     * @return string
-     */
-    public function getAuthPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * Get the e-mail address where password reminders are sent.
-     *
-     * @return string
-     */
-    public function getReminderEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * Set the password, lets automatically hash it
-     * @param string $value The password (unhashed)
-     */
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = Hash::make( $value );
+        return $this->hasOne('Sharenjoy\Cmsharenjoy\User\Account', 'user_id');
     }
 
 }

@@ -1,7 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Controllers;
 
 use Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException;
-use View, Redirect, Input, App, Request, Config, Response, Lang, Paginator;
+use View, Redirect, Input, App, Request, Config, Response, Lang, Paginator, Categorize;
 use Session, Debugbar, Message;
 
 abstract class ObjectBaseController extends BaseController {
@@ -49,11 +49,10 @@ abstract class ObjectBaseController extends BaseController {
     {
         parent::__construct();
 
-        $filterForm = $this->repository->composeForm($this->filterFormConfig, 'list-filter', Input::all());
-        $filterForm ? View::share('filterForm', $filterForm) : '';
-
         // Debugbar::info($filterForm);
-        // Debugbar::info(Input::all());
+        // $environment = App::environment();
+        // Debugbar::info($_SERVER['MY_LARAVEL_ENV']);
+
         // Message::add('info', 'test')->flash();
 
     }
@@ -62,15 +61,19 @@ abstract class ObjectBaseController extends BaseController {
      * Main users page.
      * @return   View
      */
-    public function getIndex($sort = '')
+    public function getIndex()
     {
         $perPage    = Input::get('perPage');
         $page       = Input::get('page', 1);
         $query      = Request::query();
-        
-        $perPage    = empty($perPage) || $perPage == '' ? $this->paginationCount : $perPage;
-        $sortable   = $sort == 'sort' ? true : false;
-        $filterable = $sort == 'sort' ? false : true;
+        $perPage    = isset($perPage) ?: $this->paginationCount;
+
+        // Set filter form fields
+        if (isset($this->filterFormConfig) && !is_null($this->filterFormConfig))
+        {
+            $filterForm = $this->repository->composeForm($this->filterFormConfig, 'list-filter', Input::all());
+            $filterForm ? View::share('filterForm', $filterForm) : '';
+        }
         
         // Get the model from repositroy
         $model = $this->repository->getModel();
@@ -92,11 +95,34 @@ abstract class ObjectBaseController extends BaseController {
         $items = Paginator::make($result->items, $result->totalItems, $perPage)->appends($query);
 
         $this->layout->with('paginationCount', $perPage)
-                     ->with('sortable', $sortable)
-                     ->with('filterable', $filterable)
+                     ->with('sortable', false)
+                     ->with('filterable', true)
                      ->with('listConfig', $this->listConfig)
-                     ->with('items', $items)
-                     ->with('messages', Message::getMessageBag());
+                     ->with('items', $items);
+    }
+
+    /**
+     * To sort item of page.
+     * @return   View
+     */
+    public function getSort()
+    {
+        $perPage    = Input::get('perPage');
+        $page       = Input::get('page', 1);
+        $perPage    = isset($perPage) ?: $this->paginationCount;
+        
+        // Get the model from repositroy
+        $model  = $this->repository->getModel();
+        $result = $this->repository->byPage($page, $perPage, $model);
+
+        // Set Pagination of data 
+        $items = Paginator::make($result->items, $result->totalItems, $perPage);
+
+        $this->layout->with('paginationCount', $perPage)
+                     ->with('sortable', true)
+                     ->with('filterable', false)
+                     ->with('listConfig', $this->listConfig)
+                     ->with('items', $items);
     }
 
     /**
@@ -105,8 +131,7 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function getCreate()
     {
-        $this->layout->with('fieldsForm', $this->repository->setModelForm('create-form'))
-                     ->with('messages', Message::getMessageBag());
+        $this->layout->with('fieldsForm', $this->repository->setModelForm('create-form'));
     }
 
     /**
@@ -127,8 +152,7 @@ abstract class ObjectBaseController extends BaseController {
         $fieldsForm = $this->repository->setModelForm('update-form', $item);
 
         $this->layout->with('item' , $item)
-                     ->with('fieldsForm', $fieldsForm)
-                     ->with('messages', Message::getMessageBag());
+                     ->with('fieldsForm', $fieldsForm);
     }
 
     /**
@@ -139,7 +163,7 @@ abstract class ObjectBaseController extends BaseController {
     public function getDelete($id)
     {
         try {
-            $this->repository->deleteOne($id);
+            $this->repository->delete($id);
         }
         catch(EntityNotFoundException $e)
         {
@@ -149,8 +173,7 @@ abstract class ObjectBaseController extends BaseController {
         // delete success message
         Message::merge(array('success'=>'The item was successfully removed.'))->flash();
 
-        return Redirect::to($this->objectUrl)
-                    ->with('messages', Message::getMessageBag());
+        return Redirect::to($this->objectUrl);
     }
 
     /**
@@ -161,20 +184,17 @@ abstract class ObjectBaseController extends BaseController {
     public function postCreate()
     {   
         // To create data
-        $result = $this->repository->createOne(Input::all());
+        $result = $this->repository->create(Input::all());
 
-        if ( ! $result)
-        {   
-            return Redirect::to($this->createUrl)
-                        ->with('messages', Message::getMessageBag())
-                        ->withInput();
-        }
-        else
-        {
-            Message::merge(array('success'=>'Item Created'))->flash();
-            return Redirect::to($this->objectUrl)
-                        ->with('messages', Message::getMessageBag());
-        }
+        // if ( ! $result)
+        // {   
+        //     return Redirect::to($this->createUrl)->withInput();
+        // }
+        // else
+        // {
+        //     Message::merge(array('success'=>'Item Created'))->flash();
+        //     return Redirect::to($this->objectUrl);
+        // }
     }
 
     /**
@@ -185,19 +205,16 @@ abstract class ObjectBaseController extends BaseController {
     public function postUpdate($id)
     {
         // To update data
-        $result = $this->repository->updateOne($id, Input::all());
+        $result = $this->repository->update($id, Input::all());
 
         if ( ! $result)
         {
-            return Redirect::to($this->updateUrl.$id)
-                        ->with('messages', Message::getMessageBag())
-                        ->withInput();
+            return Redirect::to($this->updateUrl.$id)->withInput();
         }
         else
         {
             Message::merge(array('success'=>'Item Saved'))->flash();
-            return Redirect::to($this->updateUrl.$id)
-                        ->with('messages', Message::getMessageBag());
+            return Redirect::to($this->updateUrl.$id);
         }
     }
 
@@ -226,6 +243,22 @@ abstract class ObjectBaseController extends BaseController {
         }
 
         return Response::json('success', 200);
+    }
+
+    protected function setupLayout()
+    {
+        $action = array_get(explode('-', $this->onAction), 1);
+        $action = $this->onAction == 'get-sort' ? 'index' : $action;
+        $commonRepoLayout = Config::get('cmsharenjoy::app.commonRepoLayoutDirectory');
+        
+        if (View::exists('cmsharenjoy::'.$this->appName.'.'.$action))
+        {
+            $this->layout = View::make('cmsharenjoy::'.$this->appName.'.'.$action);
+        }
+        else if(View::exists('cmsharenjoy::'.$commonRepoLayout.'.'.$action))
+        {
+            $this->layout = View::make('cmsharenjoy::'.$commonRepoLayout.'.'.$action);
+        }
     }
     
 }

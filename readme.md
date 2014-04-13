@@ -28,3 +28,8 @@ This is a laravel cms which based on davzie/laravel-bootstrap.
 
     php artisan migrate --package="sharenjoy/cmsharenjoy"
     php artisan db:seed --class="Sharenjoy\Cmsharenjoy\Seeds\DatabaseSeeder"
+
+### Publishing the Assets and config of Debugbar
+
+    php artisan debugbar:publish
+    php artisan config:publish barryvdh/laravel-debugbar

@@ -4,16 +4,8 @@ use Sharenjoy\Cmsharenjoy\Repo\Tag\TagInterface;
 
 class TagController extends ObjectBaseController {
 
-    /**
-     * The application name and also is view name
-     * @var string
-     */
-    protected $appName = 'tags';
+    protected $appName = 'tag';
 
-    /**
-     * This array are fileds of setting data which show the table list.
-     * @var array
-     */
     protected $listConfig = [
         'tag' => [
             'name'  => 'tag',
@@ -27,16 +19,6 @@ class TagController extends ObjectBaseController {
         ],
     ];
 
-    /**
-     * If filter's data from database, It should be use App::make
-     * an instance of object what we need.
-     * @var array
-     */
-    protected $filterFormConfig = [];
-
-    /**
-     * Construct Shit
-     */
     public function __construct(TagInterface $tag)
     {
         $this->repository = $tag;

@@ -20,38 +20,20 @@ class TagRepository extends EloquentBaseRepository implements TagInterface {
         $this->model     = $tag;
     }
 
-    public function setFilterQuery($model = null, $query)
-    {
-        return;        
-    }
-
     public function finalProcess($action, $model = null, $data = null)
     {
-        if ( ! $model)
-        {
-            $model = $this->model;
-        }
-
         switch ($action)
         {
             case 'get-index':
-
                 break;
-
             case 'get-update':
-                
                 break;
-
             case 'post-create':
             case 'post-update':
-                
                 break;
-            
             default:
-                
                 break;
         }
-        
         return $model;
     }
 
@@ -102,7 +84,7 @@ class TagRepository extends EloquentBaseRepository implements TagInterface {
         {
             foreach ($tags as $tag)
             {
-                $returnTags[] = $this->createOne(array('tag' => $tag));
+                $returnTags[] = $this->create(array('tag' => $tag));
             }
         }
         

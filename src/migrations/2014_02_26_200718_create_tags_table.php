@@ -19,7 +19,7 @@ class CreateTagsTable extends Migration {
 			$table->increments('id');
 			$table->integer('user_id')->unsigned()->nullable()->default(0);
 			$table->string('tag');
-			$table->string('slug');
+			$table->string('slug')->unique();
             $table->integer('sort')->unsigned()->nullable()->default(0);
 			$table->timestamps();
 		});

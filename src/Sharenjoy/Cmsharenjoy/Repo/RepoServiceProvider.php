@@ -33,6 +33,15 @@ class RepoServiceProvider extends ServiceProvider {
             );
         });
 
+        // The Category Bindings
+        $app->bind('Sharenjoy\Cmsharenjoy\Repo\Category\CategoryInterface', function($app)
+        {
+            return new Category\CategoryRepository(
+                new \Sharenjoy\Cmsharenjoy\Service\Categorize\Categories\Category,
+                new Category\CategoryValidator($app['validator'])
+            );
+        });
+
         // The Tags Bindings
         $app->bind('Sharenjoy\Cmsharenjoy\Repo\Tag\TagInterface', function($app)
         {

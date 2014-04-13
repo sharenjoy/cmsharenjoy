@@ -79,4 +79,18 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
         return $this->errors()->toArray();
     }
 
+    /**
+     * To set some column don't need to valid
+     * @param string $key
+     * @param string $id
+     */
+    public function setUniqueUpdateFields($keyAry, $id)
+    {
+        foreach ($keyAry as $field)
+        {
+            $rules = $this->rules;
+            $this->rules[$field] = $rules[$field].','.$id;
+        }
+    }
+
 }

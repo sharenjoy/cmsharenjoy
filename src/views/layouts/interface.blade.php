@@ -7,27 +7,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="">
+        <meta name="csrf-token" content="{{csrf_token()}}">
 
         <title>@yield('title')</title>
-
-        @section('css')
-        <!-- Bootstrap core CSS -->        
-        <link rel="stylesheet" href="{{ asset('packages/sharenjoy/cmsharenjoy/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('packages/sharenjoy/cmsharenjoy/css/font-icons/entypo/css/entypo.css') }}">
-        <link rel="stylesheet" href="{{ asset('packages/sharenjoy/cmsharenjoy/css/font-icons/font-awesome/css/font-awesome.min.css') }}">
-        <link rel="stylesheet" href="{{ asset('packages/sharenjoy/cmsharenjoy/css/font-icons/entypo/css/animation.css') }}">
+        
+        {{Theme::asset()->styles()}}
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic">
-        <link rel="stylesheet" href="{{ asset('packages/sharenjoy/cmsharenjoy/css/neon.css') }}">
-        <link rel="stylesheet" href="{{ asset('packages/sharenjoy/cmsharenjoy/css/custom.css') }}">
-        <link rel="stylesheet" href="{{ asset('packages/sharenjoy/cmsharenjoy/css/skins/white.css') }}">
+
+        @section('styles')
         @show
 
-        <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/jquery-1.10.2.min.js') }}"></script>
+        <!--[if lt IE 9]><script src="{{asset('packages/sharenjoy/cmsharenjoy/js/ie8-responsive-file-warning.js')}}"></script><![endif]-->
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
-          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-          <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
     </head>
@@ -48,7 +43,7 @@
                     <div class="logo">
                         <a href="{{ url( $urlSegment ) }}">
                             <!-- <img src="assets/images/logo.png" alt="" /> -->
-                            <span>{{ $app_name }}</span>
+                            <span>{{$app_name}}</span>
                         </a>
                     </div>
                     
@@ -92,14 +87,29 @@
                     </li>
                     
                     @foreach($menu_items as $url => $item)
-                        @if( $item['top'] )
-                            <li class="{{ Request::is( "$urlSegment/$url*" ) ? 'active' : '' }}">
-                                <a href="{{ url( $urlSegment.'/'.$url ) }}">
-                                    <i class="entypo-chart-bar"></i>
-                                    <span>{{ $item['name'] }}</span>
-                                </a>
-                            </li>
+                        @if(isset($item['sub']))
+                        <li class="{{ Request::is( "$urlSegment/$url*" ) ? 'opened active' : '' }}">
+                        @else
+                        <li class="{{ Request::is( "$urlSegment/$url*" ) ? 'active' : '' }}">
                         @endif
+                            <a href="{{ url( $urlSegment.'/'.$url ) }}">
+                                <i class="{{$item['icon']}}"></i>
+                                <span>{{ $item['name'] }}</span>
+                            </a>
+
+                            @if(isset($item['sub']))
+                                <ul class="{{ Request::is( "$urlSegment/$url*" ) ? 'visible' : '' }}">
+                                    @foreach($item['sub'] as $subUrl => $subItem)
+                                        <li class="{{ Request::is( "$urlSegment/$subUrl*" ) ? 'active' : '' }}">
+                                            <a href="{{ url( $urlSegment.'/'.$subUrl ) }}">
+                                                <span>{{$subItem['name']}}</span>
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
+
+                        </li>
                     @endforeach
 
                 </ul>
@@ -265,16 +275,10 @@
         </div>
         <!-- page-container Ends -->
 
+        {{Theme::asset()->scripts()}}
+
         @section('scripts')
-            <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/gsap/main-gsap.js') }}"></script>
-            <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js') }}"></script>
-            <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/bootstrap.min.js') }}"></script>
-            <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/joinable.js') }}"></script>
-            <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/resizeable.js') }}"></script>
-            <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/neon-api.js') }}"></script>
-            <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/neon-chat.js') }}"></script>
-            <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/neon-custom.js') }}"></script>
-            <script src="{{ asset('packages/sharenjoy/cmsharenjoy/js/custom.js') }}"></script>
         @show
+
     </body>
 </html>
