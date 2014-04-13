@@ -29,7 +29,12 @@ This is a laravel cms which based on davzie/laravel-bootstrap.
     php artisan migrate --package="sharenjoy/cmsharenjoy"
     php artisan db:seed --class="Sharenjoy\Cmsharenjoy\Seeds\DatabaseSeeder"
 
-### Publishing the Assets and config of Debugbar
+### Publishing the assets and config of Debugbar
 
     php artisan debugbar:publish
     php artisan config:publish barryvdh/laravel-debugbar
+
+### Publishing the assets and create a theme of laravel4-theme
+
+    php artisan config:publish teepluss/theme
+    php artisan theme:create admin
