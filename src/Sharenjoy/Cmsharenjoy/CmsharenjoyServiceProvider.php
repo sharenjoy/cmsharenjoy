@@ -62,7 +62,8 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
 		$app->bind('Sharenjoy\Cmsharenjoy\User\UserInterface', function($app)
 		{
 		    return new User\UserRepository(
-		        new User\User
+		        new User\User,
+                new User\UserValidator($app['validator'])
 		    );
 		});
 

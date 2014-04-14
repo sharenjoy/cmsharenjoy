@@ -6,9 +6,10 @@ use Hash, Session, Message, Debugbar;
 
 class UserRepository extends EloquentBaseRepository implements UserInterface {
 
-    public function __construct(User $user)
+    public function __construct(User $user, ValidableInterface $validator)
     {
-        $this->model = $user;
+        $this->validator = $validator;
+        $this->model     = $user;
     }
 
     public function finalProcess($action, $model = null, $data = null)

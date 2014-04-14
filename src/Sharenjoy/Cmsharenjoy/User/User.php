@@ -1,8 +1,8 @@
 <?php namespace Sharenjoy\Cmsharenjoy\User;
 
-use Zizaco\Confide\ConfideUser;
+use Eloquent;
 
-class User extends ConfideUser {
+class User extends Eloquent {
 
     protected $table  = 'users';
 
