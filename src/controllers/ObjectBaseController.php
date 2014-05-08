@@ -39,6 +39,9 @@ abstract class ObjectBaseController extends BaseController {
         // Debugbar::info(Session::get('action'));
 
         // Message::add('info', 'test')->flash();
+        // 
+        // Debugbar::info(url('aaa/sss').'/');
+        // Debugbar::info(Request::segment(2));
     }
 
     /**

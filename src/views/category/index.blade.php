@@ -76,7 +76,7 @@
         </div>
     @else
         <div class="alert alert-info">
-            <strong>No Items Yet:</strong> You don't have any items here just yet. Add one using the button below.
+            {{trans('cmsharenjoy::admin.no_item_yet')}}
         </div>
     @endif
 @stop

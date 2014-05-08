@@ -181,7 +181,7 @@ abstract class BaseController extends Controller {
         $this->updateUrl = is_null($this->updateUrl) ? $this->objectUrl.'/update/' : null;
         $this->createUrl = is_null($this->createUrl) ? $this->objectUrl.'/create' : null;
         $this->deleteUrl = is_null($this->deleteUrl) ? $this->objectUrl.'/delete/' : null;
-        $this->sortUrl   = is_null($this->sortUrl)   ? $this->objectUrl.'/sort/' : null;
+        $this->sortUrl   = is_null($this->sortUrl)   ? $this->objectUrl.'/sort' : null;
     }
 
     /**

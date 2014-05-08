@@ -51,9 +51,9 @@ class CategoryController extends ObjectBaseController {
     protected function setHandyUrls()
     {
         $this->objectUrl = url('/admin/'.$this->appName.'/index/'.$this->type);
-        $this->createUrl = '/admin/'.$this->appName.'/create/'.$this->type;
-        $this->updateUrl = '/admin/'.$this->appName.'/update/';
-        $this->deleteUrl = '/admin/'.$this->appName.'/delete/';
+        $this->createUrl = url('/admin/'.$this->appName.'/create/'.$this->type);
+        $this->updateUrl = url('/admin/'.$this->appName.'/update/').'/';
+        $this->deleteUrl = url('/admin/'.$this->appName.'/delete/').'/';
     }
 
     public function getIndex()
