@@ -18,6 +18,18 @@ class SettingRepository extends EloquentBaseRepository implements SettingInterfa
     }
 
     /**
+     * Examine the key exists or not
+     * @param  string  $key
+     * @return boolean
+     */
+    public function has($key)
+    {
+        $model = $this->model->where('key', $key)->first();
+        
+        return $model->value ? true : false;
+    }
+
+    /**
      * Get a setting by it's key or slug or whatever
      * @param  string $key The key (contact-address , website-name etc)
      * @return One God-Damn Record

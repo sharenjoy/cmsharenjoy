@@ -153,7 +153,7 @@ abstract class BaseController extends Controller {
         }
 
         // Brand name from setting
-        $this->brandName = Setting::get('application_name');
+        $this->brandName = Setting::get('brand_name');
         
         // Share some variables to views
         View::share('brandName', $this->brandName);

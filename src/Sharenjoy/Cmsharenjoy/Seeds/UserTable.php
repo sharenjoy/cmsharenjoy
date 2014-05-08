@@ -13,9 +13,8 @@ class UserTable extends Seeder {
         $types = [
             [
                 'email'         => Config::get('cmsharenjoy::setup.email'),
-                'password'      => Hash::make( Config::get('cmsharenjoy::setup.password') ),
-                'confirmed'     => '1',
-                'sort'          => '1',
+                'password'      => Hash::make(Config::get('cmsharenjoy::setup.password')),
+                'activated'     => '1',
                 'created_at'    => date('Y-m-d H:i:s'),
                 'updated_at'    => date('Y-m-d H:i:s')
             ]
@@ -25,6 +24,7 @@ class UserTable extends Seeder {
 
         $types = [
             [
+                'user_id'       => '1',
                 'first_name'    => Config::get('cmsharenjoy::setup.first_name'),
                 'last_name'     => Config::get('cmsharenjoy::setup.last_name'),
                 'phone'         => Config::get('cmsharenjoy::setup.phone')

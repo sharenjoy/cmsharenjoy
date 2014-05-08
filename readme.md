@@ -40,12 +40,6 @@ This is cmsharenjoy.
 
     php artisan asset:publish sharenjoy/cmsharenjoy
 
-### Migrating and seeding the database
-<!-- Seed the database, this pretty much just seeds an example user and settings. Migration is pretty simple, ensure your database config is setup and run this: -->
-
-    php artisan migrate --package="sharenjoy/cmsharenjoy"
-    php artisan db:seed --class="Sharenjoy\Cmsharenjoy\Seeds\DatabaseSeeder"
-
 ### Publishing the Debugbar assets and config
 
     php artisan debugbar:publish
@@ -56,6 +50,8 @@ This is cmsharenjoy.
     php artisan migrate --package=cartalyst/sentry
     php artisan config:publish cartalyst/sentry
 
+>Add a `sort` column to users table 
+
 ### Modify the config of Sentry for new User model that extends Sentry User model
 
     'users' => array(
@@ -64,6 +60,12 @@ This is cmsharenjoy.
         'model' => '\Sharenjoy\Cmsharenjoy\User\User',
 
     ),
+
+### Migrating and seeding the database
+<!-- Seed the database, this pretty much just seeds an example user and settings. Migration is pretty simple, ensure your database config is setup and run this: -->
+
+    php artisan migrate --package="sharenjoy/cmsharenjoy"
+    php artisan db:seed --class="Sharenjoy\Cmsharenjoy\Seeds\DatabaseSeeder"
 
 ### Publishing the Laravel4-theme assets and create a theme
 
