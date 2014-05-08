@@ -40,6 +40,8 @@ This is cmsharenjoy.
 
     php artisan asset:publish sharenjoy/cmsharenjoy
 
+>Create the folders of file where public/uploads/thumbs
+
 ### Publishing the Debugbar assets and config
 
     php artisan debugbar:publish
