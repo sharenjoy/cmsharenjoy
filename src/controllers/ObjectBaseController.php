@@ -2,7 +2,7 @@
 
 use Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException;
 use View, Redirect, Input, App, Request, Config, Response, Lang, Paginator, Categorize;
-use Session, Debugbar, Message;
+use Session, Debugbar, Message, Sentry, Theme, API;
 
 abstract class ObjectBaseController extends BaseController {
 
@@ -10,21 +10,6 @@ abstract class ObjectBaseController extends BaseController {
      * The model to work with for editing stuff
      */
     protected $repository;
-
-    /**
-     * By default a mass assignment is used to validate things on a model
-     * Sometimes you want to confirm inputs (such as password confirmations)
-     * that you don't want to be necessarily stored on the model. This will validate
-     * inputs from Input::all() not from $model->fill();
-     * @var boolean
-     */
-    protected $validateWithInput = false;
-
-    /**
-     * This is the MessageBag instance
-     * @var MessageBag
-     */
-    protected $messages;
 
     /**
      * These are the data of array that don't need to filter
@@ -51,10 +36,9 @@ abstract class ObjectBaseController extends BaseController {
 
         // Debugbar::info($filterForm);
         // $environment = App::environment();
-        // Debugbar::info($_SERVER['MY_LARAVEL_ENV']);
+        // Debugbar::info(Session::get('action'));
 
         // Message::add('info', 'test')->flash();
-
     }
 
     /**
@@ -131,7 +115,7 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function getCreate()
     {
-        $this->layout->with('fieldsForm', $this->repository->setModelForm('create-form'));
+        $this->layout->with('fieldsForm', $this->repository->setFormFields());
     }
 
     /**
@@ -149,7 +133,7 @@ abstract class ObjectBaseController extends BaseController {
             return Redirect::to($this->objectUrl);
         }
 
-        $fieldsForm = $this->repository->setModelForm('update-form', $item);
+        $fieldsForm = $this->repository->setFormFields($item);
 
         $this->layout->with('item' , $item)
                      ->with('fieldsForm', $fieldsForm);
@@ -171,7 +155,7 @@ abstract class ObjectBaseController extends BaseController {
         }
 
         // delete success message
-        Message::merge(array('success'=>'The item was successfully removed.'))->flash();
+        Message::merge(array('success'=>trans('cmsharenjoy::admin.success_deleted')))->flash();
 
         return Redirect::to($this->objectUrl);
     }
@@ -186,15 +170,15 @@ abstract class ObjectBaseController extends BaseController {
         // To create data
         $result = $this->repository->create(Input::all());
 
-        // if ( ! $result)
-        // {   
-        //     return Redirect::to($this->createUrl)->withInput();
-        // }
-        // else
-        // {
-        //     Message::merge(array('success'=>'Item Created'))->flash();
-        //     return Redirect::to($this->objectUrl);
-        // }
+        if ( ! $result)
+        {
+            return Redirect::to($this->createUrl)->withInput();
+        }
+        else
+        {
+            Message::merge(array('success'=>trans('cmsharenjoy::admin.success_created')))->flash();
+            return Redirect::to($this->objectUrl);
+        }
     }
 
     /**
@@ -213,7 +197,7 @@ abstract class ObjectBaseController extends BaseController {
         }
         else
         {
-            Message::merge(array('success'=>'Item Saved'))->flash();
+            Message::merge(array('success'=>trans('cmsharenjoy::admin.success_updated')))->flash();
             return Redirect::to($this->updateUrl.$id);
         }
     }
@@ -247,8 +231,12 @@ abstract class ObjectBaseController extends BaseController {
 
     protected function setupLayout()
     {
-        $action = array_get(explode('-', $this->onAction), 1);
+        $action = $this->doAction;
+
+        // If action equat sort so that set the action to index
         $action = $this->onAction == 'get-sort' ? 'index' : $action;
+        
+        // Get reop directory from config
         $commonRepoLayout = Config::get('cmsharenjoy::app.commonRepoLayoutDirectory');
         
         if (View::exists('cmsharenjoy::'.$this->appName.'.'.$action))

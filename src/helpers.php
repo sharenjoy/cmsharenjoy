@@ -210,3 +210,73 @@ if(! function_exists('array_column'))
     }
 }
 
+if ( ! function_exists('is_really_writable'))
+{
+    /**
+     * Tests for file writability
+     *
+     * is_writable() returns TRUE on Windows servers when you really can't write to
+     * the file, based on the read-only attribute. is_writable() is also unreliable
+     * on Unix servers if safe_mode is on.
+     *
+     * @param   string
+     * @return  void
+     */
+    function is_really_writable($file)
+    {
+        // If we're on a Unix server with safe_mode off we call is_writable
+        if (DIRECTORY_SEPARATOR === '/' && (bool) @ini_get('safe_mode') === FALSE)
+        {
+            return is_writable($file);
+        }
+
+        /* For Windows servers and safe_mode "on" installations we'll actually
+         * write a file then read it. Bah...
+         */
+        if (is_dir($file))
+        {
+            $file = rtrim($file, '/').'/'.md5(mt_rand());
+            if (($fp = @fopen($file, FOPEN_WRITE_CREATE)) === FALSE)
+            {
+                return FALSE;
+            }
+
+            fclose($fp);
+            @chmod($file, DIR_WRITE_MODE);
+            @unlink($file);
+            return TRUE;
+        }
+        elseif ( ! is_file($file) OR ($fp = @fopen($file, FOPEN_WRITE_CREATE)) === FALSE)
+        {
+            return FALSE;
+        }
+
+        fclose($fp);
+        return TRUE;
+    }
+}
+
+
+if ( ! function_exists('format_date')) {
+
+    /**
+     * Formats a timestamp into a human date format.
+     *
+     * @param int $unix The UNIX timestamp
+     * @param string $format The date format to use.
+     * @return string The formatted date.
+     */
+    function format_date($unix, $format = '')
+    {
+        if ($unix == '' || !is_numeric($unix)) {
+            $unix = strtotime($unix);
+        }
+
+        if (!$format) {
+            $format = Setting::get('date_format');
+        }
+
+        return strstr($format, '%') !== false ? ucfirst(utf8_encode(strftime($format, $unix))) : date($format, $unix);
+    }
+
+}

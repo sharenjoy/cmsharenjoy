@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.interface')
 
 @section('title')
-    {{ Lang::get('cmsharenjoy::admin.manage') }} {{ Lang::get("cmsharenjoy::app.$appName") }}
+{{trans('cmsharenjoy::admin.manage')}}{{trans('cmsharenjoy::app.'.$appName)}}
 @stop
 
 @section('content')
@@ -17,17 +17,17 @@
     
     @if( ! $items->isEmpty() )
         <div class="row">
-            <div class="col-md-7">
+            <div class="col-md-8">
                 @include('cmsharenjoy::partials.list-table')
             </div>
 
-            <div class="col-md-5">
+            <div class="col-md-4">
 
                 <div class="panel panel-primary" data-collapsed="0">
             
                     <div class="panel-heading">
                         <div class="panel-title">
-                            Simple Draggable List
+                            {{trans('cmsharenjoy::admin.please_drag')}}
                         </div>
                         
                         <div class="panel-options">

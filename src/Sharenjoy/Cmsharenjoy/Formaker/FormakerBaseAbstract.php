@@ -43,9 +43,23 @@ Abstract class FormakerBaseAbstract {
      * Clean up the field name for the label
      * @param string $name
      */
-    protected function prettifyFieldName()
+    protected function prettifyFieldName($name = '')
     {
-        return ucwords(preg_replace('/(?<=\w)(?=[A-Z])/', " $1", $this->name));
+        if ( ! $name)
+        {
+            $name = $this->name;
+        }
+
+        // If doesn't set the config of lang
+        if (Lang::has('cmsharenjoy::app.form.'.$name))
+        {
+            return Lang::get('cmsharenjoy::app.form.'.$name);
+        }
+        else
+        {
+            // convert foo_boo to fooBoo and then convert to Foo Boo
+            return ucwords(preg_replace('/(?<=\w)(?=[A-Z])/', " $1", camel_case($name)));
+        }
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Formaker;
 
-use Form, Lang, Theme, Config;
+use Form, Lang, Theme, Config, Session;
 
 class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface {
 
@@ -91,7 +91,13 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
      */
     protected function help($args = array())
     {
-        if (array_get($this->args, 'help'))
+        $target = 'app.form.help.'.Session::get('onController').'.'.$this->name;
+        if (Lang::has('cmsharenjoy::'.$target))
+        {
+            $description = Lang::get('cmsharenjoy::'.$target);
+            unset($this->args['help']);
+        }
+        elseif (array_get($this->args, 'help'))
         {
             $description = array_get($this->args, 'help');
             unset($this->args['help']);
@@ -143,6 +149,13 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
         if( ! isset($this->args['class']))
         {
             $this->args = array_merge(array('class' => $this->inputClass), $this->args);
+        }
+
+        // Set the lang of placeholder from config
+        $target = 'app.form.placeholder.'.Session::get('onController').'.'.$this->name;
+        if (Lang::has('cmsharenjoy::'.$target))
+        {
+            $this->args['placeholder'] = Lang::get('cmsharenjoy::'.$target);
         }
 
         return $this->createInput($type, $value);
@@ -347,8 +360,8 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
 
         switch ($type)
         {
-            case 'create-form':
-            case 'update-form':
+            case 'create':
+            case 'update':
                 $this->field()
                      ->help(['tag'=>'span', 'class'=>'help-block'])
                      ->wrapper(['class'=>'col-sm-5'])

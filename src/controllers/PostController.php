@@ -6,17 +6,17 @@ class PostController extends ObjectBaseController {
 
     protected $appName = 'post';
 
+    protected $functionRules = [
+        'list'   => true,
+        'create' => true,
+        'update' => true,
+        'delete' => true,
+        'order'  => true,
+    ];
+
     protected $listConfig = [
-        'title' => [
-            'name'  => 'title',
-            'align' => '',
-            'width' => ''
-        ],
-        'created_at' => [
-            'name'  => 'created',
-            'align' => 'center',
-            'width' => '20%'
-        ],
+        'title'        => ['name'=>'title',        'align'=>'',       'width'=>''   ],
+        'created_at'   => ['name'=>'created',      'align'=>'center', 'width'=>'20%'],
     ];
 
     protected $filterFormConfig = [
@@ -34,10 +34,10 @@ class PostController extends ObjectBaseController {
         'keyword' => [
             'args' => ['placeholder'=>'Please enter the keyword that you want to search.']
         ],
-        'dateRange' => [
+        'date_range' => [
             'type' => 'daterange',
         ],
-        'startTime' => [
+        'start_date' => [
             'type' => 'datepicker',
         ],
         'color' => [

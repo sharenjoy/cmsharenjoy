@@ -1,7 +1,9 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Controllers;
 
 use Illuminate\Routing\Controller;
-use Auth, Session, App, View, Config, Str, Route, Request, Theme, Message;
+use Sharenjoy\Cmsharenjoy\User\Account;
+use Sharenjoy\Cmsharenjoy\User\User;
+use Sentry, Session, View, Config, Str, Route, Request, Theme, Message, Setting;
 
 abstract class BaseController extends Controller {
 
@@ -22,6 +24,12 @@ abstract class BaseController extends Controller {
      * @var string
      */
     protected $appName;
+
+    /**
+     * The brand name
+     * @var string
+     */
+    protected $brandName;
 
     /**
      * To manage some function that can open or not
@@ -70,6 +78,12 @@ abstract class BaseController extends Controller {
      * @var string
      */
     protected $onAction;
+
+    /**
+     * The action active right away
+     * @var string
+     */
+    protected $doAction;
 
     /**
      * The layout
@@ -121,21 +135,31 @@ abstract class BaseController extends Controller {
             // Take out the method from the action.
             $action = str_replace(array('get', 'post', 'patch', 'put', 'delete'), '', last($routeArray));
 
-            $this->onController = $controller;
+            $this->onController = strtolower($controller);
             $this->onAction = Str::slug(Request::method(). '-' .$action);
+            $this->doAction = strtolower($action);
+            Session::put('onController', $this->onController);
             Session::put('onAction', $this->onAction);
+            Session::put('doAction', $this->doAction);
         }
 
         // Get the login user
-        $user = Auth::user();
-        Session::put('user', $user);
+        $user = Sentry::getUser();
+        if ($user)
+        {
+            // Debugbar::info($user->account()->getParentKey());
+            Session::put('user', $user);
+            View::share('user', $user);
+        }
 
+        // Brand name from setting
+        $this->brandName = Setting::get('application_name');
+        
         // Share some variables to views
-        $settings = App::make('Sharenjoy\Cmsharenjoy\Settings\SettingsInterface');
-        View::share('app_name', $settings->getAppName());
+        View::share('brandName', $this->brandName);
         View::share('appName' , $this->appName);
         View::share('functionRules', $this->functionRules);
-        View::share('user', $user);
+        View::share('langLocales', Config::get('cmsharenjoy::app.locales'));
 
         $composed_views = array('cmsharenjoy::*');
         View::composer($composed_views, 'Sharenjoy\Cmsharenjoy\Composers\Page');
@@ -174,6 +198,21 @@ abstract class BaseController extends Controller {
         View::share('updateUrl', $this->updateUrl);
         View::share('deleteUrl', $this->deleteUrl);
         View::share('sortUrl',   $this->sortUrl);
+    }
+
+    protected function setupLayout()
+    {
+        $action = $this->doAction;
+        $commonRepoLayout = Config::get('cmsharenjoy::app.commonRepoLayoutDirectory');
+        
+        if (View::exists('cmsharenjoy::'.$this->appName.'.'.$action))
+        {
+            $this->layout = View::make('cmsharenjoy::'.$this->appName.'.'.$action);
+        }
+        else if(View::exists('cmsharenjoy::'.$commonRepoLayout.'.'.$action))
+        {
+            $this->layout = View::make('cmsharenjoy::'.$commonRepoLayout.'.'.$action);
+        }
     }
 
 }

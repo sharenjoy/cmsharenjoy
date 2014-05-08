@@ -8,17 +8,12 @@ return array(
     /**
      * The name of the application, will be used in the main management areas of the application
      */
-    'name' => 'Your Fantastic CMS',
+    'name' => 'CMS',
 
     /**
      * The email address associated with support enquires on a technical basis
      */
-    'support_email' => 'example@example.com',
-
-    /**
-     * The base path to put uploads into
-     */
-    'upload_base_path'=>'uploads/',
+    'support_email' => '',
 
     /**
      * The URL key to access the main admin area
@@ -28,7 +23,12 @@ return array(
     /**
      * The array of language
      */
-    'locales' => array('en', 'tw'),
+    'locales' => array(
+        'zh-TW' => '繁體中文',
+        'en'    => '英文',
+        // 'zh-CN' => '簡體中文',
+        // 'ja'    => '日文',
+    ),
 
     /**
      * The common directory of layout
@@ -40,41 +40,41 @@ return array(
      */
     'menu_items'=>array(
         'post'=>array(
-            'name'=>'Posts',
-            'icon'=>'entypo-chart-bar',
+            'name'=>'menu.post',
+            'icon'=>'entypo-doc-text',
             'top'=>true
         ),
         'category'=>array(
-            'name' =>'Categories',
-            'icon' =>'entypo-chart-bar',
+            'name' =>'menu.category',
+            'icon' =>'entypo-flow-tree',
             'top'  =>true,
             'sub'  => array(
                 'category/index/product' => array(
-                    'name' => 'Product Categories'
+                    'name' => 'menu.product_category'
                 ),
                 'category/index/post' => array(
-                    'name' => 'Post Categories'
+                    'name' => 'menu.post_category'
                 ),
             )
         ),
         'tag'=>array(
-            'name'=>'Tags',
-            'icon'=>'entypo-chart-bar',
+            'name'=>'menu.tag',
+            'icon'=>'entypo-tag',
             'top'=>true
         ),
-        'gallery'=>array(
-            'name'=>'Gallery',
-            'icon'=>'entypo-chart-bar',
+        'filer'=>array(
+            'name'=>'menu.file',
+            'icon'=>'entypo-box',
             'top'=>true
         ),
         'user'=>array(
-            'name'=>'Users',
-            'icon'=>'entypo-chart-bar',
+            'name'=>'menu.user',
+            'icon'=>'entypo-key',
             'top'=>true
         ),
         'setting'=>array(
-            'name'=>'Settings',
-            'icon'=>'entypo-chart-bar',
+            'name'=>'menu.setting',
+            'icon'=>'entypo-cog',
             'top'=>true
         )
     )

@@ -10,25 +10,14 @@ class CategoryController extends ObjectBaseController {
     protected $functionRules = [
         'list'   => true,
         'create' => true,
-        'order'  => false
+        'update' => true,
+        'delete' => true,
     ];
 
     protected $listConfig = [
-        'type' => [
-            'name'  => 'type',
-            'align' => 'center',
-            'width' => '25%'
-        ],
-        'title' => [
-            'name'  => 'title',
-            'align' => '',
-            'width' => ''
-        ],
-        'created_at' => [
-            'name'  => 'created',
-            'align' => 'center',
-            'width' => '20%'
-        ],
+        'type'         => ['name'=>'type',         'align'=>'center', 'width'=>'25%'],
+        'title'        => ['name'=>'title',        'align'=>'',       'width'=>''   ],
+        'created_at'   => ['name'=>'created',      'align'=>'center', 'width'=>'20%'],
     ];
 
     protected $type;

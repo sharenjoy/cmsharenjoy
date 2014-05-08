@@ -12,21 +12,23 @@ This is cmsharenjoy.
 <!-- Add this string to your array of providers in app/config/app.php -->
 
     'Barryvdh\Debugbar\ServiceProvider',
+    'Cartalyst\Sentry\SentryServiceProvider',
     'Sharenjoy\Cmsharenjoy\CmsharenjoyServiceProvider',
     'Sharenjoy\Cmsharenjoy\Repo\RepoServiceProvider',
     'Sharenjoy\Cmsharenjoy\Exception\ExceptionServiceProvider',
     'Sharenjoy\Cmsharenjoy\Service\Message\MessageServiceProvider',
     'Sharenjoy\Cmsharenjoy\Service\Notification\NotificationServiceProvider',
-    'Cartalyst\Sentry\SentryServiceProvider',
     'Teepluss\Theme\ThemeServiceProvider',
     'Sharenjoy\Cmsharenjoy\Formaker\FormakerServiceProvider',
     'Sharenjoy\Cmsharenjoy\Service\Categorize\CategorizeServiceProvider',
+    'Intervention\Image\ImageServiceProvider',
 
 ### Adding the alices to app.php
 
     'Debugbar'        => 'Barryvdh\Debugbar\Facade',
     'Theme'           => 'Teepluss\Theme\Facades\Theme',
     'Sentry'          => 'Cartalyst\Sentry\Facades\Laravel\Sentry',
+    'Image'           => 'Intervention\Image\Facades\Image',
 
 ### Publishing the configuration(Optional)
 <!-- Publish the configurations for this package in order to change them to your liking: -->
@@ -41,7 +43,7 @@ This is cmsharenjoy.
 ### Migrating and seeding the database
 <!-- Seed the database, this pretty much just seeds an example user and settings. Migration is pretty simple, ensure your database config is setup and run this: -->
 
-    php artisan migrate --package=sharenjoy/cmsharenjoy
+    php artisan migrate --package="sharenjoy/cmsharenjoy"
     php artisan db:seed --class="Sharenjoy\Cmsharenjoy\Seeds\DatabaseSeeder"
 
 ### Publishing the Debugbar assets and config
@@ -53,6 +55,15 @@ This is cmsharenjoy.
 
     php artisan migrate --package=cartalyst/sentry
     php artisan config:publish cartalyst/sentry
+
+### Modify the config of Sentry for new User model that extends Sentry User model
+
+    'users' => array(
+        
+        // Change to the model
+        'model' => '\Sharenjoy\Cmsharenjoy\User\User',
+
+    ),
 
 ### Publishing the Laravel4-theme assets and create a theme
 

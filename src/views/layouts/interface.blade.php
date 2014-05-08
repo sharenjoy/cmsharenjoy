@@ -3,11 +3,13 @@
     <head>
         <meta charset="utf-8">
         <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+        
+        <meta http-equiv="expires" content="-1">
+        <meta name="robots" content="none">
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="author" content="">
-        <meta name="csrf-token" content="{{csrf_token()}}">
 
         <title>@yield('title')</title>
         
@@ -43,7 +45,7 @@
                     <div class="logo">
                         <a href="{{ url( $urlSegment ) }}">
                             <!-- <img src="assets/images/logo.png" alt="" /> -->
-                            <span>{{$app_name}}</span>
+                            <span>{{$brandName}}</span>
                         </a>
                     </div>
                     
@@ -82,7 +84,7 @@
                     <li class="{{ Request::is( "$urlSegment" ) ? 'active' : '' }}">
                         <a href="{{ url( $urlSegment ) }}">
                             <i class="entypo-gauge"></i>
-                            <span>Dashboard</span>
+                            <span>{{trans('cmsharenjoy::app.menu.dashboard')}}</span>
                         </a>
                     </li>
                     
@@ -94,7 +96,7 @@
                         @endif
                             <a href="{{ url( $urlSegment.'/'.$url ) }}">
                                 <i class="{{$item['icon']}}"></i>
-                                <span>{{ $item['name'] }}</span>
+                                <span>{{trans('cmsharenjoy::app.'.$item['name'])}}</span>
                             </a>
 
                             @if(isset($item['sub']))
@@ -102,7 +104,7 @@
                                     @foreach($item['sub'] as $subUrl => $subItem)
                                         <li class="{{ Request::is( "$urlSegment/$subUrl*" ) ? 'active' : '' }}">
                                             <a href="{{ url( $urlSegment.'/'.$subUrl ) }}">
-                                                <span>{{$subItem['name']}}</span>
+                                                <span>{{trans('cmsharenjoy::app.'.$subItem['name'])}}</span>
                                             </a>
                                         </li>
                                     @endforeach
@@ -139,7 +141,7 @@
                                     @else
                                         <img src="{{ asset('packages/sharenjoy/cmsharenjoy/images/thumb-1.jpg') }}" alt="" class="img-circle" />
                                     @endif
-                                    {{ $user->first_name.' '.$user->last_name }}
+                                    {{ $user->account->first_name.' '.$user->account->last_name }}
                                     <b class="caret"></b>
                                 </a>
                                 
@@ -236,7 +238,7 @@
                 <footer class="main">
                     <div class="row">
                         <div class="col-xs-6 col-sm-6 col-md-6">
-                            &copy; {{ date('Y') }} <strong>{{ $app_name }}</strong>
+                            &copy; {{date('Y')}} <strong>{{$brandName}}</strong>
                         </div>
 
                         <div class="col-xs-6 col-sm-6 col-md-6">
@@ -245,12 +247,9 @@
                                 <li>
                                     {{ Form::select(
                                         'language', 
-                                        array(
-                                            'en' => 'English',
-                                            'tw' => '繁體中文'
-                                        ), 
+                                        $langLocales, 
                                         $active_language,
-                                        array('class'=>'form-control', 'id'=>'language')
+                                        array('class'=>'form-control', 'id'=>'admin_language')
                                     )}}
                                 </li>
 
@@ -274,6 +273,20 @@
 
         </div>
         <!-- page-container Ends -->
+
+        @yield('modal')
+        
+        
+        <script type="text/javascript">
+        @section('main-scripts')
+            var sharenjoy          = {};
+            sharenjoy.APPURL       = "{{$objectUrl}}";
+            sharenjoy.SITEURL      = "{{Config::get('app.url')}}";
+            sharenjoy.BASEURI      = "{{base_path()}}";
+            sharenjoy.PUBLICURI    = "{{public_path()}}";
+            sharenjoy.csrf_token   = "{{csrf_token()}}";
+        @show
+        </script>
 
         {{Theme::asset()->scripts()}}
 

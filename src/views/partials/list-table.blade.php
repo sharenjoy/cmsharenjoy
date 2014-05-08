@@ -3,12 +3,12 @@
     <div class="row">
         <div class="col-xs-8 col-left">
             <div class="dataTables_length">
-                <h2>{{ Lang::get('cmsharenjoy::admin.manage') }} {{ Lang::get("cmsharenjoy::app.$appName") }}</h2>
+                <h3>{{trans('cmsharenjoy::admin.manage')}}</h3>
             </div>
         </div>
         <div class="col-xs-4 col-right">
             <div class="dataTables_filter" id="table-1_filter">
-                <!-- <label>{{ Lang::get('cmsharenjoy::admin.search') }}: <input type="text" aria-controls="table-1"></label> -->
+                <!-- <label>{{trans('cmsharenjoy::admin.search')}}: <input type="text" aria-controls="table-1"></label> -->
             </div>
         </div>
     </div>
@@ -20,7 +20,7 @@
             <tr>
                 <th>&nbsp;</th>
                 @foreach($listConfig as $item)
-                    <th align="center">{{ Lang::get("cmsharenjoy::app.$item[name]") }}</th>
+                    <th align="center">{{trans("cmsharenjoy::app.$item[name]")}}</th>
                 @endforeach
             </tr>
         </thead>
@@ -29,14 +29,8 @@
             @foreach($items as $item)
                 <tr id="{{ $item->id }}">
                     <td width="20%">
-                        <div class="text-center">
-                            <a href="{{ $updateUrl.$item->id }}" class="tooltip-primary" data-toggle="tooltip" data-placement="top" title="{{ Lang::get('cmsharenjoy::admin.edit') }}" data-original-title="{{ Lang::get('cmsharenjoy::admin.edit') }}">
-                                <i class="fa fa-pencil-square-o fa-lg"></i>
-                            </a>
-                            &nbsp;&nbsp;
-                            <a href="{{ $deleteUrl.$item->id }}" class="tooltip-primary" data-toggle="tooltip" data-placement="top" title="{{ Lang::get('cmsharenjoy::admin.delete') }}" data-original-title="{{ Lang::get('cmsharenjoy::admin.delete') }}">
-                                <i class="fa fa-trash-o fa-lg"></i>
-                            </a>
+                        <div class="list-fun-box">
+                            @include('cmsharenjoy::partials.function-list')
                         </div>
                     </td>
                     @foreach($listConfig as $key => $value)

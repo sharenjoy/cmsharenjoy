@@ -20,7 +20,11 @@ class CreateSettingsTable extends Migration {
                 $table->increments('id')->index();
                 $table->string('key', 255)->unique();
                 $table->string('label', 255);
+                $table->text('description')->nullable();
+                $table->string('type', 255);
                 $table->string('value', 255);
+                $table->string('module', 255);
+                $table->integer('sort')->unsigned()->nullable()->default(0);
                 $table->timestamps();
             });
         }

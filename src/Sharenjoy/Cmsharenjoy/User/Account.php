@@ -9,6 +9,7 @@ class Account extends Eloquent {
     public $timestamps = false;
 
     protected $fillable = array(
+        'user_id',
         'first_name',
         'last_name',
         'phone',

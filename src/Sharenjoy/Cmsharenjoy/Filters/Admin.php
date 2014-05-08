@@ -1,6 +1,6 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Filters;
 
-use Auth, Redirect, Config, Request, Session;
+use Sentry, Redirect, Config, Request, Session;
 
 class Admin {
 
@@ -10,7 +10,7 @@ class Admin {
      */
     public function filter()
     {
-        if (Auth::guest())
+        if ( ! Sentry::check())
         {
             return Redirect::guest(Config::get('cmsharenjoy::app.access_url').'/login');
         }
@@ -19,7 +19,7 @@ class Admin {
 
         // This is for language
         $lang = $segment;
-        if (in_array($lang, Config::get('cmsharenjoy::app.locales')))
+        if (array_key_exists($lang, Config::get('cmsharenjoy::app.locales')))
         {
             Session::put('admin-locale', $lang);
 

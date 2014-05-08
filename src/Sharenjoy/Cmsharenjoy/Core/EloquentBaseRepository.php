@@ -279,31 +279,35 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
      * @param  array The input needs to valid
      * @return boolean
      */
-    protected function valid(array $input)
+    protected function valid(array $input, $validator = null)
     {
-        return $this->validator->with($input)->passes();
+        $validator = $validator ?: $this->validator;
+        return $validator->with($input)->passes();
     }
 
     /**
      * Return any validation errors
      * @return array
      */
-    public function errors()
+    public function errors($validator = null)
     {
-        return $this->validator->errors();
+        $validator = $validator ?: $this->validator;
+        return $validator->errors();
     }
 
     /**
      * Merge message to flashMessageBag
      * @return void
      */
-    public function getErrorsToFlashMessageBag()
+    public function getErrorsToFlashMessageBag($validator = null)
     {
-        if ($this->validator->getErrorsToArray())
+        $validator = $validator ?: $this->validator;
+
+        if ($validator->getErrorsToArray())
         {
-            foreach ($this->validator->getErrorsToArray() as $value)
+            foreach ($validator->getErrorsToArray() as $message)
             {
-                Message::merge(array('errors'=>$value))->flash();
+                Message::merge(array('errors' => $message))->flash();
             }
         }
     }
@@ -350,23 +354,21 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
         return false;
     }
 
-    public function setModelForm($type, $input = array())
+    public function setFormFields($input = array())
     {
-        $formConfig = $this->model->formConfig;
+        $type          = Session::get('doAction');
+        $typeConfigStr = $type.'FormConfig';
+        $typeDenyStr   = $type.'FormDeny';
+        $typeConfig    = $this->model->$typeConfigStr ?: [];
 
-        if ($type)
+        $formConfig = array_merge($this->model->formConfig, $typeConfig);
+
+        if( ! empty($this->model->$typeDenyStr))
         {
-            switch ($type)
+            foreach ($this->model->$typeDenyStr as $value)
             {
-                case 'create-form':
-                    $typeConfig = $this->model->createFormConfig ?: [];
-                    break;
-
-                case 'update-form':
-                    $typeConfig = $this->model->updateFormConfig ?: [];
-                    break;
+                unset($formConfig[$value]);
             }
-            $formConfig = array_merge($formConfig, $typeConfig);
         }
 
         // To order the form config
@@ -389,7 +391,7 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
     protected function composeInputData(array $data)
     {
         // slug
-        if (isset($this->slug) && !is_null($this->slug))
+        if ( ! empty($this->slug))
         {
             $data = array_merge($data, array(
                 'slug' => Str::slug($data[$this->slug], '-')

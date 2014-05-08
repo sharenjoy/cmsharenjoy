@@ -2,14 +2,15 @@
 
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
 use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;
-use Hash, Session, Message, Debugbar;
+use Sentry, Input, Mail, Hash, Config, Session, Message, Debugbar;
 
 class UserRepository extends EloquentBaseRepository implements UserInterface {
 
-    public function __construct(User $user, ValidableInterface $validator)
+    public function __construct(User $user, ValidableInterface $userValidator, ValidableInterface $accountValidator)
     {
-        $this->validator = $validator;
-        $this->model     = $user;
+        $this->userValidator    = $userValidator;
+        $this->accountValidator = $accountValidator;
+        $this->model            = $user;
     }
 
     public function finalProcess($action, $model = null, $data = null)
@@ -24,15 +25,14 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
                 }
                 break;
             case 'get-update':
-                $model->first_name = $model->account->first_name;
-                $model->last_name = $model->account->last_name;
-                $model->phone = $model->account->phone;
+                $model->first_name  = $model->account->first_name;
+                $model->last_name   = $model->account->last_name;
+                $model->phone       = $model->account->phone;
+                $model->description = $model->account->description;
                 break;
             case 'post-create':
                 break;
             case 'post-update':
-                $account = new Account($data);
-                $model->account()->save($account);
                 break;
             default:
                 break;
@@ -41,58 +41,164 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
     }
 
     public function create(array $input)
-    {
-        $data = $this->composeInputData($input);
-
-        Debugbar::info(get_class($this->model));
-
-        $this->model->email = $input[ 'email' ];
-        $this->model->password = $input[ 'password' ];
-
-        // The password confirmation will be removed from model
-        // before saving. This field will be used in Ardent's
-        // auto validation.
-        $this->model->password_confirmation = $input[ 'password_confirmation' ];
-
-        // Save if valid. Password field will be hashed before save
-        $this->model->save();
-
-        if ( ! $this->model->id )
+    {   
+        try
         {
-            // Get validation errors (see Ardent package)
-            $error = $this->model->errors()->all(':message');
+            $vali = false;
+            if ( ! $this->accountValidator->with($input)->passes())
+            {
+                if ($this->accountValidator->getErrorsToArray())
+                {
+                    foreach ($this->accountValidator->getErrorsToArray() as $message)
+                    {
+                        Message::merge(array('errors' => $message))->flash();
+                    }
+                }
+                $vali = true;
+            }
+            if ( ! $this->userValidator->with($input)->passes())
+            {
+                if ($this->userValidator->getErrorsToArray())
+                {
+                    foreach ($this->userValidator->getErrorsToArray() as $message)
+                    {
+                        Message::merge(array('errors' => $message))->flash();
+                    }
+                }
+                $vali = true;
+            }
+            if ($vali) return false;
+            
+            // create user
+            $user = Sentry::createUser(array(
+                'email'       => Input::get('email'),
+                'password'    => Input::get('password'),
+                // 'permissions' => $permissions
+            ));
 
-            Message::merge(array('errors'=>$error))->flash();
+            // sort id
+            $this->storeById($user->id, array('sort' => $user->id));
 
+            // activate user
+            $activationCode = $user->getActivationCode();
+
+            // create account info
+            $input['user_id'] = $user->id;
+            $account = $user->account()->getRelated()->create($input);
+
+            if(true)
+            {
+                $user->attemptActivation($activationCode);
+            }
+            else
+            {
+                $userName = $account->first_name.' '.$account->last_name;
+                $datas = array(
+                    'id'       => $user->id,
+                    'code'     => $activationCode,
+                    'username' => $userName,
+                );
+
+                // send email
+                Mail::queue('cmsharenjoy::mail.user-activation', $datas, function($message) use ($user)
+                {
+                    $message->from(Config::get('mail.from.address'), Config::get('mail.from.name'))
+                            ->subject('Account activation');
+                    $message->to($user->getLogin());
+                });
+            }
+        }
+        catch (\Cartalyst\Sentry\Users\LoginRequiredException $e)
+        {
+            Message::merge(array('errors' => 'Login field is required.'))->flash();
             return false;
         }
-        
-        // $account = new Account($data);
-        // $model->account()->save($account);
+        catch (\Cartalyst\Sentry\Users\PasswordRequiredException $e)
+        {
+            Message::merge(array('errors' => 'Password field is required.'))->flash();
+            return false;
+        }
+        catch (\Cartalyst\Sentry\Users\UserExistsException $e)
+        {
+            Message::merge(array('errors' => 'User with this login already exists.'))->flash();
+            return false;
+        }
+        catch (\Cartalyst\Sentry\Groups\GroupNotFoundException $e)
+        {
+            Message::merge(array('errors' => 'Group was not found.'))->flash();
+            return false;
+        }
 
-        // return $this->model->id;
+        return true;
     }
 
     public function update($id, array $input)
     {
-        $data = $this->composeInputData($input);
+        try
+        {
+            $vali = false;
+            if ( ! $this->accountValidator->with($input)->passes())
+            {
+                if ($this->accountValidator->getErrorsToArray())
+                {
+                    foreach ($this->accountValidator->getErrorsToArray() as $message)
+                    {
+                        Message::merge(array('errors' => $message))->flash();
+                    }
+                }
+                $vali = true;
+            }
 
-        if(isset($this->model->uniqueFields) && count($this->model->uniqueFields))
-        {
-            $this->validator->setUniqueUpdateFields($this->model->uniqueFields, $id);
+            $this->userValidator->setRule('updateRules');
+            if( ! empty($this->model->uniqueFields))
+            {
+                $this->userValidator->setUniqueUpdateFields($this->model->uniqueFields, $id);
+            }
+
+            if ( ! $this->userValidator->with($input)->passes())
+            {
+                if ($this->userValidator->getErrorsToArray())
+                {
+                    foreach ($this->userValidator->getErrorsToArray() as $message)
+                    {
+                        Message::merge(array('errors' => $message))->flash();
+                    }
+                }
+                $vali = true;
+            }
+            if ($vali) return false;
+
+            // Find the user using the user id
+            $user = Sentry::findUserById($id);
+
+            // Update the user details
+            $user->email = $input['email'];
+
+            // Update the user
+            if ($user->save())
+            {
+                // update account info
+                $account = $user->account()->getRelated()->where('user_id', $id)->first();
+                $account->fill($input)->save();
+
+                return true;
+            }
+            else
+            {
+                Message::merge(array('errors' => 'User information was not updated'))->flash();
+                return false;
+            }
         }
-        
-        if ( ! $this->valid($data))
+        catch (Cartalyst\Sentry\Users\UserExistsException $e)
         {
-            $this->getErrorsToFlashMessageBag();
+            Message::merge(array('errors' => 'User with this login already exists.'))->flash();
             return false;
         }
-
-        $model = $this->model->find($id)->fill($data);
-
-        $model = $this->finalProcess(Session::get('onAction'), $model, $data);
-        
-        $model->save();
+        catch (Cartalyst\Sentry\Users\UserNotFoundException $e)
+        {
+            Message::merge(array('errors' => 'User was not found.'))->flash();
+            return false;
+        }
 
         return true;
     }

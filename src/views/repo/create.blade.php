@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.interface-create')
 
 @section('title')
-    Create New {{ $appName }}
+{{trans('cmsharenjoy::admin.add')}}{{trans('cmsharenjoy::app.'.$appName)}}
 @stop
 
 @section('form-items')
@@ -11,7 +11,7 @@
             
                 <div class="panel-heading">
                     <div class="panel-title">
-                        <h2>Create New {{$appName}}</h2>
+                        <h3>{{trans('cmsharenjoy::admin.add')}}</h3>
                     </div>
                     
                     <!-- <div class="panel-options">
@@ -36,7 +36,9 @@
                         
                         <div class="form-group">
                             <div class="col-sm-8">
-                                {{ Form::submit('Create Item' , array('class'=>'btn btn-large btn-success')) }}
+                                {{ Form::reset(trans('cmsharenjoy::buttons.reset') , array('class'=>'btn btn-large btn-default')) }}
+                                &nbsp;
+                                {{ Form::submit(trans('cmsharenjoy::buttons.create') , array('class'=>'btn btn-large btn-success')) }}
                             </div>
                         </div>
 

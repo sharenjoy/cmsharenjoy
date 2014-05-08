@@ -2,6 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    
+    <meta http-equiv="expires" content="-1">
+    <meta name="robots" content="none">
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -19,6 +23,7 @@
     <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/neon-theme.css')}}">
     <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/neon-forms.css')}}">
     <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/custom.css')}}">
+    <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/skins/white.css')}}">
     @show
 
     <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/jquery-1.11.0.min.js')}}"></script>
@@ -33,16 +38,11 @@
     
     
 </head>
-<body class="page-body login-page login-form-fall" data-url="http://neon.dev">
-
-
-<!-- This is needed when you send requests via Ajax --><script type="text/javascript">
-var baseurl = '';
-</script>
+<body class="page-body login-page login-form-fall skin-white">
 
 <div class="login-container">
     
-    <div class="login-header login-caret">
+    <!-- <div class="login-header login-caret">
         
         <div class="login-content">
             
@@ -52,7 +52,6 @@ var baseurl = '';
             
             <p class="description">Dear user, log in to access the admin area!</p>
             
-            <!-- progress bar indicator -->
             <div class="login-progressbar-indicator">
                 <h3>43%</h3>
                 <span>logging in...</span>
@@ -63,7 +62,7 @@ var baseurl = '';
     
     <div class="login-progressbar">
         <div></div>
-    </div>
+    </div> -->
     
     <div class="login-form">
         

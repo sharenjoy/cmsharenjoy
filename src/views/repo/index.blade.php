@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.interface')
 
 @section('title')
-    {{ Lang::get('cmsharenjoy::admin.manage') }} {{ Lang::get("cmsharenjoy::app.$appName") }}
+{{trans('cmsharenjoy::admin.manage')}}{{trans('cmsharenjoy::app.'.$appName)}}
 @stop
 
 @section('content')
@@ -23,7 +23,7 @@
         </div>
     @else
         <div class="alert alert-info">
-            <strong>No Items Yet:</strong> You don't have any items here just yet. Add one using the button below.
+            {{trans('cmsharenjoy::admin.no_item_yet')}}
         </div>
     @endif
 @stop

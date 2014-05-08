@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.interface-update')
 
 @section('title')
-    Edit {{$appName}}: {{$item->title}}
+{{trans('cmsharenjoy::admin.edit')}}{{trans('cmsharenjoy::app.'.$appName)}}
 @stop
 
 @section('form-items')
@@ -11,7 +11,7 @@
             
                 <div class="panel-heading">
                     <div class="panel-title">
-                        <h2>Edit {{$appName}}: <small>{{$item->title}}</small></h2>
+                        <h3>{{trans('cmsharenjoy::admin.edit')}}</h3>
                     </div>
                     
                     <!-- <div class="panel-options">
@@ -36,7 +36,9 @@
                         
                         <div class="form-group">
                             <div class="col-sm-8">
-                                {{ Form::submit('Update Item' , array('class'=>'btn btn-large btn-success')) }}
+                                {{ Form::reset(trans('cmsharenjoy::buttons.reset') , array('class'=>'btn btn-large btn-default')) }}
+                                &nbsp;
+                                {{ Form::submit(trans('cmsharenjoy::buttons.update') , array('class'=>'btn btn-large btn-success')) }}
                             </div>
                         </div>
 

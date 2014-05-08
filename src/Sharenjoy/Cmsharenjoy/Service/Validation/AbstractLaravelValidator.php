@@ -45,6 +45,17 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
     }
 
     /**
+     * To overwrite normal rules
+     * @param string $action The new rule
+     */
+    public function setRule($action)
+    {
+        $this->rules = $this->$action;
+
+        return $this;
+    }
+
+    /**
      * Validation passes or fails
      * @return Boolean
      */
@@ -81,7 +92,7 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
 
     /**
      * To set some column don't need to valid
-     * @param string $key
+     * @param array $keyAry
      * @param string $id
      */
     public function setUniqueUpdateFields($keyAry, $id)

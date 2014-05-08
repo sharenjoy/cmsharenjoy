@@ -10,12 +10,13 @@ class UserValidator extends AbstractLaravelValidator {
      * @var Array
      */
     protected $rules = [
-        'email'                 => 'required',
-        'password'              => 'required|between:4,12',
+        'email'                 => 'required|email|unique:users,email',
+        'password'              => 'required|min:6|confirmed',
+        'password_confirmation' => 'required|min:6'
+    ];
 
-        // 'email'                 => 'required|unique:users,email',
-        // 'password'              => 'required|between:4,12|confirmed',
-        // 'password_confirmation' => 'required|between:4,12'
+    protected $updateRules = [
+        'email'                 => 'required|email|unique:users,email',
     ];
 
 }
