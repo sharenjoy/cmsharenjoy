@@ -52,10 +52,8 @@ class PostController extends ObjectBaseController {
         parent::__construct();
     }
 
-    protected function controllerFinalProcess($model = null)
+    protected function controllerFinalProcess($model)
     {
-        $model = $model ?: $this->repository->getModel();
-        
         switch ($this->onAction) {
             case 'get-index':
                 foreach ($model as $key => $value)
