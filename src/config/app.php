@@ -18,7 +18,7 @@ return array(
     /**
      * The URL key to access the main admin area
      */
-    'access_url'=>'admin',
+    'access_url' => 'admin',
 
     /**
      * The array of language

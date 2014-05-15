@@ -2,7 +2,7 @@
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
-use Response, Session, Route, Request, Input;
+use Session;
 
 class CmsharenjoyServiceProvider extends ServiceProvider {
 
@@ -18,10 +18,7 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
 	 *
 	 * @return void
 	 */
-	public function register()
-	{
-		//
-	}
+	public function register(){}
 
 	/**
 	 * Bootstrap the application events.
@@ -41,12 +38,6 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
         {
             $app->setLocale(Session::get('admin-locale'));
         }
-
-		// Define 404 page
-		$app->missing(function($exception)
-		{
-		    return Response::view('cmsharenjoy::errors.missing', array(), 404);
-		});
 
 		// Get the URL segment to use for routing
         $urlSegment = $config->get('cmsharenjoy::app.access_url');

@@ -3,7 +3,8 @@
 use Illuminate\Routing\Controller;
 use Sharenjoy\Cmsharenjoy\User\Account;
 use Sharenjoy\Cmsharenjoy\User\User;
-use Sentry, Session, View, Config, Str, Route, Request, Theme, Message, Setting;
+use App, Sentry, Session, View, Config, Str;
+use Response, Route, Request, Theme, Message, Setting;
 
 abstract class BaseController extends Controller {
 
@@ -112,6 +113,12 @@ abstract class BaseController extends Controller {
 
     protected function filterProcess()
     {
+        // Define 404 page
+        App::missing(function($exception)
+        {
+            return Response::view('cmsharenjoy::errors.missing', array(), 404);
+        });
+        
         // Setup composed views and the variables that they require
         $this->beforeFilter('adminFilter' , array('except' => $this->whitelist));
 

@@ -28,6 +28,32 @@ class UserController extends ObjectBaseController {
         parent::__construct();
     }
 
+    protected function controllerFinalProcess($model = null)
+    {
+        $model = $model ?: $this->repository->getModel();
+        
+        switch ($this->onAction) {
+            case 'get-index':
+                foreach ($model as $key => $value)
+                {
+                    $model[$key]->user_name = $value->account->first_name.' '.$value->account->last_name;
+                    $model[$key]->phone     = $value->account->phone;
+                }
+                break;
+            case 'get-update':
+                $model->first_name  = $model->account->first_name;
+                $model->last_name   = $model->account->last_name;
+                $model->phone       = $model->account->phone;
+                $model->description = $model->account->description;
+                break;
+            
+            default:
+                break;
+        }
+
+        return $model;
+    }
+
     public function getResetpassword($id)
     {
         try

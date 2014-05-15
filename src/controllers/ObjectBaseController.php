@@ -37,11 +37,6 @@ abstract class ObjectBaseController extends BaseController {
         // Debugbar::info($filterForm);
         // $environment = App::environment();
         // Debugbar::info(Session::get('action'));
-
-        // Message::add('info', 'test')->flash();
-        // 
-        // Debugbar::info(url('aaa/sss').'/');
-        // Debugbar::info(Request::segment(2));
     }
 
     /**
@@ -76,7 +71,10 @@ abstract class ObjectBaseController extends BaseController {
         $result = $this->repository->byPage($page, $perPage, $model);
 
         // Do some final things process
-        $result->items = $this->repository->finalProcess($this->onAction, $result->items);
+        if (method_exists($this, 'controllerFinalProcess'))
+        {
+            $result->items = $this->controllerFinalProcess($result->items);
+        }
 
         // Set Pagination of data 
         $items = Paginator::make($result->items, $result->totalItems, $perPage)->appends($query);
@@ -129,16 +127,21 @@ abstract class ObjectBaseController extends BaseController {
     {
         // Catch some validation if can't get the data
         try {
-            $item = $this->repository->byId($id);
+            $model = $this->repository->byId($id);
+
+            if (method_exists($this, 'controllerFinalProcess'))
+            {
+                $model = $this->controllerFinalProcess($model);
+            }
         }
         catch(EntityNotFoundException $e)
         {
             return Redirect::to($this->objectUrl);
         }
 
-        $fieldsForm = $this->repository->setFormFields($item);
+        $fieldsForm = $this->repository->setFormFields($model);
 
-        $this->layout->with('item' , $item)
+        $this->layout->with('item' , $model)
                      ->with('fieldsForm', $fieldsForm);
     }
 
@@ -225,7 +228,7 @@ abstract class ObjectBaseController extends BaseController {
             if($id)
             {
                 $sort = $sort_value[$key];
-                $this->repository->storeById($id, array('sort' => $sort));
+                $this->repository->store($id, array('sort' => $sort));
             }
         }
 

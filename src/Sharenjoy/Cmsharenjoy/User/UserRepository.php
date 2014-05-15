@@ -13,33 +13,6 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
         $this->model            = $user;
     }
 
-    public function finalProcess($action, $model = null, $data = null)
-    {
-        switch ($action)
-        {
-            case 'get-index':
-                foreach ($model as $key => $value)
-                {
-                    $model[$key]->user_name = $value->account->first_name.' '.$value->account->last_name;
-                    $model[$key]->phone     = $value->account->phone;
-                }
-                break;
-            case 'get-update':
-                $model->first_name  = $model->account->first_name;
-                $model->last_name   = $model->account->last_name;
-                $model->phone       = $model->account->phone;
-                $model->description = $model->account->description;
-                break;
-            case 'post-create':
-                break;
-            case 'post-update':
-                break;
-            default:
-                break;
-        }
-        return $model;
-    }
-
     public function create(array $input)
     {   
         try
@@ -77,7 +50,7 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
             ));
 
             // sort id
-            $this->storeById($user->id, array('sort' => $user->id));
+            $this->store($user->id, array('sort' => $user->id));
 
             // activate user
             $activationCode = $user->getActivationCode();

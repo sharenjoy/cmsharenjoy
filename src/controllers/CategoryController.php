@@ -127,7 +127,7 @@ class CategoryController extends ObjectBaseController {
 
     protected function storeSortById($model, $sortNum)
     {
-        $this->repository->storeById($model->id, array('sort' => $sortNum));
+        $this->repository->store($model->id, array('sort' => $sortNum));
     }
 
 }

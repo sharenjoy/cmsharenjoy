@@ -52,4 +52,28 @@ class PostController extends ObjectBaseController {
         parent::__construct();
     }
 
+    protected function controllerFinalProcess($model = null)
+    {
+        $model = $model ?: $this->repository->getModel();
+        
+        switch ($this->onAction) {
+            case 'get-index':
+                foreach ($model as $key => $value)
+                {
+                    $model[$key]->tags_csv   = $value->tags->implode('tag', ',');
+                    $model[$key]->user_name  = $value->author->first_name.' '.$value->author->last_name;
+                    $model[$key]->user_email = $value->author->email;
+                }
+                break;
+            case 'get-update':
+                $model->tags_csv = $model->tags->implode('tag', ',');
+                break;
+            
+            default:
+                break;
+        }
+
+        return $model;
+    }
+
 }

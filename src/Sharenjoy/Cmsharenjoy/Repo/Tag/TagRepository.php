@@ -20,23 +20,6 @@ class TagRepository extends EloquentBaseRepository implements TagInterface {
         $this->model     = $tag;
     }
 
-    public function finalProcess($action, $model = null, $data = null)
-    {
-        switch ($action)
-        {
-            case 'get-index':
-                break;
-            case 'get-update':
-                break;
-            case 'post-create':
-            case 'post-update':
-                break;
-            default:
-                break;
-        }
-        return $model;
-    }
-
     /**
      * Sync tags
      * @param mixed  $tags can be array or string

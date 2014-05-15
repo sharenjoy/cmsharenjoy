@@ -40,6 +40,4 @@ class SettingRepository extends EloquentBaseRepository implements SettingInterfa
         return $model->value;
     }
 
-    public function finalProcess($action, $model = null, $data = null){}
-
 }

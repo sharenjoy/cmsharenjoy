@@ -3,7 +3,7 @@
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
 use Sharenjoy\Cmsharenjoy\Repo\Tag\TagInterface;
 use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;
-use Config, Formaker, View, Debugbar;
+use Config, Formaker, View, Session, Debugbar;
 
 class PostRepository extends EloquentBaseRepository implements PostInterface {
 
@@ -51,25 +51,15 @@ class PostRepository extends EloquentBaseRepository implements PostInterface {
         return $model;                     
     }
 
-    public function finalProcess($action, $model, $data = null)
+    protected function repoFinalProcess($model = null, $data = null)
     {
+        $model  = $model ?: $this->model;
+        $action = Session::get('onController').'-'.Session::get('onAction');
+
         switch ($action)
         {
-            case 'get-index':
-                foreach ($model as $key => $value)
-                {
-                    $model[$key]->tags_csv   = $value->tags->implode('tag', ',');
-                    $model[$key]->user_name  = $value->author->first_name.' '.$value->author->last_name;
-                    $model[$key]->user_email = $value->author->email;
-                }
-                break;
-
-            case 'get-update':
-                $model->tags_csv = $model->tags->implode('tag', ',');
-                break;
-
-            case 'post-create':
-            case 'post-update':
+            case 'post-post-create':
+            case 'post-post-update':
                 // $tags is an array that return from syncTags
                 $tags = $this->tag->syncTags($data['tag']);
                 // Assign set tags to model

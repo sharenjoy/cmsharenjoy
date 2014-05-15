@@ -87,7 +87,10 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
         }
 
         // Do some final things in the repository
-        $model = $this->finalProcess(Session::get('onAction'), $model);
+        if (method_exists($this, 'repoFinalProcess'))
+        {
+            $model = $this->repoFinalProcess($model);
+        }
 
         return $model;
     }
@@ -106,6 +109,12 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
             throw new EntityNotFoundException;
         }
 
+        // Do some final things in the repository
+        if (method_exists($this, 'repoFinalProcess'))
+        {
+            $model = $this->repoFinalProcess($model);
+        }
+
         return $model;
     }
 
@@ -116,8 +125,10 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
      * @param boolean $all Show published or all
      * @return StdClass Object with $items and $totalItems for pagination
      */
-    public function byPage($page = 1, $limit, $model)
+    public function byPage($page = 1, $limit, $model = null)
     {
+        $model = $model ?: $this->model;
+
         $result             = new StdClass;
         $result->page       = $page;
         $result->limit      = $limit;
@@ -187,9 +198,13 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
 
         // Create the model
         $model = $this->model->create($data);
-        $this->storeById($model->id, array('sort' => $model->id));
+        $this->store($model->id, array('sort' => $model->id));
         
-        $model = $this->finalProcess(Session::get('onAction'), $model, $data);
+        // Do some final things in the repository
+        if (method_exists($this, 'repoFinalProcess'))
+        {
+            $model = $this->repoFinalProcess($model, $data);
+        }
 
         return $model->id;
     }
@@ -216,7 +231,11 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
 
         $model = $this->model->find($id)->fill($data);
 
-        $model = $this->finalProcess(Session::get('onAction'), $model, $data);
+        // Do some final things in the repository
+        if (method_exists($this, 'repoFinalProcess'))
+        {
+            $model = $this->repoFinalProcess($model, $data);
+        }
         
         $model->save();
 
@@ -229,11 +248,12 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
      * @param  array $data
      * @return void
      */
-    public function storeById($id, $data)
+    public function store($id, $data)
     {
         $model = $this->model->where('id', $id)->update($data);
         
-        if ( ! $model) {
+        if ( ! $model)
+        {
             throw new EntityNotFoundException;
         }
     }
@@ -247,7 +267,8 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
     {
         $model = $this->model->find($id);
 
-        if ( ! $model) {
+        if ( ! $model)
+        {
             Message::merge(array(
                 'errors' => Lang::get('cmsharenjoy::exception.not_found', array('id' => $id))
             ))->flash();
@@ -269,8 +290,9 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
      *       Perhaps interface it?
      * @return int  Total articles
      */
-    protected function totalRows($model)
+    protected function totalRows($model = null)
     {
+        $model = $model ?: $this->model;
         return $model->count();
     }
 

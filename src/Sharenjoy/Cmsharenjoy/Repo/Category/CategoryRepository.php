@@ -13,23 +13,6 @@ class CategoryRepository extends EloquentBaseRepository implements CategoryInter
         $this->model     = $category;
     }
 
-    public function finalProcess($action, $model = null, $data = null)
-    {
-        switch ($action)
-        {
-            case 'get-index':
-                break;
-            case 'get-update':
-                break;
-            case 'post-create':
-            case 'post-update':
-                break;
-            default:
-                break;
-        }
-        return $model;
-    }
-
     /**
      * Create a new Article
      * @param array  Data to create a new object
@@ -48,7 +31,7 @@ class CategoryRepository extends EloquentBaseRepository implements CategoryInter
         // Create the model
         $model = $this->model->fill($data);
         $model->makeRoot();
-        $this->storeById($model->id, array('sort' => $model->id));
+        $this->store($model->id, array('sort' => $model->id));
 
         return $model->id;
     }
