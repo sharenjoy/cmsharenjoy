@@ -2,50 +2,52 @@
 
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
 use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;
-use Sentry, Input, Mail, Hash, Config, Session, Message, Debugbar;
+use Sentry, Input, Mail, Hash, Config, Session, Message;
 
 class UserRepository extends EloquentBaseRepository implements UserInterface {
 
-    public function __construct(User $user, ValidableInterface $userValidator, ValidableInterface $accountValidator)
+    protected $repoName = 'user';
+
+    public function __construct(User $user, ValidableInterface $validator)
     {
-        $this->userValidator    = $userValidator;
-        $this->accountValidator = $accountValidator;
-        $this->model            = $user;
+        $this->validator = $validator;
+        $this->model     = $user;
+    }
+
+    public function setFilterQuery($model = null, $query)
+    {
+        $model = $model ?: $this->model;
+
+        if (count($query) !== 0)
+        {
+            extract($query);
+        }
+        return $model;                     
     }
 
     public function create(array $input)
     {   
         try
         {
-            $vali = false;
-            if ( ! $this->accountValidator->with($input)->passes())
+            if ( ! $this->validator->with($input)->passes())
             {
-                if ($this->accountValidator->getErrorsToArray())
+                if ($this->validator->getErrorsToArray())
                 {
-                    foreach ($this->accountValidator->getErrorsToArray() as $message)
+                    foreach ($this->validator->getErrorsToArray() as $message)
                     {
                         Message::merge(array('errors' => $message))->flash();
                     }
                 }
-                $vali = true;
+                return false;
             }
-            if ( ! $this->userValidator->with($input)->passes())
-            {
-                if ($this->userValidator->getErrorsToArray())
-                {
-                    foreach ($this->userValidator->getErrorsToArray() as $message)
-                    {
-                        Message::merge(array('errors' => $message))->flash();
-                    }
-                }
-                $vali = true;
-            }
-            if ($vali) return false;
             
             // create user
             $user = Sentry::createUser(array(
                 'email'       => Input::get('email'),
                 'password'    => Input::get('password'),
+                'name'        => Input::get('name'),
+                'phone'       => Input::get('phone'),
+                'description' => Input::get('description'),
                 // 'permissions' => $permissions
             ));
 
@@ -55,25 +57,20 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
             // activate user
             $activationCode = $user->getActivationCode();
 
-            // create account info
-            $input['user_id'] = $user->id;
-            $account = $user->account()->getRelated()->create($input);
-
             if(true)
             {
                 $user->attemptActivation($activationCode);
             }
             else
             {
-                $userName = $account->first_name.' '.$account->last_name;
                 $datas = array(
                     'id'       => $user->id,
                     'code'     => $activationCode,
-                    'username' => $userName,
+                    'username' => $user->name,
                 );
 
                 // send email
-                Mail::queue('cmsharenjoy::mail.user-activation', $datas, function($message) use ($user)
+                Mail::queue('cmsharenjoy::emails.auth.user-activation', $datas, function($message) use ($user)
                 {
                     $message->from(Config::get('mail.from.address'), Config::get('mail.from.name'))
                             ->subject('Account activation');
@@ -109,58 +106,38 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
     {
         try
         {
-            $vali = false;
-            if ( ! $this->accountValidator->with($input)->passes())
-            {
-                if ($this->accountValidator->getErrorsToArray())
-                {
-                    foreach ($this->accountValidator->getErrorsToArray() as $message)
-                    {
-                        Message::merge(array('errors' => $message))->flash();
-                    }
-                }
-                $vali = true;
-            }
-
-            $this->userValidator->setRule('updateRules');
+            $this->validator->setRule('updateRules');
             if( ! empty($this->model->uniqueFields))
             {
-                $this->userValidator->setUniqueUpdateFields($this->model->uniqueFields, $id);
+                $this->validator->setUniqueUpdateFields($this->model->uniqueFields, $id);
             }
-
-            if ( ! $this->userValidator->with($input)->passes())
+            if ( ! $this->validator->with($input)->passes())
             {
-                if ($this->userValidator->getErrorsToArray())
+                if ($this->validator->getErrorsToArray())
                 {
-                    foreach ($this->userValidator->getErrorsToArray() as $message)
+                    foreach ($this->validator->getErrorsToArray() as $message)
                     {
                         Message::merge(array('errors' => $message))->flash();
                     }
                 }
-                $vali = true;
+                return false;
             }
-            if ($vali) return false;
 
             // Find the user using the user id
             $user = Sentry::findUserById($id);
 
             // Update the user details
-            $user->email = $input['email'];
+            $user->email       = $input['email'];
+            $user->name        = $input['name'];
+            $user->phone       = $input['phone'];
+            $user->description = $input['description'];
 
             // Update the user
-            if ($user->save())
-            {
-                // update account info
-                $account = $user->account()->getRelated()->where('user_id', $id)->first();
-                $account->fill($input)->save();
-
-                return true;
-            }
-            else
+            if ( ! $user->save())
             {
                 Message::merge(array('errors' => 'User information was not updated'))->flash();
                 return false;
-            }
+            }            
         }
         catch (Cartalyst\Sentry\Users\UserExistsException $e)
         {

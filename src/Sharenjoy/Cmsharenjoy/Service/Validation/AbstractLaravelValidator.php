@@ -26,7 +26,7 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
      * Validation rules
      * @var Array
      */
-    protected $rules = array();
+    public $rules = array();
 
     public function __construct(Factory $validator)
     {
@@ -99,8 +99,11 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
     {
         foreach ($keyAry as $field)
         {
-            $rules = $this->rules;
-            $this->rules[$field] = $rules[$field].','.$id;
+            if (isset($this->rules[$field]))
+            {
+                $rules = $this->rules;
+                $this->rules[$field] = $rules[$field].','.$id;
+            }
         }
     }
 

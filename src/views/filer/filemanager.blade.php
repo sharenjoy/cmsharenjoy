@@ -1,60 +1,95 @@
-@extends('cmsharenjoy::layouts.interface')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    
+    <meta http-equiv="expires" content="-1">
+    <meta name="robots" content="none">
 
-@section('title')
-{{trans('cmsharenjoy::admin.manage')}}{{trans("cmsharenjoy::app.$appName")}}
-@stop
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    
+    <title>{{trans('cmsharenjoy::app.menu.file')}}</title>
+    
+    <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css')}}">
+    <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/font-icons/entypo/css/entypo.css')}}">
+    <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/font-icons/font-awesome/css/font-awesome.min.css')}}">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic">
+    <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/bootstrap.css')}}">
+    <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/neon-core.css')}}">
+    <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/neon-theme.css')}}">
+    <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/neon-forms.css')}}">
+    <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/custom.css')}}">
+    <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/skins/white.css')}}">
 
-@section('content')
+    <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/fileupload/files.css')}}">
+    <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/js/dropzone/dropzone.css')}}">
 
-    <div class="row">
-        <div class="col-md-12">
+    <!--[if lt IE 9]><script src="{{asset('packages/sharenjoy/cmsharenjoy/js/ie8-responsive-file-warning.js')}}"></script><![endif]-->
 
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <div class="panel-title">
-                        <h2>{{trans("cmsharenjoy::app.$appName")}}</h2>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    
+</head>
+<body class="page-body skin-white" id="filemanager">
+
+    <div class="page-container">
+        <div class="main-content">
+        
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="panel panel-primary">
+                        <div class="panel-body">
+                            <button type="button" id="new-folder" class="btn btn-blue btn-lg" onclick="jQuery('#modal-new-folder').modal('show', {backdrop: 'static'});">{{trans('cmsharenjoy::files.new_folder')}}</button>
+                            <button type="button" id="new-file" class="btn btn-blue btn-lg" onclick="jQuery('#modal-create-file').modal('show', {backdrop: 'static'});">{{trans('cmsharenjoy::files.role_upload')}}</button>
+                            <button type="button" id="file-pick" class="btn btn-orange btn-lg" style="display:none">{{trans('cmsharenjoy::files.pick_file')}}</button>
+                            <button type="button" id="file-detail" class="btn btn-success btn-lg" style="display:none">{{trans('cmsharenjoy::files.role_edit_file')}}</button>
+                            <button type="button" id="delete-file" class="btn btn-danger btn-lg" style="display:none">{{trans('cmsharenjoy::files.role_delete_file')}}</button>
+                        </div>
                     </div>
-                    <div class="panel-options">
-                        <!-- <a href="#sample-modal" data-toggle="modal" data-target="#sample-modal-dialog-1" class="bg"><i class="entypo-cog"></i></a> -->
-                        <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
-                        <!-- <a href="#" data-rel="reload"><i class="entypo-arrows-ccw"></i></a>
-                        <a href="#" data-rel="close"><i class="entypo-cancel"></i></a> -->
-                    </div>
-                </div>
+                    
+                    @include('cmsharenjoy::partials.messaging')
+                    
+                    @include('cmsharenjoy::filer.manage')
 
-                <div class="panel-body">
-                    <button type="button" id="new-folder" class="btn btn-blue btn-lg" onclick="jQuery('#modal-new-folder').modal('show', {backdrop: 'static'});">{{trans('cmsharenjoy::files.new_folder')}}</button>
-                    <button type="button" id="new-file" class="btn btn-blue btn-lg" onclick="jQuery('#modal-create-file').modal('show', {backdrop: 'static'});">{{trans('cmsharenjoy::files.role_upload')}}</button>
-                    <button type="button" id="file-detail" class="btn btn-success btn-lg" style="display:none">{{trans('cmsharenjoy::files.role_edit_file')}}</button>
-                    <button type="button" id="delete-file" class="btn btn-danger btn-lg" style="display:none">{{trans('cmsharenjoy::files.role_delete_file')}}</button>
                 </div>
-
             </div>
-            
-            @include('cmsharenjoy::partials.messaging')
-            
-            @include('cmsharenjoy::filer.manage')
 
         </div>
     </div>
 
-@stop
+    @include('cmsharenjoy::filer.modal')
 
-@section('modal')
-@include('cmsharenjoy::filer.modal')
-@stop
+    <script type="text/javascript">
+        var sharenjoy          = {};
+        sharenjoy.APPURL       = "{{$objectUrl}}";
+        sharenjoy.SITEURL      = "{{Config::get('app.url')}}";
+        sharenjoy.BASEURI      = "{{base_path()}}";
+        sharenjoy.PUBLICURI    = "{{public_path()}}";
+        sharenjoy.csrf_token   = "{{csrf_token()}}";
+        sharenjoy.file = {};
+        sharenjoy.file.parent_id = "{{$parentId}}";
+        sharenjoy.file.upload_max_filesize = {{$uploadMaxFilesize}};
+    </script>
 
-@section('main-scripts')
-    @parent
-    sharenjoy.file = {};
-    sharenjoy.file.parent_id = "{{$parentId}}";
-    sharenjoy.file.upload_max_filesize = {{$uploadMaxFilesize}};
-@stop
-
-@section('scripts')
-    @parent
-    <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/fileupload/files.css')}}">
-    <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/js/dropzone/dropzone.css')}}">
+    <!-- Bottom Scripts -->
+    <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/jquery-1.11.0.min.js')}}"></script>
+    <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/gsap/main-gsap.js')}}"></script>
+    <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js')}}"></script>
+    <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/bootstrap.js')}}"></script>
+    <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/joinable.js')}}"></script>
+    <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/resizeable.js')}}"></script>
+    <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/neon-api.js')}}"></script>
+    <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/jquery.validate.min.js')}}"></script>
+    <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/neon-custom.js')}}"></script>
     <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/dropzone/dropzone.min.js')}}"></script>
 
     <script>
@@ -62,6 +97,7 @@
 
             var $new_folder_button  = $('#new-folder');
             var $new_file_button    = $('#new-file');
+            var $file_pick_button   = $('#file-pick');
             var $delete_file_button = $('#delete-file');
             var $file_detail_button = $('#file-detail');
             var $modal_delete_file  = $('#modal-delete-file');
@@ -69,6 +105,12 @@
             var unselected_blank    = ['UL', 'TD', 'TH', 'DIV'];
             var append_files = [];
             var append_form  = [];
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': sharenjoy.csrf_token
+                }
+            });
 
             $('.dd-list li[data-id="{{$parentId}}"]').find('.dd-handle').addClass('selected');
             $('.dd-list li[data-id="{{$parentId}}"] .dd-handle').find('i').attr('class', 'fa fa-folder-open');
@@ -107,12 +149,18 @@
                 if($file_detail_button.css('display') == 'none'){
                     $file_detail_button.fadeIn();
                 }
+
+                // show file detail button
+                if($file_pick_button.css('display') == 'none'){
+                    $file_pick_button.fadeIn();
+                }
             }
 
             var hide_something = function(){
                 $('#file-point b').text('');
                 $delete_file_button.hide();
                 $file_detail_button.hide();
+                $file_pick_button.hide();
                 $('.folders-center li').removeClass('selected');
             }
 
@@ -164,6 +212,27 @@
                 $modal_delete_file.modal('show', {backdrop: 'static'});
             });
 
+            $file_pick_button.on('click', function(){
+                var file;
+
+                var field_name = $(parent.document).contents().find('#pick_field_name').val();
+                var $parent    = $(parent.document).contents().find('#'+field_name);
+                var $from_file = $('.folders-center li.selected');
+                var type       = $from_file.attr('data-type');
+                var ext        = $from_file.attr('data-extension');
+                var name       = $from_file.attr('data-name') + '.' + ext;
+
+                if (type == 'i') {
+                    file = sharenjoy.SITEURL + '/uploads/' + name;
+                }else{
+                    file = sharenjoy.SITEURL + '/packages/sharenjoy/cmsharenjoy/css/fileupload/img/' + type + '.png';
+                }
+
+                parent.modal_hide('#modal-filemanager');
+                $parent.find('img').attr('src', file);
+                $parent.find('input').attr('value', name);
+            });
+
             $modal_delete_file.on('click', '.delete-button', function(){
                 var send_data = {};
                 var $selected = $('.folders-center li.selected');
@@ -200,54 +269,7 @@
                 }
             });
 
-            if($("#dropzone_example").length)
-            {
-                var dze_info = $("#dze_info"),
-                    status = {uploaded: 0, errors: 0};
-                
-                var $f = $('<tr><td class="name"></td><td class="size"></td><td class="type"></td><td class="status"></td></tr>');
-
-                myDropzone.on("success", function(file) {
-                    
-                    var _$f = $f.clone();
-                    
-                    dze_info.removeClass('hidden');
-                    
-                    _$f.addClass('success');
-                    
-                    _$f.find('.name').html(file.name);
-                    _$f.find('.size').html(parseInt(file.size / 1024, 10) + ' KB');
-                    _$f.find('.type').html(file.type);
-                    _$f.find('.status').html('Uploaded <i class="entypo-check"></i>');
-                    
-                    dze_info.find('tbody').append( _$f );
-                    
-                    status.uploaded++;
-                    
-                    dze_info.find('tfoot td').html('<span class="label label-success">' + status.uploaded + ' uploaded</span> <span class="label label-danger">' + status.errors + ' not uploaded</span>');
-                    
-                })
-                .on('error', function(file)
-                {
-                    var _$f = $f.clone();
-                    
-                    dze_info.removeClass('hidden');
-                    
-                    _$f.addClass('danger');
-                    
-                    _$f.find('.name').html(file.name);
-                    _$f.find('.size').html(parseInt(file.size / 1024, 10) + ' KB');
-                    _$f.find('.type').html(file.type);
-                    _$f.find('.status').html('Uploaded <i class="entypo-cancel"></i>');
-                    
-                    dze_info.find('tbody').append( _$f );
-                    
-                    status.errors++;
-                    
-                    dze_info.find('tfoot td').html('<span class="label label-success">' + status.uploaded + ' uploaded</span> <span class="label label-danger">' + status.errors + ' not uploaded</span>');
-                });
-            }
-
+            // sortable
             // Return a helper with preserved width of cells
             var fixHelper = function(e, ui) {
                 ui.children().each(function() {
@@ -287,4 +309,6 @@
 
         });
     </script>
-@stop
+
+</body>
+</html>

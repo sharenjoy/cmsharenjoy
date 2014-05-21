@@ -50,7 +50,7 @@ This is cmsharenjoy.
     php artisan migrate --package=cartalyst/sentry
     php artisan config:publish cartalyst/sentry
 
->Add a `sort` column to users table 
+>Add a `sort` column to users table
 
 ### Modify the config of Sentry for new User model that extends Sentry User model
 

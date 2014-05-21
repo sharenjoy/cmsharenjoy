@@ -43,9 +43,8 @@
             
                     <!-- logo -->
                     <div class="logo">
-                        <a href="{{ url( $urlSegment ) }}">
-                            <!-- <img src="assets/images/logo.png" alt="" /> -->
-                            <span>{{$brandName}}</span>
+                        <a href="{{url('/')}}" target="_blank">
+                            <img src="{{asset('images/logo.png')}}" width="60" alt="" />
                         </a>
                     </div>
                     
@@ -137,20 +136,18 @@
                                 
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     @if($user->img != '')
-                                        <img src="{{ storage_path( $user->img ) }}" alt="" class="img-circle" />
+                                        <img src="{{asset('uploads/'.$user->img)}}" width="45" height="45" class="img-circle" />
                                     @else
-                                        <img src="{{ asset('packages/sharenjoy/cmsharenjoy/images/thumb-1.jpg') }}" alt="" class="img-circle" />
+                                        <img src="{{asset('img/logo.png')}}" width="45" height="45" class="img-circle" />
                                     @endif
-                                    {{ $user->account->first_name.' '.$user->account->last_name }}
-                                    <b class="caret"></b>
+                                    {{$user->name}}
+                                    <!-- <b class="caret"></b> -->
                                 </a>
                                 
-                                <ul class="dropdown-menu">
+                                <!-- <ul class="dropdown-menu">
                                     
-                                    <!-- Reverse Caret -->
                                     <li class="caret"></li>
                                     
-                                    <!-- Profile sub-links -->
                                     <li>
                                         <a href="#">
                                             <i class="entypo-user"></i>
@@ -178,7 +175,8 @@
                                             Tasks
                                         </a>
                                     </li>
-                                </ul>
+                                </ul> -->
+
                             </li>
                         </ul>
                     </div>
@@ -273,8 +271,64 @@
 
         </div>
         <!-- page-container Ends -->
+        
+        @if(Session::get('onController') != 'filer')
+            <!-- Filemanager modal -->
+            <div class="modal fade" id="modal-filemanager" tabindex="-1" role="dialog">
+                <div class="modal-dialog" style="width:800px">
+                    <div class="modal-content">
+                        
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">{{trans('cmsharenjoy::app.menu.file')}}</h4>
+                        </div>
+                        
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <iframe src="{{url($urlSegment.'/filer/filemanager')}}" id="iframe-modal-filemanager" width="100%" height="560" frameborder="0" scrolling="no"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <input type="hidden" name="pick_field_name" id="pick_field_name" value="">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if(isset($albumId))
+                <div class="modal fade" id="modal-file-album" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" style="width:800px">
+                        <div class="modal-content">
+                            
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">{{trans('cmsharenjoy::app.menu.file')}}</h4>
+                            </div>
+                            
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <iframe src="{{url($urlSegment.'/filer/filealbum/'.$albumId)}}" id="iframe-modal-file-album" width="100%" height="560" frameborder="0" scrolling="no"></iframe>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+            <!-- Filemanager modal Ends -->
+        @endif
 
+        <!-- Modal -->
         @yield('modal')
+        <!-- Modal Ends -->
         
         
         <script type="text/javascript">

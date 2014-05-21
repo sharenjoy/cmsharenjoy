@@ -9,7 +9,7 @@ class Login extends AbstractLaravelValidator {
      *
      * @var Array
      */
-    protected $rules = [
+    public $rules = [
         'email'                 => 'required|email',
         'password'              => 'required'
     ];

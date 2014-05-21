@@ -248,16 +248,15 @@ class DashController extends BaseController {
             // Get the password reset code
             $resetCode = $user->getResetPasswordCode();
 
-            $userName = $user->account->first_name.' '.$user->account->last_name;
             $datas = array(
                 'id'        => $user->id,
-                'username'  => $userName,
+                'username'  => $user->name,
                 'code'      => $resetCode,
                 'password'  => $password
             );
 
             // send email
-            Mail::queue('cmsharenjoy::mail.user-reset-password', $datas, function($message) use ($user)
+            Mail::queue('cmsharenjoy::emails.auth.user-reset-password', $datas, function($message) use ($user)
             {
                 $message->from(Config::get('mail.from.address'), Config::get('mail.from.name'))
                         ->subject(trans('cmsharenjoy::admin.reset_password'));

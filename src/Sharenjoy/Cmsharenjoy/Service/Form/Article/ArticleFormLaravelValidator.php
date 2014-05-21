@@ -9,7 +9,7 @@ class ArticleFormLaravelValidator extends AbstractLaravelValidator {
      *
      * @var Array
      */
-    protected $rules = array(
+    public $rules = array(
         'title' => 'required',
         'user_id' => 'required|exists:users,id', // Assumes db connection
         'status_id' => 'required|exists:statuses,id', // Assumes db connection

@@ -23,7 +23,7 @@ class RepoServiceProvider extends ServiceProvider {
     {
         $app = $this->app;
 
-        // The Posts Bindings
+        // The Post Binding
         $app->bind('Sharenjoy\Cmsharenjoy\Repo\Post\PostInterface', function($app)
         {
             return new Post\PostRepository(
@@ -33,7 +33,7 @@ class RepoServiceProvider extends ServiceProvider {
             );
         });
 
-        // The Category Bindings
+        // The Category Binding
         $app->bind('Sharenjoy\Cmsharenjoy\Repo\Category\CategoryInterface', function($app)
         {
             return new Category\CategoryRepository(
@@ -42,12 +42,21 @@ class RepoServiceProvider extends ServiceProvider {
             );
         });
 
-        // The Tags Bindings
+        // The Tag Binding
         $app->bind('Sharenjoy\Cmsharenjoy\Repo\Tag\TagInterface', function($app)
         {
             return new Tag\TagRepository(
                 new Tag\Tag,
                 new Tag\TagValidator($app['validator'])
+            );
+        });
+
+        // The Member Binding
+        $app->bind('Sharenjoy\Cmsharenjoy\Repo\Member\MemberInterface', function($app)
+        {
+            return new Member\MemberRepository(
+                new Member\Member,
+                new Member\MemberValidator($app['validator'])
             );
         });
     }

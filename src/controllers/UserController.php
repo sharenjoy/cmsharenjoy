@@ -16,7 +16,7 @@ class UserController extends ObjectBaseController {
     ];
 
     protected $listConfig = [
-        'user_name'    => ['name'=>'userName' ,    'align'=>'',       'width'=>''   ],
+        'name'         => ['name'=>'name',         'align'=>'',       'width'=>''   ],
         'phone'        => ['name'=>'cellphone',    'align'=>'',       'width'=>''   ],
         'email'        => ['name'=>'email',        'align'=>'',       'width'=>''   ],
         'created_at'   => ['name'=>'created',      'align'=>'center', 'width'=>'20%'],
@@ -34,17 +34,8 @@ class UserController extends ObjectBaseController {
         
         switch ($this->onAction) {
             case 'get-index':
-                foreach ($model as $key => $value)
-                {
-                    $model[$key]->user_name = $value->account->first_name.' '.$value->account->last_name;
-                    $model[$key]->phone     = $value->account->phone;
-                }
                 break;
             case 'get-update':
-                $model->first_name  = $model->account->first_name;
-                $model->last_name   = $model->account->last_name;
-                $model->phone       = $model->account->phone;
-                $model->description = $model->account->description;
                 break;
             
             default:
@@ -72,17 +63,16 @@ class UserController extends ObjectBaseController {
             // Get the password reset code
             $resetCode = $user->getResetPasswordCode();
 
-            $userName = $user->account->first_name.' '.$user->account->last_name;
             $datas = array(
                 'id'        => $user->id,
-                'username'  => $userName,
+                'username'  => $user->name,
                 'code'      => $resetCode,
                 'password'  => $password
                 
             );
 
             // send email
-            Mail::queue('cmsharenjoy::mail.user-reset-password', $datas, function($message) use ($user)
+            Mail::queue('cmsharenjoy::emails.auth.user-reset-password', $datas, function($message) use ($user)
             {
                 $message->from(Config::get('mail.from.address'), Config::get('mail.from.name'))
                         ->subject(trans('cmsharenjoy::admin.reset_password'));

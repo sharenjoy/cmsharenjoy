@@ -42,25 +42,13 @@
 
 <div class="login-container">
     
-    <!-- <div class="login-header login-caret">
-        
-        <div class="login-content">
-            
-            <a href="index.html" class="logo">
-                <img src="{{asset('packages/sharenjoy/cmsharenjoy/images/logo@2x.png')}}" width="120" alt="" />
-            </a>
-            
-            <p class="description">Dear user, log in to access the admin area!</p>
-            
-            <div class="login-progressbar-indicator">
-                <h3>43%</h3>
-                <span>logging in...</span>
-            </div>
-        </div>
-        
+    <div class="login-logo">
+        <a href="{{url('admin')}}" class="logo">
+            <img src="{{asset('img/logo.png')}}" width="250" alt="" />
+        </a>
     </div>
     
-    <div class="login-progressbar">
+    <!-- <div class="login-progressbar">
         <div></div>
     </div> -->
     

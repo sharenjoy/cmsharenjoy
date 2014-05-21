@@ -9,7 +9,7 @@ class CategoryValidator extends AbstractLaravelValidator {
      *
      * @var Array
      */
-    protected $rules = [
+    public $rules = [
         'type'       => 'required',
         'title'      => 'required|unique:categories,title'
     ];

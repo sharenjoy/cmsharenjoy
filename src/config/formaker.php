@@ -81,9 +81,20 @@ return array(
         
         // For url
         'url'                   => 'url',
+        'link'                  => 'url',
         
+        // For image
+        'img'                   => 'image',
+        'image'                 => 'image',
+        'imagename'             => 'image',
+
         // For file
         'file'                  => 'file',
+        'filename'              => 'file',
+
+        // For album
+        'album'                 => 'album',
+        'filealbum'             => 'album',
     ],
 
 

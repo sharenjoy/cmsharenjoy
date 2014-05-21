@@ -91,10 +91,16 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
      */
     protected function help($args = array())
     {
-        $target = 'app.form.help.'.Session::get('onController').'.'.$this->name;
-        if (Lang::has('cmsharenjoy::'.$target))
+        $targetA = 'app.form.help.'.Session::get('onController').'.'.$this->name;
+        $targetB = 'app.form.help.'.$this->name;
+        if (Lang::has('cmsharenjoy::'.$targetA))
         {
-            $description = Lang::get('cmsharenjoy::'.$target);
+            $description = Lang::get('cmsharenjoy::'.$targetA);
+            unset($this->args['help']);
+        }
+        elseif (Lang::has('cmsharenjoy::'.$targetB))
+        {
+            $description = Lang::get('cmsharenjoy::'.$targetB);
             unset($this->args['help']);
         }
         elseif (array_get($this->args, 'help'))
@@ -152,10 +158,15 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
         }
 
         // Set the lang of placeholder from config
-        $target = 'app.form.placeholder.'.Session::get('onController').'.'.$this->name;
-        if (Lang::has('cmsharenjoy::'.$target))
+        $targetA = 'app.form.placeholder.'.Session::get('onController').'.'.$this->name;
+        $targetB = 'app.form.placeholder.'.$this->name;
+        if (Lang::has('cmsharenjoy::'.$targetA))
         {
-            $this->args['placeholder'] = Lang::get('cmsharenjoy::'.$target);
+            $this->args['placeholder'] = Lang::get('cmsharenjoy::'.$targetA);
+        }
+        elseif (Lang::has('cmsharenjoy::'.$targetB))
+        {
+            $this->args['placeholder'] = Lang::get('cmsharenjoy::'.$targetB);
         }
 
         return $this->createInput($type, $value);
@@ -192,6 +203,13 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
 
             case 'url':
                 $input = Form::url($name, $value, $args);
+                break;
+
+            case 'album':
+                $input = '<button type="button" class="btn btn-info btn-lg btn-icon file-album-pick-open-manager">
+                            '.trans('cmsharenjoy::buttons.open').'
+                            <i class="entypo-picture"></i>
+                        </button>';
                 break;
 
             case 'tag':
@@ -300,26 +318,53 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
                 $this->assets[] = ['asset'=>'bootstrap-colorpicker-js', 'type'=>'script', 'queue'=>false];
                 break;
 
-            case 'file':
+            case 'image':
                 $args['class'] = '';
-                $args = array_merge(array('accept' => 'image/*'), $args);
-                $input .= '<div class="fileinput fileinput-new" data-provides="fileinput">
-                            <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;" data-trigger="fileinput">
-                                <img src="http://placehold.it/200x150" alt="...">
-                            </div>
-                            <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px"></div>
-                            <div>
-                                <span class="btn btn-white btn-file">
-                                    <span class="fileinput-new">Select image</span>
-                                    <span class="fileinput-exists">Change</span>';
-                $input .= Form::file($name, $args);
-                $input .= '</span>
-                        <a href="#" class="btn btn-orange fileinput-exists" data-dismiss="fileinput">Remove</a>
+                $size = array_get($args, 'size') ?: '/200x150&text=-';
+                unset($args['size']);
+                $img = $value ? asset('uploads/'.$value) : "http://placehold.it/{$size}";
+                $select_image = Lang::get('cmsharenjoy::buttons.select_image');
+                $change       = Lang::get('cmsharenjoy::buttons.change');
+                $remove       = Lang::get('cmsharenjoy::buttons.remove');
+                $input        = <<<EOE
+                    <div class="fileinput fileinput-new file-pick-open-manager">
+                        <div class="fileinput-new thumbnail" id="image-{$this->name}" style="width: 200px; height: 150px;">
+                            <input type="hidden" name="{$this->name}" value="{$value}">
+                            <img src="{$img}">
+                        </div>
+                        <div>
+                            <span class="btn btn-white btn-file">
+                                <span class="fileinput-new">{$select_image}</span>
+                                <span class="fileinput-exists">{$change}</span>
+                            </span>
+                            <a href="#" class="btn btn-orange fileinput-exists" data-dismiss="fileinput">{$remove}</a>
+                        </div>
                     </div>
-                </div>';
-                $this->assets[] = ['asset'=>'file-input-js', 'type'=>'script', 'queue'=>false];
+EOE;
                 break;
 
+            case 'file':
+                $args['class'] = '';
+                $select_image  = Lang::get('cmsharenjoy::buttons.select_file');
+                $change        = Lang::get('cmsharenjoy::buttons.change');
+                $remove        = Lang::get('cmsharenjoy::buttons.remove');
+                $input         = <<<EOE
+                    <div class="fileinput fileinput-new file-pick-open-manager">
+                        <div class="fileinput-new thumbnail" id="file-{$this->name}" style="width: 100px; height: 100px;">
+                            <input type="hidden" name="{$this->name}" value="">
+                            <img src="http://placehold.it/100&text=FILE">
+                        </div>
+                        <div>
+                            <span class="btn btn-white btn-file">
+                                <span class="fileinput-new">{$select_image}</span>
+                                <span class="fileinput-exists">{$change}</span>
+                            </span>
+                            <a href="#" class="btn btn-orange fileinput-exists" data-dismiss="fileinput">{$remove}</a>
+                        </div>
+                    </div>
+EOE;
+                break;
+                
             default:
                 throw new \InvalidArgumentException('Invalid argument.');
         }

@@ -32,7 +32,7 @@ return array(
     'password_reset_failed'       => '重設密碼失敗',
     'password_reset_code_invalid' => '提供的密碼重設認證碼有誤',
     'some_wrong'                  => '喔喔! 有些地方發生錯誤了',
-    'sent_reset_code'             => '已將重設的密碼寄送至您所註冊的電子信箱了',
+    'sent_reset_code'             => '已將重設的密碼寄送至此電子信箱了',
     'success_created'             => '項目建立成功',
     'success_updated'             => '項目更新成功',
     'success_deleted'             => '項目刪除成功',

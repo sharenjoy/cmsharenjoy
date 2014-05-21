@@ -1,19 +1,19 @@
-<?php namespace Sharenjoy\Cmsharenjoy\User;
+<?php namespace Sharenjoy\Cmsharenjoy\Repo\Member;
 
 use Eloquent;
+use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
-use Illuminate\Auth\UserInterface as LaravelUserInterface;
-use Cartalyst\Sentry\Users\Eloquent\User as SentryUserModel;
 
-class User extends SentryUserModel implements LaravelUserInterface, RemindableInterface {
+class Member extends Eloquent implements UserInterface, RemindableInterface {
 
-    protected $table  = 'users';
+    protected $table = 'members';
 
     protected $fillable = array(
         'email',
         'password',
         'name',
         'phone',
+        'mobile',
         'description'
     );
 
@@ -23,6 +23,7 @@ class User extends SentryUserModel implements LaravelUserInterface, RemindableIn
         'name'                  => ['order' => '10'],
         'email'                 => ['order' => '20'],
         'phone'                 => ['order' => '30'],
+        'mobile'                => ['order' => '35'],
         'password'              => ['order' => '40'],
         'password_confirmation' => ['order' => '50'],
         'description'           => ['order' => '60'],
@@ -33,11 +34,24 @@ class User extends SentryUserModel implements LaravelUserInterface, RemindableIn
     protected $hidden = ['password'];
 
     /**
-     * sentry methods
+     * Get the unique identifier for the member.
+     *
+     * @return mixed
      */
-    public function getAuthIdentifier(){ return $this->getKey(); }
-    public function getAuthPassword(){ return $this->password; }
-    public function getReminderEmail(){ return $this->email; }
+    public function getAuthIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Get the password for the member.
+     *
+     * @return string
+     */
+    public function getAuthPassword()
+    {
+        return $this->password;
+    }
 
     /**
      * Get the token value for the "remember me" session.
@@ -68,6 +82,16 @@ class User extends SentryUserModel implements LaravelUserInterface, RemindableIn
     public function getRememberTokenName()
     {
         return 'remember_token';
+    }
+
+    /**
+     * Get the e-mail address where password reminders are sent.
+     *
+     * @return string
+     */
+    public function getReminderEmail()
+    {
+        return $this->email;
     }
 
 }

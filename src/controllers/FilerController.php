@@ -77,12 +77,71 @@ class FilerController extends BaseController {
                             ->with('uploadMaxFilesize', $maxSize);
     }
 
+    public function getFilemanager($parentId = null)
+    {
+        \Debugbar::disable();
+
+        if (is_null($parentId))
+        {
+            $model = Folder::orderBy('sort')->first();
+            $parentId = $model->id;
+        }
+
+        $folderTree = Filer::folderTree();
+
+        // make a parser instance
+        $parser = App::make('Sharenjoy\Cmsharenjoy\Utilities\Parser');
+        $folderTreeBuilder = $parser->treeBuilder(
+            $folderTree, 
+            '<li class="dd-item" data-id="{id}"><a href="'.$this->objectUrl.'/filemanager/{id}"><div class="dd-handle"><i class="fa fa-folder-o"></i>&nbsp;&nbsp;&nbsp;{name}</div></a> {children} </li>',
+            'ul class="dd-list"'
+        );
+
+        $fileResult = $this->foldercontents($parentId);
+        if ( ! $fileResult['status'])
+        {
+            Message::add('errors', $fileResult['message'])->flash();
+        }
+
+        $maxSize = Filer::getMaxSizeAllowed() > Filer::getMaxSizePossible() ? 
+                                                Filer::getMaxSizePossible() : 
+                                                Filer::getMaxSizeAllowed();
+        // Convert bytes to mega                                                
+        $maxSize = $maxSize / 1048576;
+
+        return $this->layout->with('parentId', $parentId)
+                            ->with('fileResult', $fileResult)
+                            ->with('folderTree', $folderTreeBuilder)
+                            ->with('uploadMaxFilesize', $maxSize);
+    }
+
+    public function getFilealbum($parentId = null)
+    {
+        \Debugbar::disable();
+
+        $fileResult = $this->foldercontents($parentId);
+        if ( ! $fileResult['status'])
+        {
+            Message::add('errors', $fileResult['message'])->flash();
+        }
+
+        $maxSize = Filer::getMaxSizeAllowed() > Filer::getMaxSizePossible() ? 
+                                                Filer::getMaxSizePossible() : 
+                                                Filer::getMaxSizeAllowed();
+        // Convert bytes to mega                                                
+        $maxSize = $maxSize / 1048576;
+
+        return $this->layout->with('parentId', $parentId)
+                            ->with('fileResult', $fileResult)
+                            ->with('uploadMaxFilesize', $maxSize);
+    }
+
     /**
      * Create a new folder
      *
      * Grabs the parent id and the name of the folder from POST data.
      */
-    public function postNewfolder()
+    public function postNewfolder($toWhere = 'index')
     {
         $parent_id = Input::get('parent', 0);
         $input = Input::all();
@@ -103,7 +162,7 @@ class FilerController extends BaseController {
 
         $result = Filer::createFolder($parent_id, $input['name']);
 
-        return Redirect::to($this->objectUrl);
+        return Redirect::to($this->objectUrl.'/'.$toWhere.'/'.$result['data']['id']);
     }
 
     /**
@@ -223,8 +282,9 @@ class FilerController extends BaseController {
         if ($result['status'] == true)
         {
             $result['data']['append'] = <<<EOE
-            <li original-title="" class="file type-{$result['data']['type']}" data-id="{$result['data']['id']}" data-name="{$result['data']['filename']}">{img}<span class="name-text">{$result['data']['name']}.{$result['data']['extension']}</span></li>
+            <li original-title="" class="file type-{$result['data']['type']}" data-id="{$result['data']['id']}" data-name="{$result['data']['filename']}" data-extension="{$result['data']['extension']}" data-type="{$result['data']['type']}">{img}<span class="name-text">{$result['data']['name']}.{$result['data']['extension']}</span></li>
 EOE;
+            $result['data']['append_form'] = '<input type="hidden" value="'.$result['data']['id'].'" />';
             
             if ($result['data']['type'] == 'i')
             {
@@ -241,7 +301,7 @@ EOE;
         return Response::json($result, 200);
     }
 
-    public function postUpdatefile()
+    public function postUpdatefile($toWhere = 'index')
     {
         $input = Input::all();
 
@@ -266,7 +326,8 @@ EOE;
         $file->save();
 
         Message::merge(array('success' => "File updated"))->flash();
-        return Redirect::to($this->objectUrl.'/index/'.$file->folder_id);
+
+        return Redirect::to($this->objectUrl.'/'.$toWhere.'/'.$file->folder_id);
     }
 
     /**

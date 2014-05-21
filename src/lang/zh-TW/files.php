@@ -53,6 +53,7 @@ return array(
     'delete'                   => '刪除',
     'edit'                     => '編輯',
     'details'                  => '細節',
+    'pick_file'                => '指定此檔案',
     
     // Folders
     

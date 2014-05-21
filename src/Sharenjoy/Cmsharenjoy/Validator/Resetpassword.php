@@ -9,7 +9,7 @@ class Resetpassword extends AbstractLaravelValidator {
      *
      * @var Array
      */
-    protected $rules = [
+    public $rules = [
         'old_password'          => 'required|min:6',
         'password'              => 'required|min:6|confirmed',
         'password_confirmation' => 'required|min:6'

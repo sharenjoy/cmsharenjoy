@@ -27,14 +27,28 @@
         
         <tbody>
             @foreach($items as $item)
-                <tr id="{{ $item->id }}">
+                <tr id="{{$item->id}}">
                     <td width="20%">
                         <div class="list-fun-box">
                             @include('cmsharenjoy::partials.function-list')
                         </div>
                     </td>
                     @foreach($listConfig as $key => $value)
-                        <td align="{{ $value['align'] }}" width="{{ $value['width'] }}">{{ $item->$key }}</td>
+                        @if(isset($value['type']) AND $value['type'] == 'image')
+                            <td align="{{$value['align']}}" width="{{$value['width']}}">
+                                @if($item->$key != '')
+                                <img src="{{asset('uploads/thumbs/'.$item->$key)}}" width="75">
+                                @else - @endif
+                            </td>
+                        @elseif(isset($value['type']) AND $value['type'] == 'link')
+                            <td align="{{$value['align']}}" width="{{$value['width']}}">
+                                @if($item->$key != '')
+                                <a href="{{$item->$key}}" target="_blank">{{trans('cmsharenjoy::app.linkto')}}</a>
+                                @else - @endif
+                            </td>
+                        @else
+                            <td align="{{$value['align']}}" width="{{$value['width']}}">{{$item->$key}}</td>
+                        @endif
                     @endforeach
                 </tr>
             @endforeach

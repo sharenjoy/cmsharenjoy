@@ -4,14 +4,18 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th width="20%"><i class="fa fa-folder"></i> {{trans('cmsharenjoy::files.folders')}}</th>
+                        @if(Session::get('doAction') != 'filealbum')
+                        <th width="25%"><i class="fa fa-folder"></i> {{trans('cmsharenjoy::files.folders')}}</th>
+                        @endif
                         <th><i class="fa fa-file-text"></i> {{trans('cmsharenjoy::files.files_title')}}&nbsp;&nbsp;<span id="file-point"><b></b></span></th>
                     </tr>
                 </thead>
 
                 <tfoot>
                     <tr>
-                        <th width="20%"><i class="fa fa-folder"></i> {{trans('cmsharenjoy::files.folders')}}</th>
+                        @if(Session::get('doAction') != 'filealbum')
+                        <th width="25%"><i class="fa fa-folder"></i> {{trans('cmsharenjoy::files.folders')}}</th>
+                        @endif
                         <th><i class="fa fa-file-text"></i> {{trans('cmsharenjoy::files.files_title')}}</th>
                     </tr>
                 </tfoot>
@@ -19,6 +23,7 @@
                 <tbody>
                     
                     <tr>
+                        @if(Session::get('doAction') != 'filealbum')
                         <td>
                             <div id="list-1" class="nested-list dd with-margins">
                                 <ul class="dd-list">
@@ -26,6 +31,7 @@
                                 </ul>
                             </div>
                         </td>
+                        @endif
                         <td>
                             <div id="sortable" class="file-context">
                                 <ul class="folders-center">
@@ -38,7 +44,7 @@
                                     
                                     @if(count($fileResult['data']['file']))
                                         @foreach($fileResult['data']['file'] as $key => $file)
-                                            <li original-title="" class="file type-{{$file['type']}}" data-id="{{$file['id']}}" data-name="{{$file['filename']}}">
+                                            <li original-title="" class="file type-{{$file['type']}}" data-id="{{$file['id']}}" data-name="{{$file['filename']}}" data-extension="{{$file['extension']}}" data-type="{{$file['type']}}">
                                                 @if($file['type'] == 'i')
                                                 <img src="{{asset('uploads/thumbs/'.$file['filename'].'.'.$file['extension'])}}" alt="{{$file['alt_attribute']}}">
                                                 @endif
@@ -49,13 +55,13 @@
 
                                 </ul>
 
-                                @if(count($fileResult['data']['file']))
-                                    <form name="filesortform">
+                                <form name="filesortform">
+                                    @if(count($fileResult['data']['file']))
                                         @foreach($fileResult['data']['file'] as $key => $file)
                                             <input type="hidden" value="{{$file['sort']}}" />
                                         @endforeach
-                                    </form>
-                                @endif
+                                    @endif
+                                </form>
                             </div>
                         </td>
                     </tr>

@@ -3,7 +3,7 @@
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
 use Sharenjoy\Cmsharenjoy\Repo\Tag\TagInterface;
 use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;
-use Config, Formaker, View, Session, Debugbar;
+use Config, Formaker, View, Session;
 
 class PostRepository extends EloquentBaseRepository implements PostInterface {
 

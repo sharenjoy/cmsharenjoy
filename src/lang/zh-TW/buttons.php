@@ -30,7 +30,8 @@ return array(
     'preview'       => '預覽',
     'close'         => '關閉',
     'clone'         => '複製',
-    're-index'      => '重新建立索引',
+    'remove'        => '移除',
+    're_index'      => '重新建立索引',
     'copy'          => '複製',
     'filter'        => '篩選',
     'clear'         => '重設',
@@ -38,5 +39,9 @@ return array(
     'reset'         => '重設',
     'search'        => '搜尋',
     'continue'      => '繼續',
+    'change'        => '更換',
+    'select_image'  => '選擇圖片',
+    'select_file'   => '選擇檔案',
+    'open'          => '開啟',
 
 );

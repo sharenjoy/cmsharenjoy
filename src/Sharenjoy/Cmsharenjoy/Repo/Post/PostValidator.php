@@ -9,7 +9,7 @@ class PostValidator extends AbstractLaravelValidator {
      *
      * @var Array
      */
-    protected $rules = [
+    public $rules = [
         'title'     => 'required',
         'slug'      => 'required|unique:posts,slug',
         'content'   => 'required'

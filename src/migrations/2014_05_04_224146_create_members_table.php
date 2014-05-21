@@ -12,20 +12,32 @@ class CreateMembersTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('members', function($table)
-		{
-			$table->engine = 'InnoDB';
+		if ( !Schema::hasTable('members') )
+        {
+            Schema::create('members', function($table)
+            {
 
-		    $table->increments('id')->index();
-		    $table->integer('user_id')->unsigned()->index()->nullable()->default(0);
-		    $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('name', 255);
-            $table->string('mobile', 255);
-            $table->string('tel', 255);
-            $table->string('address', 255);
-            $table->text('description')->nullable();
-			$table->timestamps();
-		});
+                $table->engine = 'InnoDB';
+                $table->increments('id');
+
+                $table->string('email',255)->unique();
+                $table->string('password',255);
+                $table->string('name',255);
+                $table->string('phone',255)->nullable();;
+                $table->string('mobile',255)->nullable();;
+                $table->string('first_name',255)->nullable();
+                $table->string('last_name',255)->nullable();
+                $table->text('description')->nullable();
+                $table->boolean('activated')->default(0);
+				$table->string('activation_code')->nullable();
+				$table->timestamp('activated_at')->nullable();
+                $table->dateTime('last_login')->nullable();
+                $table->string('remember_token',100)->nullable();
+                $table->integer('sort')->unsigned()->nullable()->default(0);
+                $table->timestamps();
+
+            });
+        }
 	}
 
 	/**

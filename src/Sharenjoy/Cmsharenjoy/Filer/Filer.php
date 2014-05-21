@@ -87,7 +87,7 @@ class Filer implements FilerInterface {
         while (Folder::findBySlug($slug)->count()) {
             ++$i;
             $slug = $original_slug.'-'.$i;
-            $name = $original_name.'-'.$i;
+            // $name = $original_name.'-'.$i;
         }
 
         $folder = Folder::create(array(
@@ -102,6 +102,7 @@ class Filer implements FilerInterface {
 
         $insert['id'] = $folder->id;
         $insert['file_count'] = 0;
+        $insert['name'] = $folder->name;
 
         return $this->result(true, trans('cmsharenjoy::files.item_created'), $insert['name'], $folder->toArray());
     }

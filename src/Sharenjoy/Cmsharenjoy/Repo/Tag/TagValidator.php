@@ -9,7 +9,7 @@ class TagValidator extends AbstractLaravelValidator {
      *
      * @var Array
      */
-    protected $rules = [
+    public $rules = [
         'tag'       => 'required',
         'slug'      => 'required|unique:tags,slug'
     ];

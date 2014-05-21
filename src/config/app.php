@@ -38,16 +38,14 @@ return array(
     /**
      * The menu items shown at the top and side of the application
      */
-    'menu_items'=>array(
-        'post'=>array(
-            'name'=>'menu.post',
-            'icon'=>'entypo-doc-text',
-            'top'=>true
+    'menu_items' => array(
+        'post' => array(
+            'name' => 'menu.post',
+            'icon' => 'entypo-doc-text',
         ),
-        'category'=>array(
+        'category' => array(
             'name' =>'menu.category',
             'icon' =>'entypo-flow-tree',
-            'top'  =>true,
             'sub'  => array(
                 'category/index/product' => array(
                     'name' => 'menu.product_category'
@@ -57,25 +55,25 @@ return array(
                 ),
             )
         ),
-        'tag'=>array(
-            'name'=>'menu.tag',
-            'icon'=>'entypo-tag',
-            'top'=>true
+        'tag' => array(
+            'name' => 'menu.tag',
+            'icon' => 'entypo-tag',
         ),
-        'filer'=>array(
-            'name'=>'menu.file',
-            'icon'=>'entypo-box',
-            'top'=>true
+        'filer' => array(
+            'name' => 'menu.file',
+            'icon' => 'entypo-box',
         ),
-        'user'=>array(
-            'name'=>'menu.user',
-            'icon'=>'entypo-key',
-            'top'=>true
+        'member' => array(
+            'name' => 'menu.member',
+            'icon' => 'entypo-users',
         ),
-        'setting'=>array(
-            'name'=>'menu.setting',
-            'icon'=>'entypo-cog',
-            'top'=>true
+        'user' => array(
+            'name' => 'menu.user',
+            'icon' => 'entypo-key',
+        ),
+        'setting' => array(
+            'name' => 'menu.setting',
+            'icon' => 'entypo-cog',
         )
     )
 );

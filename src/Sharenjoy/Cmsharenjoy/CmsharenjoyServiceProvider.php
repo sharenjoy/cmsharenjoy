@@ -55,13 +55,12 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
 
 	protected function bindRepository($app, $config)
 	{
-		// The Users Bindings
+		// The Users Binding
 		$app->bind('Sharenjoy\Cmsharenjoy\User\UserInterface', function($app)
 		{
 		    return new User\UserRepository(
 		        new User\User,
-                new User\UserValidator($app['validator']),
-                new User\AccountValidator($app['validator'])
+                new User\UserValidator($app['validator'])
 		    );
 		});
 

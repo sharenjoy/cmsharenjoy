@@ -62,10 +62,10 @@ abstract class ObjectBaseController extends BaseController {
 
         // If we get the request of get contains filter
         // We will do some filter things
-        if (Input::get('filter'))
+        if (method_exists($this->repository, 'setFilterQuery'))
         {
             $filter = array_except($query, $this->filterExcept);
-            $model = $this->repository->setFilterQuery($model, $filter, $this->filterFormConfig);
+            $model = $this->repository->setFilterQuery($model, $filter);
         }
 
         $result = $this->repository->byPage($page, $perPage, $model);

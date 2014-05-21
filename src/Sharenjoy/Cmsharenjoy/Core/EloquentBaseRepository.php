@@ -218,11 +218,14 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
     {
         $data = $this->composeInputData($input);
 
+        if(isset($this->validator->updateRules))
+        {
+            $this->validator->setRule('updateRules');
+        }
         if(isset($this->model->uniqueFields) && count($this->model->uniqueFields))
         {
             $this->validator->setUniqueUpdateFields($this->model->uniqueFields, $id);
         }
-        
         if ( ! $this->valid($data))
         {
             $this->getErrorsToFlashMessageBag();

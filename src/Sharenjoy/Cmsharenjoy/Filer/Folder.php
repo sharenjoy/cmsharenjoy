@@ -84,7 +84,7 @@ class Folder extends Eloquent
      */
     public static function findAllOrdered($direction = 'asc')
     {
-        return static::orderBy('sort', $direction)->get();
+        return static::where('hidden', 0)->orderBy('sort', $direction)->get();
     }
 
     /**

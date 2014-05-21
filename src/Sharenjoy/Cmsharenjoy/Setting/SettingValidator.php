@@ -9,7 +9,7 @@ class SettingValidator extends AbstractLaravelValidator {
      *
      * @var Array
      */
-    protected $rules = [
+    public $rules = [
         'id'      => 'required|exists:settings',
         'value'   => 'required'
     ];

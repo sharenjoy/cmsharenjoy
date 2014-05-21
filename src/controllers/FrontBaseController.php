@@ -1,9 +1,9 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Controllers;
+<?php namespace Sharenjoy\Cmsharenjoy\Front\Controllers;
 
 use Illuminate\Routing\Controller;
 use Sharenjoy\Cmsharenjoy\User\Account;
 use Sharenjoy\Cmsharenjoy\User\User;
-use App, Sentry, Session, View, Config, Str;
+use App, Auth, Session, View, Config, Str;
 use Route, Response, Request, Theme, Message, Setting;
 
 abstract class FrontBaseController extends Controller {
@@ -53,7 +53,8 @@ abstract class FrontBaseController extends Controller {
     {
         $this->filterProcess();
         $this->setCommonVariable();
-        \Debugbar::disable();
+        // \Debugbar::disable();
+        \Debugbar::enable();
     }
 
     protected function filterProcess()
@@ -90,12 +91,11 @@ abstract class FrontBaseController extends Controller {
         }
 
         // Get the login user
-        $user = Sentry::getUser();
-        if ($user)
+        if (Auth::check())
         {
-            // Debugbar::info($user->account()->getParentKey());
-            Session::put('user', $user);
-            View::share('user', $user);
+            $member = Auth::user();
+            Session::put('member', $member);
+            View::share('member', $member);
         }
 
         // Brand name from setting
@@ -117,13 +117,17 @@ abstract class FrontBaseController extends Controller {
         {
             $this->layout = View::make($this->onController.'.'.$this->doAction);
         }
+        elseif (View::exists($this->onController.'-'.$this->doAction))
+        {
+            $this->layout = View::make($this->onController.'-'.$this->doAction);
+        }
+        elseif ($this->doAction == 'index' && View::exists($this->onController))
+        {
+            $this->layout = View::make($this->onController);
+        }
         elseif (View::exists($this->doAction))
         {
             $this->layout = View::make($this->doAction);
-        }
-        else
-        {
-            throw new \Sharenjoy\Cmsharenjoy\Exception\ViewNotFoundException;
         }
     }
 
