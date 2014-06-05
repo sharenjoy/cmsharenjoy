@@ -95,6 +95,9 @@ return array(
         // For album
         'album'                 => 'album',
         'filealbum'             => 'album',
+
+        // For category
+        'category_id'           => 'category',
     ],
 
 

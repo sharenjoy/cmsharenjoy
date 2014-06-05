@@ -59,6 +59,35 @@ class RepoServiceProvider extends ServiceProvider {
                 new Member\MemberValidator($app['validator'])
             );
         });
+
+        // The Report Binding
+        $app->bind('Sharenjoy\Cmsharenjoy\Repo\Report\ReportInterface', function($app)
+        {
+            return new Report\ReportRepository(
+                new Report\Report,
+                $app->make('Sharenjoy\Cmsharenjoy\Repo\Tag\TagInterface'),
+                new Report\ReportValidator($app['validator'])
+            );
+        });
+
+        // The Product Binding
+        $app->bind('Sharenjoy\Cmsharenjoy\Repo\Product\ProductInterface', function($app)
+        {
+            return new Product\ProductRepository(
+                new Product\Product,
+                $app->make('Sharenjoy\Cmsharenjoy\Repo\Tag\TagInterface'),
+                new Product\ProductValidator($app['validator'])
+            );
+        });
+
+        // The Order Binding
+        $app->bind('Sharenjoy\Cmsharenjoy\Repo\Order\OrderInterface', function($app)
+        {
+            return new Order\OrderRepository(
+                new Order\Order,
+                new Order\OrderValidator($app['validator'])
+            );
+        });
     }
 
 }

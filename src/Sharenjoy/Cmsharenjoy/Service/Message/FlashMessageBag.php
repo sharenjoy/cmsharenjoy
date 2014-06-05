@@ -29,4 +29,33 @@ class FlashMessageBag extends MessageBag {
 
         return $this;
     }
+
+    /**
+     * Output some message and status
+     * @param  string $type    The type of message
+     * @param  string $status  success, errors, warning
+     * @param  string $message This is message wants to output
+     * @param  array  $date
+     * @return mixed
+     */
+    public function output($type, $status, $message, $data = null)
+    {
+        switch ($type)
+        {
+            case 'msg':
+                $this->merge(array($status => $message))->flash();
+                break;
+
+            case 'ajax':
+                return array(
+                    'message' => $message,
+                    'status'  => $status,
+                    'data'    => $data
+                );
+                break;
+
+            default:
+                break;
+        }
+    }
 }

@@ -1,6 +1,8 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Service\Validation;
 
 use Illuminate\Validation\Factory;
+use Sharenjoy\Cmsharenjoy\Exception\ValidatorRulesNotFoundException;
+use App, Message;
 
 abstract class AbstractLaravelValidator implements ValidableInterface {
 
@@ -28,9 +30,34 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
      */
     public $rules = array();
 
-    public function __construct(Factory $validator)
+    public function __construct(Factory $validator = null)
     {
-        $this->validator = $validator;
+        if ($validator == null)
+        {
+            $this->validator = App::make('validator');
+        }
+        else
+        {
+            $this->validator = $validator;
+        }
+    }
+
+    /**
+     * To overwrite normal rules
+     * @param string $action The new rule
+     */
+    public function setRule($ruleName)
+    {
+        if (isset($this->$ruleName))
+        {
+            $this->rules = $this->$ruleName;
+        }
+        else
+        {
+            throw new ValidatorRulesNotFoundException;
+        }
+
+        return $this;
     }
 
     /**
@@ -40,17 +67,6 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
     public function with(array $data)
     {
         $this->data = $data;
-
-        return $this;
-    }
-
-    /**
-     * To overwrite normal rules
-     * @param string $action The new rule
-     */
-    public function setRule($action)
-    {
-        $this->rules = $this->$action;
 
         return $this;
     }
@@ -73,7 +89,7 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
     }
 
     /**
-     * Return errors, if any
+     * Return errors
      * @return MessageBag
      */
     public function errors()
@@ -91,6 +107,21 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
     }
 
     /**
+     * Merge message to flashMessageBag
+     * @return void
+     */
+    public function getErrorsToFlashMessageBag()
+    {
+        if ($this->getErrorsToArray())
+        {
+            foreach ($this->getErrorsToArray() as $message)
+            {
+                Message::merge(array('errors' => $message))->flash();
+            }
+        }
+    }
+
+    /**
      * To set some column don't need to valid
      * @param array $keyAry
      * @param string $id
@@ -105,6 +136,47 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
                 $this->rules[$field] = $rules[$field].','.$id;
             }
         }
+    }
+
+    /**
+     * Test if form validator passes
+     * @param  array The input needs to valid
+     * @param  array The type of message, it can be 'messageBeg'
+     * @return boolean
+     */
+    public function valid(array $input, $ruleName = null, $uniqueField = array(), $errorType = 'flashMessageBag')
+    {
+        // Set rule by other rules
+        if (isset($this->$ruleName))
+        {
+            $this->setRule($ruleName);
+        }
+
+        if (count($uniqueField))
+        {
+            list($ary, $id) = $uniqueField;
+            if (count($ary) && $id != '')
+            {
+                $this->setUniqueUpdateFields($ary, $id);
+            }
+        }
+
+        $result = $this->with($input)->passes();
+
+        if ( ! $result)
+        {
+            switch ($errorType)
+            {
+                case 'flashMessageBag':
+                    $this->getErrorsToFlashMessageBag();
+                    break;
+                
+                default:
+                    break;
+            }
+        }
+        
+        return $result;
     }
 
 }

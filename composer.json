@@ -14,7 +14,8 @@
         "illuminate/support": "4.1.*",
         "barryvdh/laravel-debugbar": "1.6.*",
         "cartalyst/sentry": "2.1.*",
-        "teepluss/theme": "dev-master"
+        "teepluss/theme": "dev-master",
+        "moltin/laravel-cart": "dev-master"
     },
     "autoload": {
         "classmap": [

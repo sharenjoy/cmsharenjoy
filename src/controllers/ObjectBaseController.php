@@ -1,8 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Controllers;
 
-use Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException;
-use View, Redirect, Input, App, Request, Config, Response, Lang, Paginator, Categorize;
-use Session, Debugbar, Message, Sentry, Theme, API;
+use View, Redirect, Input, Request, Config;
+use Response, Paginator, Message, Poster;
 
 abstract class ObjectBaseController extends BaseController {
 
@@ -33,10 +32,6 @@ abstract class ObjectBaseController extends BaseController {
     public function __construct()
     {
         parent::__construct();
-
-        // Debugbar::info($filterForm);
-        // $environment = App::environment();
-        // Debugbar::info(Session::get('action'));
     }
 
     /**
@@ -48,36 +43,27 @@ abstract class ObjectBaseController extends BaseController {
         $perPage    = Input::get('perPage');
         $page       = Input::get('page', 1);
         $query      = Request::query();
-        $perPage    = isset($perPage) ?: $this->paginationCount;
+        $perPage    = $perPage ?: $this->paginationCount;
+
+        $model      = Poster::getModel();
 
         // Set filter form fields
-        if (isset($this->filterFormConfig) && !is_null($this->filterFormConfig))
+        $filterForm = $this->repository->getForm(Input::all(), 'filter');
+        if ($filterForm)
         {
-            $filterForm = $this->repository->composeForm($this->filterFormConfig, 'list-filter', Input::all());
-            $filterForm ? View::share('filterForm', $filterForm) : '';
-        }
-        
-        // Get the model from repositroy
-        $model = $this->repository->getModel();
+            View::share('filterForm', $filterForm);
 
-        // If we get the request of get contains filter
-        // We will do some filter things
-        if (method_exists($this->repository, 'setFilterQuery'))
-        {
             $filter = array_except($query, $this->filterExcept);
-            $model = $this->repository->setFilterQuery($model, $filter);
+            $model  = Poster::filter($filter);
         }
 
-        $result = $this->repository->byPage($page, $perPage, $model);
+        $result = Poster::showByPage($page, (int)$perPage, $model);
 
-        // Do some final things process
-        if (method_exists($this, 'controllerFinalProcess'))
-        {
-            $result->items = $this->controllerFinalProcess($result->items);
-        }
+        $result->items = Poster::processMulitple($result->items);
 
         // Set Pagination of data 
-        $items = Paginator::make($result->items, $result->totalItems, $perPage)->appends($query);
+        $query = array_except($query, ['page']);
+        $items = Paginator::make($result->items, $result->totalItems, $result->limit)->appends($query);
 
         $this->layout->with('paginationCount', $perPage)
                      ->with('sortable', false)
@@ -94,14 +80,19 @@ abstract class ObjectBaseController extends BaseController {
     {
         $perPage    = Input::get('perPage');
         $page       = Input::get('page', 1);
-        $perPage    = isset($perPage) ?: $this->paginationCount;
+        $query      = Request::query();
+        $perPage    = $perPage ?: $this->paginationCount;
         
-        // Get the model from repositroy
-        $model  = $this->repository->getModel();
-        $result = $this->repository->byPage($page, $perPage, $model);
+        // Get the model
+        $model  = Poster::getModel();
+
+        $result = Poster::showByPage($page, (int)$perPage, $model);
+
+        $result->items = Poster::processMulitple($result->items);
 
         // Set Pagination of data 
-        $items = Paginator::make($result->items, $result->totalItems, $perPage);
+        $query = array_except($query, ['page']);
+        $items = Paginator::make($result->items, $result->totalItems, $result->limit)->appends($query);
 
         $this->layout->with('paginationCount', $perPage)
                      ->with('sortable', true)
@@ -116,7 +107,7 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function getCreate()
     {
-        $this->layout->with('fieldsForm', $this->repository->setFormFields());
+        $this->layout->with('fieldsForm', $this->repository->getForm());
     }
 
     /**
@@ -125,21 +116,18 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function getUpdate($id)
     {
-        // Catch some validation if can't get the data
-        try {
-            $model = $this->repository->byId($id);
-
-            if (method_exists($this, 'controllerFinalProcess'))
-            {
-                $model = $this->controllerFinalProcess($model);
-            }
-        }
-        catch(EntityNotFoundException $e)
+        try
         {
+            $model = Poster::showById($id);
+            $model = Poster::process($model);
+
+            $fieldsForm = $this->repository->getForm($model);
+        }
+        catch(\Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException $e)
+        {
+            Message::output('msg', 'errors', trans('cmsharenjoy::exception.not_found', array('id' => $id)));
             return Redirect::to($this->objectUrl);
         }
-
-        $fieldsForm = $this->repository->setFormFields($model);
 
         $this->layout->with('item' , $model)
                      ->with('fieldsForm', $fieldsForm);
@@ -152,16 +140,18 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function getDelete($id)
     {
-        try {
+        try
+        {
             $this->repository->delete($id);
         }
-        catch(EntityNotFoundException $e)
+        catch(\Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException $e)
         {
+            Message::output('msg', 'errors', trans('cmsharenjoy::exception.not_found', array('id' => $id)));
+
             return Redirect::to($this->objectUrl);
         }
 
-        // delete success message
-        Message::merge(array('success'=>trans('cmsharenjoy::admin.success_deleted')))->flash();
+        Message::output('msg', 'success', trans('cmsharenjoy::admin.success_deleted'));
 
         return Redirect::to($this->objectUrl);
     }
@@ -172,7 +162,7 @@ abstract class ObjectBaseController extends BaseController {
      * @return Redirect
      */
     public function postCreate()
-    {   
+    {
         // To create data
         $result = $this->repository->create(Input::all());
 
@@ -180,11 +170,10 @@ abstract class ObjectBaseController extends BaseController {
         {
             return Redirect::to($this->createUrl)->withInput();
         }
-        else
-        {
-            Message::merge(array('success'=>trans('cmsharenjoy::admin.success_created')))->flash();
-            return Redirect::to($this->objectUrl);
-        }
+        
+        Message::output('msg', 'success', trans('cmsharenjoy::admin.success_created'));
+
+        return Redirect::to($this->objectUrl);
     }
 
     /**
@@ -201,11 +190,10 @@ abstract class ObjectBaseController extends BaseController {
         {
             return Redirect::to($this->updateUrl.$id)->withInput();
         }
-        else
-        {
-            Message::merge(array('success'=>trans('cmsharenjoy::admin.success_updated')))->flash();
-            return Redirect::to($this->updateUrl.$id);
-        }
+
+        Message::output('msg', 'success', trans('cmsharenjoy::admin.success_updated'));
+
+        return Redirect::to($this->updateUrl.$id);
     }
 
     /**
@@ -232,7 +220,9 @@ abstract class ObjectBaseController extends BaseController {
             }
         }
 
-        return Response::json('success', 200);
+        $result = Message::output('ajax', 'success', "排序成功");
+
+        return Response::json($result, 200);
     }
 
     protected function setupLayout()

@@ -1,6 +1,6 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Formaker;
 
-use Config, Lang;
+use Config, Lang, Session;
 
 Abstract class FormakerBaseAbstract {
 
@@ -88,9 +88,9 @@ Abstract class FormakerBaseAbstract {
      * @param  string $type  The type of form fields
      * @return array
      */
-    public function composeForm($formConfig, $type)
+    public function makeForm(array $formConfig, $type)
     {
-        if (is_array($formConfig) && count($formConfig))
+        if (count($formConfig))
         {
             $data = array();
 

@@ -26,7 +26,7 @@
                         @if(Session::get('doAction') != 'filealbum')
                         <td>
                             <div id="list-1" class="nested-list dd with-margins">
-                                <ul class="dd-list">
+                                <ul class="dd-list folders-folder">
                                     {{$folderTree}}
                                 </ul>
                             </div>

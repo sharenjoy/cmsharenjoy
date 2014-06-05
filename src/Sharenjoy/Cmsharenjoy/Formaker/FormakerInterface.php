@@ -10,12 +10,4 @@ interface FormakerInterface {
      */
     public function make();
 
-    /**
-     * Can compose some of custom fields
-     * @param  array $formConfig It's config of fields
-     * @param  string $type
-     * @return array  The data of form fields
-     */
-    public function composeForm($formConfig, $type);
-
 }

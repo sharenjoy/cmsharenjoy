@@ -145,8 +145,11 @@ abstract class BaseController extends Controller {
             $this->onController = strtolower($controller);
             $this->onAction = Str::slug(Request::method(). '-' .$action);
             $this->doAction = strtolower($action);
+            // post
             Session::put('onController', $this->onController);
+            // get-create, post-create
             Session::put('onAction', $this->onAction);
+            // create, update
             Session::put('doAction', $this->doAction);
         }
 

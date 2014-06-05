@@ -25,7 +25,7 @@ return array(
      */
     'locales' => array(
         'zh-TW' => '繁體中文',
-        'en'    => '英文',
+        // 'en'    => '英文',
         // 'zh-CN' => '簡體中文',
         // 'ja'    => '日文',
     ),
@@ -39,9 +39,13 @@ return array(
      * The menu items shown at the top and side of the application
      */
     'menu_items' => array(
-        'post' => array(
-            'name' => 'menu.post',
+        'report' => array(
+            'name' => 'menu.report',
             'icon' => 'entypo-doc-text',
+        ),
+        'product' => array(
+            'name' => 'menu.product',
+            'icon' => 'entypo-feather',
         ),
         'category' => array(
             'name' =>'menu.category',
@@ -50,18 +54,15 @@ return array(
                 'category/index/product' => array(
                     'name' => 'menu.product_category'
                 ),
-                'category/index/post' => array(
-                    'name' => 'menu.post_category'
-                ),
             )
-        ),
-        'tag' => array(
-            'name' => 'menu.tag',
-            'icon' => 'entypo-tag',
         ),
         'filer' => array(
             'name' => 'menu.file',
             'icon' => 'entypo-box',
+        ),
+        'order' => array(
+            'name' => 'menu.order',
+            'icon' => 'entypo-basket',
         ),
         'member' => array(
             'name' => 'menu.member',

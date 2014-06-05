@@ -1,11 +1,11 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Repo\Post;
+<?php namespace Sharenjoy\Cmsharenjoy\Repo\Product;
 
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
 use Sharenjoy\Cmsharenjoy\Repo\Tag\TagInterface;
 use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;
 use Config, Formaker, View, Session;
 
-class PostRepository extends EloquentBaseRepository implements PostInterface {
+class ProductRepository extends EloquentBaseRepository implements ProductInterface {
 
     /**
      * Responsible for converting to slug
@@ -21,28 +21,15 @@ class PostRepository extends EloquentBaseRepository implements PostInterface {
     
     /**
      * Construct Shit
-     * @param Posts $posts
+     * @param Products $Products
      */
-    public function __construct(Post $post, TagInterface $tag, ValidableInterface $validator)
+    public function __construct(Product $model, TagInterface $tag, ValidableInterface $validator)
     {
         $this->validator = $validator;
-        $this->model     = $post;
+        $this->model     = $model;
         $this->tag       = $tag;
-    }
 
-    public function setFilterQuery($model = null, $query)
-    {
-        $model = $model ?: $this->model;
-
-        if (count($query) !== 0)
-        {
-            extract($query);
-        
-            $model = $status != 0 ? $model->where('status_id', $status) : $model;
-            $model = $keyword != '' ? $model->where('title', 'LIKE', "%$keyword%"): $model;
-            // $model = $model->whereBetween('created_at', array('2014-03-01', '2014-03-03'));
-        }
-        return $model;                     
+        parent::__construct();
     }
 
     protected function repoFinalProcess($model = null, $data = null)
@@ -52,8 +39,8 @@ class PostRepository extends EloquentBaseRepository implements PostInterface {
 
         switch ($action)
         {
-            case 'post-post-create':
-            case 'post-post-update':
+            case 'report-post-create':
+            case 'report-post-update':
                 // $tags is an array that return from syncTags
                 $tags = $this->tag->syncTags($data['tag']);
                 // Assign set tags to model

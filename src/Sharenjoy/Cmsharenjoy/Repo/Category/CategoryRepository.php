@@ -11,6 +11,8 @@ class CategoryRepository extends EloquentBaseRepository implements CategoryInter
     {
         $this->validator = $validator;
         $this->model     = $category;
+
+        parent::__construct();
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Controllers;
 
 use Sharenjoy\Cmsharenjoy\Repo\Category\CategoryInterface;
-use Response, Input, Request, View, Categorize, Session;
+use Response, Input, Request, Categorize, Session, Poster;
 
 class CategoryController extends ObjectBaseController {
 
@@ -23,8 +23,8 @@ class CategoryController extends ObjectBaseController {
     protected $type;
 
     protected $categoryLevelNumber = [
-        'product' => 2,
-        'post' => 1
+        'product' => 1,
+        'post'    => 1
     ];
 
     public function __construct(CategoryInterface $category)
@@ -59,7 +59,7 @@ class CategoryController extends ObjectBaseController {
     public function getIndex()
     {
         $type    = $this->type;
-        $model   = $this->repository->getModel();
+        $model   = Poster::getModel();
         $model   = $model->whereType($type)->orderBy('sort');
         $perPage = $model->count();
 

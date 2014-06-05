@@ -1,6 +1,6 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Formaker;
 
-use Form, Lang, Theme, Config, Session;
+use Form, Lang, Theme, Config, Session, Categorize;
 
 class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface {
 
@@ -242,6 +242,15 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
                 $input = Form::select($name, $option, $value, $args);
                 break;
 
+            case 'category':
+                $categories = Categorize::getCategoryProvider()->root()
+                                                               ->whereType('Product')
+                                                               ->orderBy('sort', 'asc')
+                                                               ->get();
+                $option = Categorize::tree($categories)->lists('title', 'id');
+                $input = Form::select($name, $option, $value, $args);
+                break;
+
             case 'checkbox':
                 $option = array_get($args, 'option') ?: $this->guessOption($name);
                 unset($args['option']);
@@ -414,7 +423,7 @@ EOE;
                      ->wrapper(['class'=>'form-group']);
                 break;
 
-            case 'list-filter':
+            case 'filter':
                 $this->field()
                      ->label(['tag'=>'span', 'position'=>'top'])
                      ->wrapper(['class'=>'list-filter col-md-3 col-sm-6']);
