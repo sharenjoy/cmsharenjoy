@@ -1,12 +1,10 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Controllers;
 
-
 use Sharenjoy\Cmsharenjoy\Repo\Order\OrderInterface;
 use Sharenjoy\Cmsharenjoy\Repo\Order\OrderDetail;
+use Poster;
 
 class OrderController extends ObjectBaseController {
-
-    protected $appName = 'order';
 
     protected $functionRules = [
         'list'   => true,
@@ -19,9 +17,8 @@ class OrderController extends ObjectBaseController {
         'sn'          => ['name'=>'order_sn',     'align'=>'',       'width'=>''   ],
         'name'        => ['name'=>'name',         'align'=>'',       'width'=>''   ],
         'mobile'      => ['name'=>'mobile',       'align'=>'',       'width'=>''   ],
-        'email'       => ['name'=>'email',        'align'=>'',       'width'=>''   ],
-        'address'     => ['name'=>'address',      'align'=>'',       'width'=>''   ],
         'totalamount' => ['name'=>'amount',       'align'=>'right',  'width'=>''   ],
+        'process_id'  => ['name'=>'process',      'align'=>'center', 'width'=>''   ],
         'created_at'  => ['name'=>'created',      'align'=>'center', 'width'=>'20%'],
     ];
 
@@ -33,18 +30,17 @@ class OrderController extends ObjectBaseController {
 
     public function getUpdate($id)
     {
-        // Catch some validation if can't get the data
-        try {
-            $model = $this->repository->byId($id);
-
-            $detail = OrderDetail::where('order_id', $id)->get();
+        try
+        {
+            $model = Poster::showById($id);
+            $detail = $model->orderDetail()->get();
         }
         catch(EntityNotFoundException $e)
         {
             return Redirect::to($this->objectUrl);
         }
 
-        $fieldsForm = $this->repository->setFormFields($model);
+        $fieldsForm = $this->repository->getForm($model);
 
         $this->layout->with('item' , $model)
                      ->with('orderDetail', $detail)

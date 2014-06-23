@@ -42,14 +42,14 @@ class FlashMessageBag extends MessageBag {
     {
         switch ($type)
         {
-            case 'msg':
+            case 'flash':
                 $this->merge(array($status => $message))->flash();
                 break;
 
-            case 'ajax':
+            case 'json':
                 return array(
-                    'message' => $message,
                     'status'  => $status,
+                    'message' => $message,
                     'data'    => $data
                 );
                 break;

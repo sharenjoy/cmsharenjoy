@@ -4,8 +4,6 @@ use Sharenjoy\Cmsharenjoy\Repo\Product\ProductInterface;
 
 class ProductController extends ObjectBaseController {
 
-    protected $appName = 'product';
-
     protected $functionRules = [
         'list'   => true,
         'create' => true,

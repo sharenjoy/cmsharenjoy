@@ -1,21 +1,15 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Repo\Order;
 
-use Eloquent;
+use Sharenjoy\Cmsharenjoy\Core\EloquentBaseModel;
+use Config;
 
-class Order extends Eloquent {
+class Order extends EloquentBaseModel {
 
-    /**
-     * The table to get the data from
-     * @var string
-     */
     protected $table    = 'orders';
 
-    /**
-     * These are the mass-assignable keys
-     * @var array
-     */
     protected $fillable = array(
         'sn',
+        'member_id',
         'name',
         'mobile',
         'email',
@@ -23,31 +17,54 @@ class Order extends Eloquent {
         'content',
         'total',
         'delivery_price',
-        'totalamount'
+        'totalamount',
+        'easy_contact_time_id',
+        'process_id',
+        'sort'
     );
 
+    public $uniqueFields = [];
+    
+    public $createComposeItem = ['sort'];
+    public $updateComposeItem = [];
+
+    public $processItem = [
+        'get-index'   => ['process|process_id'],
+        'get-sort'    => [],
+        'get-create'  => [],
+        'get-update'  => [],
+        'post-create' => [],
+        'post-create' => [],
+    ];
+
+    public $filterFormConfig = [];
+
     public $formConfig = [
-        'sn'          => ['order' => '5'],
-        'name'        => ['order' => '8'],
-        'mobile'      => ['order' => '10'],
-        'email'       => ['order' => '20'],
-        'address'     => ['order' => '30'],
-        'totalamount' => ['order' => '40'],
-        'content'     => ['order' => '50', 'type'=>'textarea'],
+        'sn'                   => ['order' => '5'],
+        'name'                 => ['order' => '8'],
+        'mobile'               => ['order' => '10'],
+        'email'                => ['order' => '20'],
+        'address'              => ['order' => '30'],
+        'totalamount'          => ['order' => '40'],
+        'easy_contact_time_id' => ['order' => '45', 'type'=>'select', 'option' => 'easy_contact_time'],
+        'process_id'           => ['order' => '48', 'type'=>'radio', 'option' => 'process'],
+        'content'              => ['order' => '50', 'type'=>'textarea'],
     ];
 
     public $createFormConfig = [];
     public $updateFormConfig = [];
 
-    /**
-     * Indicates if the model should soft delete.
-     * @var bool
-     */
-    protected $softDelete = false;
+    public $createFormDeny   = [];
+    public $updateFormDeny   = [];
+
+    public function process($field = __FUNCTION__)
+    {
+        $this->$field = Config::get('cmsharenjoy::options.process.'.$this->process_id);
+    }
 
     public function orderDetail()
     {
-        return $this->hasMany('Sharenjoy\Cmsharenjoy\Order\OrderDetail', 'order_id');
+        return $this->hasMany('Sharenjoy\Cmsharenjoy\Repo\Order\OrderDetail', 'order_id');
     }
 
 }

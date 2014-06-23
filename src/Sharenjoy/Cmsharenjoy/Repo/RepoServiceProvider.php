@@ -70,6 +70,15 @@ class RepoServiceProvider extends ServiceProvider {
             );
         });
 
+        // The Qna Binding
+        $app->bind('Sharenjoy\Cmsharenjoy\Repo\Qna\QnaInterface', function($app)
+        {
+            return new Qna\QnaRepository(
+                new Qna\Qna,
+                new Qna\QnaValidator($app['validator'])
+            );
+        });
+
         // The Product Binding
         $app->bind('Sharenjoy\Cmsharenjoy\Repo\Product\ProductInterface', function($app)
         {

@@ -11,7 +11,7 @@ class Login extends AbstractLaravelValidator {
      */
     public $rules = [
         'email'                 => 'required|email',
-        'password'              => 'required'
+        'password'              => 'required|min:6'
     ];
 
 }

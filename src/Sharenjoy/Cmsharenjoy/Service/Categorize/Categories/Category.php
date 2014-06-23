@@ -5,32 +5,41 @@ use Sharenjoy\Cmsharenjoy\Service\Categorize\Categories\CategoryInterface;
 
 class Category extends Model implements CategoryInterface {
 
-    /**
-     * Model table.
-     * @var string
-     */
     protected $table = 'categories';
 
-    /**
-     * It's the unique fields
-     * @var array
-     */
-    public $uniqueFields = ['title'];
+    protected $fillable = [
+        'user_id',
+        'type',
+        'title',
+        'description'
+    ];
 
-    /**
-     * Guarded.
-     * @var array
-     */
-    protected $guarded = array();
+    public $uniqueFields = [];
+
+    public $createComposeItem = ['user'];
+    public $updateComposeItem = ['user'];
+
+    public $processItem = [
+        'get-index'   => [],
+        'get-sort'    => [],
+        'get-create'  => [],
+        'get-update'  => ['username|thisisuser'],
+        'post-create' => [],
+        'post-create' => [],
+    ];
+
+    public $filterFormConfig = [];
 
     public $formConfig = [
-        'title' => [
-            'order' => '20'
-        ],
-        'description' => [
-            'order' => '30'
-        ]
+        'title'              => ['order' => '20'],
+        'description'        => ['order' => '30']
     ];
+
+    public $createFormConfig = [];
+    public $updateFormConfig = [];
+
+    public $createFormDeny   = [];
+    public $updateFormDeny   = [];
 
     /**
      * Model event.
@@ -157,6 +166,16 @@ class Category extends Model implements CategoryInterface {
         {
             $this->destroy($id);
         }
+    }
+
+    public function author()
+    {
+        return $this->belongsTo('Sharenjoy\Cmsharenjoy\User\User', 'user_id');
+    }
+
+    public function username($field = __FUNCTION__)
+    {
+        $this->$field = $this->author->name;
     }
 
 }

@@ -6,40 +6,20 @@ use Sentry, Input, Mail, Hash, Config, Session, Message;
 
 class UserRepository extends EloquentBaseRepository implements UserInterface {
 
-    protected $repoName = 'user';
-
     public function __construct(User $user, ValidableInterface $validator)
     {
         $this->validator = $validator;
         $this->model     = $user;
-    }
 
-    public function setFilterQuery($model = null, $query)
-    {
-        $model = $model ?: $this->model;
-
-        if (count($query) !== 0)
-        {
-            extract($query);
-        }
-        return $model;                     
+        parent::__construct();
     }
 
     public function create(array $input)
     {   
         try
         {
-            if ( ! $this->validator->with($input)->passes())
-            {
-                if ($this->validator->getErrorsToArray())
-                {
-                    foreach ($this->validator->getErrorsToArray() as $message)
-                    {
-                        Message::merge(array('errors' => $message))->flash();
-                    }
-                }
-                return false;
-            }
+            $result = $this->validator->valid($input);
+            if ( ! $result->status) return false;
             
             // create user
             $user = Sentry::createUser(array(
@@ -48,16 +28,14 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
                 'name'        => Input::get('name'),
                 'phone'       => Input::get('phone'),
                 'description' => Input::get('description'),
+                'sort'        => time(),
                 // 'permissions' => $permissions
             ));
-
-            // sort id
-            $this->store($user->id, array('sort' => $user->id));
 
             // activate user
             $activationCode = $user->getActivationCode();
 
-            if(true)
+            if (true)
             {
                 $user->attemptActivation($activationCode);
             }
@@ -80,48 +58,34 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
         }
         catch (\Cartalyst\Sentry\Users\LoginRequiredException $e)
         {
-            Message::merge(array('errors' => 'Login field is required.'))->flash();
+            Message::output('flash', 'errors', 'Login field is required.');
             return false;
         }
         catch (\Cartalyst\Sentry\Users\PasswordRequiredException $e)
         {
-            Message::merge(array('errors' => 'Password field is required.'))->flash();
+            Message::output('flash', 'errors', 'Password field is required.');
             return false;
         }
         catch (\Cartalyst\Sentry\Users\UserExistsException $e)
         {
-            Message::merge(array('errors' => 'User with this login already exists.'))->flash();
+            Message::output('flash', 'errors', 'User with this login already exists.');
             return false;
         }
         catch (\Cartalyst\Sentry\Groups\GroupNotFoundException $e)
         {
-            Message::merge(array('errors' => 'Group was not found.'))->flash();
+            Message::output('flash', 'errors', 'Group was not found.');
             return false;
         }
 
         return true;
     }
 
-    public function update($id, array $input)
+    public function update($id, array $input, $vaidatorRules = 'updateRules')
     {
         try
         {
-            $this->validator->setRule('updateRules');
-            if( ! empty($this->model->uniqueFields))
-            {
-                $this->validator->setUniqueUpdateFields($this->model->uniqueFields, $id);
-            }
-            if ( ! $this->validator->with($input)->passes())
-            {
-                if ($this->validator->getErrorsToArray())
-                {
-                    foreach ($this->validator->getErrorsToArray() as $message)
-                    {
-                        Message::merge(array('errors' => $message))->flash();
-                    }
-                }
-                return false;
-            }
+            $result = $this->validator->valid($input, $vaidatorRules, [$this->model->uniqueFields, $id]);
+            if ( ! $result->status) return false;
 
             // Find the user using the user id
             $user = Sentry::findUserById($id);
@@ -135,27 +99,22 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
             // Update the user
             if ( ! $user->save())
             {
-                Message::merge(array('errors' => 'User information was not updated'))->flash();
+                Message::output('flash', 'errors', 'User information was not updated');
                 return false;
             }            
         }
         catch (Cartalyst\Sentry\Users\UserExistsException $e)
         {
-            Message::merge(array('errors' => 'User with this login already exists.'))->flash();
+            Message::output('flash', 'errors', 'User with this login already exists.');
             return false;
         }
         catch (Cartalyst\Sentry\Users\UserNotFoundException $e)
         {
-            Message::merge(array('errors' => 'User was not found.'))->flash();
+            Message::output('flash', 'errors', 'User was not found.');
             return false;
         }
 
         return true;
-    }
-
-    protected function composeInputData(array $data)
-    {   
-        return $data;
     }
 
 }

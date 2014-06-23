@@ -22,19 +22,26 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
     }
 
     /**
+     * Return a instance of model
+     * @return Eloquent
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
      * Create a new Article
      * @param array  Data to create a new object
      * @return string The insert id
      */
     public function create(array $input)
     {
-        if ( ! $this->validator->valid($input))
-        {
-            return false;
-        }
-
         // Compose some necessary variable to input data
-        $input = Poster::compose($input, $this->model->composeItem);
+        $input = Poster::compose($input, $this->model->createComposeItem);
+        
+        $result = $this->validator->valid($input);
+        if ( ! $result->status) return false;
 
         // Create the model
         $model = $this->model->create($input);
@@ -49,13 +56,11 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
      */
     public function update($id, array $input, $vaidatorRules = 'updateRules')
     {
-        if ( ! $this->validator->valid($input, $vaidatorRules, [$this->model->uniqueFields, $id]))
-        {
-            return false;
-        }
-
         // Compose some necessary variable to input data
-        $input = Poster::compose($input, $this->model->composeItem);
+        $input = Poster::compose($input, $this->model->updateComposeItem);
+
+        $result = $this->validator->valid($input, $vaidatorRules, [$this->model->uniqueFields, $id]);
+        if ( ! $result->status) return false;
 
         // Update the model
         $model = $this->model->find($id)->fill($input);
@@ -65,20 +70,19 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
     }
 
     /**
-     * Store data by id
+     * Edit data by id
      * @param  int $id
      * @param  array $data
      * @return void
      */
-    public function store($id, $data)
+    public function edit($value, $data, $field = 'id')
     {
-        $model = $this->model->where('id', $id)->update($data);
+        $model = $this->model->where($field, $value)->update($data);
         
         if ( ! $model)
         {
             throw new \Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException;
         }
-
         return $model;
     }
 
@@ -95,13 +99,11 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
         {
             throw new \Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException;
         }
-
         $model->delete();
     }
 
     public function pushFormConfig($type = 'list', $data)
     {
-        
         switch ($type)
         {
             case 'list':
@@ -125,7 +127,7 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
         $typeConfigStr = $type.'FormConfig';
         $typeDenyStr   = $type.'FormDeny';
         $typeConfig    = $this->model->$typeConfigStr ?: [];
-
+        
         switch ($type)
         {
             case 'create':
@@ -152,7 +154,6 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
                 $formConfig = $typeConfig;
                 break;
         }
-        
         return $this->composeForm($formConfig, $type, $input);
     }
 

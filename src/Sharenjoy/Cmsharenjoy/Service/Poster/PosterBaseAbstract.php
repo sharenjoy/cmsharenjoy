@@ -26,7 +26,15 @@ Abstract class PosterBaseAbstract {
      */
     public function setModel($model)
     {
-        $this->model = $model;
+        if (is_string($model))
+        {
+            $this->model = new $model;
+        }
+        else
+        {
+            $this->model = $model;
+        }
+        
         return $this;
     }
 

@@ -120,12 +120,12 @@ abstract class ObjectBaseController extends BaseController {
         {
             $model = Poster::showById($id);
             $model = Poster::process($model);
-
+            
             $fieldsForm = $this->repository->getForm($model);
         }
         catch(\Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException $e)
         {
-            Message::output('msg', 'errors', trans('cmsharenjoy::exception.not_found', array('id' => $id)));
+            Message::output('flash', 'errors', trans('cmsharenjoy::exception.not_found', array('id' => $id)));
             return Redirect::to($this->objectUrl);
         }
 
@@ -146,12 +146,12 @@ abstract class ObjectBaseController extends BaseController {
         }
         catch(\Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException $e)
         {
-            Message::output('msg', 'errors', trans('cmsharenjoy::exception.not_found', array('id' => $id)));
+            Message::output('flash', 'errors', trans('cmsharenjoy::exception.not_found', array('id' => $id)));
 
             return Redirect::to($this->objectUrl);
         }
 
-        Message::output('msg', 'success', trans('cmsharenjoy::admin.success_deleted'));
+        Message::output('flash', 'success', trans('cmsharenjoy::admin.success_deleted'));
 
         return Redirect::to($this->objectUrl);
     }
@@ -171,7 +171,7 @@ abstract class ObjectBaseController extends BaseController {
             return Redirect::to($this->createUrl)->withInput();
         }
         
-        Message::output('msg', 'success', trans('cmsharenjoy::admin.success_created'));
+        Message::output('flash', 'success', trans('cmsharenjoy::admin.success_created'));
 
         return Redirect::to($this->objectUrl);
     }
@@ -191,7 +191,7 @@ abstract class ObjectBaseController extends BaseController {
             return Redirect::to($this->updateUrl.$id)->withInput();
         }
 
-        Message::output('msg', 'success', trans('cmsharenjoy::admin.success_updated'));
+        Message::output('flash', 'success', trans('cmsharenjoy::admin.success_updated'));
 
         return Redirect::to($this->updateUrl.$id);
     }
@@ -215,14 +215,20 @@ abstract class ObjectBaseController extends BaseController {
         {
             if($id)
             {
-                $sort = $sort_value[$key];
-                $this->repository->store($id, array('sort' => $sort));
+                try
+                {
+                    $sort = $sort_value[$key];
+                    $this->repository->edit($id, array('sort' => $sort));
+                }
+                catch (\Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException $e)
+                {
+                    Message::output('flash', 'errors', trans('cmsharenjoy::exception.not_found', array('id' => $id)));
+                    return Redirect::to($this->objectUrl);
+                }
             }
         }
 
-        $result = Message::output('ajax', 'success', "排序成功");
-
-        return Response::json($result, 200);
+        return Response::json(Message::output('json', 'success', trans('cmsharenjoy::admin.success_ordered')), 200);
     }
 
     protected function setupLayout()
@@ -235,9 +241,9 @@ abstract class ObjectBaseController extends BaseController {
         // Get reop directory from config
         $commonRepoLayout = Config::get('cmsharenjoy::app.commonRepoLayoutDirectory');
         
-        if (View::exists('cmsharenjoy::'.$this->appName.'.'.$action))
+        if (View::exists('cmsharenjoy::'.$this->onController.'.'.$action))
         {
-            $this->layout = View::make('cmsharenjoy::'.$this->appName.'.'.$action);
+            $this->layout = View::make('cmsharenjoy::'.$this->onController.'.'.$action);
         }
         else if(View::exists('cmsharenjoy::'.$commonRepoLayout.'.'.$action))
         {

@@ -11,7 +11,7 @@ class ReportValidator extends AbstractLaravelValidator {
      */
     public $rules = [
         'title'     => 'required',
-        'link'      => 'required',
+        // 'link'      => 'required',
         'source'    => 'required',
         'content'   => 'required',
         'img'       => 'required'

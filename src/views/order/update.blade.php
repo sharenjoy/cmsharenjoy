@@ -38,15 +38,15 @@
                             </thead>
                             <tbody>
 
-                              @foreach($orderDetail as $item)
-                              <tr data-id="{{$item->id}}">
+                              @foreach($orderDetail as $value)
+                              <tr data-id="{{$value->id}}">
                                 <td>
-                                  <img class="img-responsive" width="80" src="{{asset('uploads/'.$item->img)}}">
+                                  <img class="img-responsive" width="80" src="{{asset('uploads/'.$value->img)}}">
                                 </td>
-                                <td>{{$item->name}} {{$item->name_jp}}
-                                    <p class="text-muted">{{$item->description}}</p></td>
-                                <td width="15%" align="right">${{number_format($item->price)}}</td>
-                                <td width="15%" align="center"> {{$item->quantity}} 份 </td>
+                                <td>{{$value->name}} {{$value->name_jp}}
+                                    <p class="text-muted">{{$value->description}}</p></td>
+                                <td width="15%" align="right">${{number_format($value->price)}}</td>
+                                <td width="15%" align="center"> {{$value->quantity}} 份 </td>
                               </tr>
                               @endforeach
 

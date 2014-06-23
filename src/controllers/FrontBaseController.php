@@ -1,10 +1,8 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Front\Controllers;
 
 use Illuminate\Routing\Controller;
-use Sharenjoy\Cmsharenjoy\User\Account;
-use Sharenjoy\Cmsharenjoy\User\User;
-use App, Auth, Session, View, Config, Str;
-use Route, Response, Request, Theme, Message, Setting;
+use App, Auth, Session, View, Str, Route;
+use Response, Request, Theme, Message, Setting;
 
 abstract class FrontBaseController extends Controller {
 
@@ -53,8 +51,6 @@ abstract class FrontBaseController extends Controller {
     {
         $this->filterProcess();
         $this->setCommonVariable();
-        // \Debugbar::disable();
-        \Debugbar::enable();
     }
 
     protected function filterProcess()
@@ -82,11 +78,16 @@ abstract class FrontBaseController extends Controller {
             // Take out the method from the action.
             $action = str_replace(array('get', 'post', 'patch', 'put', 'delete'), '', last($routeArray));
 
+            // post, report
             $this->onController = strtolower($controller);
-            $this->onAction = Str::slug(Request::method(). '-' .$action);
-            $this->doAction = strtolower($action);
             Session::put('onController', $this->onController);
+
+            // get-create, post-create
+            $this->onAction = Str::slug(Request::method(). '-' .$action);
             Session::put('onAction', $this->onAction);
+
+            // create, update
+            $this->doAction = strtolower($action);
             Session::put('doAction', $this->doAction);
         }
 
@@ -94,25 +95,31 @@ abstract class FrontBaseController extends Controller {
         if (Auth::check())
         {
             $member = Auth::user();
-            Session::put('member', $member);
+            Session::put('member', $member->toArray());
             View::share('member', $member);
         }
 
         // Brand name from setting
         $this->brandName = Setting::get('brand_name');
+        View::share('brandName', $this->brandName);
         
         // Set the theme
         $this->theme = Theme::uses('front');
-
-        // Share some variables to views
-        View::share('brandName', $this->brandName);
 
         // Message
         View::share('messages', Message::getMessageBag());
     }
 
+    /**
+     * This is the order that show layout
+     * 1. view/member/create.blade.php
+     * 2. view/member-index.blade.php
+     * 3. view/member.blade.php (action = index)
+     * 4. view/create.blade.php
+     * @return View
+     */
     protected function setupLayout()
-    {   
+    {
         if (View::exists($this->onController.'.'.$this->doAction))
         {
             $this->layout = View::make($this->onController.'.'.$this->doAction);
@@ -130,5 +137,23 @@ abstract class FrontBaseController extends Controller {
             $this->layout = View::make($this->doAction);
         }
     }
+
+    /**
+     * Handle dynamic method calls
+     * @param string $name
+     * @param array $args
+     */
+    // public function __call($name, $args)
+    // {
+    //     $args = empty($args) ? [] : $args[0];
+    //     $action = 'get'.$name;
+    //     \Debugbar::info($name);
+    //     if ($this->layout == null)
+    //     {
+    //         App::abort(404);
+    //     }
+
+    //     return Redirect::to($this->object);
+    // }
 
 }

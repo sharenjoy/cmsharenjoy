@@ -3,6 +3,7 @@
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
 use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;
 use Sharenjoy\Cmsharenjoy\Service\Categorize\Categories\Category;
+use Poster;
 
 class CategoryRepository extends EloquentBaseRepository implements CategoryInterface {
 
@@ -22,20 +23,18 @@ class CategoryRepository extends EloquentBaseRepository implements CategoryInter
      */
     public function create(array $input)
     {
-        $data = $this->composeInputData($input);
+        $result = $this->validator->valid($input);
+        if ( ! $result->status) return false;
 
-        if ( ! $this->valid($data))
-        {
-            $this->getErrorsToFlashMessageBag();
-            return false;
-        }
+        // Compose some necessary variable to input data
+        $input = Poster::compose($input, $this->model->createComposeItem);
 
         // Create the model
-        $model = $this->model->fill($data);
+        $model = $this->model->create($input);
         $model->makeRoot();
-        $this->store($model->id, array('sort' => $model->id));
+        $model = $this->edit($model->id, array('sort' => $model->id));
 
-        return $model->id;
+        return $model;
     }
 
 }

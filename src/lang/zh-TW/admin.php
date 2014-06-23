@@ -36,6 +36,7 @@ return array(
     'success_created'             => '項目建立成功',
     'success_updated'             => '項目更新成功',
     'success_deleted'             => '項目刪除成功',
+    'success_ordered'             => '項目排序成功',
     'page_not_found'              => '您要找的頁面不存在',
     'no_item_yet'                 => '還沒有任何項目存在，請使用新增功能來新增您第一個項目',
 

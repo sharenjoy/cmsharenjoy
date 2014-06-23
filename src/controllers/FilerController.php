@@ -4,7 +4,6 @@ use Sharenjoy\Cmsharenjoy\Filer\Folder;
 use Sharenjoy\Cmsharenjoy\Filer\File;
 use Sharenjoy\Cmsharenjoy\Filer\FilerValidator;
 use Config, Lang, Theme, Message, Session, Input, Response, App, Redirect, Filer, Request;
-use Debugbar;
 
 /**
  * PyroCMS file Admin Controller
@@ -16,7 +15,6 @@ use Debugbar;
  */
 class FilerController extends BaseController {
 
-    protected $appName = 'filer';
     protected $filer;
 
     private $_folders   = array();
@@ -43,6 +41,8 @@ class FilerController extends BaseController {
      */
     public function getIndex($parentId = null)
     {
+        \Debugbar::disable();
+
         if (is_null($parentId))
         {
             $model = Folder::orderBy('sort')->first();
@@ -117,8 +117,6 @@ class FilerController extends BaseController {
 
     public function getFilealbum($parentId = null)
     {
-        \Debugbar::disable();
-
         $fileResult = $this->foldercontents($parentId);
         if ( ! $fileResult['status'])
         {
@@ -144,19 +142,12 @@ class FilerController extends BaseController {
     public function postNewfolder($toWhere = 'index')
     {
         $parent_id = Input::get('parent', 0);
-        $input = Input::all();
+        $input     = Input::all();
 
-        $validator = new FilerValidator(App::make('validator'));
-        $validator->setRule('newFolderRules');
-        if ( ! $validator->with($input)->passes())
+        $validator = new FilerValidator();
+        $result    = $validator->valid($input, 'newFolderRules');
+        if ( ! $result->status)
         {
-            if ($validator->getErrorsToArray())
-            {
-                foreach ($validator->getErrorsToArray() as $message)
-                {
-                    Message::merge(array('errors' => $message))->flash();
-                }
-            }
             return Redirect::to($this->objectUrl)->withInput();
         }
 
@@ -305,17 +296,10 @@ EOE;
     {
         $input = Input::all();
 
-        $validator = new FilerValidator(App::make('validator'));
-        $validator->setRule('fileUpdateRules');
-        if ( ! $validator->with($input)->passes())
+        $validator = new FilerValidator();
+        $result    = $validator->valid($input, 'fileUpdateRules');
+        if ( ! $result->status)
         {
-            if ($validator->getErrorsToArray())
-            {
-                foreach ($validator->getErrorsToArray() as $message)
-                {
-                    Message::merge(array('errors' => $message))->flash();
-                }
-            }
             return Redirect::to($this->objectUrl.'/index/'.$input['folder_id'])->withInput();
         }
 
@@ -325,8 +309,7 @@ EOE;
         $file->alt_attribute = $input['alt_attribute'];
         $file->save();
 
-        Message::merge(array('success' => "File updated"))->flash();
-
+        Message::output('flash', 'success', 'File updated');
         return Redirect::to($this->objectUrl.'/'.$toWhere.'/'.$file->folder_id);
     }
 

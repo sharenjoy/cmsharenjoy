@@ -5,13 +5,11 @@ use Sentry, Mail, Config, Message, Redirect, Str;
 
 class UserController extends ObjectBaseController {
 
-    protected $appName = 'user';
-
     protected $functionRules = [
-        'list'   => true,
-        'create' => true,
-        'update' => true,
-        'delete' => true,
+        'list'          => true,
+        'create'        => true,
+        'update'        => true,
+        'delete'        => true,
         'resetpassword' => true,
     ];
 
@@ -28,23 +26,6 @@ class UserController extends ObjectBaseController {
         parent::__construct();
     }
 
-    protected function controllerFinalProcess($model = null)
-    {
-        $model = $model ?: $this->repository->getModel();
-        
-        switch ($this->onAction) {
-            case 'get-index':
-                break;
-            case 'get-update':
-                break;
-            
-            default:
-                break;
-        }
-
-        return $model;
-    }
-
     public function getResetpassword($id)
     {
         try
@@ -56,7 +37,7 @@ class UserController extends ObjectBaseController {
 
             if ( ! $user->save())
             {
-                Message::merge(array('errors' => trans('cmsharenjoy::admin.some_wrong')))->flash();
+                Message::output('flash', 'errors', trans('cmsharenjoy::admin.some_wrong'));
                 return Redirect::to($this->urlSegment.'/login');
             }
 
@@ -81,11 +62,11 @@ class UserController extends ObjectBaseController {
         }
         catch (\Cartalyst\Sentry\Users\UserNotFoundException $e)
         {
-            Message::merge(array('errors' => trans('cmsharenjoy::admin.user_not_found')))->flash();
+            Message::output('flash', 'errors', trans('cmsharenjoy::admin.user_not_found'));
             return Redirect::to($this->objectUrl);
         }
 
-        Message::merge(array('success' => trans('cmsharenjoy::admin.sent_reset_code')))->flash();
+        Message::output('flash', 'success', trans('cmsharenjoy::admin.sent_reset_code'));
         return Redirect::to($this->objectUrl);
     }
 

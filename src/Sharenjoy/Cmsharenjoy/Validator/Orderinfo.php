@@ -12,7 +12,6 @@ class Orderinfo extends AbstractLaravelValidator {
     public $rules = [
         'name'    => 'required',
         'mobile'  => 'required',
-        'email'   => 'required|email',
         'address' => 'required'
     ];
 

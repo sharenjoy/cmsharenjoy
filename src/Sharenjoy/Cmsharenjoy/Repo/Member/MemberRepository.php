@@ -6,81 +6,41 @@ use Sentry, Input, Mail, Hash, Config, Session, Message;
 
 class MemberRepository extends EloquentBaseRepository implements MemberInterface {
 
-    protected $repoName = 'member';
-
     public function __construct(Member $member, ValidableInterface $validator)
     {
         $this->validator = $validator;
         $this->model     = $member;
-    }
 
-    public function setFilterQuery($model = null, $query)
-    {
-        $model = $model ?: $this->model;
-
-        if (count($query) !== 0)
-        {
-            extract($query);
-        }
-        return $model;                     
+        parent::__construct();
     }
 
     public function create(array $input)
-    {   
-        if ( ! $this->validator->with($input)->passes())
-        {
-            if ($this->validator->getErrorsToArray())
-            {
-                foreach ($this->validator->getErrorsToArray() as $message)
-                {
-                    Message::merge(array('errors' => $message))->flash();
-                }
-            }
-            return false;
-        }
-        
+    {
+        $result = $this->validator->valid($input);
+        if ( ! $result->status) return false;
+
+        $input = Poster::compose($input, $this->model->createComposeItem);
         $input['password'] = Hash::make($input['password']);
 
-        // create user
-        $member = $this->model->create($input);
-        $this->store($member->id, array('sort' => $member->id));
+        // Create the model
+        $model = $this->model->create($input);
 
-        return $member;
+        return $model;
     }
 
-    public function update($id, array $input)
+    public function update($id, array $input, $vaidatorRules = 'updateRules')
     {
-        $this->validator->setRule('updateRules');
+        $result = $this->validator->valid($input, $vaidatorRules, [$this->model->uniqueFields, $id]);
+        if ( ! $result->status) return false;
 
-        if( ! empty($this->model->uniqueFields))
-        {
-            $this->validator->setUniqueUpdateFields($this->model->uniqueFields, $id);
-        }
-        if ( ! $this->validator->with($input)->passes())
-        {
-            if ($this->validator->getErrorsToArray())
-            {
-                foreach ($this->validator->getErrorsToArray() as $message)
-                {
-                    Message::merge(array('errors' => $message))->flash();
-                }
-            }
-            return false;
-        }
+        // Compose some necessary variable to input data
+        $input = Poster::compose($input, $this->model->updateComposeItem);
 
-        // Find the user using the user id
-        $member = $this->model->find($id)->fill($input);
+        // Update the model
+        $model = $this->model->find($id)->fill($input);
+        $model->save();
 
-        // Update the user
-        if ( ! $member->save())
-        {
-            Message::merge(array('errors' => 'User information was not updated'))->flash();
-            return false;
-        }
-
-        return true;
+        return $model;
     }
-
-    protected function composeInputData(array $data) { return $data; }
 
 }

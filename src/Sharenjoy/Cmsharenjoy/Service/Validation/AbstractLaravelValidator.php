@@ -2,7 +2,7 @@
 
 use Illuminate\Validation\Factory;
 use Sharenjoy\Cmsharenjoy\Exception\ValidatorRulesNotFoundException;
-use App, Message;
+use App, Message, StdClass;
 
 abstract class AbstractLaravelValidator implements ValidableInterface {
 
@@ -144,7 +144,7 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
      * @param  array The type of message, it can be 'messageBeg'
      * @return boolean
      */
-    public function valid(array $input, $ruleName = null, $uniqueField = array(), $errorType = 'flashMessageBag')
+    public function valid(array $input, $ruleName = null, $uniqueField = array(), $errorType = 'flash')
     {
         // Set rule by other rules
         if (isset($this->$ruleName))
@@ -161,14 +161,20 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
             }
         }
 
-        $result = $this->with($input)->passes();
+        $result = new StdClass;
+        $result->status = $this->with($input)->passes();
 
-        if ( ! $result)
+        if ( ! $result->status)
         {
             switch ($errorType)
             {
-                case 'flashMessageBag':
+                case 'flash':
                     $this->getErrorsToFlashMessageBag();
+                    $result->message = 'MessageBag';
+                    break;
+
+                case 'json':
+                    $result->message = Message::output($errorType, 'errors', $this->getErrorsToArray());
                     break;
                 
                 default:

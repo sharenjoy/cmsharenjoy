@@ -2,22 +2,15 @@
 
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
 use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;
-use StdClass, Str, Input, Debugbar;
 
 class TagRepository extends EloquentBaseRepository implements TagInterface {
 
-    /**
-     * This value is a field of database that
-     * responsible for converting to slug
-     * @var string
-     */
-    protected $slug = 'tag';
-
-    // Class expects an Eloquent model
     public function __construct(Tag $tag, ValidableInterface $validator)
     {
         $this->validator = $validator;
         $this->model     = $tag;
+
+        parent::__construct();
     }
 
     /**

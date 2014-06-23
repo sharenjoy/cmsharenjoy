@@ -1,28 +1,31 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Repo\Tag;
+<?php namespace Sharenjoy\Cmsharenjoy\Repo\Qna;
 
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseModel;
 
-class Tag extends EloquentBaseModel {
+class Qna extends EloquentBaseModel {
 
-    protected $table = 'tags';
+    protected $table    = 'qnas';
 
-    protected $fillable = array(
+    protected $fillable = [
         'user_id',
-        'tag',
-        'slug'
-    );
+        'status_id',
+        'title',
+        'answer',
+        'description',
+        'sort'
+    ];
 
-    public $uniqueFields = ['slug'];
+    public $uniqueFields = [];
     
     public $createComposeItem = [
-        'slug|title',
         'user',
-        'sort',
+        'status',
+        'sort'
     ];
 
     public $updateComposeItem = [
-        'slug|title',
         'user',
+        'status'
     ];
 
     public $processItem = [
@@ -37,7 +40,9 @@ class Tag extends EloquentBaseModel {
     public $filterFormConfig = [];
 
     public $formConfig = [
-        'tag'         => ['type'  => 'text', 'order' => '10']
+        'title'       => ['order' => '10'],
+        'answer'      => ['order' => '20'],
+        'description' => ['order' => '30'],
     ];
 
     public $createFormConfig = [];
@@ -54,11 +59,6 @@ class Tag extends EloquentBaseModel {
     public function username($field = __FUNCTION__)
     {
         $this->$field = $this->author->name;
-    }
-
-    public function posts()
-    {
-        return $this->belongsToMany('Sharenjoy\Cmsharenjoy\Repo\Post\Post', 'posts_tags', 'tag_id', 'post_id');
     }
 
 }

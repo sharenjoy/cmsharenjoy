@@ -85,6 +85,11 @@ return array(
         
         // For image
         'img'                   => 'image',
+        'img1'                  => 'image',
+        'img2'                  => 'image',
+        'img3'                  => 'image',
+        'img4'                  => 'image',
+        'img5'                  => 'image',
         'image'                 => 'image',
         'imagename'             => 'image',
 
@@ -98,20 +103,6 @@ return array(
 
         // For category
         'category_id'           => 'category',
-    ],
-
-
-    /**
-    * Frequent option value can map
-    * to their respective input types.
-    */
-    'commonOption' =>
-    [
-        'status' => [
-            '0' => Lang::get('cmsharenjoy::option.pleaseSelect'),
-            '1' => Lang::get('cmsharenjoy::option.enable'),
-            '2' => Lang::get('cmsharenjoy::option.disable'),
-        ],
     ],
 
 );

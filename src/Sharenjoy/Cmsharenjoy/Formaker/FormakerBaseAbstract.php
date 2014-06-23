@@ -77,9 +77,20 @@ Abstract class FormakerBaseAbstract {
      * option value should be.
      * @param string $name
      */
-    protected function guessOption()
+    protected function guessOption($option)
     {
-        return array_get(Config::get('cmsharenjoy::formaker.commonOption'), $this->name) ?: ['1'=>'Yes', '2'=>'No'];
+        if (is_array($option))
+        {
+            return $option;
+        }
+        elseif(is_string($option))
+        {
+            return Config::get('cmsharenjoy::options.'.$option);
+        }
+        else
+        {
+            return Config::get('cmsharenjoy::options.'.$this->name) ?: ['1'=>'Yes', '2'=>'No'];
+        }
     }
 
     /**

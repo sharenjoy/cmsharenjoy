@@ -1,8 +1,8 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Controllers;
 
-use Sharenjoy\Cmsharenjoy\Repo\Report\ReportInterface;
+use Sharenjoy\Cmsharenjoy\Repo\Qna\QnaInterface;
 
-class ReportController extends ObjectBaseController {
+class QnaController extends ObjectBaseController {
 
     protected $functionRules = [
         'list'   => true,
@@ -14,14 +14,13 @@ class ReportController extends ObjectBaseController {
 
     protected $listConfig = [
         'title'        => ['name'=>'title',        'type'=>'',       'align'=>'',       'width'=>''    ],
-        'link'         => ['name'=>'link',         'type'=>'link',   'align'=>'center', 'width'=>'80'  ],
-        'img'          => ['name'=>'image',        'type'=>'image',  'align'=>'center', 'width'=>'80'  ],
+        'answer'       => ['name'=>'answer',       'type'=>'',       'align'=>'',       'width'=>''    ],
         'created_at'   => ['name'=>'created',      'type'=>'',       'align'=>'center', 'width'=>'20%' ],
     ];
 
-    public function __construct(ReportInterface $report)
+    public function __construct(QnaInterface $repo)
     {
-        $this->repository = $report;
+        $this->repository = $repo;
         parent::__construct();
     }
 

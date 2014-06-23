@@ -1,19 +1,11 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Repo\Product;
 
-use Eloquent;
+use Sharenjoy\Cmsharenjoy\Core\EloquentBaseModel;
 
-class Product extends Eloquent {
+class Product extends EloquentBaseModel {
 
-    /**
-     * The table to get the data from
-     * @var string
-     */
     protected $table    = 'products';
 
-    /**
-     * These are the mass-assignable keys
-     * @var array
-     */
     protected $fillable = array(
         'user_id',
         'category_id',
@@ -24,9 +16,28 @@ class Product extends Eloquent {
         'img'
     );
 
+    public $uniqueFields = [];
+    
+    public $createComposeItem = ['user', 'sort'];
+    public $updateComposeItem = ['user'];
+
+    public $processItem = [
+        'get-index'   => [],
+        'get-sort'    => [],
+        'get-create'  => [],
+        'get-update'  => [],
+        'post-create' => [],
+        'post-create' => [],
+    ];
+
+    public $filterFormConfig = [
+        'category_id'       => ['args' => ['category'=>'Product']],
+        'keyword'           => [],
+    ];
+
     public $formConfig = [
         'img'               => ['order' => '5'],
-        'category_id'       => ['order' => '8'],
+        'category_id'       => ['order' => '8', 'args' => ['category'=>'Product']],
         'title'             => ['order' => '10'],
         'title_jp'          => ['order' => '20'],
         'price'             => ['order' => '30'],
@@ -36,20 +47,33 @@ class Product extends Eloquent {
     public $createFormConfig = [];
     public $updateFormConfig = [];
 
-    /**
-     * Indicates if the model should soft delete.
-     * @var bool
-     */
-    protected $softDelete = false;
+    public $createFormDeny   = [];
+    public $updateFormDeny   = [];
+
 
     public function author()
     {
         return $this->belongsTo('Sharenjoy\Cmsharenjoy\User\User', 'user_id');
     }
 
+    public function username($field = __FUNCTION__)
+    {
+        $this->$field = $this->author->name;
+    }
+
     public function categories()
     {
         return $this->belongsTo('Sharenjoy\Cmsharenjoy\Repo\Category\Category', 'category_id');
+    }
+
+    public function scopeCategory_id($query, $value)
+    {
+        return $value ? $query->where('category_id', $value) : $query;
+    }
+
+    public function scopeKeyword($query, $value)
+    {
+        return $value ? $query->where('title', 'LIKE', "%$value%") : $query;
     }
 
 }

@@ -1,19 +1,11 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Repo\Order;
 
-use Eloquent;
+use Sharenjoy\Cmsharenjoy\Core\EloquentBaseModel;
 
-class OrderDetail extends Eloquent {
+class OrderDetail extends EloquentBaseModel {
 
-    /**
-     * The table to get the data from
-     * @var string
-     */
     protected $table    = 'order_detail';
 
-    /**
-     * These are the mass-assignable keys
-     * @var array
-     */
     protected $fillable = array(
         'order_id',
         'product_id',
@@ -22,6 +14,22 @@ class OrderDetail extends Eloquent {
         'quantity',
         'price'
     );
+
+    public $uniqueFields = [];
+    
+    public $createComposeItem = [];
+    public $updateComposeItem = [];
+
+    public $processItem = [
+        'get-index'   => [],
+        'get-sort'    => [],
+        'get-create'  => [],
+        'get-update'  => [],
+        'post-create' => [],
+        'post-create' => [],
+    ];
+
+    public $filterFormConfig = [];
 
     public $formConfig = [
         'img'               => ['order' => '5'],
@@ -35,17 +43,14 @@ class OrderDetail extends Eloquent {
     public $createFormConfig = [];
     public $updateFormConfig = [];
 
-    /**
-     * Indicates if the model should soft delete.
-     * @var bool
-     */
-    protected $softDelete = false;
+    public $createFormDeny   = [];
+    public $updateFormDeny   = [];
 
     public $timestamps = false;
 
-    public function orderDetail()
+    public function order()
     {
-        return $this->belongsTo('Sharenjoy\Cmsharenjoy\Order\Order', 'order_id');
+        return $this->belongsTo('Sharenjoy\Cmsharenjoy\Repo\Order\Order', 'order_id');
     }
 
 }

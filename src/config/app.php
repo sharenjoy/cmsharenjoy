@@ -1,17 +1,20 @@
 <?php
 
 /**
- * The application configuration file, used to setup globally used values throughout the application
+ * The application configuration file, used to setup 
+ * globally used values throughout the application
  */
 return array(
 
     /**
-     * The name of the application, will be used in the main management areas of the application
+     * The name of the application, will be used in 
+     * the main management areas of the application
      */
     'name' => 'CMS',
 
     /**
-     * The email address associated with support enquires on a technical basis
+     * The email address associated with support 
+     * enquires on a technical basis
      */
     'support_email' => '',
 
@@ -36,9 +39,14 @@ return array(
     'commonRepoLayoutDirectory' => 'repo',
 
     /**
-     * The menu items shown at the top and side of the application
+     * The menu items shown at the top and side 
+     * of the application
      */
     'menu_items' => array(
+        'post' => array(
+            'name' => 'menu.post',
+            'icon' => 'entypo-doc-text',
+        ),
         'report' => array(
             'name' => 'menu.report',
             'icon' => 'entypo-doc-text',
@@ -55,6 +63,14 @@ return array(
                     'name' => 'menu.product_category'
                 ),
             )
+        ),
+        // 'tag' => array(
+        //     'name' => 'menu.tag',
+        //     'icon' => 'entypo-tag',
+        // ),
+        'qna' => array(
+            'name' => 'menu.qna',
+            'icon' => 'entypo-lamp',
         ),
         'filer' => array(
             'name' => 'menu.file',
@@ -76,5 +92,17 @@ return array(
             'name' => 'menu.setting',
             'icon' => 'entypo-cog',
         )
-    )
+    ),
+    
+    /**
+     * This configuration file is used to setup 
+     * the initial user and seed to the database
+     */
+    'administrator' => [
+        'email'         => 'example@example.com',
+        'name'          => 'Example',
+        'password'      => 'password',
+        'phone'         => '0939999999',
+    ],
+
 );

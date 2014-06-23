@@ -1,8 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Exception;
 
 use Illuminate\Support\Contracts\MessageProviderInterface;
-use Exception, Redirect, Lang;
-use Debugbar;
+use Exception;
 
 class PrintHandler implements HandlerInterface {
 

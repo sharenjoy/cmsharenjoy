@@ -13,11 +13,19 @@
 
         <title>@yield('title')</title>
         
+        <!-- Assets styles Starts -->
         {{Theme::asset()->styles()}}
+        <!-- Assets styles Ends -->
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic">
-
+        
+        <!-- Section styles Starts -->
         @section('styles')
         @show
+        <!-- Section styles Ends -->
+        
+        <!-- Final styles Starts -->
+        {{Theme::asset()->container('final')->styles()}}
+        <!-- Final styles Ends -->
 
         <!--[if lt IE 9]><script src="{{asset('packages/sharenjoy/cmsharenjoy/js/ie8-responsive-file-warning.js')}}"></script><![endif]-->
 
@@ -83,7 +91,7 @@
                     <li class="{{ Request::is( "$urlSegment" ) ? 'active' : '' }}">
                         <a href="{{ url( $urlSegment ) }}">
                             <i class="entypo-gauge"></i>
-                            <span>{{trans('cmsharenjoy::app.menu.dashboard')}}</span>
+                            <span>{{trans('cmsharenjoy::app.menu.dash')}}</span>
                         </a>
                     </li>
                     
@@ -326,26 +334,50 @@
             <!-- Filemanager modal Ends -->
         @endif
 
-        <!-- Modal -->
+        <!-- Modal Starts -->
         @yield('modal')
         <!-- Modal Ends -->
         
         
         <script type="text/javascript">
         @section('main-scripts')
-            var sharenjoy          = {};
-            sharenjoy.APPURL       = "{{$objectUrl}}";
-            sharenjoy.SITEURL      = "{{Config::get('app.url')}}";
-            sharenjoy.BASEURI      = "{{base_path()}}";
-            sharenjoy.PUBLICURI    = "{{public_path()}}";
-            sharenjoy.csrf_token   = "{{csrf_token()}}";
+            var sharenjoy = {
+                "APPURL": "{{$objectUrl}}",
+                "SITEURL": "{{Config::get('app.url')}}",
+                "BASEURI": "{{base_path()}}",
+                "PUBLICURI": "{{public_path()}}",
+                "csrf_token": "{{csrf_token()}}"
+            };
+            
+            var opts = {
+                "closeButton": true,
+                "debug": false,
+                "positionClass": "toast-bottom-left",
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "3000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
         @show
         </script>
-
+        
+        <!-- Assets scripts Starts -->
         {{Theme::asset()->scripts()}}
-
+        <!-- Assets scripts Ends -->
+        
+        <!-- Section scripts Starts -->
         @section('scripts')
         @show
-
+        <!-- Section scripts Ends -->
+        
+        <!-- Final scripts Starts -->
+        {{Theme::asset()->container('final')->scripts()}}
+        <!-- Final scripts Ends -->
+        
     </body>
 </html>

@@ -31,75 +31,86 @@
                         @include('cmsharenjoy::partials.messaging')
                         
                         <div class="row">
-                            <div class="col-md-6">
                             
-                                <ul class="nav nav-tabs bordered"><!-- available classes "bordered", "right-aligned" -->
+                            @foreach($items as $key => $item)
+                            <div class="col-md-12">
+                            
+                                <!-- available classes "bordered", "right-aligned" -->
+                                <ul class="nav nav-tabs bordered">
                                     <li class="active">
-                                        <a href="#general" data-toggle="tab">
+                                        <a href="#{{$key}}" data-toggle="tab">
                                             <span class="visible-xs"><i class="entypo-home"></i></span>
-                                            <span class="hidden-xs">General</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#file" data-toggle="tab">
-                                            <span class="visible-xs"><i class="entypo-home"></i></span>
-                                            <span class="hidden-xs">File</span>
+                                            <span class="hidden-xs">{{trans('cmsharenjoy::setting.'.$key)}}</span>
                                         </a>
                                     </li>
                                 </ul>
                                 
                                 <div class="tab-content">
-                                    <div class="tab-pane active" id="general">
+                                    <div class="tab-pane active" id="{{$key}}">
                                             
-                                        {{ Form::open( array( 'url'=>$objectUrl , 'class'=>'form-horizontal form-groups-bordered' , 'role'=>'form', 'id'=>'item-form' ) ) }}
+                                        {{Form::open(array('url'=>$objectUrl, 'class'=>'form-horizontal form-groups-bordered', 'role'=>'form', 'id'=>'item-form'))}}
                                             
-                                            @foreach($items['general'] as $item)
-                                            <div class="form-group">
-                                                <div class="col-sm-12 col-md-12">
-                                                    <p>{{ Form::label( $item->key , $item->label , array( 'class'=>'control-label' ) ) }}</p>
-                                                    {{ Form::text( $item->key , $item->value , array( 'class'=>'form-control' , 'placeholder'=>'' ) ) }}
-                                                    <span class="help-block">{{$item->description}}</span>
+                                            @foreach($item['item'] as $value)
+                                            <div class="form-group setting-input">
+                                                <div class="col-sm-6 col-md-6">
+                                                    <p>{{Form::label($value->key, trans('cmsharenjoy::setting.label.'.$value->key), array('class'=>'control-label'))}}</p>
+
+                                                    @if ($value->type == 'text')
+                                                        {{Form::text(
+                                                            $value->key, 
+                                                            $value->value, 
+                                                            array('class'=>'form-control', 'data-id'=>$value->id)
+                                                        )}}
+                                                    @elseif ($value->type == 'select')
+                                                        {{Form::select(
+                                                            $value->key, 
+                                                            Config::get('cmsharenjoy::options.'. $value->key), 
+                                                            $value->value,
+                                                            array('class'=>'form-control', 'data-id'=>$value->id)
+                                                        )}}
+                                                    @elseif ($value->type == 'radio')
+                                                        @foreach (Config::get('cmsharenjoy::options.'. $value->key) as $optionKey => $optionValue)
+                                                            @if ($value->value == $optionKey)
+                                                                {{Form::radio($value->key, $optionKey, true)}}
+                                                            @else
+                                                                {{Form::radio($value->key, $optionKey)}}
+                                                            @endif
+                                                            <label>
+                                                            {{$optionValue}}&nbsp;&nbsp;
+                                                            </label>
+                                                        @endforeach
+                                                    @elseif ($value->type == 'checkbox')
+                                                        @foreach (Config::get('cmsharenjoy::options.'. $value->key) as $optionKey => $optionValue)
+                                                            <?php
+                                                                $options = explode(',', $value->value);
+                                                            ?>
+                                                            @if (in_array($optionKey, $options))
+                                                                {{Form::checkbox($value->key, $optionKey, true)}}
+                                                            @else
+                                                                {{Form::checkbox($value->key, $optionKey)}}
+                                                            @endif
+                                                            <label>
+                                                            {{$optionValue}}&nbsp;&nbsp;
+                                                            </label>
+                                                        @endforeach
+                                                    @endif
+                                                </div>
+                                                <div class="col-sm-6 col-md-6">
+                                                    <span class="help-block">{{trans('cmsharenjoy::setting.description.'.$value->key)}}</span>
                                                 </div>
                                             </div>
                                             @endforeach
-                                            
-                                            <div class="form-group">
-                                                <div class="col-sm-12 col-md-12">
-                                                    {{Form::hidden('type', 'general')}}
-                                                    {{ Form::submit('Save' , array('class'=>'btn btn-large btn-success')) }}
-                                                </div>
-                                            </div>
 
-                                        {{ Form::close() }}
-                                
-                                    </div>
-
-                                    <div class="tab-pane" id="file">
-                                            
-                                        {{ Form::open( array( 'url'=>$objectUrl , 'class'=>'form-horizontal form-groups-bordered' , 'role'=>'form', 'id'=>'item-form' ) ) }}
-                                            
-                                            @foreach($items['file'] as $item)
-                                            <div class="form-group">
-                                                <div class="col-sm-12 col-md-12">
-                                                    <p>{{ Form::label( $item->key , $item->label , array( 'class'=>'control-label' ) ) }}</p>
-                                                    {{ Form::text( $item->key , $item->value , array( 'class'=>'form-control' , 'placeholder'=>'' ) ) }}
-                                                    <span class="help-block">{{$item->description}}</span>
-                                                </div>
-                                            </div>
-                                            @endforeach
-                                            
-                                            <div class="form-group">
-                                                <div class="col-sm-12 col-md-12">
-                                                    {{Form::hidden('type', 'file')}}
-                                                    {{ Form::submit('Save' , array('class'=>'btn btn-large btn-success')) }}
-                                                </div>
-                                            </div>
-
-                                        {{ Form::close() }}
+                                        {{Form::close()}}
                                 
                                     </div>
                                 </div>
                             </div>
+                            @if ($item !== end($items))
+                            <hr>
+                            @endif
+                            @endforeach
+
                         </div>
                     </div>
                 </div>
@@ -111,4 +122,88 @@
 
 @section('scripts')
     @parent
+
+    <script>
+
+        $(function(){
+            
+            var $activeTag;
+            $('.setting-input input, .setting-input select').on('change', function (e) {
+                e.preventDefault();
+
+                $activeTag = $(this);
+                $active = $(this).parent();
+                
+                // console.log($active.find('div')['length']);
+                if ($active.find('div')['length'] == 0) {
+                    $active.append('<div style="margin-top:5px;">{{$buttons}}</div>');
+                };
+            });
+
+            $('.setting-input').delegate('button[class="btn btn-reset"]', 'click', function (e) {
+                e.preventDefault();
+                console.log($activeTag);
+                if ($activeTag[0]['tagName'] == 'SELECT')
+                {
+                    $activeTag.val(function() {
+                        return $(this).find('option').filter(function () {
+                            return $(this).prop('defaultSelected');
+                        }).val();
+                    });
+                }
+                else if ($activeTag[0]['tagName'] == 'INPUT' && $activeTag[0]['type'] == 'text')
+                {
+                    $activeTag.val($activeTag[0]['defaultValue']);
+                }
+                else if ($activeTag[0]['tagName'] == 'INPUT' && $activeTag[0]['type'] == 'radio')
+                {
+                    $activeTag.parent().find('input[type="radio"]').each(function () {
+                        console.log($(this));
+                        $(this).prop('checked', $(this)[0]['defaultChecked']);
+                    });
+                }
+                else if ($activeTag[0]['tagName'] == 'INPUT' && $activeTag[0]['type'] == 'checkbox')
+                {
+                    $activeTag.parent().find('input[type="checkbox"]').each(function () {
+                        console.log($(this));
+                        $(this).prop('checked', $(this)[0]['defaultChecked']);
+                    });
+                }
+
+                $(this).parent().fadeOut(function(){
+                    $(this).remove();
+                });
+            });
+
+            $('.setting-input').delegate('button[class="btn btn-success btn-save"]', 'click', function (e) {
+                e.preventDefault();
+
+                var send_data = {};
+
+                send_data.id    = $activeTag.attr('data-id');
+                send_data.item  = $activeTag.attr('name');
+                send_data.type  = $activeTag[0]['type'];
+                
+                if ($activeTag[0]['type'] == 'checkbox') {
+                    send_data.value = $activeTag.parent().find('input[type="checkbox"]').serialize();
+                } else {
+                    send_data.value = $activeTag.val();
+                };
+                console.log(send_data);
+                
+                $.post(sharenjoy.APPURL + "/store", send_data, function(data, status) {
+                    // console.log(data);
+                    if (data.status == 'success') {
+                        toastr.success("儲存成功", "成功", opts);
+                    }
+                });
+
+                $(this).parent().fadeOut(function(){
+                    $(this).remove();
+                });
+            });
+
+        });
+
+    </script>
 @stop

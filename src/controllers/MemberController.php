@@ -5,13 +5,11 @@ use Sentry, Mail, Config, Message, Redirect, Str, Hash;
 
 class MemberController extends ObjectBaseController {
 
-    protected $appName = 'member';
-
     protected $functionRules = [
-        'list'   => true,
-        'create' => true,
-        'update' => true,
-        'delete' => true,
+        'list'          => true,
+        'create'        => true,
+        'update'        => true,
+        'delete'        => true,
         'resetpassword' => true,
     ];
 
@@ -38,7 +36,7 @@ class MemberController extends ObjectBaseController {
 
         if ( ! $user->save())
         {
-            Message::merge(array('errors' => trans('cmsharenjoy::admin.some_wrong')))->flash();
+            Message::output('flash', 'errors', trans('cmsharenjoy::admin.some_wrong'));
             return Redirect::to($this->urlSegment.'/login');
         }
 
@@ -56,7 +54,7 @@ class MemberController extends ObjectBaseController {
             $message->to($user->email);
         });
 
-        Message::merge(array('success' => trans('cmsharenjoy::admin.sent_reset_code')))->flash();
+        Message::output('flash', 'success', trans('cmsharenjoy::admin.sent_reset_code'));
         return Redirect::to($this->objectUrl);
     }
 

@@ -4,8 +4,6 @@ use Sharenjoy\Cmsharenjoy\Repo\Tag\TagInterface;
 
 class TagController extends ObjectBaseController {
 
-    protected $appName = 'tag';
-
     protected $functionRules = [
         'list'   => true,
         'create' => true,

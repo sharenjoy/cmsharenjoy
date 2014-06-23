@@ -1,68 +1,74 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Repo\Post;
 
-use Eloquent;
+use Sharenjoy\Cmsharenjoy\Core\EloquentBaseModel;
 
-class Post extends Eloquent {
+class Post extends EloquentBaseModel {
 
-    /**
-     * The table to get the data from
-     * @var string
-     */
     protected $table    = 'posts';
 
-    /**
-     * It's the unique fields
-     * @var array
-     */
-    public $uniqueFields = ['slug'];
-
-    /**
-     * These are the mass-assignable keys
-     * @var array
-     */
     protected $fillable = array(
         'user_id',
+        'status_id',
         'title',
         'slug',
-        'content'
+        'content',
+        'sort'
     );
 
-    public $formConfig = [
-        'title' => [
-            'args' => [
-                'placeholder'=>'Post title',
-            ],
-            'order' => '10'
-        ],
-        'tag' => [
-            'input' => 'tags_csv',
-            'args'  => [
-                'placeholder'=>'Comma Separsted Tags',
-                'help'=>'Press enter or type a comma after each tag to set it.'
-            ],
-            'order' => '20'
-        ],
-        'content' => [
-            'args' => [
-                'placeholder'=>'Post content',
-            ],
-            'order' => '30'
-        ]
+    public $uniqueFields = ['slug'];
+    
+    public $createComposeItem = [
+        'slug|title',
+        'user',
+        'status',
+        'sort'
+    ];
 
+    public $updateComposeItem = [
+        'slug|title',
+        'user',
+        'status'
+    ];
+
+    public $processItem = [
+        'get-index'   => [],
+        'get-sort'    => [],
+        'get-create'  => [],
+        'get-update'  => [],
+        'post-create' => [],
+        'post-create' => [],
+    ];
+
+    public $filterFormConfig = [
+        // 'tag'         => ['type' => 'select','model'=>'tag','item'=>'tag','args'=>['placeholder'=>'This is a tag']],
+        // 'status'      => [],
+        // 'language'    => ['type' => 'select', 'option' => ['1'=>'tw', '2'=>'en']],
+        // 'keyword'     => [],
+        // 'date_range'  => ['type' => 'daterange'],
+        // 'start_date'  => ['type' => 'datepicker'],
+        // 'color'       => ['type' => 'colorpicker'],
+    ];
+
+    public $formConfig = [
+        'title'       => ['order' => '10'],
+        // 'tag'         => ['input' => 'tags_csv', 'order' => '20'],
+        'content'     => ['order' => '30']
     ];
 
     public $createFormConfig = [];
     public $updateFormConfig = [];
 
-    /**
-     * Indicates if the model should soft delete.
-     * @var bool
-     */
-    protected $softDelete = false;
+    public $createFormDeny   = [];
+    public $updateFormDeny   = [];
 
     public function author()
     {
         return $this->belongsTo('Sharenjoy\Cmsharenjoy\User\User', 'user_id');
+    }
+
+    public function username($field = __FUNCTION__)
+    {
+        $this->$field = $this->author->name;
     }
 
     public function tags()

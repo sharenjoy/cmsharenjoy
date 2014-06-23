@@ -22,7 +22,6 @@ This is cmsharenjoy.
     'Sharenjoy\Cmsharenjoy\Formaker\FormakerServiceProvider',
     'Sharenjoy\Cmsharenjoy\Service\Categorize\CategorizeServiceProvider',
     'Intervention\Image\ImageServiceProvider',
-    'Moltin\Cart\CartServiceProvider',
 
 ### Adding the alices to app.php
 
@@ -30,7 +29,6 @@ This is cmsharenjoy.
     'Theme'           => 'Teepluss\Theme\Facades\Theme',
     'Sentry'          => 'Cartalyst\Sentry\Facades\Laravel\Sentry',
     'Image'           => 'Intervention\Image\Facades\Image',
-    'Cart'            => 'Moltin\Cart\Facade',
 
 ### Publishing the configuration(Optional)
 <!-- Publish the configurations for this package in order to change them to your liking: -->
@@ -63,19 +61,6 @@ This is cmsharenjoy.
         'model' => '\Sharenjoy\Cmsharenjoy\User\User',
 
     ),
-
-### Modify Sentry user model line 302 don't thrown exception
-    
-    // Vendor/Cartalyst/Sentry/src/Cartalyst/Sentry/Users/Eloquent/User
-
-    // Check if the user already exists
-    $query = $this->newQuery();
-    $persistedUser = $query->where($this->getLoginName(), '=', $login)->first();
-
-    if ($persistedUser and $persistedUser->getId() != $this->getId())
-    {
-        // throw new UserExistsException("A user already exists with login [$login], logins must be unique for users.");
-    }
 
 ### Migrating and seeding the database
 <!-- Seed the database, this pretty much just seeds an example user and settings. Migration is pretty simple, ensure your database config is setup and run this: -->

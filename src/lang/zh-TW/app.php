@@ -4,7 +4,7 @@ return array(
 
     // For menu
     'menu' => [
-        'dashboard'             => '控制台',
+        'dash'                  => '控制台',
         'file'                  => '檔案管理',
         'user'                  => '使用者管理',
         'setting'               => '系統設定',
@@ -18,9 +18,10 @@ return array(
         'home'                  => '首頁管理',
         'product'               => '食材管理',
         'order'                 => '訂單管理',
+        'qna'                   => '問答管理',
     ],
     
-    'dashboard'                 => '控制台',
+    'dash'                      => '控制台',
     'report'                    => '媒體報導',
     'post'                      => '消息',
     'tag'                       => '標籤',
@@ -52,7 +53,10 @@ return array(
     'price'                     => '價格',
     'source'                    => '來源',
     'amount'                    => '總價',
+    'order'                     => '訂單',
     'order_sn'                  => '訂單編號',
+    'qna'                       => '問答Q&A',
+    'process'                   => '處理進度',
 
 
     // For form    
@@ -90,6 +94,9 @@ return array(
         'address'               => '寄送地址',
         'sn'                    => '訂單編號',
         'totalamount'           => '總價',
+        'answer'                => '回答',
+        'easy_contact_time_id'  => '方便聯絡時間',
+        'process_id'            => '處理進度',
 
 
         'placeholder' => [

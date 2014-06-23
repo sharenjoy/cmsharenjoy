@@ -5,8 +5,6 @@ use Response, Input, Request, Categorize, Session, Poster;
 
 class CategoryController extends ObjectBaseController {
 
-    protected $appName = 'category';
-
     protected $functionRules = [
         'list'   => true,
         'create' => true,
@@ -40,20 +38,20 @@ class CategoryController extends ObjectBaseController {
         parent::__construct();
 
         $this->repository->pushFormConfig('list', array(
-            'type' => array(
-                'args'=>['value'=>ucfirst($this->type), 'readonly'=>'readonly'],
-                'order'=>'10'
-            )
+            'type' => [
+                'args'  => ['value'=>ucfirst($this->type), 'readonly'=>'readonly'],
+                'order' => '10'
+            ]
         ));
 
     }
 
     protected function setHandyUrls()
     {
-        $this->objectUrl = url('/admin/'.$this->appName.'/index/'.$this->type);
-        $this->createUrl = url('/admin/'.$this->appName.'/create/'.$this->type);
-        $this->updateUrl = url('/admin/'.$this->appName.'/update/').'/';
-        $this->deleteUrl = url('/admin/'.$this->appName.'/delete/').'/';
+        $this->objectUrl = url('/admin/'.$this->onController.'/index/'.$this->type);
+        $this->createUrl = url('/admin/'.$this->onController.'/create/'.$this->type);
+        $this->updateUrl = url('/admin/'.$this->onController.'/update/').'/';
+        $this->deleteUrl = url('/admin/'.$this->onController.'/delete/').'/';
     }
 
     public function getIndex()
@@ -127,7 +125,7 @@ class CategoryController extends ObjectBaseController {
 
     protected function storeSortById($model, $sortNum)
     {
-        $this->repository->store($model->id, array('sort' => $sortNum));
+        $this->repository->edit($model->id, array('sort' => $sortNum));
     }
 
 }

@@ -183,9 +183,10 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
     private function createInput($type, $value)
     {
         // Add prefix
-        $name    = $this->fieldPrefix.$this->name;
-        $args    = $this->args;
-        $input   = '';
+        $name         = $this->fieldPrefix.$this->name;
+        $args         = $this->args;
+        $input        = '';
+        $dependencies = [];
 
         switch ($type)
         {
@@ -231,28 +232,31 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
                         'data-stylesheet-url'=>'/packages/sharenjoy/cmsharenjoy/css/wysihtml5-color.css'
                     ), $args);
                 $input = Form::textarea($name, $value, $args);
-                $this->assets[] = ['asset'=>'bootstrap-wysihtml5-css', 'type'=>'style', 'queue'=>false];
-                $this->assets[] = ['asset'=>'wysihtml5-js', 'type'=>'script', 'queue'=>false];
-                $this->assets[] = ['asset'=>'bootstrap-wysihtml5-js', 'type'=>'script', 'queue'=>false];
+                $this->assets[] = 'wysihtml5';
                 break;
 
             case 'select':
-                $option = array_get($args, 'option') ?: $this->guessOption($name);
+                $option = $this->guessOption(array_get($args, 'option'));
                 unset($args['option']);
                 $input = Form::select($name, $option, $value, $args);
                 break;
 
             case 'category':
+                $categoryType = $args['category'];
+                unset($args['category']);
                 $categories = Categorize::getCategoryProvider()->root()
-                                                               ->whereType('Product')
+                                                               ->whereType($categoryType)
                                                                ->orderBy('sort', 'asc')
                                                                ->get();
-                $option = Categorize::tree($categories)->lists('title', 'id');
+                $option = array_merge(
+                    array('0' => Lang::get('cmsharenjoy::option.pleaseSelect')), 
+                    Categorize::tree($categories)->lists('title', 'id')
+                );
                 $input = Form::select($name, $option, $value, $args);
                 break;
 
             case 'checkbox':
-                $option = array_get($args, 'option') ?: $this->guessOption($name);
+                $option = $this->guessOption(array_get($args, 'option'));
                 unset($args['option']);
                 $checked = array_get($args, 'checked') ?: '';
                 unset($args['checked']);
@@ -268,10 +272,11 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
                 break;
 
             case 'radio':
-                $option = array_get($args, 'option') ?: $this->guessOption($name);
+                $option = $this->guessOption(array_get($args, 'option'));
                 unset($args['option']);
                 $checked = array_get($args, 'checked') ?: '';
                 unset($args['checked']);
+                $checked = $value ?: $checked;
                 foreach ($option as $optionKey => $optionValue)
                 {
                     $input .= '<div class="radio"><label>';
@@ -296,7 +301,7 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
                 $input .= '<div class="input-group"><div class="input-group-addon"><i class="entypo-calendar"></i></div>';
                 $input .= Form::text($name, $value, $args);
                 $input .= '</div>';
-                $this->assets[] = ['asset'=>'bootstrap-datepicker-js', 'type'=>'script', 'queue'=>false];
+                $this->assets[] = 'datepicker';
                 break;
 
             case 'daterange':
@@ -312,9 +317,7 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
                 $input .= '<div class="input-group"><div class="input-group-addon"><i class="entypo-calendar"></i></div>';
                 $input .= Form::text($name, $value, $args);
                 $input .= '</div>';
-                $this->assets[] = ['asset'=>'daterangepicker-css', 'type'=>'style', 'queue'=>false];
-                $this->assets[] = ['asset'=>'moment-js', 'type'=>'script', 'queue'=>false];
-                $this->assets[] = ['asset'=>'daterangepicker-js', 'type'=>'script', 'queue'=>false];
+                $this->assets[] = 'daterange';
                 break;
 
             case 'colorpicker':
@@ -324,7 +327,7 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
                 $input .= '<div class="input-group"><div class="input-group-addon"><i class="color-preview"></i></div>';
                 $input .= Form::text($name, $value, $args);
                 $input .= '</div>';
-                $this->assets[] = ['asset'=>'bootstrap-colorpicker-js', 'type'=>'script', 'queue'=>false];
+                $this->assets[] = 'colorpicker';
                 break;
 
             case 'image':
@@ -337,8 +340,10 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
                 $remove       = Lang::get('cmsharenjoy::buttons.remove');
                 $input        = <<<EOE
                     <div class="fileinput fileinput-new file-pick-open-manager">
-                        <div class="fileinput-new thumbnail" id="image-{$this->name}" style="width: 200px; height: 150px;">
-                            <input type="hidden" name="{$this->name}" value="{$value}">
+                        <div data-type="image" class="fileinput-new thumbnail" id="image-{$name}" style="width: 200px; height: 150px;">
+EOE;
+                $input       .= Form::hidden($name, $value);
+                $input       .= <<<EOE
                             <img src="{$img}">
                         </div>
                         <div>
@@ -350,6 +355,7 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
                         </div>
                     </div>
 EOE;
+                $this->assets[] = 'file-picker-reload';
                 break;
 
             case 'file':
@@ -359,8 +365,10 @@ EOE;
                 $remove        = Lang::get('cmsharenjoy::buttons.remove');
                 $input         = <<<EOE
                     <div class="fileinput fileinput-new file-pick-open-manager">
-                        <div class="fileinput-new thumbnail" id="file-{$this->name}" style="width: 100px; height: 100px;">
-                            <input type="hidden" name="{$this->name}" value="">
+                        <div data-type="file" class="fileinput-new thumbnail" id="file-{$name}" style="width: 100px; height: 100px;">
+EOE;
+                $input        .= Form::hidden($name, $value);
+                $input        .= <<<EOE
                             <img src="http://placehold.it/100&text=FILE">
                         </div>
                         <div>
@@ -372,6 +380,7 @@ EOE;
                         </div>
                     </div>
 EOE;
+                $this->assets[] = 'file-picker-reload';
                 break;
                 
             default:
@@ -383,21 +392,25 @@ EOE;
 
     protected function setThemeAssets()
     {
-        $package = 'packages/sharenjoy/cmsharenjoy/';
-        $assetsConfig  = Config::get('cmsharenjoy::assets');
-
         if (count($this->assets))
         {
-            foreach ($this->assets as $key => $value)
+            $path    = Config::get('cmsharenjoy::assets.path');
+            $package = Config::get('cmsharenjoy::assets.package');
+
+            foreach ($this->assets as $asset)
             {
-                if ($value['queue'])
+                $pkg = $package[$asset];
+                foreach ($pkg as $key => $value)
                 {
-                    Theme::asset()->queue($value['type'])
-                                  ->add($value['asset'], $package.$assetsConfig[$value['asset']]);
-                }
-                else
-                {
-                    Theme::asset()->add($value['asset'], $package.$assetsConfig[$value['asset']]);
+                    if ($value['queue'])
+                    {
+                        Theme::asset()->queue($value['type'])
+                                      ->add($key, $path.$value['file']);
+                    }
+                    else
+                    {
+                        Theme::asset()->add($key, $path.$value['file']);
+                    }
                 }
             }
         }

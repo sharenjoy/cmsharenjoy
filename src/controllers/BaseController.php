@@ -21,12 +21,6 @@ abstract class BaseController extends Controller {
     protected $urlSegment;
 
     /**
-     * The application name and also is view name
-     * @var string
-     */
-    protected $appName;
-
-    /**
      * The brand name
      * @var string
      */
@@ -142,14 +136,16 @@ abstract class BaseController extends Controller {
             // Take out the method from the action.
             $action = str_replace(array('get', 'post', 'patch', 'put', 'delete'), '', last($routeArray));
 
+            // post, report
             $this->onController = strtolower($controller);
-            $this->onAction = Str::slug(Request::method(). '-' .$action);
-            $this->doAction = strtolower($action);
-            // post
             Session::put('onController', $this->onController);
+
             // get-create, post-create
+            $this->onAction = Str::slug(Request::method(). '-' .$action);
             Session::put('onAction', $this->onAction);
+
             // create, update
+            $this->doAction = strtolower($action);
             Session::put('doAction', $this->doAction);
         }
 
@@ -167,7 +163,7 @@ abstract class BaseController extends Controller {
         
         // Share some variables to views
         View::share('brandName', $this->brandName);
-        View::share('appName' , $this->appName);
+        View::share('appName' , $this->onController);
         View::share('functionRules', $this->functionRules);
         View::share('langLocales', Config::get('cmsharenjoy::app.locales'));
 
@@ -187,7 +183,7 @@ abstract class BaseController extends Controller {
      */
     protected function setHandyUrls()
     {
-        $this->objectUrl = is_null($this->objectUrl) ? url($this->urlSegment.'/'.$this->appName) : null;
+        $this->objectUrl = is_null($this->objectUrl) ? url($this->urlSegment.'/'.$this->onController) : null;
         $this->updateUrl = is_null($this->updateUrl) ? $this->objectUrl.'/update/' : null;
         $this->createUrl = is_null($this->createUrl) ? $this->objectUrl.'/create' : null;
         $this->deleteUrl = is_null($this->deleteUrl) ? $this->objectUrl.'/delete/' : null;
@@ -212,16 +208,15 @@ abstract class BaseController extends Controller {
 
     protected function setupLayout()
     {
-        $action = $this->doAction;
         $commonRepoLayout = Config::get('cmsharenjoy::app.commonRepoLayoutDirectory');
         
-        if (View::exists('cmsharenjoy::'.$this->appName.'.'.$action))
+        if (View::exists('cmsharenjoy::'.$this->onController.'.'.$this->doAction))
         {
-            $this->layout = View::make('cmsharenjoy::'.$this->appName.'.'.$action);
+            $this->layout = View::make('cmsharenjoy::'.$this->onController.'.'.$this->doAction);
         }
-        else if(View::exists('cmsharenjoy::'.$commonRepoLayout.'.'.$action))
+        else if(View::exists('cmsharenjoy::'.$commonRepoLayout.'.'.$this->doAction))
         {
-            $this->layout = View::make('cmsharenjoy::'.$commonRepoLayout.'.'.$action);
+            $this->layout = View::make('cmsharenjoy::'.$commonRepoLayout.'.'.$this->doAction);
         }
     }
 

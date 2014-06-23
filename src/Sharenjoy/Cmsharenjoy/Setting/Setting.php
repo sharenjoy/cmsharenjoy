@@ -1,8 +1,8 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Setting;
 
-use Eloquent;
+use Sharenjoy\Cmsharenjoy\Core\EloquentBaseModel;
 
-class Setting extends Eloquent {
+class Setting extends EloquentBaseModel {
 
     /**
      * The table to get the data from

@@ -23,7 +23,7 @@ class CreateFileFoldersTable extends Migration {
             $table->string('location', 20)->default('local');
             $table->string('remote_container', 100);
             $table->tinyInteger('hidden')->default(0);
-            $table->string('sort', 20)->nullable()->default(0);
+            $table->integer('sort')->unsigned()->nullable()->default(0);
             $table->timestamps();
         });
 	}

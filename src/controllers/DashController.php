@@ -6,8 +6,6 @@ use Sentry, App, View, Redirect, Input, Config, Message, Mail, Str;
 
 class DashController extends BaseController {
 
-    protected $appName = 'dashboard';
-
     /**
      * Let's whitelist all the methods we want to allow guests to visit!
      *

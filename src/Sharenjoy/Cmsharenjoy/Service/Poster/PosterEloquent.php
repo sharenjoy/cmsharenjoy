@@ -1,6 +1,6 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Service\Poster;
 
-use Lang, Str, Session, Message;
+use Str, Session, StdClass;
 
 class PosterEloquent extends PosterBaseAbstract implements PosterInterface {
 
@@ -50,7 +50,7 @@ class PosterEloquent extends PosterBaseAbstract implements PosterInterface {
     {
         $model = $model ?: $this->model;
 
-        $result             = new \StdClass;
+        $result             = new StdClass;
         $result->page       = $page;
         $result->limit      = $limit;
         $result->totalItems = 0;
@@ -190,7 +190,7 @@ class PosterEloquent extends PosterBaseAbstract implements PosterInterface {
                         break;
 
                     case 'status':
-                        $value = $field ?:1;
+                        $value = $field ?: 1;
                         $data['status_id'] = $value;
                         break;
                     

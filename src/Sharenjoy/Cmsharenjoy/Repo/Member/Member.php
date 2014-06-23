@@ -1,10 +1,10 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Repo\Member;
 
-use Eloquent;
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
+use Sharenjoy\Cmsharenjoy\Core\EloquentBaseModel;
 
-class Member extends Eloquent implements UserInterface, RemindableInterface {
+class Member extends EloquentBaseModel implements UserInterface, RemindableInterface {
 
     protected $table = 'members';
 
@@ -19,6 +19,20 @@ class Member extends Eloquent implements UserInterface, RemindableInterface {
 
     public $uniqueFields = ['email'];
 
+    public $createComposeItem = ['sort'];
+    public $updateComposeItem = [];
+
+    public $processItem = [
+        'get-index'   => [],
+        'get-sort'    => [],
+        'get-create'  => [],
+        'get-update'  => [],
+        'post-create' => [],
+        'post-create' => [],
+    ];
+
+    public $filterFormConfig = [];
+
     public $formConfig = [
         'name'                  => ['order' => '10'],
         'email'                 => ['order' => '20'],
@@ -29,7 +43,11 @@ class Member extends Eloquent implements UserInterface, RemindableInterface {
         'description'           => ['order' => '60'],
     ];
 
-    public $updateFormDeny = ['password', 'password_confirmation'];
+    public $createFormConfig = [];
+    public $updateFormConfig = [];
+
+    public $createFormDeny   = [];
+    public $updateFormDeny   = ['password', 'password_confirmation'];
 
     protected $hidden = ['password'];
 
@@ -92,6 +110,18 @@ class Member extends Eloquent implements UserInterface, RemindableInterface {
     public function getReminderEmail()
     {
         return $this->email;
+    }
+
+    public function orders()
+    {
+        return $this->hasMany('Sharenjoy\Cmsharenjoy\Repo\Order\Order', 'member_id')
+                    ->orderBy('created_at', 'DESC')
+                    ->limit(10);
+    }
+
+    public function contactInfo()
+    {
+        return $this->hasMany('Sharenjoy\Cmsharenjoy\Repo\Member\ContactInfo', 'member_id');
     }
 
 }

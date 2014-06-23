@@ -12,7 +12,7 @@ class OrderValidator extends AbstractLaravelValidator {
     public $rules = [
         'name'    => 'required',
         'mobile'  => 'required',
-        'email'   => 'required|email',
+        // 'email'   => 'required|email',
         'address' => 'required',
     ];
 

@@ -2,15 +2,9 @@
 
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
 use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;
-use Config;
 
-class SettingRepository extends EloquentBaseRepository implements SettingInterface
-{
+class SettingRepository extends EloquentBaseRepository implements SettingInterface {
 
-    /**
-     * Construct Shit
-     * @param Settings $settings
-     */
     public function __construct(Setting $setting, ValidableInterface $validator)
     {
         $this->validator = $validator;

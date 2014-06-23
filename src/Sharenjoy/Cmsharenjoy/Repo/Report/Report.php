@@ -4,13 +4,9 @@ use Sharenjoy\Cmsharenjoy\Core\EloquentBaseModel;
 
 class Report extends EloquentBaseModel {
 
-    /**
-     * The table to get the data from
-     * @var string
-     */
     protected $table    = 'reports';
 
-    protected $fillable = array(
+    protected $fillable = [
         'user_id',
         'status_id',
         'title',
@@ -19,14 +15,20 @@ class Report extends EloquentBaseModel {
         'content',
         'img',
         'sort'
-    );
+    ];
 
     public $uniqueFields = [];
     
-    public $composeItem = [
+    public $createComposeItem = [
         'slug|title',
         'user',
         'sort',
+        'status'
+    ];
+
+    public $updateComposeItem = [
+        'slug|title',
+        'user',
         'status'
     ];
 
@@ -63,6 +65,15 @@ class Report extends EloquentBaseModel {
     public $createFormDeny   = [];
     public $updateFormDeny   = [];
     
+    public function author()
+    {
+        return $this->belongsTo('Sharenjoy\Cmsharenjoy\User\User', 'user_id');
+    }
+
+    public function username($field = __FUNCTION__)
+    {
+        $this->$field = $this->author->name;
+    }
 
     public function scopeStatus($query, $value)
     {

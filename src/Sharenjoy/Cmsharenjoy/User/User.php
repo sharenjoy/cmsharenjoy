@@ -19,6 +19,18 @@ class User extends SentryUserModel implements LaravelUserInterface, RemindableIn
 
     public $uniqueFields = ['email'];
 
+    public $createComposeItem = ['sort'];
+    public $updateComposeItem = [];
+
+    public $processItem = [
+        'get-index'   => [],
+        'get-sort'    => [],
+        'get-create'  => [],
+        'get-update'  => [],
+        'post-create' => [],
+        'post-create' => [],
+    ];
+
     public $formConfig = [
         'name'                  => ['order' => '10'],
         'email'                 => ['order' => '20'],
@@ -28,7 +40,11 @@ class User extends SentryUserModel implements LaravelUserInterface, RemindableIn
         'description'           => ['order' => '60'],
     ];
 
-    public $updateFormDeny = ['password', 'password_confirmation'];
+    public $createFormConfig = [];
+    public $updateFormConfig = [];
+
+    public $createFormDeny   = [];
+    public $updateFormDeny   = ['password', 'password_confirmation'];
 
     protected $hidden = ['password'];
 
