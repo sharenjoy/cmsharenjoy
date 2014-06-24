@@ -22,6 +22,8 @@ This is cmsharenjoy.
     'Sharenjoy\Cmsharenjoy\Formaker\FormakerServiceProvider',
     'Sharenjoy\Cmsharenjoy\Service\Categorize\CategorizeServiceProvider',
     'Intervention\Image\ImageServiceProvider',
+    'Moltin\Cart\CartServiceProvider',
+
 
 ### Adding the alices to app.php
 
@@ -29,6 +31,7 @@ This is cmsharenjoy.
     'Theme'           => 'Teepluss\Theme\Facades\Theme',
     'Sentry'          => 'Cartalyst\Sentry\Facades\Laravel\Sentry',
     'Image'           => 'Intervention\Image\Facades\Image',
+    'Cart'            => 'Moltin\Cart\Facade',
 
 ### Publishing the configuration(Optional)
 <!-- Publish the configurations for this package in order to change them to your liking: -->
