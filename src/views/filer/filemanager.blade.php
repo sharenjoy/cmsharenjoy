@@ -70,7 +70,8 @@
 
     <script type="text/javascript">
         var sharenjoy          = {};
-        sharenjoy.APPURL       = "{{$objectUrl}}";
+        sharenjoy.APPURL       = "{{Config::get('app.url')}}/{{$urlSegment}}/{{Session::get('onController')}}";
+        sharenjoy.OBJURL       = "{{$objectUrl}}";
         sharenjoy.SITEURL      = "{{Config::get('app.url')}}";
         sharenjoy.BASEURI      = "{{base_path()}}";
         sharenjoy.PUBLICURI    = "{{public_path()}}";
@@ -78,6 +79,21 @@
         sharenjoy.file = {};
         sharenjoy.file.parent_id = "{{$parentId}}";
         sharenjoy.file.upload_max_filesize = {{$uploadMaxFilesize}};
+
+        var opts = {
+            "closeButton": true,
+            "debug": false,
+            "positionClass": "toast-bottom-left",
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "3000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
     </script>
 
     <!-- Bottom Scripts -->
@@ -88,6 +104,7 @@
     <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/joinable.js')}}"></script>
     <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/resizeable.js')}}"></script>
     <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/neon-api.js')}}"></script>
+    <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/toastr.js')}}"></script>
     <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/jquery.validate.min.js')}}"></script>
     <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/neon-custom.js')}}"></script>
     <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/dropzone/dropzone.min.js')}}"></script>
@@ -300,8 +317,11 @@
 
                     // console.log(send_result);
 
-                    $.post(sharenjoy.APPURL + "/order", send_result, function(data, status) {
-                        // console.log(data);
+                    $.post(sharenjoy.APPURL + "/order", send_result, function(result, status) {
+                        // console.log(result);
+                        if (result.status == 'success') {
+                            toastr.success(result.message, "Success", opts);
+                        }
                     });
                 }
             });

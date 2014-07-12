@@ -24,6 +24,14 @@ return array(
         '4' => trans('cmsharenjoy::option.easyContactTime4'),
         '5' => trans('cmsharenjoy::option.easyContactTime5'),
     ],
+
+    'delivery_time_zone' => [
+        '1' => trans('cmsharenjoy::option.deliveryTimeZone1'),
+        '2' => trans('cmsharenjoy::option.deliveryTimeZone2'),
+        '3' => trans('cmsharenjoy::option.deliveryTimeZone3'),
+        '4' => trans('cmsharenjoy::option.deliveryTimeZone4'),
+        '5' => trans('cmsharenjoy::option.deliveryTimeZone5'),
+    ],
     
     
 );

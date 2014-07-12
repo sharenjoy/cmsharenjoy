@@ -21,7 +21,7 @@ class CreateSettingsTable extends Migration {
                 $table->string('key', 255)->unique();
                 $table->string('module', 255);
                 $table->string('type', 255);
-                $table->string('value', 255);
+                $table->text('value');
                 $table->text('option')->nullable();
                 $table->integer('sort')->unsigned()->nullable()->default(0);
                 $table->timestamps();

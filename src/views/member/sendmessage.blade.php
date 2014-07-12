@@ -24,21 +24,21 @@
                 
                 <div class="panel-body">
                     
-                    {{ Form::open( array( 'url'=>$updateUrl.$item->id , 'class'=>'form-horizontal form-groups-bordered' , 'role'=>'form', 'id'=>'item-form' ) ) }}
+                    {{ Form::open( array( 'url'=>$objectUrl.'/sendmessage' , 'class'=>'form-horizontal form-groups-bordered' , 'role'=>'form', 'id'=>'item-form' ) ) }}
                     
-                        @if(isset($fieldsForm))
-                            @foreach($fieldsForm as $key => $value)
-                                @if(isset($value['field']))
-                                    {{$value['field']}}
-                                @endif
-                            @endforeach
-                        @endif
+                        <div class="form-group">
+                            {{Form::label('message', trans('cmsharenjoy::app.form.content'), array('class'=>'col-sm-2 control-label'))}}
+                            <div class="col-sm-5">
+                                {{Form::textarea('message', '', array('class'=>'form-control', 'rows'=>'5'))}}
+                            </div>
+                        </div>
                         
                         <div class="form-group">
                             <div class="col-sm-8">
+                                {{Form::hidden('id', $id)}}
                                 {{ Form::reset(trans('cmsharenjoy::buttons.reset') , array('class'=>'btn btn-large btn-default')) }}
                                 &nbsp;
-                                {{ Form::submit(trans('cmsharenjoy::buttons.update') , array('class'=>'btn btn-large btn-success')) }}
+                                {{ Form::submit(trans('cmsharenjoy::buttons.sendmessage') , array('class'=>'btn btn-large btn-success')) }}
                             </div>
                         </div>
 

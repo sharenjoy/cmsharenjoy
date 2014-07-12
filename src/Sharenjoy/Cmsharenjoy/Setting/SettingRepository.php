@@ -25,13 +25,27 @@ class SettingRepository extends EloquentBaseRepository implements SettingInterfa
 
     /**
      * Get a setting by it's key or slug or whatever
-     * @param  string $key The key (contact-address , website-name etc)
+     * @param  mix $key The key (contact-address , website-name etc)
      * @return One God-Damn Record
      */
     public function get($key)
     {
-        $model = $this->model->where('key', $key)->first();
-        return $model->value;
+        if (is_array($key))
+        {
+            $result = $this->model->where(function($query) use ($key){
+                for ($i=0; $i < count($key); $i++)
+                {
+                    $query->orWhere('key', $key[$i]);
+                }
+            })->get()->lists('value', 'key');
+        }
+        elseif(is_string($key))
+        {
+            $model = $this->model->where('key', $key)->first();
+            $result = $model->value;
+        }
+
+        return $result;
     }
 
 }

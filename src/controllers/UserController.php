@@ -37,7 +37,7 @@ class UserController extends ObjectBaseController {
 
             if ( ! $user->save())
             {
-                Message::output('flash', 'errors', trans('cmsharenjoy::admin.some_wrong'));
+                Message::output('flash', 'errors', trans('cmsharenjoy::app.some_wrong'));
                 return Redirect::to($this->urlSegment.'/login');
             }
 
@@ -56,17 +56,17 @@ class UserController extends ObjectBaseController {
             Mail::queue('cmsharenjoy::emails.auth.user-reset-password', $datas, function($message) use ($user)
             {
                 $message->from(Config::get('mail.from.address'), Config::get('mail.from.name'))
-                        ->subject(trans('cmsharenjoy::admin.reset_password'));
+                        ->subject(trans('cmsharenjoy::app.reset_password'));
                 $message->to($user->email);
             });
         }
         catch (\Cartalyst\Sentry\Users\UserNotFoundException $e)
         {
-            Message::output('flash', 'errors', trans('cmsharenjoy::admin.user_not_found'));
+            Message::output('flash', 'errors', trans('cmsharenjoy::app.user_not_found'));
             return Redirect::to($this->objectUrl);
         }
 
-        Message::output('flash', 'success', trans('cmsharenjoy::admin.sent_reset_code'));
+        Message::output('flash', 'success', trans('cmsharenjoy::app.sent_reset_code'));
         return Redirect::to($this->objectUrl);
     }
 

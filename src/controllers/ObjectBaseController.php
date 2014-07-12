@@ -60,7 +60,7 @@ abstract class ObjectBaseController extends BaseController {
         $result = Poster::showByPage($page, (int)$perPage, $model);
 
         $result->items = Poster::processMulitple($result->items);
-
+        
         // Set Pagination of data 
         $query = array_except($query, ['page']);
         $items = Paginator::make($result->items, $result->totalItems, $result->limit)->appends($query);
@@ -138,22 +138,49 @@ abstract class ObjectBaseController extends BaseController {
      * @param  integer $id The object ID
      * @return Redirect
      */
-    public function getDelete($id)
+    public function postDelete()
     {
         try
         {
+            $id = Input::get('id');
             $this->repository->delete($id);
         }
         catch(\Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException $e)
         {
             Message::output('flash', 'errors', trans('cmsharenjoy::exception.not_found', array('id' => $id)));
-
             return Redirect::to($this->objectUrl);
         }
 
-        Message::output('flash', 'success', trans('cmsharenjoy::admin.success_deleted'));
-
+        Message::output('flash', 'success', trans('cmsharenjoy::app.success_deleted'));
         return Redirect::to($this->objectUrl);
+    }
+
+    /**
+     * Before delete an object get some information
+     * @return Response object
+     */
+    public function postDeleteconfirm()
+    {
+        if( ! Request::ajax())
+        {
+            Response::json('error', 400);
+        }
+
+        $id        = Input::get('id');
+        $data      = Poster::showById($id)->toArray();
+        $existsAry = ['title', 'name', 'subject', 'tag'];
+        $result['subject'] = trans('cmsharenjoy::app.confirm_deleted');
+
+        foreach ($existsAry as $value)
+        {
+            if (array_key_exists($value, $data))
+            {
+                $result['title'] = $data[$value];
+                break;
+            }
+        }
+
+        return Response::json(Message::output('json', 'success', '', $result), 200);
     }
 
     /**
@@ -171,7 +198,7 @@ abstract class ObjectBaseController extends BaseController {
             return Redirect::to($this->createUrl)->withInput();
         }
         
-        Message::output('flash', 'success', trans('cmsharenjoy::admin.success_created'));
+        Message::output('flash', 'success', trans('cmsharenjoy::app.success_created'));
 
         return Redirect::to($this->objectUrl);
     }
@@ -191,7 +218,7 @@ abstract class ObjectBaseController extends BaseController {
             return Redirect::to($this->updateUrl.$id)->withInput();
         }
 
-        Message::output('flash', 'success', trans('cmsharenjoy::admin.success_updated'));
+        Message::output('flash', 'success', trans('cmsharenjoy::app.success_updated'));
 
         return Redirect::to($this->updateUrl.$id);
     }
@@ -228,7 +255,7 @@ abstract class ObjectBaseController extends BaseController {
             }
         }
 
-        return Response::json(Message::output('json', 'success', trans('cmsharenjoy::admin.success_ordered')), 200);
+        return Response::json(Message::output('json', 'success', trans('cmsharenjoy::app.success_ordered')), 200);
     }
 
     protected function setupLayout()

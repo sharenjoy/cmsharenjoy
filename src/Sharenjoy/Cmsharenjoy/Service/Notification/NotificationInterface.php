@@ -1,18 +1,18 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Service\Notification;
 
-interface NotifierInterface {
+interface NotificationInterface {
 
     /**
      * Recipients of notification
      * @param  string $to The recipient
-     * @return Sharenjoy\Cmsharenjoy\Service\Notification\NotifierInterface  $this  Return self for chainability
+     * @return Sharenjoy\Cmsharenjoy\Service\Notification\NotificationInterface  $this  Return self for chainability
      */
     public function to($to);
 
     /**
      * Sender of notification
      * @param  string $from The sender
-     * @return Sharenjoy\Cmsharenjoy\Service\Notification\NotifierInterface  $this  Return self for chainability
+     * @return Sharenjoy\Cmsharenjoy\Service\Notification\NotificationInterface  $this  Return self for chainability
      */
     public function from($from);
 

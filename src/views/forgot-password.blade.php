@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.login')
 
 @section('title')
-{{trans('cmsharenjoy::admin.forgot_password')}} - {{$brandName}}
+{{trans('cmsharenjoy::app.forgot_password')}} - {{$brandName}}
 @stop
 
 @section('content')
@@ -30,7 +30,7 @@
         </div>
 
         <div class="form-group">
-            <a href="{{url($urlSegment.'/login')}}" class="link">{{trans('cmsharenjoy::admin.back_login')}}</a>
+            <a href="{{url($urlSegment.'/login')}}" class="link">{{trans('cmsharenjoy::app.back_login')}}</a>
         </div>
                      
     {{ Form::close() }}

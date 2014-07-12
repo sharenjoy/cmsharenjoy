@@ -189,6 +189,10 @@ class PosterEloquent extends PosterBaseAbstract implements PosterInterface {
                         $data[$item] = time();
                         break;
 
+                    case 'password':
+                        $data[$item] = \Hash::make($data[$item]);
+                        break;
+
                     case 'status':
                         $value = $field ?: 1;
                         $data['status_id'] = $value;

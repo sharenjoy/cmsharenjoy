@@ -9,7 +9,8 @@ class Tag extends EloquentBaseModel {
     protected $fillable = array(
         'user_id',
         'tag',
-        'slug'
+        'slug',
+        'sort'
     );
 
     public $uniqueFields = ['slug'];
@@ -53,7 +54,7 @@ class Tag extends EloquentBaseModel {
 
     public function username($field = __FUNCTION__)
     {
-        $this->$field = $this->author->name;
+        $this->$field = isset($this->author->name) ? $this->author->name : '';
     }
 
     public function posts()

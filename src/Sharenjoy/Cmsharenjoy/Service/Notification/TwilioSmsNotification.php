@@ -1,8 +1,9 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Service\Notification;
 
 use Services_Twilio;
+use Config;
 
-class SmsNotifier implements NotifierInterface {
+class TwilioSmsNotification implements NotificationInterface {
 
     /**
      * Recipient of notification
@@ -22,15 +23,20 @@ class SmsNotifier implements NotifierInterface {
      */
     protected $twilio;
 
-    public function __construct(Services_Twilio $twilio)
+    public function __construct()
     {
-        $this->twilio = $twilio;
+        $this->twilio = new Services_Twilio(
+            Config::get('cmsharenjoy::twilio.account_id'),
+            Config::get('cmsharenjoy::twilio.auth_token')
+        );
+
+        $this->from(Config::get('cmsharenjoy::twilio.from'));
     }
 
     /**
      * Recipients of notification
      * @param  string $to The recipient
-     * @return Impl\Service\Notification\SmsNotifier  $this  Return self for chainability
+     * @return Impl\Service\Notification\SmsNotification  $this  Return self for chainability
      */
     public function to($to)
     {
@@ -42,7 +48,7 @@ class SmsNotifier implements NotifierInterface {
     /**
      * Sender of notification
      * @param  string $from The sender
-     * @return Impl\Service\Notification\NotifierInterface  $this  Return self for chainability
+     * @return Impl\Service\Notification\NotificationInterface  $this  Return self for chainability
      */
     public function from($from)
     {

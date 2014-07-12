@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.interface')
 
 @section('title')
-{{trans('cmsharenjoy::admin.manage')}}{{trans('cmsharenjoy::app.'.$appName)}}
+{{trans('cmsharenjoy::app.manage')}}{{trans('cmsharenjoy::app.'.$appName)}}
 @stop
 
 @section('content')
@@ -23,7 +23,7 @@
         </div>
     @else
         <div class="alert alert-info">
-            {{trans('cmsharenjoy::admin.no_item_yet')}}
+            {{trans('cmsharenjoy::app.no_item_yet')}}
         </div>
     @endif
 @stop

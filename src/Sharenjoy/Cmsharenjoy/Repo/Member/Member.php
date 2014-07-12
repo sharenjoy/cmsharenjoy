@@ -14,7 +14,8 @@ class Member extends EloquentBaseModel implements UserInterface, RemindableInter
         'name',
         'phone',
         'mobile',
-        'description'
+        'description',
+        'sort'
     );
 
     public $uniqueFields = ['email'];

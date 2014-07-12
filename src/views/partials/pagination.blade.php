@@ -13,7 +13,7 @@
                 array('class'=>'form-control pagination_count', 'id'=>'pagination_count')
             )}}
             &nbsp;&nbsp;
-            {{Lang::get('cmsharenjoy::admin.pagination_desc', array('from'=>$items->getFrom(), 'to'=>$items->getTo(), 'total'=>$items->getTotal()))}}
+            {{Lang::get('cmsharenjoy::app.pagination_desc', array('from'=>$items->getFrom(), 'to'=>$items->getTo(), 'total'=>$items->getTotal()))}}
         {{Form::close()}}
     </div>
 </div>

@@ -189,17 +189,13 @@
                         </ul>
                     </div>
                     
-                    
                     <!-- Raw Links -->
                     <div class="col-md-6 col-sm-4 clearfix hidden-xs">
-                        
                         <ul class="list-inline links-list pull-right">
                             <!-- <li>
                                 <a href="#">Live Site</a>
                             </li>
-                            
                             <li class="sep"></li>
-                            
                             <li>
                                 <a href="#" data-toggle="chat" data-animate="1" data-collapse-sidebar="1">
                                     <i class="entypo-chat"></i>
@@ -208,18 +204,14 @@
                                     <span class="badge badge-success chat-notifications-badge is-hidden">0</span>
                                 </a>
                             </li>
-                            
                             <li class="sep"></li> -->
-                            
                             <li>
                                 <a href="{{ url( $urlSegment.'/logout' ) }}">
-                                    {{ Lang::get('cmsharenjoy::admin.logout') }} <i class="entypo-logout right"></i>
+                                    {{ Lang::get('cmsharenjoy::app.logout') }} <i class="entypo-logout right"></i>
                                 </a>
                             </li>
                         </ul>
-                        
                     </div>
-                    
                 </div>
 
                 <hr />
@@ -246,7 +238,6 @@
                         <div class="col-xs-6 col-sm-6 col-md-6">
                             &copy; {{date('Y')}} <strong>{{$brandName}}</strong>
                         </div>
-
                         <div class="col-xs-6 col-sm-6 col-md-6">
                         
                             <ul class="list-inline links-list pull-right">
@@ -258,83 +249,24 @@
                                         array('class'=>'form-control', 'id'=>'admin_language')
                                     )}}
                                 </li>
-
                                 <!-- <li class="sep"></li>
-
                                 <li>
                                     <a href="{{ url( $urlSegment.'/logout' ) }}">
                                         Log Out <i class="entypo-logout right"></i>
                                     </a>
                                 </li> -->
                             </ul>
-                            
                         </div>
                     </div>
-                    
                 </footer>
                 <!-- footer Ends -->
-
             </div>
             <!-- main-content Ends -->
-
         </div>
         <!-- page-container Ends -->
-        
-        @if(Session::get('onController') != 'filer')
-            <!-- Filemanager modal -->
-            <div class="modal fade" id="modal-filemanager" tabindex="-1" role="dialog">
-                <div class="modal-dialog" style="width:800px">
-                    <div class="modal-content">
-                        
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title">{{trans('cmsharenjoy::app.menu.file')}}</h4>
-                        </div>
-                        
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <iframe src="{{url($urlSegment.'/filer/filemanager')}}" id="iframe-modal-filemanager" width="100%" height="560" frameborder="0" scrolling="no"></iframe>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="modal-footer">
-                            <input type="hidden" name="pick_field_name" id="pick_field_name" value="">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @if(isset($albumId))
-                <div class="modal fade" id="modal-file-album" tabindex="-1" role="dialog">
-                    <div class="modal-dialog" style="width:800px">
-                        <div class="modal-content">
-                            
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title">{{trans('cmsharenjoy::app.menu.file')}}</h4>
-                            </div>
-                            
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <iframe src="{{url($urlSegment.'/filer/filealbum/'.$albumId)}}" id="iframe-modal-file-album" width="100%" height="560" frameborder="0" scrolling="no"></iframe>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endif
-            <!-- Filemanager modal Ends -->
-        @endif
 
         <!-- Modal Starts -->
+        @include('cmsharenjoy::partials.modal')
         @yield('modal')
         <!-- Modal Ends -->
         
@@ -342,7 +274,8 @@
         <script type="text/javascript">
         @section('main-scripts')
             var sharenjoy = {
-                "APPURL": "{{$objectUrl}}",
+                "APPURL": "{{Config::get('app.url')}}/{{$urlSegment}}/{{Session::get('onController')}}",
+                "OBJURL": "{{$objectUrl}}",
                 "SITEURL": "{{Config::get('app.url')}}",
                 "BASEURI": "{{base_path()}}",
                 "PUBLICURI": "{{public_path()}}",

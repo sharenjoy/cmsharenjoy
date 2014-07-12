@@ -3,12 +3,12 @@
     <div class="row">
         <div class="col-xs-8 col-left">
             <div class="dataTables_length">
-                <h3>{{trans('cmsharenjoy::admin.manage')}}</h3>
+                <h3>{{trans('cmsharenjoy::app.manage')}}</h3>
             </div>
         </div>
         <div class="col-xs-4 col-right">
             <div class="dataTables_filter" id="table-1_filter">
-                <!-- <label>{{trans('cmsharenjoy::admin.search')}}: <input type="text" aria-controls="table-1"></label> -->
+                <!-- <label>{{trans('cmsharenjoy::app.search')}}: <input type="text" aria-controls="table-1"></label> -->
             </div>
         </div>
     </div>

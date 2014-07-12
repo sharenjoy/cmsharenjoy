@@ -72,7 +72,7 @@ class Report extends EloquentBaseModel {
 
     public function username($field = __FUNCTION__)
     {
-        $this->$field = $this->author->name;
+        $this->$field = isset($this->author->name) ? $this->author->name : '';
     }
 
     public function scopeStatus($query, $value)

@@ -42,7 +42,7 @@ class DashController extends BaseController {
     {
         Sentry::logout();
 
-        Message::merge(array('success' => trans('cmsharenjoy::admin.success_logout')))->flash();
+        Message::merge(array('success' => trans('cmsharenjoy::app.success_logout')))->flash();
         return Redirect::to($this->urlSegment.'/login');
     }
 
@@ -99,16 +99,16 @@ class DashController extends BaseController {
         }
         catch(\Cartalyst\Sentry\Throttling\UserBannedException $e)
         {
-            Message::merge(array('errors' => trans('cmsharenjoy::admin.invalid_email_password')))->flash();
+            Message::merge(array('errors' => trans('cmsharenjoy::app.invalid_email_password')))->flash();
             return Redirect::to($this->urlSegment.'/login')->withInput();
         }
         catch (\RuntimeException $e)
         {
-            Message::merge(array('errors' => trans('cmsharenjoy::admin.invalid_email_password')))->flash();
+            Message::merge(array('errors' => trans('cmsharenjoy::app.invalid_email_password')))->flash();
             return Redirect::to($this->urlSegment.'/login')->withInput();
         }
 
-        Message::merge(array('success' => trans('cmsharenjoy::admin.success_login')))->flash();
+        Message::merge(array('success' => trans('cmsharenjoy::app.success_login')))->flash();
         return Redirect::to( $this->urlSegment );
     }
 
@@ -126,23 +126,23 @@ class DashController extends BaseController {
             // Attempt to activate the user
             if ($user->attemptActivation($code))
             {
-                Message::merge(array('success' => trans('cmsharenjoy::admin.user_actived')))->flash();
+                Message::merge(array('success' => trans('cmsharenjoy::app.user_actived')))->flash();
                 return Redirect::to($this->urlSegment.'/login');
             }
             else
             {
-                Message::merge(array('errors' => trans('cmsharenjoy::admin.error_active')))->flash();
+                Message::merge(array('errors' => trans('cmsharenjoy::app.error_active')))->flash();
                 return Redirect::to($this->urlSegment.'/login');
             }
         }
         catch (\Cartalyst\Sentry\Users\UserNotFoundException $e)
         {
-            Message::merge(array('errors' => trans('cmsharenjoy::admin.user_not_found')))->flash();
+            Message::merge(array('errors' => trans('cmsharenjoy::app.user_not_found')))->flash();
             return Redirect::to($this->urlSegment.'/login');
         }
         catch (\Cartalyst\Sentry\Users\UserAlreadyActivatedException $e)
         {
-            Message::merge(array('info' => trans('cmsharenjoy::admin.user_already_actived')))->flash();
+            Message::merge(array('info' => trans('cmsharenjoy::app.user_already_actived')))->flash();
             return Redirect::to($this->urlSegment.'/login');
         }
     }
@@ -183,13 +183,13 @@ class DashController extends BaseController {
             
             if ( ! $user->checkPassword($input['old_password']))
             {
-                Message::merge(array('errors' => trans('cmsharenjoy::admin.old_password_incorrect')))->flash();
+                Message::merge(array('errors' => trans('cmsharenjoy::app.old_password_incorrect')))->flash();
                 return Redirect::back();
             }
 
             if ($input['password'] !== $input['password_confirmation'])
             {
-                Message::merge(array('errors' => trans('cmsharenjoy::admin.password_no_match')))->flash();
+                Message::merge(array('errors' => trans('cmsharenjoy::app.password_no_match')))->flash();
                 return Redirect::back();
             }
 
@@ -200,24 +200,24 @@ class DashController extends BaseController {
                 if ($user->attemptResetPassword($input['code'], $input['password']))
                 {
                     Sentry::logout();
-                    Message::merge(array('success' => trans('cmsharenjoy::admin.password_reset_success')))->flash();
+                    Message::merge(array('success' => trans('cmsharenjoy::app.password_reset_success')))->flash();
                     return Redirect::to($this->urlSegment.'/login');
                 }
                 else
                 {
-                    Message::merge(array('errors' => trans('cmsharenjoy::admin.password_reset_failed')))->flash();
+                    Message::merge(array('errors' => trans('cmsharenjoy::app.password_reset_failed')))->flash();
                     return Redirect::back();
                 }
             }
             else
             {
-                Message::merge(array('errors' => trans('cmsharenjoy::admin.password_reset_code_invalid')))->flash();
+                Message::merge(array('errors' => trans('cmsharenjoy::app.password_reset_code_invalid')))->flash();
                 return Redirect::back();
             }
         }
         catch (\Cartalyst\Sentry\Users\UserNotFoundException $e)
         {
-            Message::merge(array('errors' => trans('cmsharenjoy::admin.user_not_found')))->flash();
+            Message::merge(array('errors' => trans('cmsharenjoy::app.user_not_found')))->flash();
             return Redirect::back();
         }
     }
@@ -239,7 +239,7 @@ class DashController extends BaseController {
 
             if ( ! $user->save())
             {
-                Message::merge(array('errors' => trans('cmsharenjoy::admin.some_wrong')))->flash();
+                Message::merge(array('errors' => trans('cmsharenjoy::app.some_wrong')))->flash();
                 return Redirect::to($this->urlSegment.'/forgotpassword');
             }
 
@@ -257,17 +257,17 @@ class DashController extends BaseController {
             Mail::queue('cmsharenjoy::emails.auth.user-reset-password', $datas, function($message) use ($user)
             {
                 $message->from(Config::get('mail.from.address'), Config::get('mail.from.name'))
-                        ->subject(trans('cmsharenjoy::admin.reset_password'));
+                        ->subject(trans('cmsharenjoy::app.reset_password'));
                 $message->to($user->email);
             });
         }
         catch (\Cartalyst\Sentry\Users\UserNotFoundException $e)
         {
-            Message::merge(array('errors' => trans('cmsharenjoy::admin.user_not_found')))->flash();
+            Message::merge(array('errors' => trans('cmsharenjoy::app.user_not_found')))->flash();
             return Redirect::to($this->urlSegment.'/forgotpassword');
         }
 
-        Message::merge(array('success' => trans('cmsharenjoy::admin.sent_reset_code')))->flash();
+        Message::merge(array('success' => trans('cmsharenjoy::app.sent_reset_code')))->flash();
         return Redirect::to($this->urlSegment.'/forgotpassword');
     }
 

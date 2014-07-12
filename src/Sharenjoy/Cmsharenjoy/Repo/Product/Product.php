@@ -13,7 +13,8 @@ class Product extends EloquentBaseModel {
         'title_jp',
         'price',
         'description',
-        'img'
+        'img',
+        'sort'
     );
 
     public $uniqueFields = [];
@@ -58,7 +59,7 @@ class Product extends EloquentBaseModel {
 
     public function username($field = __FUNCTION__)
     {
-        $this->$field = $this->author->name;
+        $this->$field = isset($this->author->name) ? $this->author->name : '';
     }
 
     public function categories()

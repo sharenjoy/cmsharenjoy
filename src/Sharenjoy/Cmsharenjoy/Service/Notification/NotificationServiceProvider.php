@@ -1,39 +1,53 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Service\Notification;
 
-use Services_Twilio;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Foundation\AliasLoader;
 
 class NotificationServiceProvider extends ServiceProvider {
 
-    /**
-     * Register the service provider.
-     *
-     * @return void
-     */
-    public function register()
+    public function register() {}
+
+    public function boot()
     {
-        $app = $this->app;
+        $config = $this->app['config'];
 
-        $app['sharenjoy.notifier'] = $app->share(function() use ($app)
-        {
-            $config = $app['config'];
+        $this->registerTransport($config);
 
-            $twilio = new Services_Twilio(
-                $config->get('cmsharenjoy::twilio.account_id'),
-                $config->get('cmsharenjoy::twilio.auth_token')
-            );
+        // Adding an Aliac in app/config/app.php
+        AliasLoader::getInstance()->alias('Notify', 'Sharenjoy\Cmsharenjoy\Service\Notification\Facades\Notification');
+    }
 
-            $notifier = new SmsNotifier($twilio);
-
-            $notifier->from($config['cmsharenjoy::twilio.from']);
-
-            return $notifier;
-        });
+    /**
+     * Register the Notification Transport instance.
+     *
+     * @param  array  $config
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     */
+    protected function registerTransport($config)
+    {
+        $driver = $config->get('cmsharenjoy::notification.driver');
+        
+        $this->app->bind(
+            'Sharenjoy\Cmsharenjoy\Service\Notification\NotificationInterface',
+            function() use ($driver, $config)
+            {
+                switch ($driver)
+                {
+                    case 'twilio':
+                        return new TwilioSmsNotification();
+                    
+                    default:
+                        throw new \InvalidArgumentException('Invalid notification driver.');
+                }
+            }
+        );
     }
 
     public function provides()
     {
-        return array('sharenjoy.notifier');
+        return array();
     }
 
 }

@@ -218,7 +218,7 @@ class FilerController extends BaseController {
         }
 
         // let the files library format the return array like all the others
-        return Response::json(Filer::result(true, trans('cmsharenjoy::files.sort_saved')), 200);
+        return Response::json(Message::output('json', 'success', trans('cmsharenjoy::app.success_ordered')), 200);
     }
 
     /**

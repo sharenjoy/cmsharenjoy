@@ -2,7 +2,7 @@
 
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
 use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;
-use Sentry, Input, Mail, Hash, Config, Session, Message;
+use Sentry, Input, Mail, Hash, Config, Session, Message, Poster;
 
 class MemberRepository extends EloquentBaseRepository implements MemberInterface {
 
@@ -16,11 +16,13 @@ class MemberRepository extends EloquentBaseRepository implements MemberInterface
 
     public function create(array $input)
     {
+        // Compose some necessary variable to input data
+        $input = Poster::compose($input, $this->model->createComposeItem);
+
         $result = $this->validator->valid($input);
         if ( ! $result->status) return false;
 
-        $input = Poster::compose($input, $this->model->createComposeItem);
-        $input['password'] = Hash::make($input['password']);
+        $input = Poster::compose($input, ['password']);        
 
         // Create the model
         $model = $this->model->create($input);
@@ -30,11 +32,11 @@ class MemberRepository extends EloquentBaseRepository implements MemberInterface
 
     public function update($id, array $input, $vaidatorRules = 'updateRules')
     {
-        $result = $this->validator->valid($input, $vaidatorRules, [$this->model->uniqueFields, $id]);
-        if ( ! $result->status) return false;
-
         // Compose some necessary variable to input data
         $input = Poster::compose($input, $this->model->updateComposeItem);
+
+        $result = $this->validator->valid($input, $vaidatorRules, [$this->model->uniqueFields, $id]);
+        if ( ! $result->status) return false;
 
         // Update the model
         $model = $this->model->find($id)->fill($input);

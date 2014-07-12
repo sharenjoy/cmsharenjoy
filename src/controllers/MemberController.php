@@ -1,7 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Controllers;
 
 use Sharenjoy\Cmsharenjoy\Repo\Member\MemberInterface;
-use Sentry, Mail, Config, Message, Redirect, Str, Hash;
+use Sentry, Mail, Config, Message, Redirect, Str, Hash, Poster, Input, App, Notify;
 
 class MemberController extends ObjectBaseController {
 
@@ -11,6 +11,7 @@ class MemberController extends ObjectBaseController {
         'update'        => true,
         'delete'        => true,
         'resetpassword' => true,
+        'sendmessage'   => true,
     ];
 
     protected $listConfig = [
@@ -36,7 +37,7 @@ class MemberController extends ObjectBaseController {
 
         if ( ! $user->save())
         {
-            Message::output('flash', 'errors', trans('cmsharenjoy::admin.some_wrong'));
+            Message::output('flash', 'errors', trans('cmsharenjoy::app.some_wrong'));
             return Redirect::to($this->urlSegment.'/login');
         }
 
@@ -50,12 +51,37 @@ class MemberController extends ObjectBaseController {
         Mail::queue('emails.auth.reset-password', $datas, function($message) use ($user)
         {
             $message->from(Config::get('mail.from.address'), Config::get('mail.from.name'))
-                    ->subject(trans('cmsharenjoy::admin.reset_password'));
+                    ->subject(trans('cmsharenjoy::app.reset_password'));
             $message->to($user->email);
         });
 
-        Message::output('flash', 'success', trans('cmsharenjoy::admin.sent_reset_code'));
+        Message::output('flash', 'success', trans('cmsharenjoy::app.sent_reset_code'));
         return Redirect::to($this->objectUrl);
+    }
+
+
+    public function getSendmessage($id)
+    {
+        $this->layout->with('id', $id);
+    }
+
+    public function postSendmessage()
+    {
+        $data = Input::all();
+        $user = Poster::showById($data['id'])->toArray();
+
+        if ($user['mobile'] != '' && $data['message'] != '')
+        {
+            Notify::to('+886939025412')->notify('齊味', $data['message']);
+            Message::output('flash', 'success', '簡訊寄送成功');
+        }
+        else
+        {
+            Message::output('flash', 'errors', '簡訊寄送失敗');
+        }
+
+        return Redirect::to($this->objectUrl);
+
     }
 
 }

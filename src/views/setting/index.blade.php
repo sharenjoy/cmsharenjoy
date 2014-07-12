@@ -32,27 +32,30 @@
                         
                         <div class="row">
                             
-                            @foreach($items as $key => $item)
                             <div class="col-md-12">
                             
                                 <!-- available classes "bordered", "right-aligned" -->
                                 <ul class="nav nav-tabs bordered">
-                                    <li class="active">
+                                  @foreach($items as $key => $item)
+                                    <li @if($key == 'general')class="active"@endif>
                                         <a href="#{{$key}}" data-toggle="tab">
                                             <span class="visible-xs"><i class="entypo-home"></i></span>
                                             <span class="hidden-xs">{{trans('cmsharenjoy::setting.'.$key)}}</span>
                                         </a>
                                     </li>
+                                  @endforeach
                                 </ul>
                                 
                                 <div class="tab-content">
-                                    <div class="tab-pane active" id="{{$key}}">
+                                    
+                                    @foreach($items as $key => $item)
+                                    <div class="tab-pane @if($key == 'general')active@endif" id="{{$key}}">
                                             
                                         {{Form::open(array('url'=>$objectUrl, 'class'=>'form-horizontal form-groups-bordered', 'role'=>'form', 'id'=>'item-form'))}}
                                             
                                             @foreach($item['item'] as $value)
                                             <div class="form-group setting-input">
-                                                <div class="col-sm-6 col-md-6">
+                                                <div class="col-sm-5 col-md-5">
                                                     <p>{{Form::label($value->key, trans('cmsharenjoy::setting.label.'.$value->key), array('class'=>'control-label'))}}</p>
 
                                                     @if ($value->type == 'text')
@@ -60,6 +63,12 @@
                                                             $value->key, 
                                                             $value->value, 
                                                             array('class'=>'form-control', 'data-id'=>$value->id)
+                                                        )}}
+                                                    @elseif ($value->type == 'textarea')
+                                                        {{Form::textarea(
+                                                            $value->key, 
+                                                            $value->value, 
+                                                            array('class'=>'form-control', 'rows'=>'3', 'data-id'=>$value->id)
                                                         )}}
                                                     @elseif ($value->type == 'select')
                                                         {{Form::select(
@@ -95,7 +104,7 @@
                                                         @endforeach
                                                     @endif
                                                 </div>
-                                                <div class="col-sm-6 col-md-6">
+                                                <div class="col-sm-7 col-md-7">
                                                     <span class="help-block">{{trans('cmsharenjoy::setting.description.'.$value->key)}}</span>
                                                 </div>
                                             </div>
@@ -104,13 +113,10 @@
                                         {{Form::close()}}
                                 
                                     </div>
+                                    @endforeach
+
                                 </div>
                             </div>
-                            @if ($item !== end($items))
-                            <hr>
-                            @endif
-                            @endforeach
-
                         </div>
                     </div>
                 </div>
@@ -128,7 +134,7 @@
         $(function(){
             
             var $activeTag;
-            $('.setting-input input, .setting-input select').on('change', function (e) {
+            $('.setting-input input, .setting-input textarea, .setting-input select').on('change', function (e) {
                 e.preventDefault();
 
                 $activeTag = $(this);
@@ -152,6 +158,10 @@
                     });
                 }
                 else if ($activeTag[0]['tagName'] == 'INPUT' && $activeTag[0]['type'] == 'text')
+                {
+                    $activeTag.val($activeTag[0]['defaultValue']);
+                }
+                else if ($activeTag[0]['tagName'] == 'TEXTAREA' && $activeTag[0]['type'] == 'textarea')
                 {
                     $activeTag.val($activeTag[0]['defaultValue']);
                 }
@@ -189,12 +199,12 @@
                 } else {
                     send_data.value = $activeTag.val();
                 };
-                console.log(send_data);
+                // console.log(send_data);
                 
                 $.post(sharenjoy.APPURL + "/store", send_data, function(data, status) {
                     // console.log(data);
                     if (data.status == 'success') {
-                        toastr.success("儲存成功", "成功", opts);
+                        toastr.success("{{trans('cmsharenjoy::app.success_updated')}}", "{{trans('cmsharenjoy::app.success')}}", opts);
                     }
                 });
 

@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.interface')
 
 @section('title')
-{{trans('cmsharenjoy::admin.manage')}}{{trans("cmsharenjoy::app.$appName")}}
+{{trans('cmsharenjoy::app.manage')}}{{trans("cmsharenjoy::app.$appName")}}
 @stop
 
 @section('content')
@@ -278,8 +278,11 @@
 
                     // console.log(send_result);
 
-                    $.post(sharenjoy.APPURL + "/order", send_result, function(data, status) {
-                        // console.log(data);
+                    $.post(sharenjoy.APPURL + "/order", send_result, function(result, status) {
+                        // console.log(result);
+                        if (result.status == 'success') {
+                            toastr.success(result.message, "Success", opts);
+                        }
                     });
                 }
             });

@@ -8,10 +8,10 @@
         }
     ],
     "require": {
-        "php": ">=5.3.0",
+        "php": ">=5.4.0",
+        "illuminate/support": "4.2.*",
         "twilio/sdk": "3.12.*",
         "intervention/image": "1.*",
-        "illuminate/support": "4.2.*",
         "barryvdh/laravel-debugbar": "1.6.*",
         "cartalyst/sentry": "2.1.*",
         "teepluss/theme": "dev-master",

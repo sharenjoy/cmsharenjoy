@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.interface')
 
 @section('title')
-404 {{trans('cmsharenjoy::admin.page_not_found')}}
+404 {{trans('cmsharenjoy::app.page_not_found')}}
 @stop
 
 @section('content')
@@ -13,7 +13,7 @@
 		
 			<div class="error-text">
 				<h2>404</h2>
-				<p>{{trans('cmsharenjoy::admin.page_not_found')}} !</p>
+				<p>{{trans('cmsharenjoy::app.page_not_found')}} !</p>
 			</div>
 		
 			<!-- <hr />

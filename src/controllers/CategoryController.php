@@ -1,7 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Controllers;
 
 use Sharenjoy\Cmsharenjoy\Repo\Category\CategoryInterface;
-use Response, Input, Request, Categorize, Session, Poster;
+use Response, Input, Request, Categorize, Session, Poster, Message;
 
 class CategoryController extends ObjectBaseController {
 
@@ -120,7 +120,7 @@ class CategoryController extends ObjectBaseController {
             }
         }
 
-        return Response::json('success', 200);
+        return Response::json(Message::output('json', 'success', trans('cmsharenjoy::app.success_ordered')), 200);
     }
 
     protected function storeSortById($model, $sortNum)

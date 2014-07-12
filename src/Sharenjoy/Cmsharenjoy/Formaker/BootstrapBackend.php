@@ -248,10 +248,9 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
                                                                ->whereType($categoryType)
                                                                ->orderBy('sort', 'asc')
                                                                ->get();
-                $option = array_merge(
-                    array('0' => Lang::get('cmsharenjoy::option.pleaseSelect')), 
-                    Categorize::tree($categories)->lists('title', 'id')
-                );
+                $option = array('0' => Lang::get('cmsharenjoy::option.pleaseSelect')) +
+                          Categorize::tree($categories)->lists('title', 'id');
+
                 $input = Form::select($name, $option, $value, $args);
                 break;
 

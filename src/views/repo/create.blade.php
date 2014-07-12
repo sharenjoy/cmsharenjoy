@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.interface-create')
 
 @section('title')
-{{trans('cmsharenjoy::admin.add')}}{{trans('cmsharenjoy::app.'.$appName)}}
+{{trans('cmsharenjoy::app.add')}}{{trans('cmsharenjoy::app.'.$appName)}}
 @stop
 
 @section('form-items')
@@ -11,7 +11,7 @@
             
                 <div class="panel-heading">
                     <div class="panel-title">
-                        <h3>{{trans('cmsharenjoy::admin.add')}}</h3>
+                        <h3>{{trans('cmsharenjoy::app.add')}}</h3>
                     </div>
                     
                     <!-- <div class="panel-options">

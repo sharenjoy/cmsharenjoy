@@ -36,6 +36,7 @@ return array(
     'filter'        => '篩選',
     'clear'         => '重設',
     'resetpassword' => '重設密碼',
+    'sendmessage'   => '寄送簡訊',
     'reset'         => '重設',
     'search'        => '搜尋',
     'continue'      => '繼續',
@@ -43,5 +44,6 @@ return array(
     'select_image'  => '選擇圖片',
     'select_file'   => '選擇檔案',
     'open'          => '開啟',
+    'confirm'       => '確認',
 
 );

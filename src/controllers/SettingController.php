@@ -51,15 +51,15 @@ class SettingController extends BaseController {
             return Redirect::to($this->objectUrl);
         }
 
-        return Response::json(Message::output('json', 'success', trans('cmsharenjoy::admin.success_ordered'), $data), 200);
+        return Response::json(Message::output('json', 'success', trans('cmsharenjoy::app.success_ordered'), $data), 200);
     }
 
     protected function item()
     {
         $model = $this->repository->getModel();
 
-        $items['general']['item'] = $model->where('module', 'general')->get();
-        $items['file']['item']    = $model->where('module', 'file')->get();
+        $items['general']['item'] = $model->where('module', 'general')->orderBy('sort')->get();
+        $items['file']['item']    = $model->where('module', 'file')->orderBy('sort')->get();
 
         return $items;
     }
