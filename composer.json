@@ -15,7 +15,10 @@
         "barryvdh/laravel-debugbar": "1.6.*",
         "cartalyst/sentry": "2.1.*",
         "teepluss/theme": "dev-master",
-        "moltin/laravel-cart": "dev-master"
+        "moltin/laravel-cart": "dev-master",
+    },
+    "require-dev": {
+        "way/generators": "2.*"
     },
     "autoload": {
         "classmap": [

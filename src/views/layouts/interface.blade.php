@@ -132,7 +132,7 @@
             <!-- main-content Starts -->
             <div class="main-content">
         
-                <div class="row">
+                <div class="row" id="main-content-header">
     
                     <!-- Profile Info and Notifications -->
                     <div class="col-md-6 col-sm-8 clearfix">
@@ -213,8 +213,6 @@
                         </ul>
                     </div>
                 </div>
-
-                <hr />
 
                 <!-- <ol class="breadcrumb bc-3">
                     <li>

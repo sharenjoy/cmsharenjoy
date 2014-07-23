@@ -30,32 +30,39 @@ class FlashMessageBag extends MessageBag {
         return $this;
     }
 
+    public function success($message)
+    {
+        $this->merge(['success' => $message])->flash();
+    }
+
+    public function error($message)
+    {
+        $this->merge(['error' => $message])->flash();
+    }
+
+    public function info($message)
+    {
+        $this->merge(['info' => $message])->flash();
+    }
+
+    public function warning($message)
+    {
+        $this->merge(['warning' => $message])->flash();
+    }
+
     /**
      * Output some message and status
-     * @param  string $type    The type of message
-     * @param  string $status  success, errors, warning
+     * @param  string $status  success, error, warning
      * @param  string $message This is message wants to output
      * @param  array  $date
-     * @return mixed
+     * @return array
      */
-    public function output($type, $status, $message, $data = null)
+    public function json($status, $message, $data = null)
     {
-        switch ($type)
-        {
-            case 'flash':
-                $this->merge(array($status => $message))->flash();
-                break;
-
-            case 'json':
-                return array(
-                    'status'  => $status,
-                    'message' => $message,
-                    'data'    => $data
-                );
-                break;
-
-            default:
-                break;
-        }
+        return array(
+            'status'  => $status,
+            'message' => $message,
+            'data'    => $data
+        );
     }
 }

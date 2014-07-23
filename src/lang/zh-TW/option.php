@@ -2,6 +2,10 @@
 
 return array(
 
+    // gender
+    'male'              => '男性',
+    'female'            => '女性',
+
     // status
     'pleaseSelect'      => '請選擇',
     'enable'            => '開啟',

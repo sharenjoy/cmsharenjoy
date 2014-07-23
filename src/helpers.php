@@ -256,9 +256,8 @@ if ( ! function_exists('is_really_writable'))
     }
 }
 
-
-if ( ! function_exists('format_date')) {
-
+if ( ! function_exists('format_date'))
+{
     /**
      * Formats a timestamp into a human date format.
      *
@@ -278,5 +277,5 @@ if ( ! function_exists('format_date')) {
 
         return strstr($format, '%') !== false ? ucfirst(utf8_encode(strftime($format, $unix))) : date($format, $unix);
     }
-
 }
+

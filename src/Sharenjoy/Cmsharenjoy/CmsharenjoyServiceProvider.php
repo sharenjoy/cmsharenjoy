@@ -87,7 +87,7 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
             switch ($driver)
             {
                 case 'file':
-                    return new Filer\Filer;                  
+                    return new Filer\FilerRepository;                  
                 
                 default:
                     throw new \InvalidArgumentException('Invalid file driver.');

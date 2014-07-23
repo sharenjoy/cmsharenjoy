@@ -259,10 +259,11 @@
 
                 $modal_delete_file.modal('hide');
 
-                $.post(sharenjoy.APPURL + "/deletefile", send_data, function(data, status) {
-                    if (data.status == true) {
+                $.post(sharenjoy.APPURL + "/deletefile", send_data, function(result, status) {
+                    if (result.status == true) {
                         $selected.remove();
                         hide_something();
+                        toastr.success(result.message, "{{trans('cmsharenjoy::app.success')}}", opts);
                     }
                 });
             });
@@ -320,7 +321,7 @@
                     $.post(sharenjoy.APPURL + "/order", send_result, function(result, status) {
                         // console.log(result);
                         if (result.status == 'success') {
-                            toastr.success(result.message, "Success", opts);
+                            toastr.success(result.message, "{{trans('cmsharenjoy::app.success')}}", opts);
                         }
                     });
                 }

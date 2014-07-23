@@ -206,6 +206,10 @@ abstract class BaseController extends Controller {
         View::share('sortUrl',   $this->sortUrl);
     }
 
+    /**
+     * Setting the output layout priority
+     * @return view
+     */
     protected function setupLayout()
     {
         $commonRepoLayout = Config::get('cmsharenjoy::app.commonRepoLayoutDirectory');

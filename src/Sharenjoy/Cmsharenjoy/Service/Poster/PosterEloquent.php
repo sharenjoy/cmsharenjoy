@@ -5,6 +5,20 @@ use Str, Session, StdClass;
 class PosterEloquent extends PosterBaseAbstract implements PosterInterface {
 
     /**
+     * To show all the rows form model
+     * @param  Model $model
+     * @param  string $sort
+     * @param  string $order
+     * @return Model
+     */
+    public function showAll($model = null, $sort = 'sort', $order = 'desc')
+    {
+        $model = $model ?: $this->model;
+
+        return $model->orderBy($sort, $order)->get();
+    }
+
+    /**
      * Get a record by its ID
      * @param  integer $id The ID of the record
      * @param  array   $items The other things I need to do in model
@@ -17,7 +31,7 @@ class PosterEloquent extends PosterBaseAbstract implements PosterInterface {
 
         if ( ! $model)
         {
-            throw new \Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException();
+            throw new \Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException;
         }
         return $model;
     }
@@ -34,7 +48,7 @@ class PosterEloquent extends PosterBaseAbstract implements PosterInterface {
 
         if ( ! $model)
         {
-            throw new \Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException();
+            throw new \Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException;
         }
         return $model;
     }
@@ -46,7 +60,7 @@ class PosterEloquent extends PosterBaseAbstract implements PosterInterface {
      * @param boolean $all Show published or all
      * @return StdClass Object with $items and $totalItems for pagination
      */
-    public function showByPage($page = 1, $limit, $model = null, $sort = 'sort', $order = 'desc')
+    public function showByPage($page = 1, $limit, $model = null)
     {
         $model = $model ?: $this->model;
 
@@ -56,13 +70,16 @@ class PosterEloquent extends PosterBaseAbstract implements PosterInterface {
         $result->totalItems = 0;
         $result->items      = array();
 
-        $query = $model->orderBy($sort, $order);
+        if ( ! $this->hasQuery) $model = $model->orderBy('created_at', 'desc');
 
-        $rows = $query->skip($limit * ($page-1))
-                      ->take($limit)
-                      ->get();
-
+        // Get the total rows of model
         $result->totalItems = $model->count();
+
+        // get the pagenation
+        $rows  = $model->skip($limit * ($page-1))
+                       ->take($limit)
+                       ->get();
+
         $result->items = $rows->all();
 
         return $result;
@@ -102,13 +119,6 @@ class PosterEloquent extends PosterBaseAbstract implements PosterInterface {
         return $result;
     }
 
-    public function showAll($model = null, $sort = 'sort', $order = 'desc')
-    {
-        $model = $model ?: $this->model;
-
-        return $model->orderBy($sort, $order)->get();
-    }
-
     public function showList($title, $id = 'id', $model = null)
     {
         $model = $model ?: $this->model;
@@ -129,16 +139,16 @@ class PosterEloquent extends PosterBaseAbstract implements PosterInterface {
 
     public function filter(array $data, $model = null)
     {
+        $model = $model ?: $this->model;
+        
         if (count($data))
         {
-            $model = $model ?: $this->model;
-
             foreach ($data as $key => $value)
             {
                 $model = $model->$key($value);
             }
-            return $model;
         }
+        return $model;
     }
 
     /**
@@ -213,7 +223,7 @@ class PosterEloquent extends PosterBaseAbstract implements PosterInterface {
 
         if (count($items))
         {
-            foreach ($items as $key => $item)
+            foreach ($items as $item)
             {
                 $field = '';
 

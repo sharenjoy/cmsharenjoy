@@ -1,6 +1,6 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Controllers;
+<?php namespace Sharenjoy\Cmsharenjoy\Repo\Category;
 
-use Sharenjoy\Cmsharenjoy\Repo\Category\CategoryInterface;
+use Sharenjoy\Cmsharenjoy\Controllers\ObjectBaseController;
 use Response, Input, Request, Categorize, Session, Poster, Message;
 
 class CategoryController extends ObjectBaseController {
@@ -25,9 +25,9 @@ class CategoryController extends ObjectBaseController {
         'post'    => 1
     ];
 
-    public function __construct(CategoryInterface $category)
+    public function __construct(CategoryInterface $repo)
     {
-        $this->repository = $category;
+        $this->repository = $repo;
 
         if (Request::segment(3) == 'index')
         {
@@ -120,7 +120,7 @@ class CategoryController extends ObjectBaseController {
             }
         }
 
-        return Response::json(Message::output('json', 'success', trans('cmsharenjoy::app.success_ordered')), 200);
+        return Response::json(Message::json('success', trans('cmsharenjoy::app.success_ordered')), 200);
     }
 
     protected function storeSortById($model, $sortNum)

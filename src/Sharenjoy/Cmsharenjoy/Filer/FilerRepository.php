@@ -12,7 +12,7 @@ use Config, Setting, Str, Session, Image;
  * @author		PyroCMS Dev Team
  * @package		PyroCMS\Core\Modules\Files\Libraries
  */
-class Filer implements FilerInterface {
+class FilerRepository implements FilerInterface {
 
     public		$providers;
     public      $path;

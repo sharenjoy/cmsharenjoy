@@ -2,4 +2,4 @@
 
 use Exception;
 
-class SharenjoyException extends Exception {}
+abstract class SharenjoyException extends Exception {}

@@ -11,10 +11,12 @@ return array(
     'manage'        => '管理',
     'sort'          => '排序',
     'create'        => '建立',
+    'create_exit'   => '建立＆離開',
     'edit'          => '編輯',
     'save'          => '儲存',
     'update'        => '更新',
-    'save_exit'     => '儲存離開',
+    'update_exit'   => '更新＆離開',
+    'save_exit'     => '儲存＆離開',
     'delete'        => '刪除',
     'publish'       => '發佈',
     'approve'       => '核准',
@@ -45,5 +47,6 @@ return array(
     'select_file'   => '選擇檔案',
     'open'          => '開啟',
     'confirm'       => '確認',
+    'return'        => '返回',
 
 );

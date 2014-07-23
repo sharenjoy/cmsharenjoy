@@ -25,8 +25,8 @@
                 
                 <div class="modal-footer">
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    {{Form::button('Create', array('type'=>'submit', 'class'=>"btn btn-info"))}}
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('cmsharenjoy::buttons.close')}}</button>
+                    {{Form::button(trans('cmsharenjoy::buttons.create'), array('type'=>'submit', 'class'=>"btn btn-info"))}}
                 </div>
             </div>
         </div>
@@ -91,7 +91,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('cmsharenjoy::buttons.close')}}</button>
             </div>
 
         </div>
@@ -143,8 +143,8 @@
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
                     <input type="hidden" id="file_id" name="id" value="">
                     <input type="hidden" id="folder_id" name="folder_id" value="">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                    {{Form::button('Update', array('type'=>'submit', 'class'=>"btn btn-info"))}}
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('cmsharenjoy::buttons.cancel')}}</button>
+                    {{Form::button(trans('cmsharenjoy::buttons.update'), array('type'=>'submit', 'class'=>"btn btn-info"))}}
                 </div>
             </div>
         </form>
@@ -166,8 +166,8 @@
             </div>
             
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-info delete-button">Delete</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('cmsharenjoy::buttons.cancel')}}</button>
+                <button type="button" class="btn btn-info delete-button">{{trans('cmsharenjoy::buttons.delete')}}</button>
             </div>
         </div>
     </div>

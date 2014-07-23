@@ -23,6 +23,7 @@ This is cmsharenjoy.
     'Sharenjoy\Cmsharenjoy\Service\Categorize\CategorizeServiceProvider',
     'Intervention\Image\ImageServiceProvider',
     'Moltin\Cart\CartServiceProvider',
+    'Way\Generators\GeneratorsServiceProvider',
 
 
 ### Adding the alices to app.php
@@ -52,9 +53,6 @@ This is cmsharenjoy.
 
     php artisan migrate --package=cartalyst/sentry
     php artisan config:publish cartalyst/sentry
-
->Add a `type` and `sort` column to users table
->And distory email column unique
 
 ### Modify the config of Sentry for new User model that extends Sentry User model
 

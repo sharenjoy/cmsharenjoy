@@ -1,8 +1,8 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Controllers;
+<?php namespace Sharenjoy\Cmsharenjoy\Repo\Post;
 
-use Sharenjoy\Cmsharenjoy\Repo\Tag\TagInterface;
+use Sharenjoy\Cmsharenjoy\Controllers\ObjectBaseController;
 
-class TagController extends ObjectBaseController {
+class PostController extends ObjectBaseController {
 
     protected $functionRules = [
         'list'   => true,
@@ -13,13 +13,13 @@ class TagController extends ObjectBaseController {
     ];
 
     protected $listConfig = [
-        'tag'          => ['name'=>'tag',          'align'=>'',       'width'=>''   ],
+        'title'        => ['name'=>'title',        'align'=>'',       'width'=>''   ],
         'created_at'   => ['name'=>'created',      'align'=>'center', 'width'=>'20%'],
     ];
 
-    public function __construct(TagInterface $tag)
+    public function __construct(PostInterface $repo)
     {
-        $this->repository = $tag;
+        $this->repository = $repo;
         parent::__construct();
     }
 

@@ -2,7 +2,6 @@
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
-use App;
 
 class MessageServiceProvider extends ServiceProvider {
 
@@ -17,10 +16,10 @@ class MessageServiceProvider extends ServiceProvider {
 
         $app->bind(
             'Illuminate\Support\Contracts\MessageProviderInterface',
-            function()
+            function() use ($app)
             {
                 return new FlashMessageBag(
-                    App::make('session.store')
+                    $app->make('session.store')
                 );
             }
         );

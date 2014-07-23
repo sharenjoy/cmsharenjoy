@@ -12,7 +12,7 @@ class Admin {
     {
         if ( ! Sentry::check())
         {
-            return Redirect::guest(Config::get('cmsharenjoy::app.access_url').'/login');
+            return Redirect::to(Config::get('cmsharenjoy::app.access_url').'/login');
         }
         
         $segment = Request::segment(2);

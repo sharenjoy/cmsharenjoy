@@ -1,6 +1,6 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Controllers;
+<?php namespace Sharenjoy\Cmsharenjoy\User;
 
-use Sharenjoy\Cmsharenjoy\User\UserInterface;
+use Sharenjoy\Cmsharenjoy\Controllers\ObjectBaseController;
 use Sentry, Mail, Config, Message, Redirect, Str;
 
 class UserController extends ObjectBaseController {
@@ -20,9 +20,9 @@ class UserController extends ObjectBaseController {
         'created_at'   => ['name'=>'created',      'align'=>'center', 'width'=>'20%'],
     ];
 
-    public function __construct(UserInterface $user)
+    public function __construct(UserInterface $repo)
     {
-        $this->repository = $user;
+        $this->repository = $repo;
         parent::__construct();
     }
 
@@ -37,7 +37,7 @@ class UserController extends ObjectBaseController {
 
             if ( ! $user->save())
             {
-                Message::output('flash', 'errors', trans('cmsharenjoy::app.some_wrong'));
+                Message::error(trans('cmsharenjoy::app.some_wrong'));
                 return Redirect::to($this->urlSegment.'/login');
             }
 
@@ -62,11 +62,11 @@ class UserController extends ObjectBaseController {
         }
         catch (\Cartalyst\Sentry\Users\UserNotFoundException $e)
         {
-            Message::output('flash', 'errors', trans('cmsharenjoy::app.user_not_found'));
+            Message::error(trans('cmsharenjoy::app.user_not_found'));
             return Redirect::to($this->objectUrl);
         }
 
-        Message::output('flash', 'success', trans('cmsharenjoy::app.sent_reset_code'));
+        Message::success(trans('cmsharenjoy::app.sent_reset_code'));
         return Redirect::to($this->objectUrl);
     }
 

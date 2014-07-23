@@ -1,7 +1,6 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Controllers;
+<?php namespace Sharenjoy\Cmsharenjoy\Repo\Order;
 
-use Sharenjoy\Cmsharenjoy\Repo\Order\OrderInterface;
-use Sharenjoy\Cmsharenjoy\Repo\Order\OrderDetail;
+use Sharenjoy\Cmsharenjoy\Controllers\ObjectBaseController;
 use Poster;
 
 class OrderController extends ObjectBaseController {
@@ -22,9 +21,9 @@ class OrderController extends ObjectBaseController {
         'created_at'  => ['name'=>'created',      'align'=>'center', 'width'=>'20%'],
     ];
 
-    public function __construct(OrderInterface $order)
+    public function __construct(OrderInterface $repo)
     {
-        $this->repository = $order;
+        $this->repository = $repo;
         parent::__construct();
     }
 

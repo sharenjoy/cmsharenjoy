@@ -7,12 +7,13 @@ return array(
     'fetching'                 => '收集數據中...',
     'fetch_completed'          => '結束',
     'save_failed'              => '不能保存修改',
-    'item_created'             => '創建 "%s" 成功',
-    'item_updated'             => '更新成功',
-    'item_deleted'             => '刪除 "%s" 成功',
+    'item_created'             => '檔案創建 "%s" 成功',
+    'item_updated'             => '檔案更新成功',
+    'item_deleted'             => '檔案刪除 "%s" 成功',
     'item_not_deleted'         => '"%s" 不能被刪除',
     'item_not_found'           => '對不起. 未能發現 "%s"',
     'sort_saved'               => '新排序保存成功',
+    'folder_created'           => '文件夾建立成功',
     'no_permissions'           => '您未有足夠權限',
     
     // Labels

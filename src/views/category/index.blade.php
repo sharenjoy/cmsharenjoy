@@ -103,7 +103,7 @@
 
                 $.post("../order", result, function(result, status) {
                     if (result.status == 'success') {
-                        toastr.success(result.message, "Success", opts);
+                        toastr.success(result.message, "{{trans('cmsharenjoy::app.success')}}", opts);
                     }
                 });
             });

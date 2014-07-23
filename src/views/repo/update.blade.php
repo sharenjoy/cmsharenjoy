@@ -24,7 +24,7 @@
                 
                 <div class="panel-body">
                     
-                    {{ Form::open( array( 'url'=>$updateUrl.$item->id , 'class'=>'form-horizontal form-groups-bordered' , 'role'=>'form', 'id'=>'item-form' ) ) }}
+                    {{Form::open(['url'=>$updateUrl.$item->id, 'class'=>'form-horizontal form-groups-bordered', 'role'=>'form', 'id'=>'updated-form'])}}
                     
                         @if(isset($fieldsForm))
                             @foreach($fieldsForm as $key => $value)
@@ -36,13 +36,12 @@
                         
                         <div class="form-group">
                             <div class="col-sm-8">
-                                {{ Form::reset(trans('cmsharenjoy::buttons.reset') , array('class'=>'btn btn-large btn-default')) }}
-                                &nbsp;
-                                {{ Form::submit(trans('cmsharenjoy::buttons.update') , array('class'=>'btn btn-large btn-success')) }}
+                                @include('cmsharenjoy::partials.button-update')
                             </div>
                         </div>
 
-                    {{ Form::close() }}
+                    {{Form::close()}}
+
                 </div>
             </div>
         </div>

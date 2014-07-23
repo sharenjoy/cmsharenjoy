@@ -1,13 +1,13 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Controllers;
+<?php namespace Sharenjoy\Cmsharenjoy\Setting;
 
-use Sharenjoy\Cmsharenjoy\Setting\SettingInterface;
+use Sharenjoy\Cmsharenjoy\Controllers\BaseController;
 use Input, Redirect, Message, Form, Response, Request;
 
 class SettingController extends BaseController {
 
-    public function __construct(SettingInterface $setting)
+    public function __construct(SettingInterface $repo)
     {
-        $this->repository = $setting;
+        $this->repository = $repo;
         parent::__construct();
     }
 
@@ -47,11 +47,11 @@ class SettingController extends BaseController {
         }
         catch (\Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException $e)
         {
-            Message::output('flash', 'errors', trans('cmsharenjoy::exception.not_found', array('id' => $data['id'])));
+            Message::error(trans('cmsharenjoy::exception.not_found', ['id' => $data['id']]));
             return Redirect::to($this->objectUrl);
         }
 
-        return Response::json(Message::output('json', 'success', trans('cmsharenjoy::app.success_ordered'), $data), 200);
+        return Response::json(Message::json('success', trans('cmsharenjoy::app.success_updated'), $data), 200);
     }
 
     protected function item()

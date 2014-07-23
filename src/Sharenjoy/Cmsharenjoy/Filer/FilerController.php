@@ -1,9 +1,8 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Controllers;
+<?php namespace Sharenjoy\Cmsharenjoy\Filer;
 
-use Sharenjoy\Cmsharenjoy\Filer\Folder;
-use Sharenjoy\Cmsharenjoy\Filer\File;
-use Sharenjoy\Cmsharenjoy\Filer\FilerValidator;
-use Config, Lang, Theme, Message, Session, Input, Response, App, Redirect, Filer, Request;
+use Sharenjoy\Cmsharenjoy\Controllers\BaseController;
+use Config, Lang, Theme, Message, Session, Input;
+use Response, App, Redirect, Filer, Request;
 
 /**
  * PyroCMS file Admin Controller
@@ -62,7 +61,7 @@ class FilerController extends BaseController {
         $fileResult = $this->foldercontents($parentId);
         if ( ! $fileResult['status'])
         {
-            Message::add('errors', $fileResult['message'])->flash();
+            Message::error($fileResult['message']);
         }
 
         $maxSize = Filer::getMaxSizeAllowed() > Filer::getMaxSizePossible() ? 
@@ -100,7 +99,7 @@ class FilerController extends BaseController {
         $fileResult = $this->foldercontents($parentId);
         if ( ! $fileResult['status'])
         {
-            Message::add('errors', $fileResult['message'])->flash();
+            Message::error($fileResult['message']);
         }
 
         $maxSize = Filer::getMaxSizeAllowed() > Filer::getMaxSizePossible() ? 
@@ -120,7 +119,7 @@ class FilerController extends BaseController {
         $fileResult = $this->foldercontents($parentId);
         if ( ! $fileResult['status'])
         {
-            Message::add('errors', $fileResult['message'])->flash();
+            Message::error($fileResult['message']);
         }
 
         $maxSize = Filer::getMaxSizeAllowed() > Filer::getMaxSizePossible() ? 
@@ -152,6 +151,8 @@ class FilerController extends BaseController {
         }
 
         $result = Filer::createFolder($parent_id, $input['name']);
+
+        Message::success(trans('cmsharenjoy::files.folder_created'));
 
         return Redirect::to($this->objectUrl.'/'.$toWhere.'/'.$result['data']['id']);
     }
@@ -218,7 +219,7 @@ class FilerController extends BaseController {
         }
 
         // let the files library format the return array like all the others
-        return Response::json(Message::output('json', 'success', trans('cmsharenjoy::app.success_ordered')), 200);
+        return Response::json(Message::json('success', trans('cmsharenjoy::app.success_ordered')), 200);
     }
 
     /**
@@ -309,7 +310,7 @@ EOE;
         $file->alt_attribute = $input['alt_attribute'];
         $file->save();
 
-        Message::output('flash', 'success', 'File updated');
+        Message::success(trans('cmsharenjoy::files.item_updated'));
         return Redirect::to($this->objectUrl.'/'.$toWhere.'/'.$file->folder_id);
     }
 

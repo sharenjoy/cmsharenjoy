@@ -2,7 +2,7 @@
 
 use Illuminate\Validation\Factory;
 use Sharenjoy\Cmsharenjoy\Exception\ValidatorRulesNotFoundException;
-use App, Message, StdClass;
+use App, Message, StdClass, Lang;
 
 abstract class AbstractLaravelValidator implements ValidableInterface {
 
@@ -28,7 +28,7 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
      * Validation rules
      * @var Array
      */
-    public $rules = array();
+    protected $rules = array();
 
     public function __construct(Factory $validator = null)
     {
@@ -77,7 +77,7 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
      */
     public function passes()
     {
-        $validator = $this->validator->make($this->data, $this->rules);
+        $validator = $this->validator->make($this->data, $this->rules, $this->messages(), $this->attributes());
 
         if ($validator->fails())
         {
@@ -95,6 +95,41 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
     public function errors()
     {
         return $this->errors;
+    }
+
+    /**
+     * Return the custom message form lang file
+     * @return array
+     */
+    protected function messages()
+    {
+        $messages = [];
+
+        if (Lang::has('cmsharenjoy::app.form.validation'))
+        {
+            $messages = Lang::get('cmsharenjoy::app.form.validation');
+        }
+
+        return $messages;
+    }
+
+    /**
+     * Custom message attribute
+     * @return array
+     */
+    protected function attributes()
+    {
+        $attributes = [];
+
+        foreach ($this->rules as $key => $value)
+        {
+            if (Lang::has('cmsharenjoy::app.form.'.$key))
+            {
+                $attributes[$key] = Lang::get('cmsharenjoy::app.form.'.$key);
+            }
+        }
+
+        return $attributes;
     }
 
     /**
@@ -116,7 +151,7 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
         {
             foreach ($this->getErrorsToArray() as $message)
             {
-                Message::merge(array('errors' => $message))->flash();
+                Message::error($message);
             }
         }
     }
@@ -174,7 +209,7 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
                     break;
 
                 case 'json':
-                    $result->message = Message::output($errorType, 'errors', $this->getErrorsToArray());
+                    $result->message = Message::json('error', $this->getErrorsToArray());
                     break;
                 
                 default:

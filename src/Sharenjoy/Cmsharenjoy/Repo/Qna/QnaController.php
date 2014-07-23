@@ -1,6 +1,6 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Controllers;
+<?php namespace Sharenjoy\Cmsharenjoy\Repo\Qna;
 
-use Sharenjoy\Cmsharenjoy\Repo\Qna\QnaInterface;
+use Sharenjoy\Cmsharenjoy\Controllers\ObjectBaseController;
 
 class QnaController extends ObjectBaseController {
 

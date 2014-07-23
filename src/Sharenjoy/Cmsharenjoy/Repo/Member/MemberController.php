@@ -1,6 +1,6 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Controllers;
+<?php namespace Sharenjoy\Cmsharenjoy\Repo\Member;
 
-use Sharenjoy\Cmsharenjoy\Repo\Member\MemberInterface;
+use Sharenjoy\Cmsharenjoy\Controllers\ObjectBaseController;
 use Sentry, Mail, Config, Message, Redirect, Str, Hash, Poster, Input, App, Notify;
 
 class MemberController extends ObjectBaseController {
@@ -22,9 +22,9 @@ class MemberController extends ObjectBaseController {
         'created_at'   => ['name'=>'created',      'align'=>'center', 'width'=>'20%'],
     ];
 
-    public function __construct(MemberInterface $member)
+    public function __construct(MemberInterface $repo)
     {
-        $this->repository = $member;
+        $this->repository = $repo;
         parent::__construct();
     }
 
@@ -37,7 +37,7 @@ class MemberController extends ObjectBaseController {
 
         if ( ! $user->save())
         {
-            Message::output('flash', 'errors', trans('cmsharenjoy::app.some_wrong'));
+            Message::error(trans('cmsharenjoy::app.some_wrong'));
             return Redirect::to($this->urlSegment.'/login');
         }
 
@@ -55,7 +55,7 @@ class MemberController extends ObjectBaseController {
             $message->to($user->email);
         });
 
-        Message::output('flash', 'success', trans('cmsharenjoy::app.sent_reset_code'));
+        Message::success(trans('cmsharenjoy::app.sent_reset_code'));
         return Redirect::to($this->objectUrl);
     }
 
@@ -73,11 +73,11 @@ class MemberController extends ObjectBaseController {
         if ($user['mobile'] != '' && $data['message'] != '')
         {
             Notify::to('+886939025412')->notify('齊味', $data['message']);
-            Message::output('flash', 'success', '簡訊寄送成功');
+            Message::success('簡訊寄送成功');
         }
         else
         {
-            Message::output('flash', 'errors', '簡訊寄送失敗');
+            Message::error('簡訊寄送失敗');
         }
 
         return Redirect::to($this->objectUrl);

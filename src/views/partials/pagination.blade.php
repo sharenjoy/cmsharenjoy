@@ -12,8 +12,9 @@
                 $paginationCount,
                 array('class'=>'form-control pagination_count', 'id'=>'pagination_count')
             )}}
+            {{$_SERVER['QUERY_STRING'] != '' ? Form::hidden('query_string', $_SERVER['QUERY_STRING']) : ''}}
             &nbsp;&nbsp;
-            {{Lang::get('cmsharenjoy::app.pagination_desc', array('from'=>$items->getFrom(), 'to'=>$items->getTo(), 'total'=>$items->getTotal()))}}
+            {{trans('cmsharenjoy::app.pagination_desc', array('from'=>$items->getFrom(), 'to'=>$items->getTo(), 'total'=>$items->getTotal()))}}
         {{Form::close()}}
     </div>
 </div>

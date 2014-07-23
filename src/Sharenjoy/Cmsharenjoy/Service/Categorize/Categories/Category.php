@@ -23,7 +23,7 @@ class Category extends Model implements CategoryInterface {
         'get-index'   => [],
         'get-sort'    => [],
         'get-create'  => [],
-        'get-update'  => ['username|thisisuser'],
+        'get-update'  => [],
         'post-create' => [],
         'post-create' => [],
     ];
@@ -166,16 +166,6 @@ class Category extends Model implements CategoryInterface {
         {
             $this->destroy($id);
         }
-    }
-
-    public function author()
-    {
-        return $this->belongsTo('Sharenjoy\Cmsharenjoy\User\User', 'user_id');
-    }
-
-    public function username($field = __FUNCTION__)
-    {
-        $this->$field = $this->author->name;
     }
 
 }

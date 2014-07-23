@@ -33,7 +33,8 @@ class Product extends EloquentBaseModel {
 
     public $filterFormConfig = [
         'category_id'       => ['args' => ['category'=>'Product']],
-        'keyword'           => [],
+        'created_range'     => ['type' => 'daterange'],
+        'keyword'           => ['args' => ['filter' => 'title,title_jp,description']],
     ];
 
     public $formConfig = [
@@ -64,17 +65,18 @@ class Product extends EloquentBaseModel {
 
     public function categories()
     {
-        return $this->belongsTo('Sharenjoy\Cmsharenjoy\Repo\Category\Category', 'category_id');
+        return $this->belongsTo('Sharenjoy\Cmsharenjoy\Service\Categorize\Categories\Category', 'category_id');
     }
 
     public function scopeCategory_id($query, $value)
     {
-        return $value ? $query->where('category_id', $value) : $query;
+        return $value ? $query->where('products.category_id', $value) : $query;
     }
 
-    public function scopeKeyword($query, $value)
+    public function scopeCreated_range($query, $value)
     {
-        return $value ? $query->where('title', 'LIKE', "%$value%") : $query;
+        $between = explode(' ~ ', $value);
+        return $value ? $query->whereBetween('products.created_at', $between) : $query;
     }
 
 }

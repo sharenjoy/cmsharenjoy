@@ -32,6 +32,7 @@ return array(
     'success'                     => '成功',
     'warning'                     => '注意',
     'notice'                      => '提示',
+    'info'                        => '提示',
     'message'                     => '訊息內容',
     'back_login'                  => '返回登入',
     'forgot_password'             => '忘記密碼',
@@ -144,8 +145,10 @@ return array(
         'email'                   => '電子信箱',
         'content'                 => '內容',
         'description'             => '描述',
+        'message'                 => '訊息',
+        'messages'                => '訊息',
         'password'                => '密碼',
-        'password_confirmationaa' => '確認密碼',
+        'password_confirmation'   => '確認密碼',
         'img'                     => '圖片',
         'image'                   => '圖片',
         'file'                    => '檔案',
@@ -187,6 +190,14 @@ return array(
                 'tag'             => '請使用Enter鍵或使用半型逗號分隔',
             ],
         ],
+
+        'validation' => [
+            // 'name.required'       => ':attribute 一定要填資料啦～～～～～',
+
+            // 'email.required'      => ':attribute 也一定要填喔!!!',
+            // 'email.email'         => ':attribute 格式也要正確啦～～～～',
+        ],
+
     ],
 
 );

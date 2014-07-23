@@ -76,7 +76,7 @@ abstract class FrontBaseController extends Controller {
             $controller = str_replace('Controller', '', class_basename(head($routeArray)));
 
             // Take out the method from the action.
-            $action = str_replace(array('get', 'post', 'patch', 'put', 'delete'), '', last($routeArray));
+            $action = str_replace(['get', 'post', 'patch', 'put', 'delete'], '', last($routeArray));
 
             // post, report
             $this->onController = strtolower($controller);

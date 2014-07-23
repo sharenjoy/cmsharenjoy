@@ -1,6 +1,11 @@
 <?php
 
 return array(
+    
+    'gender' => [
+        '1' => trans('cmsharenjoy::option.female'),
+        '2' => trans('cmsharenjoy::option.male'),
+    ],
 
     'status' => [
         '0' => trans('cmsharenjoy::option.pleaseSelect'),

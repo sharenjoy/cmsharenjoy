@@ -31,6 +31,15 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
     }
 
     /**
+     * Return a instance of validator
+     * @return Validator
+     */
+    public function getValidator()
+    {
+        return $this->validator;
+    }
+
+    /**
      * Create a new Article
      * @param array  Data to create a new object
      * @return string The insert id

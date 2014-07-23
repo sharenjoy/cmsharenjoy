@@ -9,11 +9,20 @@ class Member extends EloquentBaseModel implements UserInterface, RemindableInter
     protected $table = 'members';
 
     protected $fillable = array(
+        'easy_contact_time_id',
         'email',
         'password',
         'name',
+        'gender',
         'phone',
         'mobile',
+        'birth_y',
+        'birth_m',
+        'birth_d',
+        'county',
+        'district',
+        'zipcode',
+        'address',
         'description',
         'sort'
     );
@@ -125,4 +134,8 @@ class Member extends EloquentBaseModel implements UserInterface, RemindableInter
         return $this->hasMany('Sharenjoy\Cmsharenjoy\Repo\Member\ContactInfo', 'member_id');
     }
 
+    public function birthday()
+    {
+        $this->birthday = $this->birth_y.$this->birth_m.$this->birth_d;
+    }
 }

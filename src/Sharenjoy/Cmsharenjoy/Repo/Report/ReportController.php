@@ -1,6 +1,6 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Controllers;
+<?php namespace Sharenjoy\Cmsharenjoy\Repo\Report;
 
-use Sharenjoy\Cmsharenjoy\Repo\Report\ReportInterface;
+use Sharenjoy\Cmsharenjoy\Controllers\ObjectBaseController;
 
 class ReportController extends ObjectBaseController {
 
@@ -19,9 +19,9 @@ class ReportController extends ObjectBaseController {
         'created_at'   => ['name'=>'created',      'type'=>'',       'align'=>'center', 'width'=>'20%' ],
     ];
 
-    public function __construct(ReportInterface $report)
+    public function __construct(ReportInterface $repo)
     {
-        $this->repository = $report;
+        $this->repository = $repo;
         parent::__construct();
     }
 

@@ -19,7 +19,7 @@
                 
                 <div class="modal-footer">
                     <input type="hidden" name="pick_field_name" id="pick_field_name" value="">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('cmsharenjoy::buttons.close')}}</button>
                 </div>
             </div>
         </div>
@@ -43,7 +43,7 @@
                     </div>
                     
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('cmsharenjoy::buttons.close')}}</button>
                     </div>
                 </div>
             </div>

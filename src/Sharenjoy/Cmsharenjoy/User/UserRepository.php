@@ -58,22 +58,22 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
         }
         catch (\Cartalyst\Sentry\Users\LoginRequiredException $e)
         {
-            Message::output('flash', 'errors', 'Login field is required.');
+            Message::error('Login field is required.');
             return false;
         }
         catch (\Cartalyst\Sentry\Users\PasswordRequiredException $e)
         {
-            Message::output('flash', 'errors', 'Password field is required.');
+            Message::error('Password field is required.');
             return false;
         }
         catch (\Cartalyst\Sentry\Users\UserExistsException $e)
         {
-            Message::output('flash', 'errors', 'User with this login already exists.');
+            Message::error('User with this login already exists.');
             return false;
         }
         catch (\Cartalyst\Sentry\Groups\GroupNotFoundException $e)
         {
-            Message::output('flash', 'errors', 'Group was not found.');
+            Message::error('Group was not found.');
             return false;
         }
 
@@ -99,18 +99,18 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
             // Update the user
             if ( ! $user->save())
             {
-                Message::output('flash', 'errors', 'User information was not updated');
+                Message::error('User information was not updated');
                 return false;
             }            
         }
         catch (Cartalyst\Sentry\Users\UserExistsException $e)
         {
-            Message::output('flash', 'errors', 'User with this login already exists.');
+            Message::error('User with this login already exists.');
             return false;
         }
         catch (Cartalyst\Sentry\Users\UserNotFoundException $e)
         {
-            Message::output('flash', 'errors', 'User was not found.');
+            Message::error('User was not found.');
             return false;
         }
 

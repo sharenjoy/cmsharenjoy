@@ -12,6 +12,12 @@ Abstract class PosterBaseAbstract {
     protected $model;
 
     /**
+     * Does it have other query 
+     * @var boolean
+     */
+    protected $hasQuery = false;
+
+    /**
      * Return a instance of model
      * @return Eloquent
      */
@@ -35,6 +41,17 @@ Abstract class PosterBaseAbstract {
             $this->model = $model;
         }
         
+        return $this;
+    }
+
+    /**
+     * Set the hasQuery is true or not
+     * @param boolean $value
+     */
+    public function hasQuery($value = true)
+    {
+        $this->hasQuery = $value;
+
         return $this;
     }
 

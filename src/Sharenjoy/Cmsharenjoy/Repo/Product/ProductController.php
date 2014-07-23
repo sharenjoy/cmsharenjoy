@@ -1,6 +1,7 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Controllers;
+<?php namespace Sharenjoy\Cmsharenjoy\Repo\Product;
 
-use Sharenjoy\Cmsharenjoy\Repo\Product\ProductInterface;
+use Sharenjoy\Cmsharenjoy\Controllers\ObjectBaseController;
+use Input, View, Request, Poster, Paginator;
 
 class ProductController extends ObjectBaseController {
 
@@ -13,6 +14,7 @@ class ProductController extends ObjectBaseController {
     ];
 
     protected $listConfig = [
+        'ctitle'       => ['name'=>'category',     'type'=>'',       'align'=>'center', 'width'=>''    ],
         'title'        => ['name'=>'title',        'type'=>'',       'align'=>'',       'width'=>''    ],
         'title_jp'     => ['name'=>'title_jp',     'type'=>'',       'align'=>'',       'width'=>''    ],
         'price'        => ['name'=>'price',        'type'=>'',       'align'=>'right',  'width'=>''    ],
@@ -24,6 +26,14 @@ class ProductController extends ObjectBaseController {
     {
         $this->repository = $repo;
         parent::__construct();
+    }
+    
+    protected function makeQuery($model)
+    {
+        return $model::select(['products.*', 'categories.title as ctitle'])
+                     ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+                     ->orderBy('categories.sort')
+                     ->orderBy('products.sort', 'DESC');
     }
 
 }

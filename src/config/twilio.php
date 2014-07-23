@@ -2,10 +2,6 @@
 
 return array(
 
-    'from'       => '',
-    'account_id' => '',
-    'auth_token' => '',
-    
     // test
     // 'from'       => '15005550000',
     // 'account_id' => 'ACee36ad8b9cb326078b7782351b8aba61',
