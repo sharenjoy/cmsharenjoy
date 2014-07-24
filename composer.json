@@ -1,6 +1,7 @@
 {
     "name": "sharenjoy/cmsharenjoy",
     "description": "This is a cms",
+    "license": "MIT",
     "authors": [
         {
             "name": "Ronald Jian",
