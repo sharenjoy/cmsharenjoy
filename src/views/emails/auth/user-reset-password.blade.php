@@ -7,9 +7,7 @@
     <h1>Reset your password</h1>
     <p>Hello, {{ $username }}</p>
 
-    <p>This is your password: <b>{{$password}}</b></p>
-
-    <p>We suggest you <a href="{{url($urlSegment.'/resetpassword/'.$id.'/'.$code)}}">reset your password</a></p>
+    <p>This is the link that you can <a href="{{url($urlSegment.'/resetpassword/'.$code)}}">reset your password</a></p>
 
     <p>Admin</p>
 </body>

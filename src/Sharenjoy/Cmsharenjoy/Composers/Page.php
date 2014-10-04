@@ -15,7 +15,7 @@ class Page {
         $view->with('urlSegment', Config::get('cmsharenjoy::app.access_url'))
              ->with('menu_items', Config::get('cmsharenjoy::app.menu_items'))
              // ->with('success', Session::get('success', new MessageBag))
-             ->with('active_language', Session::get('admin-locale'));
+             ->with('active_language', Session::get('sharenjoy.backEndLanguage'));
     }
 
 }

@@ -4,14 +4,10 @@ use Sharenjoy\Cmsharenjoy\Service\Validation\AbstractLaravelValidator;
 
 class TagValidator extends AbstractLaravelValidator {
 
-    /**
-     * Validation rules
-     *
-     * @var Array
-     */
-    public $rules = [
-        'tag'       => 'required',
-        'slug'      => 'required|unique:tags,slug'
+    public $unique = [];
+    
+    public $rules  = [
+        'tag'       => 'required|min:1'
     ];
 
 }

@@ -28,7 +28,7 @@ return array(
      */
     'locales' => array(
         'zh-TW' => '繁體中文',
-        // 'en'    => '英文',
+        // 'en'    => 'English',
         // 'zh-CN' => '簡體中文',
         // 'ja'    => '日文',
     ),
@@ -64,10 +64,10 @@ return array(
                 ),
             )
         ),
-        // 'tag' => array(
-        //     'name' => 'menu.tag',
-        //     'icon' => 'entypo-tag',
-        // ),
+        'tag' => array(
+            'name' => 'menu.tag',
+            'icon' => 'entypo-tag',
+        ),
         'qna' => array(
             'name' => 'menu.qna',
             'icon' => 'entypo-lamp',

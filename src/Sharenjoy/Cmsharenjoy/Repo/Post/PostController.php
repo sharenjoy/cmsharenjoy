@@ -19,7 +19,7 @@ class PostController extends ObjectBaseController {
 
     public function __construct(PostInterface $repo)
     {
-        $this->repository = $repo;
+        $this->repo = $repo;
         parent::__construct();
     }
 

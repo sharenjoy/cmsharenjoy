@@ -5,10 +5,10 @@ use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;
 
 class SettingRepository extends EloquentBaseRepository implements SettingInterface {
 
-    public function __construct(Setting $setting, ValidableInterface $validator)
+    public function __construct(Setting $model, ValidableInterface $validator)
     {
         $this->validator = $validator;
-        $this->model     = $setting;
+        $this->model     = $model;
     }
 
     /**

@@ -3,3 +3,5 @@
 {{Form::submit(trans('cmsharenjoy::buttons.create'), array('class'=>'btn btn-large btn-success'))}}
 &nbsp;
 {{Form::button(trans('cmsharenjoy::buttons.create_exit'), array('class'=>'btn btn-large btn-blue', 'data-type'=>'exit'))}}
+&nbsp;
+{{Form::button(trans('cmsharenjoy::buttons.cancel'), ['class'=>'btn btn-large btn-danger', 'onclick'=>'location.href="'.Session::get('goBackPrevious').'"'])}}

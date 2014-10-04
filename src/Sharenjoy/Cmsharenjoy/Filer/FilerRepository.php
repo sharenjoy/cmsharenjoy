@@ -1,6 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Filer;
 
 use Cartalyst\Sentry\Users\Eloquent\User;
+use Sharenjoy\Cmsharenjoy\Utilities\String;
 use Config, Setting, Str, Session, Image;
 
 /**
@@ -997,7 +998,7 @@ class FilerRepository implements FilerInterface {
     **/
     protected function createSlug($name)
     {
-        $name = Str::slug($name);
+        $name = String::slug($name);
 
         return $name;
     }

@@ -33,7 +33,6 @@ class CreateMembersTable extends Migration {
 				$table->timestamp('activated_at')->nullable();
                 $table->dateTime('last_login')->nullable();
                 $table->string('remember_token',100)->nullable();
-                $table->integer('sort')->unsigned()->nullable()->default(0);
                 $table->timestamps();
 
             });

@@ -19,7 +19,7 @@
         @if(Session::has('goBackPrevious') AND Session::get('doAction') != 'index' AND Session::get('doAction') != 'sort')
         <div class="pull-left">
             <a href="{{Session::get('goBackPrevious')}}" class="btn btn-info btn-icon icon-left">
-                <i class="fa fa-undo"></i>{{trans('cmsharenjoy::buttons.return')}}
+                <i class="fa fa-arrow-left"></i>{{trans('cmsharenjoy::buttons.return')}}
             </a>
         </div>
         @endif
@@ -50,15 +50,13 @@
 
     </div>
 
-    @if(isset($filterable) AND $filterable === true AND isset($filterForm))
+    @if(isset($filterForm) AND count($filterForm))
     <div class="panel-body filter-box">
         {{Form::open(array('url'=>$objectUrl, 'role'=>'form', 'method'=>'GET'))}}
             <div class="row">
 
                 @foreach($filterForm as $key => $value)
-                    @if(isset($value['field']))
-                        {{$value['field']}}
-                    @endif
+                    {{$value}}
                 @endforeach
 
                 <div class="list-filter col-md-3 col-sm-6">

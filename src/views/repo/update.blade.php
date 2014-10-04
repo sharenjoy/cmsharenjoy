@@ -6,7 +6,7 @@
 
 @section('form-items')
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-8">
             <div class="panel panel-primary" data-collapsed="0">
             
                 <div class="panel-heading">
@@ -28,14 +28,12 @@
                     
                         @if(isset($fieldsForm))
                             @foreach($fieldsForm as $key => $value)
-                                @if(isset($value['field']))
-                                    {{$value['field']}}
-                                @endif
+                                {{$value}}
                             @endforeach
                         @endif
                         
                         <div class="form-group">
-                            <div class="col-sm-8">
+                            <div class="col-sm-12">
                                 @include('cmsharenjoy::partials.button-update')
                             </div>
                         </div>
@@ -45,6 +43,28 @@
                 </div>
             </div>
         </div>
+        
+        <!-- <div class="col-md-4">
+            <div class="panel panel-primary" data-collapsed="0">
+            
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <h3>{{trans('cmsharenjoy::app.add')}}</h3>
+                    </div>
+                </div>
+                
+                <div class="panel-body">
+                    
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            @include('cmsharenjoy::partials.button-update')
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div> -->
+
     </div>
 @stop
 

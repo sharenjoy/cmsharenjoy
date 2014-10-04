@@ -7,18 +7,16 @@ class SettingController extends BaseController {
 
     public function __construct(SettingInterface $repo)
     {
-        $this->repository = $repo;
+        $this->repo = $repo;
         parent::__construct();
     }
 
     public function getIndex()
     {
-        $items = $this->item();
-        
-        $buttons = Form::button(trans('cmsharenjoy::buttons.save'), array('class'=>'btn btn-success btn-save')).'&nbsp;'.
-                   Form::button(trans('cmsharenjoy::buttons.reset'), array('class'=>'btn btn-reset'));
+        $buttons = Form::button(trans('cmsharenjoy::buttons.save'), ['class'=>'btn btn-success btn-save']).'&nbsp;'.
+                   Form::button(trans('cmsharenjoy::buttons.reset'), ['class'=>'btn btn-reset']);
 
-        return $this->layout->with('items', $items)
+        return $this->layout->with('items', $this->item())
                             ->with('buttons', $buttons);
     }
 
@@ -43,7 +41,7 @@ class SettingController extends BaseController {
 
         try
         {
-            $this->repository->edit($data['item'], array('value' => $data['value']), 'key');
+            $this->repo->edit($data['item'], ['value' => $data['value']], 'key');
         }
         catch (\Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException $e)
         {
@@ -51,12 +49,12 @@ class SettingController extends BaseController {
             return Redirect::to($this->objectUrl);
         }
 
-        return Response::json(Message::json('success', trans('cmsharenjoy::app.success_updated'), $data), 200);
+        return Response::json(Message::result('success', trans('cmsharenjoy::app.success_updated'), $data), 200);
     }
 
     protected function item()
     {
-        $model = $this->repository->getModel();
+        $model = $this->repo->getModel();
 
         $items['general']['item'] = $model->where('module', 'general')->orderBy('sort')->get();
         $items['file']['item']    = $model->where('module', 'file')->orderBy('sort')->get();

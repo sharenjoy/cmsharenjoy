@@ -45,7 +45,7 @@
                                 <li class="dd-item" data-id="{{$valueOne['id']}}">
                                     <div class="dd-handle"> {{$valueOne['title']}} </div>
                                     
-                                    @if(isset($valueOne['children']) && count($valueOne['children']))
+                                    @if(isset($valueOne['children']) AND count($valueOne['children']))
                                     <ul class="dd-list">
                                         @foreach($valueOne['children'] as $keyTwo => $valueTwo)
                                             <li class="dd-item" data-id="{{$valueTwo['id']}}">
@@ -53,7 +53,7 @@
                                             </li>
                                         @endforeach
 
-                                        @if(isset($valueTwo['children']) && count($valueTwo['children']))
+                                        @if(isset($valueTwo['children']) AND count($valueTwo['children']))
                                         <ul class="dd-list">
                                             @foreach($valueTwo['children'] as $keyThree => $valueThree)
                                                 <li class="dd-item" data-id="{{$valueThree['id']}}">

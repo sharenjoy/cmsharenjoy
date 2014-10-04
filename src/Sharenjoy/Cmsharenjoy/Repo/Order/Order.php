@@ -7,7 +7,7 @@ class Order extends EloquentBaseModel {
 
     protected $table    = 'orders';
 
-    protected $fillable = array(
+    protected $fillable = [
         'sn',
         'member_id',
         'name',
@@ -21,22 +21,9 @@ class Order extends EloquentBaseModel {
         'easy_contact_time_id',
         'delivery_time_zone_id',
         'process_id',
-        'sort'
-    );
-
-    public $uniqueFields = [];
-    
-    public $createComposeItem = ['sort'];
-    public $updateComposeItem = [];
-
-    public $processItem = [
-        'get-index'   => ['process|process_id'],
-        'get-sort'    => [],
-        'get-create'  => [],
-        'get-update'  => [],
-        'post-create' => [],
-        'post-create' => [],
     ];
+
+    protected $eventItem = [];
 
     public $filterFormConfig = [];
 
@@ -59,14 +46,19 @@ class Order extends EloquentBaseModel {
     public $createFormDeny   = [];
     public $updateFormDeny   = [];
 
-    public function process($field = __FUNCTION__)
+    public function listQuery()
     {
-        $this->$field = Config::get('cmsharenjoy::options.process.'.$this->process_id);
+        return $this->orderBy('created_at', 'DESC');
     }
 
     public function orderDetail()
     {
         return $this->hasMany('Sharenjoy\Cmsharenjoy\Repo\Order\OrderDetail', 'order_id');
+    }
+
+    public function getProcessAttribute()
+    {
+        return Config::get('cmsharenjoy::options.process.'.$this->process_id);
     }
 
 }

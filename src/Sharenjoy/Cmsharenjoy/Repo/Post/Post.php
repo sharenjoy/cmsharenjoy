@@ -1,79 +1,47 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Repo\Post;
 
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseModel;
+use Sharenjoy\Cmsharenjoy\Repo\Tag\Traits\TaggableTrait;
+use Sharenjoy\Cmsharenjoy\Filer\Traits\AlbumModelTrait;
 
 class Post extends EloquentBaseModel {
 
+    use TaggableTrait;
+    use AlbumModelTrait;
+
     protected $table    = 'posts';
 
-    protected $fillable = array(
+    protected $fillable = [
         'user_id',
         'status_id',
         'title',
         'slug',
         'content',
         'sort'
-    );
-
-    public $uniqueFields = ['slug'];
-    
-    public $createComposeItem = [
-        'slug|title',
-        'user',
-        'status',
-        'sort'
     ];
 
-    public $updateComposeItem = [
-        'slug|title',
-        'user',
-        'status'
+    protected $eventItem = [
+        'creating'    => ['user_id', 'status_id', 'slug|title', 'sort'],
+        'created'     => ['album'],
+        'updating'    => ['user_id', 'status_id', 'slug|title'],
+        'saved'       => ['taggable'],
+        'deleted'     => ['un_taggable'],
     ];
 
-    public $processItem = [
-        'get-index'   => [],
-        'get-sort'    => [],
-        'get-create'  => [],
-        'get-update'  => [],
-        'post-create' => [],
-        'post-create' => [],
-    ];
-
-    public $filterFormConfig = [
-        // 'tag'         => ['type' => 'select','model'=>'tag','item'=>'tag','args'=>['placeholder'=>'This is a tag']],
-        // 'status'      => [],
-        // 'language'    => ['type' => 'select', 'option' => ['1'=>'tw', '2'=>'en']],
-        // 'keyword'     => [],
-        // 'date_range'  => ['type' => 'daterange'],
-        // 'start_date'  => ['type' => 'datepicker'],
-        // 'color'       => ['type' => 'colorpicker'],
-    ];
+    public $filterFormConfig = [];
 
     public $formConfig = [
         'title'       => ['order' => '10'],
-        // 'tag'         => ['input' => 'tags_csv', 'order' => '20'],
+        'tag'         => ['order' => '20'],
         'content'     => ['order' => '30']
     ];
 
     public $createFormConfig = [];
-    public $updateFormConfig = [];
+    public $updateFormConfig = [
+        'album'       => ['order' => '25'],
+    ];
 
     public $createFormDeny   = [];
     public $updateFormDeny   = [];
-
-    public function author()
-    {
-        return $this->belongsTo('Sharenjoy\Cmsharenjoy\User\User', 'user_id');
-    }
-
-    public function username($field = __FUNCTION__)
-    {
-        $this->$field = isset($this->author->name) ? $this->author->name : '';
-    }
-
-    public function tags()
-    {
-        return $this->belongsToMany('Sharenjoy\Cmsharenjoy\Repo\Tag\Tag', 'posts_tags', 'post_id', 'tag_id');
-    }
 
 }

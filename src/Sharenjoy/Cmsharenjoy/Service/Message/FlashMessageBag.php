@@ -26,43 +26,49 @@ class FlashMessageBag extends MessageBag {
     public function flash()
     {
         $this->session->flash($this->session_key, $this->messages);
-
         return $this;
     }
 
-    public function success($message)
+    protected function mergeMessage($type, $messages)
     {
-        $this->merge(['success' => $message])->flash();
-    }
-
-    public function error($message)
-    {
-        $this->merge(['error' => $message])->flash();
-    }
-
-    public function info($message)
-    {
-        $this->merge(['info' => $message])->flash();
-    }
-
-    public function warning($message)
-    {
-        $this->merge(['warning' => $message])->flash();
+        if (is_array($messages))
+        {
+            foreach ($messages as $message)
+            {
+                $this->merge([$type => $message])->flash();
+            }
+        }
+        elseif (is_string($messages))
+        {
+            $this->merge([$type => $messages])->flash();
+        }
     }
 
     /**
      * Output some message and status
      * @param  string $status  success, error, warning
      * @param  string $message This is message wants to output
-     * @param  array  $date
+     * @param  mixed  $date
      * @return array
      */
-    public function json($status, $message, $data = null)
+    public function result($status, $message, $data = null)
     {
-        return array(
+        return [
             'status'  => $status,
             'message' => $message,
             'data'    => $data
-        );
+        ];
+    }
+
+    public function __call($name, $args)
+    {
+        if (count($args) == '1')
+        {
+            $this->mergeMessage($name, $args[0]);
+        }
+        else
+        {
+            throw new \Exception("It doesn't have right arguments");
+        }
     }
 }

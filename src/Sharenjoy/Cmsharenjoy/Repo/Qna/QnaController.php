@@ -20,7 +20,7 @@ class QnaController extends ObjectBaseController {
 
     public function __construct(QnaInterface $repo)
     {
-        $this->repository = $repo;
+        $this->repo = $repo;
         parent::__construct();
     }
 

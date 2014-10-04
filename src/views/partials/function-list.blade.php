@@ -24,9 +24,9 @@
         </li>
     @endif
 
-    @if(isset($functionRules['resetpassword']) AND $functionRules['resetpassword'] == true)
+    @if(isset($functionRules['remindpassword']) AND $functionRules['remindpassword'] == true)
         <li>
-            <a href="{{$objectUrl.'/resetpassword/'.$item->id}}" class="tooltip-primary" data-toggle="tooltip" data-placement="top" title="{{trans('cmsharenjoy::buttons.resetpassword')}}" data-original-title="{{trans('cmsharenjoy::buttons.resetpassword')}}">
+            <a href="{{$objectUrl.'/remindpassword/'.$item->id}}" class="tooltip-primary" data-toggle="tooltip" data-placement="top" title="{{trans('cmsharenjoy::buttons.remindpassword')}}" data-original-title="{{trans('cmsharenjoy::buttons.remindpassword')}}">
                 <i class="fa fa-shield fa-lg"></i>
             </a>
         </li>

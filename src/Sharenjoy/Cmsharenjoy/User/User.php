@@ -1,35 +1,25 @@
 <?php namespace Sharenjoy\Cmsharenjoy\User;
 
-use Eloquent;
 use Illuminate\Auth\Reminders\RemindableInterface;
 use Illuminate\Auth\UserInterface as LaravelUserInterface;
 use Cartalyst\Sentry\Users\Eloquent\User as SentryUserModel;
+use Sharenjoy\Cmsharenjoy\Core\Traits\CommonModelTrait;
 
 class User extends SentryUserModel implements LaravelUserInterface, RemindableInterface {
 
+    use CommonModelTrait;
+
     protected $table  = 'users';
 
-    protected $fillable = array(
+    protected $fillable = [
         'email',
         'password',
         'name',
         'phone',
         'description'
-    );
-
-    public $uniqueFields = ['email'];
-
-    public $createComposeItem = ['sort'];
-    public $updateComposeItem = [];
-
-    public $processItem = [
-        'get-index'   => [],
-        'get-sort'    => [],
-        'get-create'  => [],
-        'get-update'  => [],
-        'post-create' => [],
-        'post-create' => [],
     ];
+
+    protected $eventItem = [];
 
     public $formConfig = [
         'name'                  => ['order' => '10'],
@@ -84,6 +74,11 @@ class User extends SentryUserModel implements LaravelUserInterface, RemindableIn
     public function getRememberTokenName()
     {
         return 'remember_token';
+    }
+
+    public function listQuery()
+    {
+        return $this->orderBy('created_at', 'DESC');
     }
 
 }

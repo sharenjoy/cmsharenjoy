@@ -9,17 +9,18 @@ class TagController extends ObjectBaseController {
         'create' => true,
         'update' => true,
         'delete' => true,
-        'order'  => true,
+        'order'  => false,
     ];
 
     protected $listConfig = [
         'tag'          => ['name'=>'tag',          'align'=>'',       'width'=>''   ],
+        'count'        => ['name'=>'quantity',     'align'=>'right',  'width'=>'10%'],
         'created_at'   => ['name'=>'created',      'align'=>'center', 'width'=>'20%'],
     ];
 
     public function __construct(TagInterface $repo)
     {
-        $this->repository = $repo;
+        $this->repo = $repo;
         parent::__construct();
     }
 

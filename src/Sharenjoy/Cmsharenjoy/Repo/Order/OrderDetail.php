@@ -15,19 +15,7 @@ class OrderDetail extends EloquentBaseModel {
         'price'
     );
 
-    public $uniqueFields = [];
-    
-    public $createComposeItem = [];
-    public $updateComposeItem = [];
-
-    public $processItem = [
-        'get-index'   => [],
-        'get-sort'    => [],
-        'get-create'  => [],
-        'get-update'  => [],
-        'post-create' => [],
-        'post-create' => [],
-    ];
+    protected $eventItem = [];
 
     public $filterFormConfig = [];
 

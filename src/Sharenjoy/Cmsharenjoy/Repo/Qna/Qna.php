@@ -15,26 +15,9 @@ class Qna extends EloquentBaseModel {
         'sort'
     ];
 
-    public $uniqueFields = [];
-    
-    public $createComposeItem = [
-        'user',
-        'status',
-        'sort'
-    ];
-
-    public $updateComposeItem = [
-        'user',
-        'status'
-    ];
-
-    public $processItem = [
-        'get-index'   => [],
-        'get-sort'    => [],
-        'get-create'  => [],
-        'get-update'  => [],
-        'post-create' => [],
-        'post-create' => [],
+    protected $eventItem = [
+        'creating'    => ['user_id', 'status_id', 'sort'],
+        'updating'    => ['user_id', 'status_id'],
     ];
 
     public $filterFormConfig = [];
@@ -50,15 +33,5 @@ class Qna extends EloquentBaseModel {
 
     public $createFormDeny   = [];
     public $updateFormDeny   = [];
-    
-    public function author()
-    {
-        return $this->belongsTo('Sharenjoy\Cmsharenjoy\User\User', 'user_id');
-    }
-
-    public function username($field = __FUNCTION__)
-    {
-        $this->$field = isset($this->author->name) ? $this->author->name : '';
-    }
 
 }

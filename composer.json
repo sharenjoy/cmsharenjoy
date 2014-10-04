@@ -13,13 +13,14 @@
         "illuminate/support": "4.2.*",
         "twilio/sdk": "3.12.*",
         "intervention/image": "1.*",
-        "barryvdh/laravel-debugbar": "1.6.*",
         "cartalyst/sentry": "2.1.*",
         "teepluss/theme": "dev-master",
-        "moltin/laravel-cart": "dev-master"
+        "moltin/laravel-cart": "dev-master",
+        "guzzlehttp/guzzle": "~4.0"
     },
     "require-dev": {
-        "way/generators": "2.*"
+        "way/generators": "2.*",
+        "barryvdh/laravel-debugbar": "1.6.*"
     },
     "autoload": {
         "classmap": [

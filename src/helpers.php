@@ -1,6 +1,6 @@
 <?php
 
-if(! function_exists('adminUrl'))
+if ( ! function_exists('adminUrl'))
 {
 	function adminUrl($str)
 	{
@@ -10,12 +10,12 @@ if(! function_exists('adminUrl'))
 
 }
 
-if(! function_exists('currentUserName'))
+if ( ! function_exists('currentUserName'))
 {
 	function currentUserName()
 	{
 		$user = Auth::getUser();
-		if(!is_null($user))
+		if ( ! is_null($user))
 		{
 			return $user->username;
 		}
@@ -24,12 +24,12 @@ if(! function_exists('currentUserName'))
 	}
 }
 
-if(! function_exists('currentUserId'))
+if ( ! function_exists('currentUserId'))
 {
 	function currentUserId()
 	{
 		$user = Auth::getUser();
-		if(!is_null($user))
+		if ( ! is_null($user))
 		{
 			return $user->id;
 		}
@@ -39,7 +39,7 @@ if(! function_exists('currentUserId'))
 }
 
 
-if(! function_exists('is_moderator'))
+if ( ! function_exists('is_moderator'))
 {
 	function is_moderator()
 	{
@@ -49,7 +49,7 @@ if(! function_exists('is_moderator'))
 }
 
 
-if(! function_exists('apiUrl'))
+if ( ! function_exists('apiUrl'))
 {
 	function apiUrl($str)
 	{
@@ -58,7 +58,7 @@ if(! function_exists('apiUrl'))
 	}
 }
 
-if(! function_exists('frontUrl'))
+if ( ! function_exists('frontUrl'))
 {
 	function frontUrl($str)
 	{
@@ -67,7 +67,7 @@ if(! function_exists('frontUrl'))
 	}
 }
 
-if(! function_exists('dd'))
+if ( ! function_exists('dd'))
 {
 	function dd($value)
 	{
@@ -76,7 +76,7 @@ if(! function_exists('dd'))
 }
 
 
-if(! function_exists('admin_asset'))
+if ( ! function_exists('admin_asset'))
 {
 	function admin_asset($path)
 	{
@@ -84,7 +84,7 @@ if(! function_exists('admin_asset'))
 	}
 }
 
-if(! function_exists('aw'))
+if ( ! function_exists('aw'))
 {
 	function aw($str)
 	{
@@ -92,7 +92,7 @@ if(! function_exists('aw'))
 	}
 }
 
-if(! function_exists('showflag'))
+if ( ! function_exists('showflag'))
 {
 	function showflag($ccode)
 	{
@@ -100,19 +100,19 @@ if(! function_exists('showflag'))
 	}
 }
 
-if(! function_exists('langflag'))
+if ( ! function_exists('langflag'))
 {
 	function langflag($lang)
 	{
 		$ccode = Config::get("ravel::flags.$lang",'en');
-		if(!is_null($ccode))
+		if ( ! is_null($ccode))
 		{
 			return showflag($ccode);
 		}
 	}
 }
 
-if(! function_exists('current_lang'))
+if ( ! function_exists('current_lang'))
 {
 	function current_lang()
 	{
@@ -120,7 +120,7 @@ if(! function_exists('current_lang'))
 	}
 }
 
-if(! function_exists('showActivated'))
+if ( ! function_exists('showActivated'))
 {
 	function showActivated()
 	{
@@ -129,7 +129,7 @@ if(! function_exists('showActivated'))
 }
 
 
-if(! function_exists('showDeactivated'))
+if ( ! function_exists('showDeactivated'))
 {
 	function showDeactivated()
 	{
@@ -138,7 +138,7 @@ if(! function_exists('showDeactivated'))
 }
 
 
-if(! function_exists('makeApiKey'))
+if ( ! function_exists('makeApiKey'))
 {
 	function makeApiKey()
 	{
@@ -150,7 +150,7 @@ if(! function_exists('makeApiKey'))
 	}
 }
 
-if(! function_exists('is_closure'))
+if ( ! function_exists('is_closure'))
 {
 	function is_closure($t) {
    		 return is_object($t) && ($t instanceof Closure);
@@ -158,7 +158,7 @@ if(! function_exists('is_closure'))
 }
 
 
-if(! function_exists('buildTree'))
+if ( ! function_exists('buildTree'))
 {
 	function buildTree(array $elements, $parentId = 0, $parentKey = 'parent_id', $childKey='children') {
 	    
@@ -177,7 +177,7 @@ if(! function_exists('buildTree'))
 	}
 }
 
-if(! function_exists('array_column'))
+if ( ! function_exists('array_column'))
 {
 	function array_column(array $input, $columnKey, $indexKey = null) {
         $result = array();
@@ -271,11 +271,60 @@ if ( ! function_exists('format_date'))
             $unix = strtotime($unix);
         }
 
-        if (!$format) {
+        if ( ! $format) {
             $format = Setting::get('date_format');
         }
 
         return strstr($format, '%') !== false ? ucfirst(utf8_encode(strftime($format, $unix))) : date($format, $unix);
     }
 }
+
+if ( ! function_exists('ii'))
+{
+    /**
+     * For Debugbar info method
+     * @param mixed $data
+     * @return Debugbar
+     */
+    function ii($data, $warning = null)
+    {
+        return is_null($warning) ? Debugbar::info($data) : Debugbar::warning($warning).Debugbar::info($data);
+    }
+}
+
+if ( ! function_exists('ww'))
+{
+    /**
+     * For Debugbar warning method
+     * @param mixed $data
+     * @return Debugbar
+     */
+    function ww($warning = null)
+    {
+        return is_null($warning) ? Debugbar::warning('warning') : Debugbar::warning($warning);
+    }
+}
+
+if ( ! function_exists('start'))
+{
+    /**
+     * For Debugbar start measure method
+     */
+    function start($name = 'Custom vendor', $description = null)
+    {
+        return Debugbar::startMeasure($name, $description);
+    }
+}
+
+if ( ! function_exists('stop'))
+{
+    /**
+     * For Debugbar stop measure method
+     */
+    function stop($name = 'Custom vendor')
+    {
+        return Debugbar::stopMeasure($name);
+    }
+}
+
 

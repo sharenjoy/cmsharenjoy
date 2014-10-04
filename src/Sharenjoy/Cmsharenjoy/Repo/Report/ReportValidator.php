@@ -4,11 +4,8 @@ use Sharenjoy\Cmsharenjoy\Service\Validation\AbstractLaravelValidator;
 
 class ReportValidator extends AbstractLaravelValidator {
 
-    /**
-     * Validation rules
-     *
-     * @var Array
-     */
+    public $unique = [];
+
     public $rules = [
         'title'     => 'required',
         // 'link'      => 'required',

@@ -5,10 +5,10 @@ use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;
 
 class TagRepository extends EloquentBaseRepository implements TagInterface {
 
-    public function __construct(Tag $tag, ValidableInterface $validator)
+    public function __construct(Tag $model, ValidableInterface $validator)
     {
         $this->validator = $validator;
-        $this->model     = $tag;
+        $this->model     = $model;
 
         parent::__construct();
     }

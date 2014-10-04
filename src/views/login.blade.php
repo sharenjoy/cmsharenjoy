@@ -42,7 +42,7 @@
         </div>
 
         <div class="form-group">
-            <a href="{{url($urlSegment.'/forgotpassword')}}">{{trans('cmsharenjoy::app.forgot_password')}} ?</a>
+            <a href="{{url($urlSegment.'/remindpassword')}}">{{trans('cmsharenjoy::app.forgot_password')}} ?</a>
         </div>
         
         <!-- Implemented in v1.1.4 -->              

@@ -17,24 +17,15 @@ class Product extends EloquentBaseModel {
         'sort'
     );
 
-    public $uniqueFields = [];
-    
-    public $createComposeItem = ['user', 'sort'];
-    public $updateComposeItem = ['user'];
-
-    public $processItem = [
-        'get-index'   => [],
-        'get-sort'    => [],
-        'get-create'  => [],
-        'get-update'  => [],
-        'post-create' => [],
-        'post-create' => [],
+    protected $eventItem = [
+        'creating'    => ['user_id', 'sort'],
+        'updating'    => ['user_id'],
     ];
 
     public $filterFormConfig = [
         'category_id'       => ['args' => ['category'=>'Product']],
         'created_range'     => ['type' => 'daterange'],
-        'keyword'           => ['args' => ['filter' => 'title,title_jp,description']],
+        'keyword'           => ['args' => ['data-filter' => 'products.title,products.title_jp,products.description']],
     ];
 
     public $formConfig = [
@@ -52,15 +43,12 @@ class Product extends EloquentBaseModel {
     public $createFormDeny   = [];
     public $updateFormDeny   = [];
 
-
-    public function author()
+    public function listQuery()
     {
-        return $this->belongsTo('Sharenjoy\Cmsharenjoy\User\User', 'user_id');
-    }
-
-    public function username($field = __FUNCTION__)
-    {
-        $this->$field = isset($this->author->name) ? $this->author->name : '';
+        return $this->select(['products.*', 'categories.title as ctitle'])
+                     ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+                     ->orderBy('categories.sort')
+                     ->orderBy('products.sort', 'DESC');
     }
 
     public function categories()

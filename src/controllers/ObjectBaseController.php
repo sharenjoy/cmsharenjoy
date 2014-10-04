@@ -1,30 +1,27 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Controllers;
 
-use View, Redirect, Input, Request, Config;
-use Response, Paginator, Message, Poster, Session;
+use Sharenjoy\Cmsharenjoy\Utilities\Transformer;
+use View, Redirect, Input, Request, Config, Event;
+use Response, Paginator, Message, Session;
 
 abstract class ObjectBaseController extends BaseController {
 
     /**
      * The model to work with for editing stuff
      */
-    protected $repository;
-
-    /**
-     * These are the data of array that don't need to filter
-     * @var array
-     */
-    protected $filterExcept = array(
-        'filter',
-        'perPage', 
-        'page'
-    );
+    protected $repo;
 
     /**
      * The default number of pagination
      * @var integer
      */
     protected $paginationCount = 15;
+
+    /**
+     * These are the data of array that don't need to filter
+     * @var array
+     */
+    protected $filterExcept = ['filter', 'perPage', 'page'];
 
     /**
      * ObjectBaseController construct
@@ -52,33 +49,27 @@ abstract class ObjectBaseController extends BaseController {
 
         $this->setGoBackPrevious();
         
-        $perPage = Input::get('perPage', $this->paginationCount);
-        $page    = Input::get('page', 1);
-        $query   = Request::query();
-        $model   = Poster::getModel();
-        
-        // Set filter form fields
-        $filterForm = $this->repository->getForm(Input::all(), 'filter');
-        if ($filterForm)
+        $input = Input::all();
+        $limit = Input::get('perPage', $this->paginationCount);
+        $page  = Input::get('page', 1);
+        $query = Request::query();
+
+        $model = $this->repo->makeQuery();
+
+        if (isset($input['filter']))
         {
-            View::share('filterForm', $filterForm);
             $filter = array_except($query, $this->filterExcept);
-            // $model  = Poster::filter($filter, $model);
+            $this->repo->filter($filter, $model);
         }
 
-        $model  = $this->makeQuery($model);
-        $result = Poster::setModel($model)->hasQuery()->showByPage($page, (int)$perPage);
+        $items = $this->repo->showByPage($limit, $page, array_except($query, ['page']), $model);
 
-        $result->items = Poster::processMulitple($result->items);
+        $filterForm = $this->repo->makeForm($input, 'filter');
 
-        // Set Pagination of data 
-        $query = array_except($query, ['page']);
-        $items = Paginator::make($result->items, $result->totalItems, $result->limit)->appends($query);
-
-        $this->layout->with('paginationCount', $perPage)
+        $this->layout->with('paginationCount', $limit)
                      ->with('sortable', false)
-                     ->with('filterable', true)
                      ->with('listConfig', $this->listConfig)
+                     ->with('filterForm', $filterForm)
                      ->with('items', $items);
     }
 
@@ -90,35 +81,21 @@ abstract class ObjectBaseController extends BaseController {
     {
         $this->setGoBackPrevious();
 
-        $perPage = Input::get('perPage', $this->paginationCount);
-        $page    = Input::get('page', 1);
-        $query   = Request::query();
-        $model   = Poster::getModel();
+        $input = Input::all();
+        $limit = Input::get('perPage', $this->paginationCount);
+        $page  = Input::get('page', 1);
+        $query = Request::query();
 
-        $model  = $this->makeQuery($model);
-        $result = Poster::setModel($model)->hasQuery()->showByPage($page, (int)$perPage);
+        $model = $this->repo->makeQuery();
 
-        $result->items = Poster::processMulitple($result->items);
+        $items = $this->repo->showByPage($limit, $page, array_except($query, ['page']), $model);
 
-        // Set Pagination of data 
-        $query = array_except($query, ['page']);
-        $items = Paginator::make($result->items, $result->totalItems, $result->limit)->appends($query);
+        $filterForm = $this->repo->makeForm($input, 'filter');
 
-        $this->layout->with('paginationCount', $perPage)
+        $this->layout->with('paginationCount', $limit)
                      ->with('sortable', true)
-                     ->with('filterable', false)
                      ->with('listConfig', $this->listConfig)
-                     ->with('items', $items);
-    }
-
-    /**
-     * Set what kind of data that we went to get
-     * @param  Model $model
-     * @return Model
-     */
-    protected function makeQuery($model)
-    {
-        return $model->orderBy('sort', 'DESC');
+                     ->with('items', $items);       
     }
 
     /**
@@ -127,7 +104,7 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function getCreate()
     {
-        $this->layout->with('fieldsForm', $this->repository->getForm());
+        $this->layout->with('fieldsForm', $this->repo->makeForm());
     }
 
     /**
@@ -136,21 +113,21 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function getUpdate($id)
     {
-        try
-        {
-            $model = Poster::showById($id);
-            $model = Poster::process($model);
-            
-            $fieldsForm = $this->repository->getForm($model);
-        }
-        catch(\Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException $e)
+        $model = $this->repo->showById($id);
+
+        if ( ! $model)
         {
             Message::error(trans('cmsharenjoy::exception.not_found', ['id' => $id]));
-            return Redirect::to($this->objectUrl);
+
+            return Redirect::to(Session::get('goBackPrevious'));
         }
+
+        $fieldsForm = $this->repo->makeForm($model);
 
         $this->layout->with('item' , $model)
                      ->with('fieldsForm', $fieldsForm);
+
+        Event::fire('cmsharenjoy.afterAction', [$model]);
     }
 
     /**
@@ -160,19 +137,19 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function postCreate()
     {
-        // To create data
-        $result = $this->repository->create(Input::all());
-
-        if ( ! $result)
+        if ( ! $this->repo->setInput(Input::all())->validate())
         {
-            $validator = $this->repository->getValidator();
-            return Redirect::to($this->createUrl)->withInput()->withErrors($validator->errors());
+            return Redirect::to($this->createUrl)->withInput();
         }
-        
-        Message::success(trans('cmsharenjoy::app.success_created'));
 
-        if (Input::has('exit')) return Redirect::to($this->objectUrl);
-        return Redirect::to($this->updateUrl.$result->id);
+        $result   = $this->repo->create();    
+        
+        $redirect = Input::has('exit') ? $this->objectUrl
+                                       : $this->updateUrl.$result['data']->id;
+
+        Message::success($result['message']);
+
+        return Redirect::to($redirect);
     }
 
     /**
@@ -182,18 +159,19 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function postUpdate($id)
     {
-        // To update data
-        $result = $this->repository->update($id, Input::all());
-
-        if ( ! $result)
+        if ( ! $this->repo->setInput(Input::all())->validate($id))
         {
             return Redirect::to($this->updateUrl.$id)->withInput();
         }
-        
-        Message::success(trans('cmsharenjoy::app.success_updated'));
 
-        if (Input::has('exit')) return Redirect::to(Session::get('goBackPrevious'));
-        return Redirect::to($this->updateUrl.$id);
+        $result   = $this->repo->update($id);
+
+        $redirect = Input::has('exit') ? Session::get('goBackPrevious')
+                                       : $this->updateUrl.$id;
+
+        Message::success($result['message']);
+
+        return Redirect::to($redirect);
     }
 
     /**
@@ -203,19 +181,19 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function postDelete()
     {
-        try
+        $id     = Input::get('id');
+        $result = $this->repo->delete($id);
+
+        if ( ! $result['status'])
         {
-            $id = Input::get('id');
-            $this->repository->delete($id);
-        }
-        catch(\Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException $e)
-        {
-            Message::error(trans('cmsharenjoy::exception.not_found', ['id' => $id]));
-            return Redirect::to($this->objectUrl);
+            Message::error($result['message']);
+
+            return Redirect::to(Session::get('goBackPrevious'));
         }
 
-        Message::success(trans('cmsharenjoy::app.success_deleted'));
-        return Redirect::to($this->objectUrl);
+        Message::success($result['message']);
+
+        return Redirect::to(Session::get('goBackPrevious'));
     }
 
     /**
@@ -226,22 +204,21 @@ abstract class ObjectBaseController extends BaseController {
     {
         if( ! Request::ajax()) Response::json('error', 400);
 
-        $id        = Input::get('id');
-        $data      = Poster::showById($id)->toArray();
-        $existsAry = ['title', 'name', 'subject', 'tag'];
-        
-        $result['subject'] = trans('cmsharenjoy::app.confirm_deleted');
+        $id    = Input::get('id');
+        $model = $this->repo->showById($id);
 
-        foreach ($existsAry as $value)
+        if ( ! $model)
         {
-            if (array_key_exists($value, $data))
-            {
-                $result['title'] = $data[$value];
-                break;
-            }
+            $message = trans('cmsharenjoy::exception.not_found', ['id' => $id]);
+            $subject = trans('cmsharenjoy::app.some_wrong');
+
+            return Response::json(Message::result('error', $message, $subject), 200);
         }
 
-        return Response::json(Message::json('success', '', $result), 200);
+        $result['title']   = Transformer::title($model->toArray());
+        $result['subject'] = trans('cmsharenjoy::app.confirm_deleted');
+
+        return Response::json(Message::result('success', '', $result), 200);
     }
 
     /**
@@ -263,7 +240,7 @@ abstract class ObjectBaseController extends BaseController {
                 try
                 {
                     $sort = $sort_value[$key];
-                    $this->repository->edit($id, array('sort' => $sort));
+                    $this->repo->edit($id, array('sort' => $sort));
                 }
                 catch (\Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException $e)
                 {
@@ -273,7 +250,10 @@ abstract class ObjectBaseController extends BaseController {
             }
         }
 
-        return Response::json(Message::json('success', trans('cmsharenjoy::app.success_ordered'), ['success'=>trans('cmsharenjoy::app.success')]), 200);
+        $message = trans('cmsharenjoy::app.success_ordered');
+        $data = ['success' => trans('cmsharenjoy::app.success')];
+        
+        return Response::json(Message::result('success', $message, $data), 200);
     }
 
     /**

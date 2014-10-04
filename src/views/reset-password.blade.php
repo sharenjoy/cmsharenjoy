@@ -17,7 +17,7 @@
                     <i class="entypo-key"></i>
                 </div>
                 
-                {{ Form::password('old_password' , array( 'placeholder'=>'Your old password.' , 'class'=>'form-control' ) ) }}
+                {{Form::text('email', '', array('placeholder'=>'Your email address.', 'class'=>'form-control'))}}
             </div>
             
         </div>
@@ -47,7 +47,6 @@
         </div>
         
         <div class="form-group">
-            {{Form::hidden('id', $id)}}
             {{Form::hidden('code', $code)}}
             <button type="submit" class="btn btn-primary btn-block btn-login">
                 <i class="entypo-login"></i>

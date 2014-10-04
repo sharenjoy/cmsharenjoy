@@ -1,4 +1,5 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Utilities;
+
 /**
  * CodeIgniter
  *
@@ -267,6 +268,3 @@ class Parser {
     }
 
 }
-
-/* End of file Parser.php */
-/* Location: ./system/libraries/Parser.php */

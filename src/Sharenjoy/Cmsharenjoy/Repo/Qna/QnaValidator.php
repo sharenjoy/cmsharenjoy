@@ -4,11 +4,8 @@ use Sharenjoy\Cmsharenjoy\Service\Validation\AbstractLaravelValidator;
 
 class QnaValidator extends AbstractLaravelValidator {
 
-    /**
-     * Validation rules
-     *
-     * @var Array
-     */
+    public $unique = [];
+    
     public $rules = [
         'title'       => 'required',
         'answer'      => 'required',

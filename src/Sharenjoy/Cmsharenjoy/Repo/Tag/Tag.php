@@ -1,44 +1,24 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Repo\Tag;
 
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseModel;
+use Sharenjoy\Cmsharenjoy\Utilities\String;
+use Str, Config, DB;
 
 class Tag extends EloquentBaseModel {
 
     protected $table = 'tags';
 
-    protected $fillable = array(
-        'user_id',
-        'tag',
-        'slug',
-        'sort'
-    );
-
-    public $uniqueFields = ['slug'];
-    
-    public $createComposeItem = [
-        'slug|title',
-        'user',
-        'sort',
+    protected $fillable = [
+        'tag'
     ];
 
-    public $updateComposeItem = [
-        'slug|title',
-        'user',
-    ];
-
-    public $processItem = [
-        'get-index'   => [],
-        'get-sort'    => [],
-        'get-create'  => [],
-        'get-update'  => [],
-        'post-create' => [],
-        'post-create' => [],
-    ];
+    protected $eventItem = [];
 
     public $filterFormConfig = [];
 
     public $formConfig = [
-        'tag'         => ['type'  => 'text', 'order' => '10']
+        'tag'          => ['type'  => 'text', 'order' => '10'],
+        'count'        => ['type'  => 'text', 'order' => '20']
     ];
 
     public $createFormConfig = [];
@@ -46,20 +26,48 @@ class Tag extends EloquentBaseModel {
 
     public $createFormDeny   = [];
     public $updateFormDeny   = [];
+
+    public function listQuery()
+    {
+        return $this->orderBy('count', 'DESC')->orderBy('updated_at', 'DESC');
+    }
     
-    public function author()
+    public function setTagAttribute($value)
     {
-        return $this->belongsTo('Sharenjoy\Cmsharenjoy\User\User', 'user_id');
+        $this->attributes['tag'] = Str::title(String::slug(trim($value)));
     }
 
-    public function username($field = __FUNCTION__)
+    public function scopeSuggested($query)
     {
-        $this->$field = isset($this->author->name) ? $this->author->name : '';
+        return $query->where('suggest', true);
     }
 
-    public function posts()
+    public static function withCalculate()
     {
-        return $this->belongsToMany('Sharenjoy\Cmsharenjoy\Repo\Post\Post', 'posts_tags', 'tag_id', 'post_id');
+        return static::join('taggables', 'taggables.tag_id', '=', 'tags.id')
+                    ->groupBy('tags.tag')
+                    ->get(['tags.tag', DB::raw('count(*) as count')]);
+    }
+
+    public static function withAllRelation()
+    {
+        $taggableModel = Config::get('cmsharenjoy::tag.taggableModel');
+        
+        $keys = array_keys($taggableModel);
+
+        return static::with($keys);
+    }
+
+    public function __call($method, $parameters)
+    {
+        $taggableModel = Config::get('cmsharenjoy::tag.taggableModel');
+
+        if (array_key_exists($method, $taggableModel))
+        {
+            return $this->morphedByMany($taggableModel[$method], 'taggable');
+        }
+
+        return parent::__call($method, $parameters);
     }
 
 }

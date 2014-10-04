@@ -1,7 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Repo\Category;
 
 use Sharenjoy\Cmsharenjoy\Controllers\ObjectBaseController;
-use Response, Input, Request, Categorize, Session, Poster, Message;
+use Response, Input, Request, Categorize, Session, Message;
 
 class CategoryController extends ObjectBaseController {
 
@@ -27,7 +27,7 @@ class CategoryController extends ObjectBaseController {
 
     public function __construct(CategoryInterface $repo)
     {
-        $this->repository = $repo;
+        $this->repo = $repo;
 
         if (Request::segment(3) == 'index')
         {
@@ -37,12 +37,12 @@ class CategoryController extends ObjectBaseController {
 
         parent::__construct();
 
-        $this->repository->pushFormConfig('list', array(
+        $this->repo->pushForm([
             'type' => [
                 'args'  => ['value'=>ucfirst($this->type), 'readonly'=>'readonly'],
                 'order' => '10'
             ]
-        ));
+        ]);
 
     }
 
@@ -54,10 +54,17 @@ class CategoryController extends ObjectBaseController {
         $this->deleteUrl = url('/admin/'.$this->onController.'/delete/').'/';
     }
 
+    protected function getCategoryLevelNumber($type)
+    {
+        return array_get($this->categoryLevelNumber, $type);
+    }
+
     public function getIndex()
     {
+        $this->setGoBackPrevious();
+
         $type    = $this->type;
-        $model   = Poster::getModel();
+        $model   = $this->repo->getModel();
         $model   = $model->whereType($type)->orderBy('sort');
         $perPage = $model->count();
 
@@ -71,24 +78,15 @@ class CategoryController extends ObjectBaseController {
 
         $this->layout->with('paginationCount', $perPage)
                      ->with('sortable', false)
-                     ->with('filterable', true)
                      ->with('listConfig', $this->listConfig)
                      ->with('categoryLevelNum', $num)
                      ->with('categories', $categories)
                      ->with('items', $items);
     }
 
-    protected function getCategoryLevelNumber($type)
-    {
-        return array_get($this->categoryLevelNumber, $type);
-    }
-
     public function postOrder()
     {
-        if( ! Request::ajax())
-        {
-            Response::json('error', 400);
-        }
+        if( ! Request::ajax()) Response::json('error', 400);
 
         $result  = json_decode(Input::get('sort_value'), true);
         $sortNum = 0;
@@ -120,12 +118,12 @@ class CategoryController extends ObjectBaseController {
             }
         }
 
-        return Response::json(Message::json('success', trans('cmsharenjoy::app.success_ordered')), 200);
+        return Response::json(Message::result('success', trans('cmsharenjoy::app.success_ordered')), 200);
     }
 
     protected function storeSortById($model, $sortNum)
     {
-        $this->repository->edit($model->id, array('sort' => $sortNum));
+        $this->repo->edit($model->id, ['sort' => $sortNum]);
     }
 
 }

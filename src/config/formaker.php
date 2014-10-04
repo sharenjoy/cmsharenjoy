@@ -10,18 +10,18 @@ return array(
      * {{Formaker::title()}}
      * {{Formaker::email()}}
      * {{Formaker::url()}}
-     * {{Formaker::description(['value'=>'This is value'])}}
-     * {{Formaker::description(['type'=>'wysihtml5'])}}
-     * {{Formaker::tag(['help'=>'This is tag', 'placeholder'=>'Create'])}}
-     * {{Formaker::language(['type'=>'select', 'option'=>['tw'=>'中文', 'en'=>'英文']])}}
-     * {{Formaker::status(['type'=>'checkbox', 'help'=>'This is help'])}}
-     * {{Formaker::status(['type'=>'radio', 'checked'=>'tw', 'option'=>['tw'=>'中文', 'en'=>'英文']])}}
-     * {{Formaker::date(['type'=>'daterange', 'placeholder'=>'Date Range'])}}
-     * {{Formaker::date(['type'=>'datepicker', 'placeholder'=>'Date Picker'])}}
-     * {{Formaker::colorpicker(['type'=>'colorpicker'])}}
-     * {{Formaker::file(['type'=>'file'])}}
+     * {{Formaker::description(['value' => 'This is value'])}}
+     * {{Formaker::description(['type' => 'wysihtml5'])}}
+     * {{Formaker::tag(['help' => 'This is tag', 'placeholder' => 'You can use "," sperate every tag'])}}
+     * {{Formaker::language(['type' => 'select', 'value' => 'tw', 'option' => ['tw' => '中文', 'en' => '英文']])}}
+     * {{Formaker::status(['type' => 'checkbox', 'value' => '1,2'])}}
+     * {{Formaker::category(['type' => 'category', 'args' => ['category' => 'Product']])}}
+     * {{Formaker::category_id(['args' => ['category' => 'News']])}}
+     * {{Formaker::content(['input' => 'title'])}}  // If set input key the means is the data form title input
+     * {{Formaker::delivery_time_zone_id(['type' => 'select', 'option' => 'delivery_time_zone'])}}
+     * {{Formaker::keyword(['args' => ['data-filter' => 'title,title_jp,description']])}}
+     * {{Formaker::category(['type' => 'select', 'lists' => 'category_lists'])}} // $this->model->category_lists();
      * 
-     * {{Formaker::custom('list-filter')->title()}}
      */
     
     /*

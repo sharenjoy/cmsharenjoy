@@ -4,14 +4,10 @@ use Sharenjoy\Cmsharenjoy\Service\Validation\AbstractLaravelValidator;
 
 class PostValidator extends AbstractLaravelValidator {
 
-    /**
-     * Validation rules
-     *
-     * @var Array
-     */
+    public $unique = ['title'];
+
     public $rules = [
-        'title'     => 'required',
-        // 'slug'      => 'required|unique:posts,slug',
+        'title'     => 'required|unique:posts,title',
         'content'   => 'required'
     ];
 

@@ -6,27 +6,15 @@ class ContactInfo extends EloquentBaseModel {
 
     protected $table = 'member_contacts';
 
-    protected $fillable = array(
+    protected $fillable = [
         'member_id',
         'esay_contact_time_id',
         'name',
         'phone',
         'address'
-    );
-
-    public $uniqueFields = [];
-
-    public $createComposeItem = [];
-    public $updateComposeItem = [];
-
-    public $processItem = [
-        'get-index'   => [],
-        'get-sort'    => [],
-        'get-create'  => [],
-        'get-update'  => [],
-        'post-create' => [],
-        'post-create' => [],
     ];
+
+    protected $eventItem = [];
 
     public $filterFormConfig = [];
 
@@ -42,6 +30,5 @@ class ContactInfo extends EloquentBaseModel {
 
     public $createFormDeny   = [];
     public $updateFormDeny   = [];
-
-
+    
 }

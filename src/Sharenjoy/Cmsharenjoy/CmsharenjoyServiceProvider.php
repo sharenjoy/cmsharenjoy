@@ -2,7 +2,7 @@
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
-use Session;
+use Session, Request;
 
 class CmsharenjoyServiceProvider extends ServiceProvider {
 
@@ -12,6 +12,12 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
 	 * @var bool
 	 */
 	protected $defer = false;
+
+    /**
+     * This is the variable which end
+     * @var string
+     */
+    protected $whichEnd;
 
 	/**
 	 * Register the service provider.
@@ -27,21 +33,23 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$app = $this->app;
-
-        $config = $this->app['config'];
+		$app    = $this->app;
+        $config = $app['config'];
 
 		$this->package('sharenjoy/cmsharenjoy');
 
 		// Setting the locale langage
-        if (Session::has('admin-locale'))
+        if (Session::has('sharenjoy.backEndLanguage'))
         {
-            $app->setLocale(Session::get('admin-locale'));
+            $app->setLocale(Session::get('sharenjoy.backEndLanguage'));
         }
+
+        // To define which end it is now
+        $this->whichEnd = Request::segment(1) == 'admin' ? 'backEnd' : 'frontEnd';
+        Session::set('sharenjoy.whichEnd', $this->whichEnd);
 
 		// Get the URL segment to use for routing
         $urlSegment = $config->get('cmsharenjoy::app.access_url');
-
 
 		// Binding some repositroy
         $this->bindRepository($app, $config);
@@ -58,19 +66,13 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
 		// The Users Binding
 		$app->bind('Sharenjoy\Cmsharenjoy\User\UserInterface', function($app)
 		{
-		    return new User\UserRepository(
-		        new User\User,
-                new User\UserValidator($app['validator'])
-		    );
+		    return new User\UserRepository(new User\User, new User\UserValidator);
 		});
 
 		// The Setting Bindings
 		$app->bind('Sharenjoy\Cmsharenjoy\Setting\SettingInterface', function($app)
 		{
-		    return new Setting\SettingRepository(
-		        new Setting\Setting,
-                new Setting\SettingValidator($app['validator'])
-		    );
+		    return new Setting\SettingRepository(new Setting\Setting, new Setting\SettingValidator);
 		});
 
         // The parser binding
@@ -115,11 +117,12 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
     protected function loadIncludes($urlSegment)
     {
         // Add file names without the `php` extension to this list as needed.
-        $filesToLoad = array(
-            'filters',
-            'routes',
+        $filesToLoad = [
             'helpers',
-        );
+            'routes',
+            'filters',
+            'events'
+        ];
 
         // Run through $filesToLoad array.
         foreach ($filesToLoad as $file)

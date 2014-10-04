@@ -4,11 +4,8 @@ use Sharenjoy\Cmsharenjoy\Service\Validation\AbstractLaravelValidator;
 
 class UserValidator extends AbstractLaravelValidator {
 
-    /**
-     * Validation rules
-     *
-     * @var Array
-     */
+    public $unique = ['email'];
+    
     public $rules = [
         'name'                  => 'required',
         'email'                 => 'required|email|unique:users,email',
@@ -21,6 +18,15 @@ class UserValidator extends AbstractLaravelValidator {
         'name'                  => 'required',
         'email'                 => 'required|email|unique:users,email',
         'phone'                 => 'required'
+    ];
+
+    /**
+     * This rule is for backend logining in
+     * @var array
+     */
+    public $loginRules = [
+        'email'                 => 'required|email',
+        'password'              => 'required|min:6'
     ];
 
 }

@@ -49,11 +49,16 @@ return array(
     'password_reset_failed'       => '重設密碼失敗',
     'password_reset_code_invalid' => '提供的密碼重設認證碼有誤',
     'some_wrong'                  => '喔喔! 有些地方發生錯誤了',
+    'check_some_wrong'            => '請檢查您輸入的資料。',
     'sent_reset_code'             => '已將重設的密碼寄送至此電子信箱了',
     'success_created'             => '項目建立成功',
     'success_updated'             => '項目更新成功',
     'success_deleted'             => '項目刪除成功',
     'success_ordered'             => '項目排序成功',
+    'fail_created'                => '項目建立失敗',
+    'fail_updated'                => '項目更新失敗',
+    'fail_deleted'                => '項目刪除失敗',
+    'fail_ordered'                => '項目排序失敗',
     'page_not_found'              => '您要找的頁面不存在',
     'no_item_yet'                 => '還沒有任何項目存在，請使用新增功能來新增您第一個項目',
     'invalid_email_password'      => '錯誤的帳號以及密碼',
@@ -123,6 +128,7 @@ return array(
     'order_sn'                    => '訂單編號',
     'qna'                         => '問答Q&A',
     'process'                     => '處理進度',
+    'quantity'                    => '數量',
 
 
     // For form    
@@ -153,6 +159,7 @@ return array(
         'image'                   => '圖片',
         'file'                    => '檔案',
         'filename'                => '檔案',
+        'album'                   => '相簿',
         'link'                    => '連結',
         'width'                   => '寬度',
         'height'                  => '高度',
@@ -183,6 +190,8 @@ return array(
         
         'help' => [
             'link'                => '請輸入以 http:// 為開頭的連結網址',
+            'tag'                 => '請使用Enter鍵或使用半型逗號分隔',
+            'album'               => '點開啟按鈕開啟管理相簿視窗。可管理附屬於此項目的相簿內容。',
             'user' => [
                 'first_name'      => '',
             ],

@@ -10,7 +10,6 @@ class SettingsSeeder extends Seeder {
         $types = [
             [
                 'key'           => 'brand_name',
-                'label'         => 'Brand Name',
                 'type'          => 'text',
                 'value'         => 'Cmsharenjoy',
                 'module'        => 'general',
@@ -19,7 +18,6 @@ class SettingsSeeder extends Seeder {
             ],
             [
                 'key'           => 'files_enabled_providers',
-                'label'         => 'Files enabled providers',
                 'type'          => 'text',
                 'value'         => 'local',
                 'module'        => 'file',
@@ -28,7 +26,6 @@ class SettingsSeeder extends Seeder {
             ],
             [
                 'key'           => 'files_upload_limit',
-                'label'         => 'Files upload limit',
                 'type'          => 'text',
                 'value'         => '4',
                 'module'        => 'file',
@@ -37,7 +34,6 @@ class SettingsSeeder extends Seeder {
             ],
             [
                 'key'           => 'date_format',
-                'label'         => 'Date Format',
                 'type'          => 'text',
                 'value'         => '',
                 'module'        => 'file',

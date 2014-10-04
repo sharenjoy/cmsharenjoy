@@ -21,7 +21,7 @@ class ReportController extends ObjectBaseController {
 
     public function __construct(ReportInterface $repo)
     {
-        $this->repository = $repo;
+        $this->repo = $repo;
         parent::__construct();
     }
 

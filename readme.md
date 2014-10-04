@@ -6,7 +6,7 @@ This is cmsharenjoy.
 ### Composer Require
 <!-- Nice and simple -->
 
-    "sharenjoy/cmsharenjoy": "dev-develop"
+    "sharenjoy/cmsharenjoy": "dev-master"
 
 ### Adding the service provider to app.php
 <!-- Add this string to your array of providers in app/config/app.php -->
@@ -15,16 +15,14 @@ This is cmsharenjoy.
     'Cartalyst\Sentry\SentryServiceProvider',
     'Sharenjoy\Cmsharenjoy\CmsharenjoyServiceProvider',
     'Sharenjoy\Cmsharenjoy\Repo\RepoServiceProvider',
-    'Sharenjoy\Cmsharenjoy\Exception\ExceptionServiceProvider',
     'Sharenjoy\Cmsharenjoy\Service\Message\MessageServiceProvider',
     'Sharenjoy\Cmsharenjoy\Service\Notification\NotificationServiceProvider',
     'Teepluss\Theme\ThemeServiceProvider',
-    'Sharenjoy\Cmsharenjoy\Formaker\FormakerServiceProvider',
+    'Sharenjoy\Cmsharenjoy\Service\Formaker\FormakerServiceProvider',
     'Sharenjoy\Cmsharenjoy\Service\Categorize\CategorizeServiceProvider',
     'Intervention\Image\ImageServiceProvider',
     'Moltin\Cart\CartServiceProvider',
     'Way\Generators\GeneratorsServiceProvider',
-
 
 ### Adding the alices to app.php
 
@@ -63,6 +61,8 @@ This is cmsharenjoy.
 
     ),
 
+> To create the `name` and `phone` columns to `User` table
+
 ### Migrating and seeding the database
 <!-- Seed the database, this pretty much just seeds an example user and settings. Migration is pretty simple, ensure your database config is setup and run this: -->
 
@@ -73,3 +73,4 @@ This is cmsharenjoy.
 
     php artisan config:publish teepluss/theme
     php artisan theme:create admin
+    php artisan theme:create front

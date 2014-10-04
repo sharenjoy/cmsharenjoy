@@ -114,10 +114,10 @@ abstract class BaseController extends Controller {
         });
         
         // Setup composed views and the variables that they require
-        $this->beforeFilter('adminFilter' , array('except' => $this->whitelist));
+        $this->beforeFilter('adminFilter', ['except' => $this->whitelist]);
 
         // csrf and include ajax
-        $this->beforeFilter('csrfFilter', array('on' => 'post'));
+        $this->beforeFilter('csrfFilter', ['on' => 'post']);
     }
 
     protected function setCommonVariable()
@@ -134,7 +134,7 @@ abstract class BaseController extends Controller {
             $controller = str_replace('Controller', '', class_basename(head($routeArray)));
 
             // Take out the method from the action.
-            $action = str_replace(array('get', 'post', 'patch', 'put', 'delete'), '', last($routeArray));
+            $action = str_replace(['get', 'post', 'patch', 'put', 'delete'], '', last($routeArray));
 
             // post, report
             $this->onController = strtolower($controller);
@@ -153,7 +153,6 @@ abstract class BaseController extends Controller {
         $user = Sentry::getUser();
         if ($user)
         {
-            // Debugbar::info($user->account()->getParentKey());
             Session::put('user', $user);
             View::share('user', $user);
         }

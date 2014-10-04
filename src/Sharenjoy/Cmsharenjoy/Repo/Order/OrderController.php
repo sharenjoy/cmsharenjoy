@@ -1,7 +1,6 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Repo\Order;
 
 use Sharenjoy\Cmsharenjoy\Controllers\ObjectBaseController;
-use Poster;
 
 class OrderController extends ObjectBaseController {
 
@@ -17,13 +16,13 @@ class OrderController extends ObjectBaseController {
         'name'        => ['name'=>'name',         'align'=>'',       'width'=>''   ],
         'mobile'      => ['name'=>'mobile',       'align'=>'',       'width'=>''   ],
         'totalamount' => ['name'=>'amount',       'align'=>'right',  'width'=>''   ],
-        'process_id'  => ['name'=>'process',      'align'=>'center', 'width'=>''   ],
+        'process'     => ['name'=>'process',      'align'=>'center', 'width'=>''   ],
         'created_at'  => ['name'=>'created',      'align'=>'center', 'width'=>'20%'],
     ];
 
     public function __construct(OrderInterface $repo)
     {
-        $this->repository = $repo;
+        $this->repo = $repo;
         parent::__construct();
     }
 
@@ -31,15 +30,18 @@ class OrderController extends ObjectBaseController {
     {
         try
         {
-            $model = Poster::showById($id);
+            $model = $this->repo->showById($id);
+
+            // This is differente from parent
             $detail = $model->orderDetail()->get();
+            
+            $fieldsForm = $this->repo->makeForm($model);
         }
-        catch(EntityNotFoundException $e)
+        catch(\Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException $e)
         {
+            Message::error(trans('cmsharenjoy::exception.not_found', ['id' => $id]));
             return Redirect::to($this->objectUrl);
         }
-
-        $fieldsForm = $this->repository->getForm($model);
 
         $this->layout->with('item' , $model)
                      ->with('orderDetail', $detail)

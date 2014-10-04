@@ -65,9 +65,7 @@
                     
                         @if(isset($fieldsForm))
                             @foreach($fieldsForm as $key => $value)
-                                @if(isset($value['field']))
-                                    {{$value['field']}}
-                                @endif
+                                {{$value}}
                             @endforeach
                         @endif
                         

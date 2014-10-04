@@ -1,4 +1,4 @@
-<div class="col-xs-4 col-sm-4 col-left">
+<div class="col-xs-5 col-sm-5 col-left">
     <div class="dataTables_info">
         {{Form::open(array('method'=>'get', 'role'=>'form', 'id'=>'pagination_count_form'))}}
             {{Form::select(
@@ -18,7 +18,7 @@
         {{Form::close()}}
     </div>
 </div>
-<div class="col-xs-8 col-sm-8 col-right">
+<div class="col-xs-7 col-sm-7 col-right">
     <div class="dataTables_paginate paging_bootstrap">
         {{$items->links()}}
     </div>

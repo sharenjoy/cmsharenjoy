@@ -1,8 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Service\Validation;
 
 use Illuminate\Validation\Factory;
-use Sharenjoy\Cmsharenjoy\Exception\ValidatorRulesNotFoundException;
-use App, Message, StdClass, Lang;
+use App, Message, StdClass, Lang, Session;
 
 abstract class AbstractLaravelValidator implements ValidableInterface {
 
@@ -16,19 +15,31 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
      * Validation data key => value array
      * @var Array
      */
-    protected $data = array();
+    protected $data = [];
 
     /**
      * Validation errors
      * @var Array
      */
-    protected $errors = array();
+    protected $errors = [];
 
     /**
      * Validation rules
      * @var Array
      */
-    protected $rules = array();
+    protected $rules = [];
+
+    /**
+     * This is the unique id that want to update row's id
+     * @var string
+     */
+    protected $uniqueId = null;
+
+    /**
+     * Unique fields
+     * @var Array
+     */
+    protected $unique = [];
 
     public function __construct(Factory $validator = null)
     {
@@ -44,57 +55,79 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
 
     /**
      * To overwrite normal rules
+     * @param mixed $rule The new rule
+     */
+    public function setRule($rule)
+    {
+        if (is_string($rule))
+        {
+            if (isset($this->$rule))
+                $this->rules = $this->$rule;
+            else
+                throw new \Sharenjoy\Cmsharenjoy\Exception\ValidatorRulesNotFoundException;
+        }
+        elseif (is_array($rule))
+        {
+            $this->rules = $rule;
+        }
+
+        return $this;
+    }
+
+    /**
+     * To set the unique id that want to update row
+     * @param string $id
+     */
+    public function setUniqueId($id)
+    {
+        if (is_string($id))
+        {
+            $this->uniqueId = $id;
+        }
+        return $this;
+    }
+
+    /**
+     * To overwrite normal unique
      * @param string $action The new rule
      */
-    public function setRule($ruleName)
+    public function setUniqueFields($unique)
     {
-        if (isset($this->$ruleName))
+        if (count($unique))
         {
-            $this->rules = $this->$ruleName;
+            $this->unique = $unique;
         }
         else
         {
-            throw new ValidatorRulesNotFoundException;
+            throw new \Sharenjoy\Cmsharenjoy\Exception\ValidatorRulesNotFoundException;
         }
 
         return $this;
     }
 
     /**
-     * Set data to validate
-     * @return \Sharenjoy\Cmsharenjoy\Service\Validation\AbstractLaravelValidator
+     * To set some column don't need to valid
+     * @param array $keyAry
+     * @param string $id
      */
-    public function with(array $data)
+    public function setUnique($id = null, $unique = null)
     {
-        $this->data = $data;
+        $id     = $id ?: $this->uniqueId;
+        $unique = $unique ?: $this->unique;
 
-        return $this;
-    }
-
-    /**
-     * Validation passes or fails
-     * @return Boolean
-     */
-    public function passes()
-    {
-        $validator = $this->validator->make($this->data, $this->rules, $this->messages(), $this->attributes());
-
-        if ($validator->fails())
+        if (count($unique) && $id != null)
         {
-            $this->errors = $validator->messages();
-            return false;
+            foreach ($unique as $field)
+            {
+                if (isset($this->rules[$field]))
+                {
+                    $rules = $this->rules;
+                    $this->rules[$field] = $rules[$field].','.$id;
+                }
+            }
         }
 
-        return true;
-    }
-
-    /**
-     * Return errors
-     * @return MessageBag
-     */
-    public function errors()
-    {
-        return $this->errors;
+        return $this;
     }
 
     /**
@@ -133,12 +166,45 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
     }
 
     /**
-     * Return an array of errors
-     * @return array
+     * Set data to validate
+     * @return \Sharenjoy\Cmsharenjoy\Service\Validation\AbstractLaravelValidator
      */
-    public function getErrorsToArray()
+    public function with(array $data)
     {
-        return $this->errors()->toArray();
+        $this->data = $data;
+
+        return $this;
+    }
+
+    /**
+     * Validation passes or fails
+     * @return Boolean
+     */
+    public function passes()
+    {
+        $validator = $this->validator->make(
+            $this->data,
+            $this->rules,
+            $this->messages(),
+            $this->attributes()
+        );
+
+        if ($validator->fails())
+        {
+            $this->errors = $validator->messages();
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Return errors
+     * @return MessageBag
+     */
+    public function errors()
+    {
+        return $this->errors;
     }
 
     /**
@@ -147,28 +213,13 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
      */
     public function getErrorsToFlashMessageBag()
     {
-        if ($this->getErrorsToArray())
+        $errors = $this->errors()->toArray();
+        
+        if (count($errors))
         {
-            foreach ($this->getErrorsToArray() as $message)
+            foreach ($errors as $message)
             {
                 Message::error($message);
-            }
-        }
-    }
-
-    /**
-     * To set some column don't need to valid
-     * @param array $keyAry
-     * @param string $id
-     */
-    public function setUniqueUpdateFields($keyAry, $id)
-    {
-        foreach ($keyAry as $field)
-        {
-            if (isset($this->rules[$field]))
-            {
-                $rules = $this->rules;
-                $this->rules[$field] = $rules[$field].','.$id;
             }
         }
     }
@@ -177,39 +228,31 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
      * Test if form validator passes
      * @param  array The input needs to valid
      * @param  array The type of message, it can be 'messageBeg'
-     * @return boolean
+     * @return boolean|Message
      */
-    public function valid(array $input, $ruleName = null, $uniqueField = array(), $errorType = 'flash')
+    public function valid(array $input, $errorType = 'error')
     {
-        // Set rule by other rules
-        if (isset($this->$ruleName))
-        {
-            $this->setRule($ruleName);
-        }
+        $result = $this->with($input)->passes();
 
-        if (count($uniqueField))
-        {
-            list($ary, $id) = $uniqueField;
-            if (count($ary) && $id != '')
-            {
-                $this->setUniqueUpdateFields($ary, $id);
-            }
-        }
-
-        $result = new StdClass;
-        $result->status = $this->with($input)->passes();
-
-        if ( ! $result->status)
+        if ( ! $result)
         {
             switch ($errorType)
             {
+                case 'error':
+                    Session::flash('sharenjoy.validation.errors', $this->errors());
+                    Message::error(trans('cmsharenjoy::app.check_some_wrong'));
+                    break;
+
                 case 'flash':
                     $this->getErrorsToFlashMessageBag();
-                    $result->message = 'MessageBag';
                     break;
 
                 case 'json':
-                    $result->message = Message::json('error', $this->getErrorsToArray());
+                    return Message::result(
+                        false,
+                        trans('cmsharenjoy::app.check_some_wrong'),
+                        $this->errors()->toArray()
+                    );
                     break;
                 
                 default:

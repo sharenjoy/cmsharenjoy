@@ -1,9 +1,9 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Service\Categorize\Categories;
 
-use Illuminate\Database\Eloquent\Model;
+use Sharenjoy\Cmsharenjoy\Core\EloquentBaseModel;
 use Sharenjoy\Cmsharenjoy\Service\Categorize\Categories\CategoryInterface;
 
-class Category extends Model implements CategoryInterface {
+class Category extends EloquentBaseModel implements CategoryInterface {
 
     protected $table = 'categories';
 
@@ -14,18 +14,9 @@ class Category extends Model implements CategoryInterface {
         'description'
     ];
 
-    public $uniqueFields = [];
-
-    public $createComposeItem = ['user'];
-    public $updateComposeItem = ['user'];
-
-    public $processItem = [
-        'get-index'   => [],
-        'get-sort'    => [],
-        'get-create'  => [],
-        'get-update'  => [],
-        'post-create' => [],
-        'post-create' => [],
+    protected $eventItem = [
+        'creating'    => ['user_id'],
+        'updating'    => ['user_id'],
     ];
 
     public $filterFormConfig = [];

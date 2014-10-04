@@ -1,7 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Repo\Product;
 
 use Sharenjoy\Cmsharenjoy\Controllers\ObjectBaseController;
-use Input, View, Request, Poster, Paginator;
+use Input, View, Request, Paginator;
 
 class ProductController extends ObjectBaseController {
 
@@ -24,16 +24,8 @@ class ProductController extends ObjectBaseController {
 
     public function __construct(ProductInterface $repo)
     {
-        $this->repository = $repo;
+        $this->repo = $repo;
         parent::__construct();
-    }
-    
-    protected function makeQuery($model)
-    {
-        return $model::select(['products.*', 'categories.title as ctitle'])
-                     ->leftJoin('categories', 'products.category_id', '=', 'categories.id')
-                     ->orderBy('categories.sort')
-                     ->orderBy('products.sort', 'DESC');
     }
 
 }

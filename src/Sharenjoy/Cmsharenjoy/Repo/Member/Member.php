@@ -8,7 +8,7 @@ class Member extends EloquentBaseModel implements UserInterface, RemindableInter
 
     protected $table = 'members';
 
-    protected $fillable = array(
+    protected $fillable = [
         'easy_contact_time_id',
         'email',
         'password',
@@ -24,21 +24,10 @@ class Member extends EloquentBaseModel implements UserInterface, RemindableInter
         'zipcode',
         'address',
         'description',
-        'sort'
-    );
+    ];
 
-    public $uniqueFields = ['email'];
-
-    public $createComposeItem = ['sort'];
-    public $updateComposeItem = [];
-
-    public $processItem = [
-        'get-index'   => [],
-        'get-sort'    => [],
-        'get-create'  => [],
-        'get-update'  => [],
-        'post-create' => [],
-        'post-create' => [],
+    protected $eventItem = [
+        'creating'    => ['password'],
     ];
 
     public $filterFormConfig = [];
@@ -122,6 +111,11 @@ class Member extends EloquentBaseModel implements UserInterface, RemindableInter
         return $this->email;
     }
 
+    public function listQuery()
+    {
+        return $this->orderBy('created_at', 'DESC');
+    }
+
     public function orders()
     {
         return $this->hasMany('Sharenjoy\Cmsharenjoy\Repo\Order\Order', 'member_id')
@@ -134,8 +128,9 @@ class Member extends EloquentBaseModel implements UserInterface, RemindableInter
         return $this->hasMany('Sharenjoy\Cmsharenjoy\Repo\Member\ContactInfo', 'member_id');
     }
 
-    public function birthday()
+    public function getBirthdayAttribute()
     {
-        $this->birthday = $this->birth_y.$this->birth_m.$this->birth_d;
+        return $this->birth_y.'-'.$this->birth_m.'-'.$this->birth_d;
     }
+
 }

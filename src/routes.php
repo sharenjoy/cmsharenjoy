@@ -4,6 +4,20 @@
  * Route setting
  */
 
+/* ====================================== */
+
+Route::get($urlSegment.'/language/{lang}' , function($lang)
+{
+    if (array_key_exists($lang, Config::get('cmsharenjoy::app.locales')))
+    {
+        Session::put('sharenjoy.backEndLanguage', $lang);
+        return Redirect::back();
+    }
+});
+
+Route::controller($urlSegment.'/test'     , 'Sharenjoy\Cmsharenjoy\Controllers\TestableController');
+
+
 Route::controller($urlSegment.'/user'     , 'Sharenjoy\Cmsharenjoy\User\UserController');
 Route::controller($urlSegment.'/member'   , 'Sharenjoy\Cmsharenjoy\Repo\Member\MemberController');
 Route::controller($urlSegment.'/order'    , 'Sharenjoy\Cmsharenjoy\Repo\Order\OrderController');

@@ -18,7 +18,6 @@ class UserTable extends Seeder {
                 'activated_at'  => date('Y-m-d H:i:s'),
                 'name'          => Config::get('cmsharenjoy::app.administrator.name'),
                 'phone'         => Config::get('cmsharenjoy::app.administrator.phone'),
-                'sort'          => time(),
                 'created_at'    => date('Y-m-d H:i:s'),
                 'updated_at'    => date('Y-m-d H:i:s')
             ]

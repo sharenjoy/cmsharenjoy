@@ -2,47 +2,52 @@
 
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
 use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;
-use Sentry, Input, Mail, Hash, Config, Session, Message, Poster;
+use Redirect, Message, Password, Hash;
 
 class MemberRepository extends EloquentBaseRepository implements MemberInterface {
 
-    public function __construct(Member $member, ValidableInterface $validator)
+    public function __construct(Member $model, ValidableInterface $validator)
     {
         $this->validator = $validator;
-        $this->model     = $member;
+        $this->model     = $model;
 
         parent::__construct();
     }
 
-    public function create(array $input)
+    public function passwordRemind($email, $subject)
     {
-        // Compose some necessary variable to input data
-        $input = Poster::compose($input, $this->model->createComposeItem);
+        $response = Password::remind($email, function($mail, $user, $token) use ($subject) {
+            $mail->subject($user->name.' '.$subject);
+        });
 
-        $result = $this->validator->valid($input);
-        if ( ! $result->status) return false;
+        switch ($response)
+        {
+            case Password::INVALID_USER:
+                return Message::result(false, trans($response));
 
-        $input = Poster::compose($input, ['password']);        
-
-        // Create the model
-        $model = $this->model->create($input);
-
-        return $model;
+            case Password::REMINDER_SENT:
+                return Message::result(true, trans($response));
+        }
     }
 
-    public function update($id, array $input, $vaidatorRules = 'updateRules')
+    public function passwordReset($credentials)
     {
-        // Compose some necessary variable to input data
-        $input = Poster::compose($input, $this->model->updateComposeItem);
+        $response = Password::reset($credentials, function($user, $password)
+        {
+            $user->password = Hash::make($password);
+            $user->save();
+        });
 
-        $result = $this->validator->valid($input, $vaidatorRules, [$this->model->uniqueFields, $id]);
-        if ( ! $result->status) return false;
+        switch ($response)
+        {
+            case Password::INVALID_PASSWORD:
+            case Password::INVALID_TOKEN:
+            case Password::INVALID_USER:
+                return Message::result(false, trans($response));
 
-        // Update the model
-        $model = $this->model->find($id)->fill($input);
-        $model->save();
-
-        return $model;
+            case Password::PASSWORD_RESET:
+                return Message::result(true, trans($response));
+        }
     }
 
 }

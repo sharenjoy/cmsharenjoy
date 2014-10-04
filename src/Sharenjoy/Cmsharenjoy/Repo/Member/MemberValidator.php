@@ -4,11 +4,8 @@ use Sharenjoy\Cmsharenjoy\Service\Validation\AbstractLaravelValidator;
 
 class MemberValidator extends AbstractLaravelValidator {
 
-    /**
-     * Validation rules
-     *
-     * @var Array
-     */
+    public $unique = ['email'];
+    
     public $rules = [
         'name'                  => 'required',
         'email'                 => 'required|email|unique:members,email',

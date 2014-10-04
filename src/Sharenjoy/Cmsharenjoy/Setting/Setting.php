@@ -14,6 +14,9 @@ class Setting extends EloquentBaseModel {
      * These are the mass-assignable keys
      * @var array
      */
-    protected $fillable = array( 'id' , 'value');
+    protected $fillable = [
+        'id', 
+        'value'
+    ];
 
 }

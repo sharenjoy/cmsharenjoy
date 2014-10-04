@@ -49,7 +49,11 @@
                                 <div class="tab-content">
                                     
                                     @foreach($items as $key => $item)
-                                    <div class="tab-pane @if($key == 'general')active@endif" id="{{$key}}">
+                                    @if($key == 'general')
+                                    <div class="tab-pane active" id="{{$key}}">
+                                    @else
+                                    <div class="tab-pane" id="{{$key}}">
+                                    @endif
                                             
                                         {{Form::open(array('url'=>$objectUrl, 'class'=>'form-horizontal form-groups-bordered', 'role'=>'form', 'id'=>'item-form'))}}
                                             

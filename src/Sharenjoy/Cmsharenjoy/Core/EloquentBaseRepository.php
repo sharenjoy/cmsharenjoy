@@ -1,6 +1,6 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Core;
 
-use Session, Formaker, Poster;
+use Session, Formaker, Paginator, StdClass, Message;
 
 abstract class EloquentBaseRepository implements EloquentBaseInterface {
 
@@ -16,10 +16,7 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
      */
     protected $validator;
 
-    public function __construct()
-    {
-        Poster::setModel($this->model);
-    }
+    public function __construct() {}
 
     /**
      * Return a instance of model
@@ -40,170 +37,346 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
     }
 
     /**
-     * Create a new Article
-     * @param array  Data to create a new object
-     * @return string The insert id
+     * Set the form input
+     * @param array $input
      */
-    public function create(array $input)
+    public function setInput(array $input)
     {
-        // Compose some necessary variable to input data
-        $input = Poster::compose($input, $this->model->createComposeItem);
-        
-        $result = $this->validator->valid($input);
-        if ( ! $result->status) return false;
+        $this->model->setInput($input);
 
-        // Create the model
-        $model = $this->model->create($input);
+        return $this;
+    }
+
+    /**
+     * Return the form input
+     * @return array
+     */
+    public function getInput()
+    {
+        return $this->model->getInput();
+    }
+
+    /**
+     * To validate the form result that follow rules
+     * @param  int $id
+     * @param  string $rule
+     * @param  string $errorType
+     * @return boolean
+     */
+    public function validate($id = null, $rule = 'updateRules', $errorType = 'error')
+    {
+        if ($id != null)
+        {
+            if (isset($this->validator->$rule))
+            {
+                $this->validator->setRule($rule);
+            }
+            $result = $this->validator->setUnique($id)->valid($this->getInput(), $errorType);
+        }
+        else
+        {
+            $result = $this->validator->valid($this->getInput(), $errorType);
+        }
+
+        return $result;
+    }
+
+    /**
+     * To make query from model setting
+     * @param  string $type
+     * @param  Model $model
+     * @return Model
+     */
+    public function makeQuery($type = 'listQuery', $model = null)
+    {
+        $model = $model ?: $this->model;
+
+        $model = $model->$type();
 
         return $model;
     }
 
     /**
-     * Update an existing Article
-     * @param array  Data to update an Article
-     * @return boolean
+     * To filter the items that have given
+     * @param  array  $items
+     * @param  Model $model
+     * @return Builder
      */
-    public function update($id, array $input, $vaidatorRules = 'updateRules')
+    public function filter(array $filterItems, $model = null)
     {
-        // Compose some necessary variable to input data
-        $input = Poster::compose($input, $this->model->updateComposeItem);
+        $model = $model ?: $this->model;
 
-        $result = $this->validator->valid($input, $vaidatorRules, [$this->model->uniqueFields, $id]);
-        if ( ! $result->status) return false;
-
-        // Update the model
-        $model = $this->model->find($id)->fill($input);
-        $model->save();
+        if (count($filterItems))
+        {
+            foreach ($filterItems as $key => $value)
+            {
+                $model = $model->$key($value);
+            }
+        }
 
         return $model;
+    }
+
+    /**
+     * Create a new item
+     * @return array This array is from Message::result()
+     */
+    public function create()
+    {
+        $model = $this->model->create($this->getInput());
+
+        $result = Message::result(true, trans('cmsharenjoy::app.success_created'), $model);
+
+        return $result;
+    }
+
+    /**
+     * Update an existing item
+     * @param  int  This variable is primary key that wants to update
+     * @return array This array is from Message::result()
+     */
+    public function update($id)
+    {
+        $model = $this->model->find($id)->fill($this->getInput());
+
+        $model->save();
+
+        $result = Message::result(true, trans('cmsharenjoy::app.success_updated'), $model);
+
+        return $result;
     }
 
     /**
      * Edit data by id
-     * @param  int $id
+     * @param  mixed $value
      * @param  array $data
-     * @return void
+     * @param  string $field
+     * @return int How many record has been changed
      */
-    public function edit($value, $data, $field = 'id')
+    public function edit($value, array $data, $field = 'id')
     {
-        $model = $this->model->where($field, $value)->update($data);
+        $result = $this->model->where($field, $value)->update($data);
         
-        if ( ! $model)
-        {
-            throw new \Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException;
-        }
-        return $model;
+        return $result;
     }
 
     /**
      * Delete the model passed in
      * @param  int This is the id that needs to delete
-     * @return void
+     * @return boolean
      */
     public function delete($id)
     {
-        $model = $this->model->find($id);
-
-        if ( ! $model)
+        try
         {
-            throw new \Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException;
+            $model  = $this->model->findOrFail($id);
+            $result = $model->delete();
         }
-        $model->delete();
-    }
-
-    public function pushFormConfig($type = 'list', $data)
-    {
-        switch ($type)
+        catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e)
         {
-            case 'list':
-                if (isset($this->model->formConfig))
-                    $this->model->formConfig = array_merge($this->model->formConfig, $data);
-                break;
-            case 'create':
-                if (isset($this->model->createFormConfig))
-                    $this->model->createFormConfig = array_merge($this->model->createFormConfig, $data);
-                break;
-            case 'update':
-                if (isset($this->model->updateFormConfig))
-                    $this->model->updateFormConfig = array_merge($this->model->updateFormConfig, $data);
-                break;
+            return Message::result(false, trans('cmsharenjoy::exception.not_found', ['id' => $id]));
         }
-    }
-
-    public function getForm($input = array(), $formType = null)
-    {
-        $type          = $formType ?: Session::get('doAction');
-        $typeConfigStr = $type.'FormConfig';
-        $typeDenyStr   = $type.'FormDeny';
-        $typeConfig    = $this->model->$typeConfigStr ?: [];
         
-        switch ($type)
-        {
-            case 'create':
-            case 'update':
-                $formConfig = array_merge($this->model->formConfig, $typeConfig);
-
-                // Deny some fields
-                if( ! empty($this->model->$typeDenyStr))
-                {
-                    foreach ($this->model->$typeDenyStr as $value)
-                    {
-                        unset($formConfig[$value]);
-                    }
-                }
-
-                // To order the form config
-                $formConfig = array_sort($formConfig, function($value)
-                {
-                    return $value['order'];
-                });
-                break;
-
-            case 'filter':
-                $formConfig = $typeConfig;
-                break;
-        }
-        return $this->composeForm($formConfig, $type, $input);
+        return Message::result(true, trans('cmsharenjoy::app.success_deleted'));
     }
 
     /**
-     * Compose some of useful form fields
-     * @param  array  $config The config
-     * @param  string $type  The type of form fields
-     * @return array
+     * What this method doing is can dynamic push
+     * some form data config to model's form config
+     * @param  array  $data
+     * @param  string $form
+     * @return void
      */
-    public function composeForm(array $config, $type, $input = array())
+    public function pushForm(array $data, $form = 'formConfig')
     {
-        if (count($config))
+        if (isset($this->model->$form))
         {
-            foreach ($config as $key => $value)
+            $this->model->$form = array_merge($this->model->$form, $data);
+        }
+    }
+
+    protected function processFormConfig($formConfig, $input)
+    {
+        if (count($formConfig))
+        {
+            foreach ($formConfig as $name => $config)
             {
-                if (isset($value['model']) && isset($value['item']))
+                if (isset($config['lists']))
                 {
-                    $config[$key]['option'] = $this->$value['model']->lists($value['item']);
+                    $method = $config['lists'];
+                    $formConfig[$name]['option'] = $this->model->$method();
                 }
 
                 // If use custom key of value otherwise use the $key
-                if (isset($value['input']) && isset($input[$value['input']]))
-                {
-                    $config[$key]['value'] = $input[$value['input']];
-                }
-                elseif(isset($input[$key]))
-                {
-                    $config[$key]['value'] = $input[$key];
-                }
+                if (isset($input[$name]))
+                    $formConfig[$name]['value'] = $input[$name];
+                elseif (isset($config['input']) && isset($input[$config['input']]))
+                    $formConfig[$name]['value'] = $input[$config['input']];
             }
-            
-            // Compose form fields from Formaker
-            $result = Formaker::makeForm($config, $type);
+        }
 
-            if( ! $result)
+        return $formConfig;
+    }
+
+    /**
+     * To make a form fields
+     * @param  array  $input
+     * @param  String $formType
+     * @param  array  $config This is you can customise form config
+     * @return array  Build from Formaker
+     */
+    public function makeForm($input = array(), $formType = null, array $config = array())
+    {
+        $formConfig = [];
+
+        if ( ! count($config))
+        {
+            $type          = $formType ?: Session::get('doAction');
+            $typeConfigStr = $type.'FormConfig';
+            $typeDenyStr   = $type.'FormDeny';
+            $typeConfig    = $this->model->$typeConfigStr ?: [];
+
+            switch ($type)
             {
-                throw new \Sharenjoy\Cmsharenjoy\Exception\ComposeFormException;
+                case 'create':
+                case 'update':
+                    $formConfig = array_merge($this->model->formConfig, $typeConfig);
+
+                    // Deny some fields
+                    if(count($this->model->$typeDenyStr))
+                    {
+                        foreach ($this->model->$typeDenyStr as $value)
+                            unset($formConfig[$value]);
+                    }
+
+                    // To order the form config
+                    $formConfig = array_sort($formConfig, function($value)
+                    {
+                        return $value['order'];
+                    });
+                    break;
+
+                case 'filter':
+                    $formConfig = $typeConfig;
+                    break;
             }
+        }
+        else
+        {
+            $formConfig = $config;
+        }
+
+        // To do other process that needs to be
+        $formConfig = $this->processFormConfig($formConfig, $input);
+
+        return Formaker::form($formConfig, $type);
+    }
+
+    /**
+     * Get a record by its ID
+     * @param  integer $id The ID of the record
+     * @param  Model   $model
+     * @return Builder|Model|null
+     */
+    public function showById($id, $model = null)
+    {
+        $model = $model ?: $this->model;
+
+        $model = $model->find($id);
+
+        return $model;
+    }
+
+    /**
+     * Get paginated articles
+     * @param int $limit Results per page
+     * @param int $page Number of articles per page
+     * @param array $query from Request::query()
+     * @param Model
+     * @return Paginator Object
+     */
+    public function showByPage($limit, $page, $query = null, $model = null)
+    {
+        $model = $model ?: $this->model;
+
+        // Get the total rows of model
+        $total = $model->count();
+
+        // get the pagenation
+        $rows  = $model->skip($limit * ($page-1))
+                       ->take($limit)
+                       ->get();
+
+        $items = $rows->all();
+
+        // Set Pagination of data 
+        $result = Paginator::make($items, $total, $limit);
+
+        if ($query)
+            $result = $result->appends($query);
+
+        return $result;
+    }
+
+    /**
+     * Get articles by their tag
+     * @param string  URL slug of tag
+     * @param int Number of articles per page
+     * @return StdClass Object with $items and $totalItems for pagination
+     */
+    public function showByTag($tag, $page = 1, $limit)
+    {
+        $foundTag = $this->model->where('slug', $tag)->first();
+
+        $result = new StdClass;
+        $result->page = $page;
+        $result->limit = $limit;
+        $result->totalItems = 0;
+        $result->items = array();
+
+        if( !$foundTag )
+        {
             return $result;
         }
-        return false;
+
+        $articles = $this->tag->articles()
+                        ->where('articles.status_id', 1)
+                        ->orderBy('articles.created_at', 'desc')
+                        ->skip( $limit * ($page-1) )
+                        ->take($limit)
+                        ->get();
+
+        $result->totalItems = $this->totalByTag();
+        $result->items = $articles->all();
+
+        return $result;
+    }
+
+    /**
+     * To show all the rows form model
+     * @param  string $sort
+     * @param  string $order
+     * @param  Model $model
+     * @return Model
+     */
+    public function showAll($sort = 'sort', $order = 'desc', $model = null)
+    {
+        $model = $model ?: $this->model;
+
+        return $model->orderBy($sort, $order)->get();
+    }
+
+    /**
+     * Get total count
+     * @todo I hate that this is public for the decorators.
+     *       Perhaps interface it?
+     * @return int  Total articles
+     */
+    public function total($model = null)
+    {
+        $model = $model ?: $this->model;
+
+        return $model->count();
     }
 
 }
