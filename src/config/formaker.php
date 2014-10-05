@@ -65,7 +65,7 @@ return array(
         'body'                  => 'textarea',
         
         // For wysihtml5
-        'content'               => 'wysihtml5',
+        'content'               => 'wysiwyg-advanced',
         
         // For password
         'password'              => 'password',

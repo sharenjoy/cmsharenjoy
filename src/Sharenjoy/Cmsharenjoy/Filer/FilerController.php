@@ -114,6 +114,44 @@ class FilerController extends BaseController {
                             ->with('uploadMaxFilesize', $maxSize);
     }
 
+    public function getCkeditor($parentId = null)
+    {
+        \Debugbar::disable();
+
+        if (is_null($parentId))
+        {
+            $model = Folder::orderBy('sort')->first();
+            $parentId = $model->id;
+        }
+
+        $folderTree = Filer::folderTree();
+
+        // make a parser instance
+        $parser = App::make('Sharenjoy\Cmsharenjoy\Utilities\Parser');
+        $folderTreeBuilder = $parser->treeBuilder(
+            $folderTree, 
+            '<li class="dd-item" data-id="{id}"><a href="'.$this->objectUrl.'/filemanager/{id}"><div class="dd-handle"><i class="fa fa-folder-o"></i>&nbsp;&nbsp;&nbsp;{name}</div></a> {children} </li>',
+            'ul class="dd-list"'
+        );
+
+        $fileResult = $this->foldercontents($parentId);
+        if ( ! $fileResult['status'])
+        {
+            Message::error($fileResult['message']);
+        }
+
+        $maxSize = Filer::getMaxSizeAllowed() > Filer::getMaxSizePossible() ? 
+                                                Filer::getMaxSizePossible() : 
+                                                Filer::getMaxSizeAllowed();
+        // Convert bytes to mega                                                
+        $maxSize = $maxSize / 1048576;
+
+        return $this->layout->with('parentId', $parentId)
+                            ->with('fileResult', $fileResult)
+                            ->with('folderTree', $folderTreeBuilder)
+                            ->with('uploadMaxFilesize', $maxSize);
+    }
+
     public function getFilealbum($parentId = null)
     {
         $fileResult = $this->foldercontents($parentId);

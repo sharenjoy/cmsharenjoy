@@ -1,28 +1,27 @@
 <?php
 
-return array(
+return [
 
     'path'    => 'packages/sharenjoy/cmsharenjoy/',
 
     'package' => [
-        
-        'wysihtml5' => [
-            'bootstrap-wysihtml5-css'    => [
-                'file'  => 'js/wysihtml5/bootstrap-wysihtml5.css',
-                'type'  => 'style',
-                'queue' => false,
-            ],
 
-            'wysihtml5'                  => [
-                'file'  => 'js/wysihtml5/wysihtml5-0.4.0pre.min.js',
+        'ckeditor' => [
+            'ckeditor'        => [
+                'file'  => 'js/ckeditor/ckeditor.js',
                 'type'  => 'script',
                 'queue' => false,
             ],
-            'bootstrap-wysihtml5-js'     => [
-                'file'  => 'js/wysihtml5/bootstrap-wysihtml5.js',
+            'ckeditor-jquery' => [
+                'file'  => 'js/ckeditor/adapters/jquery.js',
                 'type'  => 'script',
                 'queue' => false,
-            ]
+            ],
+            'ckeditor-custom' => [
+                'file'  => 'js/sharenjoy/ckeditor.js',
+                'type'  => 'script',
+                'queue' => false,
+            ],
         ],
         
         'tag' => [
@@ -69,7 +68,7 @@ return array(
         
         'file-picker-reload' => [
             'file-input-extra' => [
-                'file'  => 'js/file-picker-reload.js',
+                'file'  => 'js/sharenjoy/file-picker-reload.js',
                 'type'  => 'script',
                 'queue' => false,
             ]
@@ -77,4 +76,4 @@ return array(
 
     ],
 
-);
+];

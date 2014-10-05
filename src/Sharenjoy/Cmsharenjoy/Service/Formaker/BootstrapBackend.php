@@ -249,15 +249,16 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
                 $input = Form::textarea($name, $value, $args);
                 break;
 
-            case 'wysihtml5':
-                // Merge a textarea class element to array
-                $args['class'] = 'form-control wysihtml5';
-                $args = array_merge(
-                    array(
-                        'data-stylesheet-url'=>'/packages/sharenjoy/cmsharenjoy/css/wysihtml5-color.css'
-                    ), $args);
+            case 'wysiwyg-simple':
+                $args['class'] = 'form-control wysiwyg-simple';
                 $input = Form::textarea($name, $value, $args);
-                $this->assets[] = 'wysihtml5';
+                $this->assets[] = 'ckeditor';
+                break;
+
+            case 'wysiwyg-advanced':
+                $args['class'] = 'form-control wysiwyg-advanced';
+                $input = Form::textarea($name, $value, $args);
+                $this->assets[] = 'ckeditor';
                 break;
 
             case 'select':
@@ -455,7 +456,7 @@ EOE;
                     $this->field()
                      ->error()
                      ->help(['tag'=>'span', 'class'=>'help-block'])
-                     ->wrapper(['class'=>'col-sm-8 validate-has-error'])
+                     ->wrapper(['class'=>'col-sm-7 validate-has-error'])
                      ->label(['class'=>'col-sm-2 control-label', 'position'=>'top'])
                      ->wrapper(['class'=>'form-group']);
                 }
@@ -463,7 +464,7 @@ EOE;
                 {
                     $this->field()
                      ->help(['tag'=>'span', 'class'=>'help-block'])
-                     ->wrapper(['class'=>'col-sm-8'])
+                     ->wrapper(['class'=>'col-sm-7'])
                      ->label(['class'=>'col-sm-2 control-label', 'position'=>'top'])
                      ->wrapper(['class'=>'form-group']);
                 }
