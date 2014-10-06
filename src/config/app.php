@@ -4,19 +4,13 @@
  * The application configuration file, used to setup 
  * globally used values throughout the application
  */
-return array(
+return [
 
     /**
      * The name of the application, will be used in 
      * the main management areas of the application
      */
     'name' => 'CMS',
-
-    /**
-     * The email address associated with support 
-     * enquires on a technical basis
-     */
-    'support_email' => '',
 
     /**
      * The URL key to access the main admin area
@@ -44,52 +38,52 @@ return array(
      */
     'menu_items' => array(
         'post' => array(
-            'name' => 'menu.post',
+            'name' => 'cmsharenjoy::app.menu.post',
             'icon' => 'entypo-doc-text',
         ),
         'report' => array(
-            'name' => 'menu.report',
+            'name' => 'cmsharenjoy::app.menu.report',
             'icon' => 'entypo-doc-text',
         ),
         'product' => array(
-            'name' => 'menu.product',
+            'name' => 'cmsharenjoy::app.menu.product',
             'icon' => 'entypo-feather',
         ),
         'category' => array(
-            'name' =>'menu.category',
+            'name' =>'cmsharenjoy::app.menu.category',
             'icon' =>'entypo-flow-tree',
             'sub'  => array(
                 'category/index/product' => array(
-                    'name' => 'menu.product_category'
+                    'name' => 'cmsharenjoy::app.menu.product_category'
                 ),
             )
         ),
         'tag' => array(
-            'name' => 'menu.tag',
+            'name' => 'cmsharenjoy::app.menu.tag',
             'icon' => 'entypo-tag',
         ),
         'qna' => array(
-            'name' => 'menu.qna',
+            'name' => 'cmsharenjoy::app.menu.qna',
             'icon' => 'entypo-lamp',
         ),
         'filer' => array(
-            'name' => 'menu.file',
+            'name' => 'cmsharenjoy::app.menu.file',
             'icon' => 'entypo-box',
         ),
         'order' => array(
-            'name' => 'menu.order',
+            'name' => 'cmsharenjoy::app.menu.order',
             'icon' => 'entypo-basket',
         ),
         'member' => array(
-            'name' => 'menu.member',
+            'name' => 'cmsharenjoy::app.menu.member',
             'icon' => 'entypo-users',
         ),
         'user' => array(
-            'name' => 'menu.user',
+            'name' => 'cmsharenjoy::app.menu.user',
             'icon' => 'entypo-key',
         ),
         'setting' => array(
-            'name' => 'menu.setting',
+            'name' => 'cmsharenjoy::app.menu.setting',
             'icon' => 'entypo-cog',
         )
     ),
@@ -105,4 +99,4 @@ return array(
         'phone'         => '0939999999',
     ],
 
-);
+];

@@ -103,7 +103,7 @@
                         @endif
                             <a href="{{ url( $urlSegment.'/'.$url ) }}">
                                 <i class="{{$item['icon']}}"></i>
-                                <span>{{trans('cmsharenjoy::app.'.$item['name'])}}</span>
+                                <span>{{trans($item['name'])}}</span>
                             </a>
 
                             @if(isset($item['sub']))
@@ -111,7 +111,7 @@
                                     @foreach($item['sub'] as $subUrl => $subItem)
                                         <li class="{{ Request::is( "$urlSegment/$subUrl*" ) ? 'active' : '' }}">
                                             <a href="{{ url( $urlSegment.'/'.$subUrl ) }}">
-                                                <span>{{trans('cmsharenjoy::app.'.$subItem['name'])}}</span>
+                                                <span>{{trans($subItem['name'])}}</span>
                                             </a>
                                         </li>
                                     @endforeach
