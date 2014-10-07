@@ -278,13 +278,24 @@ abstract class ObjectBaseController extends BaseController {
         // Get reop directory from config
         $commonRepoLayout = Config::get('cmsharenjoy::app.commonRepoLayoutDirectory');
         
-        if (View::exists('cmsharenjoy::'.$this->onController.'.'.$action))
+        $pathA = $this->onController.'.'.$action;
+        $pathB = $commonRepoLayout.'.'.$action;
+
+        if (View::exists($this->urlSegment.'.'.$pathA))
         {
-            $this->layout = View::make('cmsharenjoy::'.$this->onController.'.'.$action);
+            $this->layout = View::make($this->urlSegment.'.'.$pathA);
         }
-        else if(View::exists('cmsharenjoy::'.$commonRepoLayout.'.'.$action))
+        elseif (View::exists('cmsharenjoy::'.$pathA))
         {
-            $this->layout = View::make('cmsharenjoy::'.$commonRepoLayout.'.'.$action);
+            $this->layout = View::make('cmsharenjoy::'.$pathA);
+        }
+        else if(View::exists($this->urlSegment.'.'.$pathB))
+        {
+            $this->layout = View::make($this->urlSegment.'.'.$pathB);
+        }
+        else if(View::exists('cmsharenjoy::'.$pathB))
+        {
+            $this->layout = View::make('cmsharenjoy::'.$pathB);
         }
     }
     

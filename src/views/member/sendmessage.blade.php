@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.interface-update')
 
 @section('title')
-{{trans('cmsharenjoy::app.edit')}}{{trans('cmsharenjoy::app.'.$appName)}}
+{{pick_trans('app.edit')}}{{pick_trans("app.$appName")}}
 @stop
 
 @section('form-items')
@@ -11,7 +11,7 @@
             
                 <div class="panel-heading">
                     <div class="panel-title">
-                        <h3>{{trans('cmsharenjoy::app.edit')}}</h3>
+                        <h3>{{pick_trans('app.edit')}}</h3>
                     </div>
                     
                     <!-- <div class="panel-options">
@@ -27,7 +27,7 @@
                     {{ Form::open( array( 'url'=>$objectUrl.'/sendmessage' , 'class'=>'form-horizontal form-groups-bordered' , 'role'=>'form', 'id'=>'item-form' ) ) }}
                     
                         <div class="form-group">
-                            {{Form::label('message', trans('cmsharenjoy::app.form.content'), array('class'=>'col-sm-2 control-label'))}}
+                            {{Form::label('message', pick_trans('app.form.content'), array('class'=>'col-sm-2 control-label'))}}
                             <div class="col-sm-5">
                                 {{Form::textarea('message', '', array('class'=>'form-control', 'rows'=>'5'))}}
                             </div>
@@ -36,9 +36,9 @@
                         <div class="form-group">
                             <div class="col-sm-8">
                                 {{Form::hidden('id', $id)}}
-                                {{ Form::reset(trans('cmsharenjoy::buttons.reset') , array('class'=>'btn btn-large btn-default')) }}
+                                {{ Form::reset(pick_trans('buttons.reset') , array('class'=>'btn btn-large btn-default')) }}
                                 &nbsp;
-                                {{ Form::submit(trans('cmsharenjoy::buttons.sendmessage') , array('class'=>'btn btn-large btn-success')) }}
+                                {{ Form::submit(pick_trans('buttons.sendmessage') , array('class'=>'btn btn-large btn-success')) }}
                             </div>
                         </div>
 

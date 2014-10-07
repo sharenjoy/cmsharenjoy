@@ -38,52 +38,52 @@ return [
      */
     'menu_items' => array(
         'post' => array(
-            'name' => 'cmsharenjoy::app.menu.post',
+            'name' => 'app.menu.post',
             'icon' => 'entypo-doc-text',
         ),
         'report' => array(
-            'name' => 'cmsharenjoy::app.menu.report',
+            'name' => 'app.menu.report',
             'icon' => 'entypo-doc-text',
         ),
         'product' => array(
-            'name' => 'cmsharenjoy::app.menu.product',
+            'name' => 'app.menu.product',
             'icon' => 'entypo-feather',
         ),
         'category' => array(
-            'name' =>'cmsharenjoy::app.menu.category',
+            'name' =>'app.menu.category',
             'icon' =>'entypo-flow-tree',
             'sub'  => array(
                 'category/index/product' => array(
-                    'name' => 'cmsharenjoy::app.menu.product_category'
+                    'name' => 'app.menu.product_category'
                 ),
             )
         ),
         'tag' => array(
-            'name' => 'cmsharenjoy::app.menu.tag',
+            'name' => 'app.menu.tag',
             'icon' => 'entypo-tag',
         ),
         'qna' => array(
-            'name' => 'cmsharenjoy::app.menu.qna',
+            'name' => 'app.menu.qna',
             'icon' => 'entypo-lamp',
         ),
         'filer' => array(
-            'name' => 'cmsharenjoy::app.menu.file',
+            'name' => 'app.menu.file',
             'icon' => 'entypo-box',
         ),
         'order' => array(
-            'name' => 'cmsharenjoy::app.menu.order',
+            'name' => 'app.menu.order',
             'icon' => 'entypo-basket',
         ),
         'member' => array(
-            'name' => 'cmsharenjoy::app.menu.member',
+            'name' => 'app.menu.member',
             'icon' => 'entypo-users',
         ),
         'user' => array(
-            'name' => 'cmsharenjoy::app.menu.user',
+            'name' => 'app.menu.user',
             'icon' => 'entypo-key',
         ),
         'setting' => array(
-            'name' => 'cmsharenjoy::app.menu.setting',
+            'name' => 'app.menu.setting',
             'icon' => 'entypo-cog',
         )
     ),

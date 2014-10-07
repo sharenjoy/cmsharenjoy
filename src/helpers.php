@@ -279,6 +279,24 @@ if ( ! function_exists('format_date'))
     }
 }
 
+if ( ! function_exists('pick_trans'))
+{
+    /**
+     * To choose the language from right place
+     */
+    function pick_trans($item, $options = array())
+    {
+        if (Lang::has($item))
+        {
+            return Lang::get($item, $options);
+        }
+        else
+        {
+            return Lang::get('cmsharenjoy::'.$item, $options);
+        }
+    }
+}
+
 if ( ! function_exists('ii'))
 {
     /**

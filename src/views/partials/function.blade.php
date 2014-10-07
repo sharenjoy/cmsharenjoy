@@ -3,7 +3,7 @@
     <!-- panel head -->
     <div class="panel-heading">
         <div class="panel-title">
-            <h2>{{trans("cmsharenjoy::app.$appName")}}</h2>
+            <h2>{{pick_trans("app.$appName")}}</h2>
         </div>
         <div class="panel-options">
             <!-- <a href="#sample-modal" data-toggle="modal" data-target="#sample-modal-dialog-1" class="bg"><i class="entypo-cog"></i></a> -->
@@ -19,7 +19,7 @@
         @if(Session::has('goBackPrevious') AND Session::get('doAction') != 'index' AND Session::get('doAction') != 'sort')
         <div class="pull-left">
             <a href="{{Session::get('goBackPrevious')}}" class="btn btn-info btn-icon icon-left">
-                <i class="fa fa-arrow-left"></i>{{trans('cmsharenjoy::buttons.return')}}
+                <i class="fa fa-arrow-left"></i>{{pick_trans('buttons.return')}}
             </a>
         </div>
         @endif
@@ -27,7 +27,7 @@
         @if(isset($functionRules['list']) AND $functionRules['list'] == true)
         <div class="pull-left">
             <a href="{{$objectUrl}}" class="btn btn-default btn-icon icon-left">
-                <i class="fa fa-bars"></i>{{trans('cmsharenjoy::buttons.list')}}
+                <i class="fa fa-bars"></i>{{pick_trans('buttons.list')}}
             </a>
         </div>
         @endif
@@ -35,7 +35,7 @@
         @if(isset($functionRules['create']) AND $functionRules['create'] == true)
         <div class="pull-left">
             <a href="{{$createUrl}}" class="btn btn-default btn-icon icon-left">
-                <i class="fa fa-plus"></i>{{trans('cmsharenjoy::buttons.new')}}
+                <i class="fa fa-plus"></i>{{pick_trans('buttons.new')}}
             </a>
         </div>
         @endif
@@ -43,7 +43,7 @@
         @if(isset($functionRules['order']) AND $functionRules['order'] == true)
         <div class="pull-left">
             <a href="{{$sortUrl}}" class="btn btn-default btn-icon icon-left">
-                <i class="fa fa-sort"></i>{{trans('cmsharenjoy::buttons.sort')}}
+                <i class="fa fa-sort"></i>{{pick_trans('buttons.sort')}}
             </a>
         </div>
         @endif
@@ -63,7 +63,7 @@
                     {{Form::hidden('filter', 'true')}}
                     {{Request::has('perPage') ? Form::hidden('perPage', Request::query('perPage')) : ''}}
                     {{Form::label('')}}<br>
-                    {{Form::submit(trans('cmsharenjoy::buttons.filter'), array('class'=>'btn btn-blue'))}}
+                    {{Form::submit(pick_trans('buttons.filter'), array('class'=>'btn btn-blue'))}}
                 </div>
 
             </div>

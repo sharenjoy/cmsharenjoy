@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.interface')
 
 @section('title')
-{{trans('cmsharenjoy::app.'.$appName)}}
+{{pick_trans('app.'.$appName)}}
 @stop
 
 @section('content')
@@ -40,7 +40,7 @@
                                     <li @if($key == 'general')class="active"@endif>
                                         <a href="#{{$key}}" data-toggle="tab">
                                             <span class="visible-xs"><i class="entypo-home"></i></span>
-                                            <span class="hidden-xs">{{trans('cmsharenjoy::setting.'.$key)}}</span>
+                                            <span class="hidden-xs">{{pick_trans('setting.'.$key)}}</span>
                                         </a>
                                     </li>
                                   @endforeach
@@ -60,7 +60,7 @@
                                             @foreach($item['item'] as $value)
                                             <div class="form-group setting-input">
                                                 <div class="col-sm-5 col-md-5">
-                                                    <p>{{Form::label($value->key, trans('cmsharenjoy::setting.label.'.$value->key), array('class'=>'control-label'))}}</p>
+                                                    <p>{{Form::label($value->key, pick_trans('setting.label.'.$value->key), array('class'=>'control-label'))}}</p>
 
                                                     @if ($value->type == 'text')
                                                         {{Form::text(
@@ -109,7 +109,7 @@
                                                     @endif
                                                 </div>
                                                 <div class="col-sm-7 col-md-7">
-                                                    <span class="help-block">{{trans('cmsharenjoy::setting.description.'.$value->key)}}</span>
+                                                    <span class="help-block">{{pick_trans('setting.description.'.$value->key)}}</span>
                                                 </div>
                                             </div>
                                             @endforeach
@@ -208,7 +208,7 @@
                 $.post(sharenjoy.APPURL + "/store", send_data, function(data, status) {
                     // console.log(data);
                     if (data.status == 'success') {
-                        toastr.success("{{trans('cmsharenjoy::app.success_updated')}}", "{{trans('cmsharenjoy::app.success')}}", opts);
+                        toastr.success("{{pick_trans('app.success_updated')}}", "{{pick_trans('app.success')}}", opts);
                     }
                 });
 

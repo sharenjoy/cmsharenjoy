@@ -7,7 +7,7 @@
         
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title">{{trans('cmsharenjoy::app.menu.file')}}</h4>
+          <h4 class="modal-title">{{pick_trans('app.menu.file')}}</h4>
         </div>
         
         <div class="modal-body">
@@ -20,7 +20,7 @@
         
         <div class="modal-footer">
           <input type="hidden" name="pick_field_name" id="pick_field_name" value="">
-          <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('cmsharenjoy::buttons.close')}}</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">{{pick_trans('buttons.close')}}</button>
         </div>
       </div>
     </div>
@@ -33,7 +33,7 @@
           
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">{{trans('cmsharenjoy::app.menu.file')}}</h4>
+            <h4 class="modal-title">{{pick_trans('app.menu.file')}}</h4>
           </div>
           
           <div class="modal-body">
@@ -45,7 +45,7 @@
           </div>
           
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('cmsharenjoy::buttons.close')}}</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">{{pick_trans('buttons.close')}}</button>
           </div>
         </div>
       </div>
@@ -74,8 +74,8 @@
         
         <div class="modal-footer">
           <input type="hidden" name="_token" value="{{csrf_token()}}">
-          <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('cmsharenjoy::buttons.cancel')}}</button>
-          {{Form::button(trans('cmsharenjoy::buttons.confirm'), ['type'=>'submit', 'class'=>"btn btn-info"])}}
+          <button type="button" class="btn btn-default" data-dismiss="modal">{{pick_trans('buttons.cancel')}}</button>
+          {{Form::button(pick_trans('buttons.confirm'), ['type'=>'submit', 'class'=>"btn btn-info"])}}
         </div>
       </div>
     </div>

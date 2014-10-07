@@ -91,7 +91,7 @@
                     <li class="{{ Request::is( "$urlSegment" ) ? 'active' : '' }}">
                         <a href="{{ url( $urlSegment ) }}">
                             <i class="entypo-gauge"></i>
-                            <span>{{trans('cmsharenjoy::app.menu.dash')}}</span>
+                            <span>{{pick_trans('app.menu.dash')}}</span>
                         </a>
                     </li>
                     
@@ -103,7 +103,7 @@
                         @endif
                             <a href="{{ url( $urlSegment.'/'.$url ) }}">
                                 <i class="{{$item['icon']}}"></i>
-                                <span>{{trans($item['name'])}}</span>
+                                <span>{{pick_trans($item['name'])}}</span>
                             </a>
 
                             @if(isset($item['sub']))
@@ -111,7 +111,7 @@
                                     @foreach($item['sub'] as $subUrl => $subItem)
                                         <li class="{{ Request::is( "$urlSegment/$subUrl*" ) ? 'active' : '' }}">
                                             <a href="{{ url( $urlSegment.'/'.$subUrl ) }}">
-                                                <span>{{trans($subItem['name'])}}</span>
+                                                <span>{{pick_trans($subItem['name'])}}</span>
                                             </a>
                                         </li>
                                     @endforeach

@@ -213,13 +213,24 @@ abstract class BaseController extends Controller {
     {
         $commonRepoLayout = Config::get('cmsharenjoy::app.commonRepoLayoutDirectory');
         
-        if (View::exists('cmsharenjoy::'.$this->onController.'.'.$this->doAction))
+        $pathA = $this->onController.'.'.$this->doAction;
+        $pathB = $commonRepoLayout.'.'.$this->doAction;
+
+        if (View::exists($this->urlSegment.'.'.$pathA))
         {
-            $this->layout = View::make('cmsharenjoy::'.$this->onController.'.'.$this->doAction);
+            $this->layout = View::make($this->urlSegment.'.'.$pathA);
         }
-        else if(View::exists('cmsharenjoy::'.$commonRepoLayout.'.'.$this->doAction))
+        elseif (View::exists('cmsharenjoy::'.$pathA))
         {
-            $this->layout = View::make('cmsharenjoy::'.$commonRepoLayout.'.'.$this->doAction);
+            $this->layout = View::make('cmsharenjoy::'.$pathA);
+        }
+        elseif (View::exists($this->urlSegment.'.'.$pathB))
+        {
+            $this->layout = View::make($this->urlSegment.'.'.$pathB);
+        }
+        elseif (View::exists('cmsharenjoy::'.$pathB))
+        {
+            $this->layout = View::make('cmsharenjoy::'.$pathB);
         }
     }
 
