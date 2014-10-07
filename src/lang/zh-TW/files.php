@@ -1,6 +1,6 @@
 <?php
     
-return array(
+return [
     
     // General
     'files_title'              => '文件',
@@ -161,4 +161,4 @@ return array(
     您的搜索匹配的項目將突出顯示。項目使用的文件夾名，文件名，擴展搜索，
     位置，遠程容器的名稱。</p>",
     
-);
+];

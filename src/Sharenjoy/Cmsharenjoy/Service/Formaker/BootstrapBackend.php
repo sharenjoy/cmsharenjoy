@@ -109,14 +109,30 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
             $description = array_get($this->args, 'help');
             unset($this->args['help']);
         }
-        elseif (Lang::has('cmsharenjoy::'.$targetA))
+        elseif (Lang::has('cmsharenjoy::'.$targetA) || Lang::has($targetA))
         {
-            $description = Lang::get('cmsharenjoy::'.$targetA);
-            unset($this->args['help']);
+            if (Lang::has($targetA))
+            {
+                $description = Lang::get($targetA);
+            }
+            elseif (Lang::has('cmsharenjoy::'.$targetA))
+            {
+                $description = Lang::get('cmsharenjoy::'.$targetA);
+            }
+
+            unset($this->args['help']);    
         }
-        elseif (Lang::has('cmsharenjoy::'.$targetB))
+        elseif (Lang::has('cmsharenjoy::'.$targetB) || Lang::has($targetB))
         {
-            $description = Lang::get('cmsharenjoy::'.$targetB);
+            if (Lang::has($targetB))
+            {
+                $description = Lang::get($targetB);
+            }
+            elseif (Lang::has('cmsharenjoy::'.$targetB))
+            {
+                $description = Lang::get('cmsharenjoy::'.$targetB);
+            }
+
             unset($this->args['help']);
         }
         else
@@ -185,13 +201,27 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
         {
             unset($this->args['placeholder']);
         }
-        elseif (Lang::has('cmsharenjoy::'.$targetA))
+        elseif (Lang::has('cmsharenjoy::'.$targetA) || Lang::has($targetA))
         {
-            $this->args['placeholder'] = Lang::get('cmsharenjoy::'.$targetA);
+            if (Lang::has($targetA))
+            {
+                $this->args['placeholder'] = Lang::get($targetA);
+            }
+            elseif (Lang::has('cmsharenjoy::'.$targetA))
+            {
+                $this->args['placeholder'] = Lang::get('cmsharenjoy::'.$targetA);
+            }
         }
-        elseif (Lang::has('cmsharenjoy::'.$targetB))
+        elseif (Lang::has('cmsharenjoy::'.$targetB) || Lang::has($targetB))
         {
-            $this->args['placeholder'] = Lang::get('cmsharenjoy::'.$targetB);
+            if (Lang::has($targetB))
+            {
+                $this->args['placeholder'] = Lang::get($targetB);
+            }
+            elseif (Lang::has('cmsharenjoy::'.$targetB))
+            {
+                $this->args['placeholder'] = Lang::get('cmsharenjoy::'.$targetB);
+            }
         }
 
         return $this->createInput($type, $value);

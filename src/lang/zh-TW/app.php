@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'menu' => [
         'dash'                    => '控制台',
@@ -209,4 +209,4 @@ return array(
 
     ],
 
-);
+];

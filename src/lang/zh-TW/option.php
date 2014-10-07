@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     // gender
     'male'              => '男性',
@@ -18,6 +18,12 @@ return array(
     'process4'          => '訂單寄送完成已送達',
     'process5'          => '訂單退款中',
     'process6'          => '訂單取消',
+
+    // payment
+    'payment1'          => '貨到付款',
+    'payment2'          => 'ATM轉帳',
+    'payment3'          => '信用卡付款',
+    'payment4'          => 'PayPal',
     
     // easy_contact_time
     'easyContactTime1'  => '任何時間皆可',
@@ -32,7 +38,6 @@ return array(
     'deliveryTimeZone3' => '12時-17時',
     'deliveryTimeZone4' => '17時-20時',
     'deliveryTimeZone5' => '20時-21時',
-    
-    
 
-);
+    
+];

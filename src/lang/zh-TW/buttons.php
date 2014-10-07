@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'submit'         => '送出',
     'cancel'         => '取消',
@@ -49,4 +49,4 @@ return array(
     'confirm'        => '確認',
     'return'         => '返回',
 
-);
+];

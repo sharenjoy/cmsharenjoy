@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     'general'     => '一般',
     'file'        => '檔案',
@@ -31,4 +31,4 @@ return array(
         'main_dish_limit_price'   => '主菜限制金額',
     ],
 
-);
+];

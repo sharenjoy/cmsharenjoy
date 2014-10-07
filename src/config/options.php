@@ -22,6 +22,13 @@ return array(
         '6' => trans('cmsharenjoy::option.process6'),
     ],
 
+    'payment' => [
+        '1' => trans('cmsharenjoy::option.payment1'),
+        '2' => trans('cmsharenjoy::option.payment2'),
+        '3' => trans('cmsharenjoy::option.payment3'),
+        '4' => trans('cmsharenjoy::option.payment4'),
+    ],
+
     'easy_contact_time' => [
         '1' => trans('cmsharenjoy::option.easyContactTime1'),
         '2' => trans('cmsharenjoy::option.easyContactTime2'),

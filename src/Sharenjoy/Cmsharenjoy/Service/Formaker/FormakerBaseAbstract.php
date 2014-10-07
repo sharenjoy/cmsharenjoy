@@ -51,7 +51,11 @@ Abstract class FormakerBaseAbstract {
         }
 
         // If doesn't set the config of lang
-        if (Lang::has('cmsharenjoy::app.form.'.$name))
+        if (Lang::has('app.form.'.$name))
+        {
+            return Lang::get('app.form.'.$name);
+        }
+        elseif (Lang::has('cmsharenjoy::app.form.'.$name))
         {
             return Lang::get('cmsharenjoy::app.form.'.$name);
         }
