@@ -64,7 +64,7 @@ return array(
         'bio'                   => 'textarea',
         'body'                  => 'textarea',
         
-        // For wysihtml5
+        // For wysiwyg
         'content'               => 'wysiwyg-advanced',
         
         // For password

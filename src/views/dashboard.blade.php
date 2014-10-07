@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.interface')
 
 @section('title')
-{{trans('cmsharenjoy::app.'.$appName)}}
+{{pick_trans("app.$appName")}}
 @stop
 
 @section('content')

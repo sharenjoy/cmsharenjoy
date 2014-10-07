@@ -18,6 +18,11 @@
         "moltin/laravel-cart": "dev-master",
         "guzzlehttp/guzzle": "~4.0"
     },
+    "require-dev": {
+        "way/generators": "2.*",
+        "barryvdh/laravel-debugbar": "1.6.*",
+        "fzaninotto/faker": "1.*"
+    },
     "autoload": {
         "classmap": [
             "src/migrations",

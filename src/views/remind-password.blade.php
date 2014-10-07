@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.login')
 
 @section('title')
-{{trans('cmsharenjoy::app.forgot_password')}} - {{$brandName}}
+{{pick_trans('app.forgot_password')}} - {{$brandName}}
 @stop
 
 @section('content')
@@ -25,12 +25,12 @@
         <div class="form-group">
             <button type="submit" class="btn btn-primary btn-block btn-login">
                 <i class="entypo-login"></i>
-                {{trans('cmsharenjoy::buttons.continue')}}
+                {{pick_trans('buttons.continue')}}
             </button>
         </div>
 
         <div class="form-group">
-            <a href="{{url($urlSegment.'/login')}}" class="link">{{trans('cmsharenjoy::app.back_login')}}</a>
+            <a href="{{url($urlSegment.'/login')}}" class="link">{{pick_trans('app.back_login')}}</a>
         </div>
                      
     {{Form::close()}}
