@@ -16,20 +16,20 @@
     <!-- panel body -->
     <div class="panel-body fun-box">
     
-        @if(Session::has('goBackPrevious') AND Session::get('doAction') != 'index' AND Session::get('doAction') != 'sort')
-        <div class="pull-left">
-            <a href="{{Session::get('goBackPrevious')}}" class="btn btn-info btn-icon icon-left">
-                <i class="fa fa-arrow-left"></i>{{pick_trans('buttons.return')}}
-            </a>
-        </div>
-        @endif
-
         @if(isset($functionRules['list']) AND $functionRules['list'] == true)
-        <div class="pull-left">
-            <a href="{{$objectUrl}}" class="btn btn-default btn-icon icon-left">
-                <i class="fa fa-bars"></i>{{pick_trans('buttons.list')}}
-            </a>
-        </div>
+            @if(Session::has('goBackPrevious') AND Session::get('doAction') != 'index' AND Session::get('doAction') != 'sort')
+            <div class="pull-left">
+                <a href="{{Session::get('goBackPrevious')}}" class="btn btn-info btn-icon icon-left">
+                    <i class="fa fa-arrow-left"></i>{{pick_trans('buttons.return')}}
+                </a>
+            </div>
+            @endif
+
+            <div class="pull-left">
+                <a href="{{$objectUrl}}" class="btn btn-default btn-icon icon-left">
+                    <i class="fa fa-bars"></i>{{pick_trans('buttons.list')}}
+                </a>
+            </div>
         @endif
 
         @if(isset($functionRules['create']) AND $functionRules['create'] == true)
