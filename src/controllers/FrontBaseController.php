@@ -1,4 +1,4 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Front\Controllers;
+<?php namespace Sharenjoy\Cmsharenjoy\Controllers;
 
 use Illuminate\Routing\Controller;
 use App, Auth, Session, View, Str, Route;
