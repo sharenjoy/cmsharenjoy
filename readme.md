@@ -14,7 +14,7 @@ This is cmsharenjoy.
     'Barryvdh\Debugbar\ServiceProvider',
     'Cartalyst\Sentry\SentryServiceProvider',
     'Sharenjoy\Cmsharenjoy\CmsharenjoyServiceProvider',
-    'Sharenjoy\Cmsharenjoy\Repo\RepoServiceProvider',
+    'Sharenjoy\Cmsharenjoy\Modules\ModuleServiceProvider',
     'Sharenjoy\Cmsharenjoy\Service\Message\MessageServiceProvider',
     'Sharenjoy\Cmsharenjoy\Service\Notification\NotificationServiceProvider',
     'Teepluss\Theme\ThemeServiceProvider',

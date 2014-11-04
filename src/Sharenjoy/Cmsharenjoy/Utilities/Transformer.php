@@ -22,7 +22,7 @@ class Transformer {
 
     public static function title(array $item)
     {
-        $existsAry = ['title', 'name', 'subject', 'tag'];
+        $existsAry = ['title', 'name', 'subject', 'tag', 'sn'];
 
         foreach ($existsAry as $value)
         {

@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
 
     /*
     |--------------------------------------------------------------------------
@@ -12,10 +12,10 @@ return array(
     |
     */
 
-    'categories' => array(
+    'categories' => [
 
         'model' => 'Sharenjoy\Cmsharenjoy\Service\Categorize\Categories\Category',
-    ),
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -27,10 +27,10 @@ return array(
     |
     */
 
-    'categoryHierarchy' => array(
+    'categoryHierarchy' => [
 
         'model' => 'Sharenjoy\Cmsharenjoy\Service\Categorize\CategoryHierarchy\Hierarchy',
-    ),
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -42,9 +42,9 @@ return array(
     |
     */
 
-    'CategoryRelates' => array(
+    'CategoryRelates' => [
 
         'model' => 'Sharenjoy\Cmsharenjoy\Service\Categorize\CategoryRelates\Relate',
-    ),
+    ],
 
-);
+];

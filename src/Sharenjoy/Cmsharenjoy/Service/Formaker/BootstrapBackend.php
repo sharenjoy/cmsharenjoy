@@ -184,7 +184,7 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
         unset($this->args['type']);
 
         // get exist value and then unset
-        $value = array_get($this->args, 'value') ?: '';
+        $value = array_get($this->args, 'value');
         unset($this->args['value']);
 
         // We'll default to Bootstrap-friendly input class names

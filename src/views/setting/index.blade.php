@@ -138,7 +138,7 @@
         $(function(){
             
             var $activeTag;
-            $('.setting-input input, .setting-input textarea, .setting-input select').on('change', function (e) {
+            $('.setting-input input, .setting-input textarea, .setting-input select').on('focusin', function (e) {
                 e.preventDefault();
 
                 $activeTag = $(this);
@@ -148,6 +148,17 @@
                 if ($active.find('div')['length'] == 0) {
                     $active.append('<div style="margin-top:5px;">{{$buttons}}</div>');
                 };
+            });
+
+            $('.setting-input input, .setting-input textarea, .setting-input select').on('focusout', function (e) {
+                e.preventDefault();
+
+                $activeTag = $(this);
+                $active = $(this).parent();
+
+                $active.find('div').fadeOut(function(){
+                    $(this).remove();
+                });
             });
 
             $('.setting-input').delegate('button[class="btn btn-reset"]', 'click', function (e) {

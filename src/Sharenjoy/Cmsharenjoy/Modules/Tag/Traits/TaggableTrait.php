@@ -1,7 +1,7 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Repo\Tag\Traits;
+<?php namespace Sharenjoy\Cmsharenjoy\Modules\Tag\Traits;
 
-use Sharenjoy\Cmsharenjoy\Repo\Tag\TagUtil;
-use Sharenjoy\Cmsharenjoy\Repo\Tag\Tag;
+use Sharenjoy\Cmsharenjoy\Modules\Tag\TagUtil;
+use Sharenjoy\Cmsharenjoy\Modules\Tag\Tag;
 use Sharenjoy\Cmsharenjoy\Utilities\String;
 use Str;
 
@@ -14,7 +14,7 @@ trait TaggableTrait {
 	 */
 	public function tags()
 	{
-		return $this->morphToMany('Sharenjoy\Cmsharenjoy\Repo\Tag\Tag', 'taggable');
+		return $this->morphToMany('Sharenjoy\Cmsharenjoy\Modules\Tag\Tag', 'taggable');
 	}
 
 	/**

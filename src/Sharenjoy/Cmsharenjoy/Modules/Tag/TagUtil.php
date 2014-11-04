@@ -1,4 +1,4 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Repo\Tag;
+<?php namespace Sharenjoy\Cmsharenjoy\Modules\Tag;
 
 /**
  * Utility functions to help with various tagging functionality.
@@ -69,7 +69,7 @@ class TagUtil {
 		if($tag->count < 0)
 		{
 			$tag->count = 0;
-			\Log::warning("The \Sharenjoy\Cmsharenjoy\Repo\Tag count for `$tag->name` was a negative number. This probably means your data got corrupted. Please assess your code and report an issue if you find one.");
+			\Log::warning("The \Sharenjoy\Cmsharenjoy\Modules\Tag count for `$tag->name` was a negative number. This probably means your data got corrupted. Please assess your code and report an issue if you find one.");
 		}
 		$tag->save();
 	}

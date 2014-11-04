@@ -1,4 +1,4 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Repo\Category;
+<?php namespace Sharenjoy\Cmsharenjoy\Modules\Category;
 
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
 use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;

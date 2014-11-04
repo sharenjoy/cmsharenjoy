@@ -6,7 +6,7 @@ class TestableController extends BaseController {
 
     public function getIndex()
     {
-        $tag = \Sharenjoy\Cmsharenjoy\Repo\Tag\Tag::withAllRelation()->first();
+        $tag = \Sharenjoy\Cmsharenjoy\Modules\Tag\Tag::withAllRelation()->first();
 
         ii($tag->toArray());
 

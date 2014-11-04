@@ -1,4 +1,4 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Repo\Tag;
+<?php namespace Sharenjoy\Cmsharenjoy\Modules\Tag;
 
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
 use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;

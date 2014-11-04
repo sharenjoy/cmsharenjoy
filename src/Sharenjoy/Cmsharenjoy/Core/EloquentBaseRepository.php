@@ -110,7 +110,8 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
         {
             foreach ($filterItems as $key => $value)
             {
-                $model = $model->$key($value);
+                $method = camel_case($key);
+                $model = $model->$method($value);
             }
         }
 

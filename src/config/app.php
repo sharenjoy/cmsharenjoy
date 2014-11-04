@@ -24,7 +24,7 @@ return [
     /**
      * The common directory of layout
      */
-    'commonRepoLayoutDirectory' => 'repo',
+    'commonRepoLayoutDirectory' => 'common',
 
     /**
      * The menu items shown at the top and side 

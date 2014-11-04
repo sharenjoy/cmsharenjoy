@@ -1,4 +1,4 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Repo\Tag;
+<?php namespace Sharenjoy\Cmsharenjoy\Modules\Tag;
 
 interface TagInterface {
 

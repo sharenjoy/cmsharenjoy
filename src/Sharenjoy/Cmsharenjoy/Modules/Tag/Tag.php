@@ -1,4 +1,4 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Repo\Tag;
+<?php namespace Sharenjoy\Cmsharenjoy\Modules\Tag;
 
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseModel;
 use Sharenjoy\Cmsharenjoy\Utilities\String;

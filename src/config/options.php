@@ -1,6 +1,6 @@
 <?php
 
-return array(
+return [
     
     'gender' => [
         '1' => trans('cmsharenjoy::option.female'),
@@ -46,4 +46,4 @@ return array(
     ],
     
     
-);
+];

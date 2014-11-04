@@ -16,7 +16,8 @@
         "cartalyst/sentry": "2.1.*",
         "teepluss/theme": "dev-master",
         "moltin/laravel-cart": "dev-master",
-        "guzzlehttp/guzzle": "~4.0"
+        "guzzlehttp/guzzle": "~4.0",
+        "pda/pheanstalk": "~3.0"
     },
     "require-dev": {
         "way/generators": "2.*",

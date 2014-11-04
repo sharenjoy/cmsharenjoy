@@ -74,7 +74,7 @@ trait CommonModelTrait {
     public function isTaggable()
     {
         return in_array(
-            'Sharenjoy\Cmsharenjoy\Repo\Tag\Traits\TaggableTrait', 
+            'Sharenjoy\Cmsharenjoy\Modules\Tag\Traits\TaggableTrait', 
             (new ReflectionClass($this))->getTraitNames()
         );
     }
