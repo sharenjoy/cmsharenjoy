@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-new-folder" tabindex="-1" role="dialog">
+<div class="modal fade custom-width" id="modal-new-folder">
     <form action="{{$objectUrl.'/newfolder/'.Session::get('doAction')}}" method="POST">
         <div class="modal-dialog" style="width: 650px;">
             <div class="modal-content">
@@ -33,7 +33,7 @@
     </form>
 </div>
 
-<div class="modal fade" id="modal-create-file" tabindex="-1" role="dialog">
+<div class="modal fade custom-width" id="modal-create-file">
     <div class="modal-dialog" style="width: 550px;">
         <div class="modal-content">
             
@@ -98,7 +98,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-file-detail" tabindex="-1" role="dialog">
+<div class="modal fade custom-width" id="modal-file-detail">
     <div class="modal-dialog" style="width: 650px;">
         <form action="{{$objectUrl.'/updatefile/'.Session::get('doAction')}}" method="POST">
             <div class="modal-content">
@@ -151,7 +151,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal-delete-file" tabindex="-1" role="dialog">
+<div class="modal fade custom-width" id="modal-delete-file">
     <div class="modal-dialog" style="width: 650px;">
         <div class="modal-content">
             

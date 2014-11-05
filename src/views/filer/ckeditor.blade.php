@@ -272,6 +272,7 @@
 
             // myDropzone is the configuration for the element that has an id attribute
             // with the value my-dropzone (or myDropzone)
+            Dropzone.autoDiscover = false;
             var myDropzone = new Dropzone("#dropzone .dropzone", {
                 maxFilesize: sharenjoy.file.upload_max_filesize,
                 headers: { 'X-CSRF-Token': sharenjoy.csrf_token },

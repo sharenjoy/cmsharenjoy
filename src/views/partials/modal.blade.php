@@ -1,7 +1,7 @@
 <!-- Filemanager modal -->
 @if(Session::get('onController') != 'filer')
   
-  <div class="modal fade" id="modal-filemanager" tabindex="-1" role="dialog">
+  <div class="modal fade custom-width" id="modal-filemanager">
     <div class="modal-dialog" style="width:800px">
       <div class="modal-content">
         
@@ -27,7 +27,7 @@
   </div>
 
   @if(isset($albumId))
-    <div class="modal fade" id="modal-file-album" tabindex="-1" role="dialog">
+    <div class="modal fade custom-width" id="modal-file-album">
       <div class="modal-dialog" style="width:800px">
         <div class="modal-content">
           
@@ -56,7 +56,7 @@
 <!-- Filemanager modal Ends -->
 
 <!-- Common model Starts -->
-<div class="modal fade" id="common-modal" tabindex="-1" role="dialog">
+<div class="modal fade" id="common-modal">
   <form action="" method="POST">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
