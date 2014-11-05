@@ -96,15 +96,9 @@
 
     <!-- Bottom Scripts -->
     <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/jquery-1.11.0.min.js')}}"></script>
-    <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/gsap/main-gsap.js')}}"></script>
     <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js')}}"></script>
     <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/bootstrap.js')}}"></script>
-    <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/joinable.js')}}"></script>
-    <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/resizeable.js')}}"></script>
-    <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/neon-api.js')}}"></script>
     <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/toastr.js')}}"></script>
-    <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/jquery.validate.min.js')}}"></script>
-    <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/neon-custom.js')}}"></script>
     <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/dropzone/dropzone.min.js')}}"></script>
 
     <script>
