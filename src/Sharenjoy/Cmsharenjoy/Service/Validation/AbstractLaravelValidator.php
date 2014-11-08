@@ -140,7 +140,11 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
 
         if (Lang::has('cmsharenjoy::app.form.validation'))
         {
-            $messages = Lang::get('cmsharenjoy::app.form.validation');
+            $messages = array_merge($messages, Lang::get('cmsharenjoy::app.form.validation'));
+        }
+        if (Lang::has('app.form.validation'))
+        {
+            $messages = array_merge($messages, Lang::get('app.form.validation'));
         }
 
         return $messages;
@@ -156,7 +160,11 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
 
         foreach ($this->rules as $key => $value)
         {
-            if (Lang::has('cmsharenjoy::app.form.'.$key))
+            if (Lang::has('app.form.'.$key))
+            {
+                $attributes[$key] = Lang::get('app.form.'.$key);
+            }
+            elseif (Lang::has('cmsharenjoy::app.form.'.$key))
             {
                 $attributes[$key] = Lang::get('cmsharenjoy::app.form.'.$key);
             }

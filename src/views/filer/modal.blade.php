@@ -14,8 +14,8 @@
                         <div class="col-md-12">
                             
                             <div class="form-group">
-                                {{Form::label('name', 'Name', array('class'=>'control-label'))}}
-                                {{Form::text('name', '', array('placeholder'=>'Name', 'class'=>'form-control', 'id'=>'name'))}}
+                                {{Form::label('folder_name', trans('cmsharenjoy::files.folder_name'), array('class'=>'control-label'))}}
+                                {{Form::text('folder_name', '', array('placeholder'=>trans('cmsharenjoy::files.folder_placeholder'), 'class'=>'form-control', 'id'=>'folder_name'))}}
                             </div>  
                             
                         </div>

@@ -182,12 +182,14 @@ class FilerController extends BaseController {
         $input     = Input::all();
 
         $validator = new FilerValidator();
-        $result    = $validator->valid($input, 'newFolderRules');
-        if ( ! $result->status)
+        $result = $validator->setRule('newFolderRules')->valid($input, 'flash');
+        
+        if ($result !== true)
         {
             return Redirect::to($this->objectUrl)->withInput();
         }
 
+        $input['name'] = $input['folder_name'];
         $result = Filer::createFolder($parent_id, $input['name']);
 
         Message::success(trans('cmsharenjoy::files.folder_created'));
@@ -336,8 +338,9 @@ EOE;
         $input = Input::all();
 
         $validator = new FilerValidator();
-        $result    = $validator->valid($input, 'fileUpdateRules');
-        if ( ! $result->status)
+        $result = $validator->setRule('fileUpdateRules')->valid($input, 'flash');
+        
+        if ($result !== true)
         {
             return Redirect::to($this->objectUrl.'/index/'.$input['folder_id'])->withInput();
         }

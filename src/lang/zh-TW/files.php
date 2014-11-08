@@ -82,6 +82,8 @@ return [
     'synchronization_started'  => '開始同步',
     'synchronization_complete' => '與同步 "%s" 成功',
     'untitled_folder'          => '未命名目錄',
+    'folder_name'              => '文件夾名稱',
+    'folder_placeholder'       => '請輸入文件夾的名稱',
     
     // Files
     'no_files'                 => '無文件',
