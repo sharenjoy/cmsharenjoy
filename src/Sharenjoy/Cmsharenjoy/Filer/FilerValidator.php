@@ -10,7 +10,7 @@ class FilerValidator extends AbstractLaravelValidator {
      * @var Array
      */
     protected $newFolderRules = [
-        'name' => 'required|unique:file_folders,name'
+        'folder_name' => 'required|unique:file_folders,name'
     ];
 
     protected $fileUpdateRules = [

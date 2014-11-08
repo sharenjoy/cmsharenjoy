@@ -173,6 +173,7 @@ return [
         'easy_contact_time_id'    => '方便聯絡時間',
         'delivery_time_zone_id'   => '配送時段',
         'process_id'              => '處理進度',
+        'folder_name'             => '文件夾名稱',
 
 
         'placeholder' => [
