@@ -1,5 +1,6 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Service\Formaker;
 
+use Sharenjoy\Cmsharenjoy\Utilities\Parser;
 use Config, Lang, Session;
 
 Abstract class FormakerBaseAbstract {
@@ -35,6 +36,12 @@ Abstract class FormakerBaseAbstract {
     protected $args;
 
     /**
+     * The array of arguments
+     * @var array
+     */
+    protected $setting;
+
+    /**
      * Default type needs to create
      * @var string
      */
@@ -45,6 +52,17 @@ Abstract class FormakerBaseAbstract {
      * @var string
      */
     protected $inputData;
+
+    /**
+     * To parser the string
+     * @var object Sharenjoy\Cmsharenjoy\Utilities\Parser
+     */
+    protected $parser;
+
+    public function __construct()
+    {
+        $this->parser = new Parser();
+    }
 
     /**
      * Which type needs to create
@@ -87,31 +105,101 @@ Abstract class FormakerBaseAbstract {
     /**
      * Provide a best guess for what the
      * input type should be.
-     * @param string $name
+     * @param array $config
      */
-    protected function guessInputType()
+    protected function setType($config)
     {
-        return array_get(Config::get('cmsharenjoy::formaker.commonInputsLookup'), $this->name) ?: 'text';
+        if (isset($config['type']) && ! is_null($config['type']))
+        {
+            $this->type = $config['type'];
+        }
+        else
+        {
+            $cfg = Config::get('cmsharenjoy::formaker.commonInputsLookup');
+            $this->type = array_get($cfg, $this->name) ?: 'text';
+        }
+    }
+
+    /**
+     * Provide a best guess for what the
+     * input type should be.
+     * @param array $config
+     */
+    protected function setValue($config)
+    {
+        if (isset($config['value']) && ! is_null($config['value']))
+        {
+            $this->value = $config['value'];
+        }
     }
 
     /**
      * Provide a best guess for what the
      * option value should be.
-     * @param string $name
+     * @param array $config
      */
-    protected function guessOption($option)
+    protected function setOption($config)
     {
+        $option = $config['option'];
+
         if (is_array($option))
         {
-            return $option;
+            $this->option = $option;
         }
         elseif(is_string($option))
         {
-            return Config::get('cmsharenjoy::options.'.$option);
+            $this->option = Config::get('cmsharenjoy::options.'.$option);
         }
         else
         {
-            return Config::get('cmsharenjoy::options.'.$this->name) ?: ['1'=>'Yes', '2'=>'No'];
+            $this->option = Config::get('cmsharenjoy::options.'.$this->name) ?: 
+                            Config::get('cmsharenjoy::options.yesno');
+        }
+
+        if (isset($config['pleaseSelect']) && $config['pleaseSelect'] === true)
+        {
+            $this->option[0] = trans('cmsharenjoy::option.pleaseSelect');
+        }
+    }
+
+    /**
+     * Provide a best guess for what the
+     * option value should be.
+     * @param array $config
+     */
+    protected function setArgs($config)
+    {
+        $this->args = $config['args'];
+
+        // Set the lang of placeholder from config
+        $targetA = 'app.form.placeholder.'.Session::get('onController').'.'.$this->name;
+        $targetB = 'app.form.placeholder.'.$this->name;
+
+        if (isset($config['placeholder']) && ! is_null($config['placeholder']))
+        {
+            $this->args['placeholder'] = $config['placeholder'];
+        }
+        elseif (Lang::has('cmsharenjoy::'.$targetA) || Lang::has($targetA))
+        {
+            if (Lang::has($targetA))
+            {
+                $this->args['placeholder'] = Lang::get($targetA);
+            }
+            elseif (Lang::has('cmsharenjoy::'.$targetA))
+            {
+                $this->args['placeholder'] = Lang::get('cmsharenjoy::'.$targetA);
+            }
+        }
+        elseif (Lang::has('cmsharenjoy::'.$targetB) || Lang::has($targetB))
+        {
+            if (Lang::has($targetB))
+            {
+                $this->args['placeholder'] = Lang::get($targetB);
+            }
+            elseif (Lang::has('cmsharenjoy::'.$targetB))
+            {
+                $this->args['placeholder'] = Lang::get('cmsharenjoy::'.$targetB);
+            }
         }
     }
 
@@ -130,35 +218,22 @@ Abstract class FormakerBaseAbstract {
             // Set the fields is list
             $this->setFormType($type);
 
-            foreach ($config as $key => $value)
+            foreach ($config as $key => $config)
             {
-                $formaker = [];
+                $this->name    = $key;
+                $this->setting = $config;
 
-                // To extract the element type,value,option,args
-                $extract = ['type', 'value', 'option', 'args'];
-                foreach ($extract as $element)
-                {
-                    if (isset($value[$element]) && ( ! is_null($value[$element]) || count($value[$element])))
-                        $this->$element = $value[$element];
-                }
+                $this->setType($config);
+                $this->setValue($config);
+                $this->setOption($config);
+                $this->setArgs($config);
 
-                $data[$key] = $this->compose();
+
+                $data[$key] = $this->make();
             }
         }
 
         return $data;
-    }
-
-    /**
-     * Handle dynamic method calls
-     * @param string $name
-     * @param array $args
-     */
-    public function compose()
-    {
-        $this->inputData = '';
-
-        return $this->make();
     }
 
 }

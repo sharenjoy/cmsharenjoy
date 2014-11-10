@@ -11,7 +11,7 @@ trait ScopeModelTrait {
     {
         if ($value)
         {
-            $filter = array_get($this->filterFormConfig, 'keyword.args.data-filter');
+            $filter = array_get($this->filterFormConfig, 'keyword.filter');
             $fields = explode(',', $filter);
             
             return $query->where(function($query) use ($value, $fields)

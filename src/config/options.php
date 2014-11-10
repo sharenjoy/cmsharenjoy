@@ -8,7 +8,11 @@ return [
     ],
 
     'status' => [
-        '0' => trans('cmsharenjoy::option.pleaseSelect'),
+        '1' => trans('cmsharenjoy::option.yes'),
+        '2' => trans('cmsharenjoy::option.no'),
+    ],
+
+    'status' => [
         '1' => trans('cmsharenjoy::option.enable'),
         '2' => trans('cmsharenjoy::option.disable'),
     ],

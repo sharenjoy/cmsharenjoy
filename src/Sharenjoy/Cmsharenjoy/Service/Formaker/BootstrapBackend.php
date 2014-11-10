@@ -4,18 +4,18 @@ use Form, Lang, Theme, Config, Session, Categorize;
 
 class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface {
 
-    /**
-     * Should form inputs receive a class name?
-     */
-    private $inputClass = 'form-control';
+    protected $inputClass = 'form-control';
 
-    /**
-     * Add prefix to every fields's name
-     * @var string
-     */
-    private $fieldPrefix = '';
+    protected $errorClass = 'has-error';
 
-    private $assets = [];
+    protected $template = '<div class="form-group has-error">
+                             <label for="field-4" class="col-sm-3 control-label">Error field</label>
+                             <div class="col-sm-5">
+                               {field}
+                             </div>
+                           </div>';
+
+    protected $assets = [];
 
     protected $errors;
 
@@ -166,65 +166,9 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
     protected function field()
     {
         // Compose the input filed
-        $this->inputData .= $this->createInputArgs();
+        $this->inputData .= $this->createInput();
+
         return $this;
-    }
-
-    /**
-     * Manage creation of input arguments
-     * @param string $type
-     * @param array $args
-     * @param string An input
-     */
-    protected function createInputArgs()
-    {
-        // If the user specifies an input type, we'll just use that.
-        // Otherwise, we'll take a best guess approach.
-        $type = array_get($this->args, 'type') ?: $this->guessInputType();
-        unset($this->args['type']);
-
-        // get exist value and then unset
-        $value = array_get($this->args, 'value');
-        unset($this->args['value']);
-
-        // We'll default to Bootstrap-friendly input class names
-        if( ! isset($this->args['class']))
-        {
-            $this->args = array_merge(array('class' => $this->inputClass), $this->args);
-        }
-
-        // Set the lang of placeholder from config
-        $targetA = 'app.form.placeholder.'.Session::get('onController').'.'.$this->name;
-        $targetB = 'app.form.placeholder.'.$this->name;
-
-        if (array_get($this->args, 'placeholder'))
-        {
-            unset($this->args['placeholder']);
-        }
-        elseif (Lang::has('cmsharenjoy::'.$targetA) || Lang::has($targetA))
-        {
-            if (Lang::has($targetA))
-            {
-                $this->args['placeholder'] = Lang::get($targetA);
-            }
-            elseif (Lang::has('cmsharenjoy::'.$targetA))
-            {
-                $this->args['placeholder'] = Lang::get('cmsharenjoy::'.$targetA);
-            }
-        }
-        elseif (Lang::has('cmsharenjoy::'.$targetB) || Lang::has($targetB))
-        {
-            if (Lang::has($targetB))
-            {
-                $this->args['placeholder'] = Lang::get($targetB);
-            }
-            elseif (Lang::has('cmsharenjoy::'.$targetB))
-            {
-                $this->args['placeholder'] = Lang::get('cmsharenjoy::'.$targetB);
-            }
-        }
-
-        return $this->createInput($type, $value);
     }
 
     /**
@@ -298,8 +242,7 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
                 break;
 
             case 'category':
-                $categoryType = $args['category'];
-                unset($args['category']);
+                $categoryType = $this->setting['category'];
                 $categories = Categorize::getCategoryProvider()->root()
                                                                ->whereType($categoryType)
                                                                ->orderBy('sort', 'asc')
