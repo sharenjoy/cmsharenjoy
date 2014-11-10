@@ -6,9 +6,27 @@ Abstract class FormakerBaseAbstract {
 
     /**
      * The name of field
-     * @var [type]
+     * @var string
      */
     protected $name;
+
+    /**
+     * The type of field
+     * @var string
+     */
+    protected $type;
+
+    /**
+     * The value of field
+     * @var string
+     */
+    protected $value;
+
+    /**
+     * The option of field
+     * @var array
+     */
+    protected $option;
 
     /**
      * The array of arguments
@@ -116,16 +134,15 @@ Abstract class FormakerBaseAbstract {
             {
                 $formaker = [];
 
-                if(isset($value['type'])  && !is_null($value['type']))
-                    $formaker['type'] = $value['type'];
-                if(isset($value['value']))
-                    $formaker['value'] = $value['value'];
-                if(isset($value['option']) && count($value['option']))
-                    $formaker['option'] = $value['option'];
-                if(isset($value['args']) && count($value['args']))
-                    $formaker = array_merge($formaker, $value['args']);
+                // To extract the element type,value,option,args
+                $extract = ['type', 'value', 'option', 'args'];
+                foreach ($extract as $element)
+                {
+                    if (isset($value[$element]) && ( ! is_null($value[$element]) || count($value[$element])))
+                        $this->$element = $value[$element];
+                }
 
-                $data[$key] = $this->$key($formaker);
+                $data[$key] = $this->compose();
             }
         }
 
@@ -137,11 +154,9 @@ Abstract class FormakerBaseAbstract {
      * @param string $name
      * @param array $args
      */
-    public function __call($name, $args)
+    public function compose()
     {
         $this->inputData = '';
-        $this->args = empty($args) ? [] : $args[0];
-        $this->name = $name;
 
         return $this->make();
     }

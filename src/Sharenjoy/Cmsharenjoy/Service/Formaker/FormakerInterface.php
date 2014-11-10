@@ -10,4 +10,6 @@ interface FormakerInterface {
      */
     public function make();
 
+    // public function createInput();
+
 }

@@ -202,17 +202,19 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
         {
             foreach ($formConfig as $name => $config)
             {
+                // To get the options of select element from the Model
                 if (isset($config['lists']))
                 {
-                    $method = $config['lists'];
+                    $method = camel_case($config['lists']);
                     $formConfig[$name]['option'] = $this->model->$method();
                 }
 
-                // If use custom key of value otherwise use the $key
-                if (isset($input[$name]))
-                    $formConfig[$name]['value'] = $input[$name];
-                elseif (isset($config['input']) && isset($input[$config['input']]))
+                // If use key that the name is input of value otherwise use the $key
+                if (isset($config['input']) && isset($input[$config['input']]))
                     $formConfig[$name]['value'] = $input[$config['input']];
+                elseif (isset($input[$name]))
+                    $formConfig[$name]['value'] = $input[$name];
+                
             }
         }
 
