@@ -1,174 +1,62 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Service\Formaker;
 
-use Form, Lang, Theme, Config, Session, Categorize;
+use Form, Lang, Config, Session, Categorize;
 
-class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface {
+class TwitterBootstrapV3 extends FormakerAbstract implements FormakerInterface {
 
-    protected $inputClass = 'form-control';
+    protected $theme = 'TwitterBootstrapV3';
 
-    protected $errorClass = 'has-error';
-
-    protected $template = '<div class="form-group has-error">
-                             <label for="field-4" class="col-sm-3 control-label">Error field</label>
-                             <div class="col-sm-5">
-                               {field}
-                             </div>
-                           </div>';
-
-    protected $assets = [];
-
-    protected $errors;
-
-    public function __construct()
+    protected function label()
     {
-        if (Session::has('sharenjoy.validation.errors'))
-        {
-            $this->errors = Session::get('sharenjoy.validation.errors');
-        }
+        $tag = "label";
+        $attributes = [
+            'for'   => $this->name,
+            'class' => array_get($this->setting, 'class.label') ?: array_get($this->config, 'class.label')
+        ];
+        $content = array_get($this->setting, 'label') ?: $this->prettifyFieldName();
+
+        return (new Templates\BlockTemplate())->make(compact('tag','attributes','content'));
     }
 
-    /**
-     * Composing the arguments to some data
-     * @param  array  $args
-     * @return array
-     */
-    protected function composeArguments($args = array())
+    protected function help()
     {
-        $arguments = array();
+        $result = $this->getLanguageSetting('help');
+        if ( ! $result) return;
 
-        $arguments['position'] = array_get($args, 'position') ?: 'bottom';
-        unset($args['position']);
+        $tag = 'span';
+        $attribures = [
+            'class' => array_get($this->setting, 'help-class') ?: array_get($this->config, 'class.help')
+        ];
+        $content = $result;
 
-        $arguments['tag'] = array_get($args, 'tag') ?: 'div';
-        unset($args['tag']);
-
-        $arguments['elements'] = '';
-        foreach ($args as $key => $value)
-        {
-            $arguments['elements'] .= $key.'="'.$value.'"';
-        }
-
-        return $arguments;
+        return (new Templates\BlockTemplate())->make(compact('tag','attributes','content'));
     }
 
-    protected function wrapper($args = array())
+    protected function error()
     {
-        $data = $this->inputData;
-        $item = $this->composeArguments($args);
-
-        $this->inputData = '<'.$item['tag'].' '.$item['elements'].'>'.$data.'</'.$item['tag'].'>';
-
-        return $this;
-    }
-
-    protected function inner($inner, $args = array())
-    {
-        $data  = $this->inputData;
-        $item  = $this->composeArguments($args);
-        $field = '<'.$item['tag'].' '.$item['elements'].'>'.$inner.'</'.$item['tag'].'>';
-
-        $this->inputData = $item['position'] == 'top' ? $field.$data : $data.$field;
-
-        return $this;
-    }
-
-    /**
-     * Handle of creation of the label
-     * @param array $args
-     * @param string $name
-     */
-    protected function label($args = array())
-    {
-        $data = $this->inputData;
-        $item = $this->composeArguments($args);
-
-        $label = array_get($this->args, 'label') ?: $this->prettifyFieldName();
-        unset($this->args['label']);
-
-        // Add prefix
-        $name  = $this->fieldPrefix.$this->name;
-        $field = '<label for="'.$name.'" '.$item['elements'].'>'.$label.'</label>';
-
-        $this->inputData = $item['position'] == 'top' ? $field.$data : $data.$field;
-
-        return $this;
-    }
-
-    /**
-     * Create help block
-     * @param  string $help The description of help
-     * @return string       The element of help block
-     */
-    protected function help($args = array())
-    {
-        $targetA = 'app.form.help.'.Session::get('onController').'.'.$this->name;
-        $targetB = 'app.form.help.'.$this->name;
-        
-        if (array_get($this->args, 'help'))
+        if (isset($this->errors) && $this->errors->has($this->name))
         {
-            $description = array_get($this->args, 'help');
-            unset($this->args['help']);
-        }
-        elseif (Lang::has('cmsharenjoy::'.$targetA) || Lang::has($targetA))
-        {
-            if (Lang::has($targetA))
-            {
-                $description = Lang::get($targetA);
-            }
-            elseif (Lang::has('cmsharenjoy::'.$targetA))
-            {
-                $description = Lang::get('cmsharenjoy::'.$targetA);
-            }
+            $tag = "span";
+            $attributes = [
+                'class' => array_get($this->setting, 'class.error') ?: array_get($this->config, 'class.error')
+            ];
+            $content = $this->errors->first($this->name);
 
-            unset($this->args['help']);    
-        }
-        elseif (Lang::has('cmsharenjoy::'.$targetB) || Lang::has($targetB))
-        {
-            if (Lang::has($targetB))
-            {
-                $description = Lang::get($targetB);
-            }
-            elseif (Lang::has('cmsharenjoy::'.$targetB))
-            {
-                $description = Lang::get('cmsharenjoy::'.$targetB);
-            }
-
-            unset($this->args['help']);
-        }
-        else
-        {
-            return $this;
+            return (new Templates\BlockTemplate())->make(compact('tag','attributes','content'));
         }
 
-        $data  = $this->inputData;
-        $item  = $this->composeArguments($args);
-        $field = '<'.$item['tag'].' '.$item['elements'].'>'.$description.'</'.$item['tag'].'>';
-
-        $this->inputData = $item['position'] == 'top' ? $field.$data : $data.$field;
-        
-        return $this;
+        return;
     }
 
-    public function error()
-    {
-        if (Session::has('sharenjoy.validation.errors'))
-        {
-            $this->inputData .= $this->errors->first($this->fieldPrefix.$this->name, '<span class="validate-has-error">:message</span>');
-        }
-        return $this;
-    }
-
-    /**
-     * Create the form field
-     * @param string $name
-     * @param array $args
-     */
     protected function field()
     {
-        // Compose the input filed
-        $this->inputData .= $this->createInput();
+        $className = 'Sharenjoy\Cmsharenjoy\Service\Formaker\Forms\\'.ucfirst(strtolower($this->type)).'Form';
+        $data = [
+            'name'  => $this->name,
+            'value' => $this->value
+        ];
 
-        return $this;
+        return (new $className())->make(array_merge($data, $this->args));
     }
 
     /**
@@ -182,7 +70,7 @@ class BootstrapBackend extends FormakerBaseAbstract implements FormakerInterface
     private function createInput($type, $value)
     {
         // Add prefix
-        $name         = $this->fieldPrefix.$this->name;
+        $name         = $this->name;
         $args         = $this->args;
         $input        = '';
         $dependencies = [];
@@ -385,32 +273,6 @@ EOE;
         return $input;
     }
 
-    protected function setThemeAssets()
-    {
-        if (count($this->assets))
-        {
-            $path    = Config::get('cmsharenjoy::assets.path');
-            $package = Config::get('cmsharenjoy::assets.package');
-
-            foreach ($this->assets as $asset)
-            {
-                $pkg = $package[$asset];
-                foreach ($pkg as $key => $value)
-                {
-                    if ($value['queue'])
-                    {
-                        Theme::asset()->queue($value['type'])
-                                      ->add($key, $path.$value['file']);
-                    }
-                    else
-                    {
-                        Theme::asset()->add($key, $path.$value['file']);
-                    }
-                }
-            }
-        }
-    }
-
     /**
      * Make the form field
      * @param string $name
@@ -418,42 +280,15 @@ EOE;
      */
     public function make()
     {
-        $type = $this->formType;
+        $template = new Templates\CommonTemplate();
+        $data = [
+            'label' => $this->label(),
+            'help'  => $this->help(),
+            'error' => $this->error(),
+            'field' => $this->field(),
+        ];
 
-        switch ($type)
-        {
-            case 'create':
-            case 'update':
-                if (Session::has('sharenjoy.validation.errors') && $this->errors->has($this->fieldPrefix.$this->name))
-                {
-                    $this->field()
-                     ->error()
-                     ->help(['tag'=>'span', 'class'=>'help-block'])
-                     ->wrapper(['class'=>'col-sm-7 validate-has-error'])
-                     ->label(['class'=>'col-sm-2 control-label', 'position'=>'top'])
-                     ->wrapper(['class'=>'form-group']);
-                }
-                else
-                {
-                    $this->field()
-                     ->help(['tag'=>'span', 'class'=>'help-block'])
-                     ->wrapper(['class'=>'col-sm-7'])
-                     ->label(['class'=>'col-sm-2 control-label', 'position'=>'top'])
-                     ->wrapper(['class'=>'form-group']);
-                }
-                break;
-
-            case 'filter':
-                $this->field()
-                     ->label(['tag'=>'span', 'position'=>'top'])
-                     ->wrapper(['class'=>'list-filter col-md-3 col-sm-6']);
-                break;
-        }
-
-        // Set assets
-        $this->setThemeAssets();
-
-        return $this->inputData;
+        return $template->make($data);
     }
 
 }

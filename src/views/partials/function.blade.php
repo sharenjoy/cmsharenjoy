@@ -50,14 +50,12 @@
 
     </div>
 
-    @if(isset($filterForm) AND count($filterForm))
+    @if(isset($filterForm) AND ! is_null($filterForm))
     <div class="panel-body filter-box">
         {{Form::open(array('url'=>$objectUrl, 'role'=>'form', 'method'=>'GET'))}}
             <div class="row">
 
-                @foreach($filterForm as $key => $value)
-                    {{$value}}
-                @endforeach
+                {{$filterForm}}
 
                 <div class="list-filter col-md-3 col-sm-6">
                     {{Form::hidden('filter', 'true')}}

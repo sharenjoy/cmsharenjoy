@@ -25,6 +25,7 @@ return [
      *
      * // The following setting is for select element option
      * {{Formaker::category_id([category' => 'News'])}}
+     * {{Formaker::category_id([category' => 'News', 'pleaseSelect' => true])}}
      * {{Formaker::category(['type' => 'category', 'category' => 'Product'])}}
      * // The following setting will triger the method of Model $this->model->categoryLists();
      * {{Formaker::category(['type' => 'select', 'lists' => 'category_lists'])}}
@@ -40,23 +41,41 @@ return [
      * 
      *  This option controls the formaker driver that will be utilized.
      * 
-     *  Supported: 
-     *  back-end: "bootstrap-v3"
-     *  fore-end: "bootstrap-v3"
+     *  Supported: "TwitterBootstrapV3"
      * 
     */
 
     // back-end
-    'driver-back'  => 'bootstrap-v3',
+    'driver-back'  => 'TwitterBootstrapV3',
 
     // fore-end
-    'driver-front' => 'bootstrap-v3',
+    'driver-front' => 'TwitterBootstrapV3',
 
 
     'loadingNamespace' => [
         'Sharenjoy\Cmsharenjoy\Service\Formaker\Inputs',
     ],
 
+
+    'backend' => [
+        'TwitterBootstrapV3' => [
+            'class' => [
+                'label'     => 'col-sm-2 control-label',
+                'error'     => 'validate-has-error',
+                'help'      => 'help-block',
+                'input'     => 'form-control',
+                'inner-div' => 'col-sm-7',
+                'outer-div' => 'form-group',
+                'filter'    => 'list-filter col-md-3 col-sm-6'
+            ],
+        ],
+    ],
+
+    'froentend' => [
+        'TwitterBootstrapV3' => [
+            
+        ],
+    ],
 
     /**
      * Frequent input names can map

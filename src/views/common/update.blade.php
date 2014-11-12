@@ -26,10 +26,8 @@
                     
                     {{Form::open(['url'=>$updateUrl.$item->id, 'class'=>'form-horizontal form-groups-bordered', 'role'=>'form', 'id'=>'updated-form'])}}
                     
-                        @if(isset($fieldsForm))
-                            @foreach($fieldsForm as $key => $value)
-                                {{$value}}
-                            @endforeach
+                        @if(isset($fieldsForm) AND ! is_null($fieldsForm))
+                            {{$fieldsForm}}
                         @endif
                         
                         <div class="form-group">
