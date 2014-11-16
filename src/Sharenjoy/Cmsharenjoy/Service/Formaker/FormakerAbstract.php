@@ -1,6 +1,6 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Service\Formaker;
 
-use Config, Lang, Session, Theme;
+use Config, Lang, Session;
 
 abstract class FormakerAbstract {
 
@@ -29,77 +29,33 @@ abstract class FormakerAbstract {
     protected $option;
 
     /**
-     * The array of arguments
+     * The arguments of field
      * @var array
      */
     protected $args;
 
     /**
-     * The array of arguments
+     * The setting of field
      * @var array
      */
     protected $setting;
 
     /**
-     * The array of arguments
+     * The config
      * @var array
      */
     protected $config;
 
     /**
-     * The array of arguments
-     * @var array
+     * The template of view
+     * @var string
      */
-    protected $errors;
-
-    public function __construct()
-    {
-        if (Session::has('sharenjoy.validation.errors'))
-        {
-            $this->errors = Session::get('sharenjoy.validation.errors');
-        }
-
-        $end = Session::get('sharenjoy.environment.whichEnd');
-
-        if ($end == 'backEnd')
-        {
-            $this->config = Config::get('cmsharenjoy::formaker.backend.'.$this->theme);
-        }
-        elseif ($end == 'frontEnd')
-        {
-            $this->config = Config::get('cmsharenjoy::formaker.frontend.'.$this->theme);
-        }
-    }
-
-    /**
-     * Clean up the field name for the label
-     * @param string $name
-     */
-    protected function prettifyFieldName($name = '')
-    {
-        if ( ! $name)
-        {
-            $name = $this->name;
-        }
-
-        // If doesn't set the config of lang
-        if (Lang::has('app.form.'.$name))
-        {
-            return Lang::get('app.form.'.$name);
-        }
-        elseif (Lang::has('cmsharenjoy::app.form.'.$name))
-        {
-            return Lang::get('cmsharenjoy::app.form.'.$name);
-        }
-        else
-        {
-            // convert foo_boo to fooBoo and then convert to Foo Boo
-            return ucwords(preg_replace('/(?<=\w)(?=[A-Z])/', " $1", camel_case($name)));
-        }
-    }
+    protected $template;
 
     protected function setType()
     {
+        $this->type = null;
+
         if (isset($this->setting['type']) && ! is_null($this->setting['type']))
         {
             $this->type = $this->setting['type'];
@@ -113,7 +69,15 @@ abstract class FormakerAbstract {
 
     protected function setValue()
     {
-        if (isset($this->setting['value']) && ! is_null($this->setting['value']))
+        $this->value = null;
+
+        $session = Session::getOldInput();
+
+        if (isset($session[$this->name]))
+        {
+            $this->value = $session[$this->name];
+        }
+        elseif (isset($this->setting['value']) && ! is_null($this->setting['value']))
         {
             $this->value = $this->setting['value'];
         }
@@ -121,33 +85,40 @@ abstract class FormakerAbstract {
 
     protected function setOption()
     {
-        if (isset($this->setting['option']) && ! is_null($this->setting['option']))
-        {
-            $option = $this->setting['option'];
+        $this->option = null;
 
-            if (is_array($option))
+        if ($this->type)
+        {
+            if (isset($this->setting['option']) && ! is_null($this->setting['option']))
             {
-                $this->option = $option;
-            }
-            elseif(is_string($option))
-            {
-                $this->option = Config::get('cmsharenjoy::options.'.$option);
+                $option = $this->setting['option'];
+
+                if (is_array($option))
+                {
+                    $this->option = $option;
+                }
+                elseif (is_string($option))
+                {
+                    $this->option = Config::get('cmsharenjoy::options.'.$option);
+                }
             }
             else
             {
                 $this->option = Config::get('cmsharenjoy::options.'.$this->name) ?: 
                                 Config::get('cmsharenjoy::options.yesno');
             }
+        }
 
-            if (isset($this->setting['pleaseSelect']) && $this->setting['pleaseSelect'] === true)
-            {
-                $this->option[0] = trans('cmsharenjoy::option.pleaseSelect');
-            }
+        if (isset($this->setting['pleaseSelect']) && $this->setting['pleaseSelect'] === true)
+        {
+            array_unshift($this->option, trans('cmsharenjoy::option.pleaseSelect'));
         }
     }
 
     protected function setArgs()
     {
+        $this->args = null;
+
         if (isset($this->setting['args']) && ! is_null($this->setting['args']))
         {
             $this->args = $this->setting['args'];
@@ -157,11 +128,12 @@ abstract class FormakerAbstract {
             $this->args = [];
         }
 
-        $result = $this->getLanguageSetting('placeholder');
+        $result = $this->getFormText('placeholder');
+
         if ($result) $this->args['placeholder'] = $result;
     }
 
-    protected function getLanguageSetting($type)
+    protected function getFormText($type)
     {
         // Set the lang of placeholder from config
         $targetA = 'app.form.'.$type.'.'.Session::get('onController').'.'.$this->name;
@@ -169,36 +141,20 @@ abstract class FormakerAbstract {
 
         if (isset($this->setting[$type]) && ! is_null($this->setting[$type]))
         {
-            $lang = $this->setting[$type];
+            return $this->setting[$type];
         }
-        elseif (Lang::has('cmsharenjoy::'.$targetA) || Lang::has($targetA))
+        
+        if (Lang::has('cmsharenjoy::'.$targetA) || Lang::has($targetA))
         {
-            if (Lang::has($targetA))
-            {
-                $lang = Lang::get($targetA);
-            }
-            elseif (Lang::has('cmsharenjoy::'.$targetA))
-            {
-                $lang = Lang::get('cmsharenjoy::'.$targetA);
-            }
-        }
-        elseif (Lang::has('cmsharenjoy::'.$targetB) || Lang::has($targetB))
-        {
-            if (Lang::has($targetB))
-            {
-                $lang = Lang::get($targetB);
-            }
-            elseif (Lang::has('cmsharenjoy::'.$targetB))
-            {
-                $lang = Lang::get('cmsharenjoy::'.$targetB);
-            }
-        }
-        else
-        {
-            return false;
+            return pick_trans($targetA);
         }
 
-        return $lang;
+        if (Lang::has('cmsharenjoy::'.$targetB) || Lang::has($targetB))
+        {
+            return pick_trans($targetB);
+        }
+
+        return;
     }
 
     /**
@@ -207,16 +163,17 @@ abstract class FormakerAbstract {
      * @param  string $type  The type of form fields
      * @return array
      */
-    public function form(array $config, $theme = 'common', $format = 'string')
+    public function form(array $config, $template = 'common', $format = 'string')
     {
         $data = $format == 'array' ? [] : null;
 
         if (count($config))
         {
-            foreach ($config as $name => $config)
+            foreach ($config as $name => $setting)
             {
-                $this->name    = $name;
-                $this->setting = $config;
+                $this->name     = $name;
+                $this->setting  = $setting;
+                $this->template = $template;
 
                 $this->setType();
                 $this->setValue();
@@ -224,16 +181,7 @@ abstract class FormakerAbstract {
                 $this->setArgs();
 
                 // To make form
-                $form = null;
-                switch ($theme)
-                {
-                    case 'filter':
-                        $form = $this->make();
-                        break;
-                    default:
-                        $form = $this->make();
-                        break;
-                }
+                $form = $this->make();
 
                 switch ($format)
                 {

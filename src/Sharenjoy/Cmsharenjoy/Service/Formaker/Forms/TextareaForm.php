@@ -1,12 +1,12 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Service\Formaker\Forms;
 
-class TextForm extends FormAbstract implements FormInterface {
+class TextareaForm extends FormAbstract implements FormInterface {
 
     public function make(Array $data)
     {
         $attributes = $this->attributes($data);
         
-        $form = '<input type="text"'.$attributes.'>';
+        $form = '<textarea'.$attributes.'>'.e($data['value']).'</textarea>';
         
         return $form;
     }

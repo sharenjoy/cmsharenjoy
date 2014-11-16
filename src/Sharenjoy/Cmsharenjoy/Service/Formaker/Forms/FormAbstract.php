@@ -1,34 +1,6 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Service\Formaker\Forms;
 
-use Theme, Config;
-
 abstract class FormAbstract {
-
-    protected function setThemeAssets()
-    {
-        if (count($this->assets))
-        {
-            $path    = Config::get('cmsharenjoy::assets.path');
-            $package = Config::get('cmsharenjoy::assets.package');
-
-            foreach ($this->assets as $asset)
-            {
-                $pkg = $package[$asset];
-                foreach ($pkg as $key => $value)
-                {
-                    if ($value['queue'])
-                    {
-                        Theme::asset()->queue($value['type'])
-                                      ->add($key, $path.$value['file']);
-                    }
-                    else
-                    {
-                        Theme::asset()->add($key, $path.$value['file']);
-                    }
-                }
-            }
-        }
-    }
 
     /**
      * Build an HTML attribute string from an array.
@@ -39,6 +11,9 @@ abstract class FormAbstract {
     protected function attributes($attributes)
     {
         $html = array();
+
+        // remove other setting argument
+        unset($attributes['others']);
 
         // For numeric keys we will assume that the key and the value are the same
         // as this will convert HTML attributes such as "required" to a correct

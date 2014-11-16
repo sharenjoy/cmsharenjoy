@@ -15,6 +15,39 @@ abstract class TemplateAbstract {
     }
 
     /**
+     * Clean up the field name for the label
+     * @param string $name
+     */
+    protected function prettifyFieldName()
+    {
+        $name = $this->data['name'];
+
+        // If doesn't set the config of lang
+        if (pick_trans('app.form.'.$name))
+        {
+            return pick_trans('app.form.'.$name);
+        }
+        
+        // convert foo_boo to fooBoo and then convert to Foo Boo
+        return ucwords(preg_replace('/(?<=\w)(?=[A-Z])/', " $1", camel_case($name)));
+    }
+
+    protected function getSettingOrConfig($key)
+    {
+        if (isset($this->data['setting'][$key]) && ! is_null($this->data['setting'][$key]))
+        {
+            return $this->data['setting'][$key];
+        }
+        
+        if (isset($this->data['config'][$key]) && ! is_null($this->data['config'][$key]))
+        {
+            return $this->data['config'][$key];
+        }
+        
+        // throw new \InvalidArgumentException("It doesn't have any config suit for {$key}");
+    }
+
+    /**
      * Build an HTML attribute string from an array.
      *
      * @param  array  $attributes

@@ -20,8 +20,42 @@ trait CommonModelTrait {
         static::deleted(function($model)  {$model->eventProcess('deleted', $model);});
     }
 
+    /**
+     * To process the input data in advance
+     * @param array $input
+     */
     public function setInput(array $input)
     {
+        /**
+         * If the field of input is an array
+         * To convert the array to string
+         */
+        if (count($input))
+        {
+            foreach ($input as $key => $value)
+            {
+                if (is_array($input[$key]))
+                {
+                    $input[$key] = join(',', $value);
+                }
+            }
+        }
+
+        /**
+         * If the value of field is null
+         * To set the value to null
+         */
+        if (count($this->formConfig))
+        {
+            foreach ($this->formConfig as $key => $value)
+            {
+                if ( ! isset($input[$key]))
+                {
+                    $input[$key] = '';
+                }
+            }
+        }
+
         self::$inputData = $input;
     }
 

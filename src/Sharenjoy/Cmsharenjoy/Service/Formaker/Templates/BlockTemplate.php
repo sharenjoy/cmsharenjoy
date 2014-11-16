@@ -6,7 +6,10 @@ class BlockTemplate extends TemplateAbstract implements TemplateInterface {
 
     public function make(Array $data)
     {
-        $data['attributes'] = $this->attributes($data['attributes']);
+        if (isset($data['attributes']) && count($data['attributes']))
+        {
+            $data['attributes'] = $this->attributes($data['attributes']);
+        }
         return $this->parser->parse($this->template, $data);
     }
 

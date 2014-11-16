@@ -6,6 +6,12 @@ return [
      * --------------------------------------------------------------------------
      *  How to use
      * --------------------------------------------------------------------------
+     *
+     * // The attrubutes can be allowed the following
+     * value, type, help, placeholder, label, args
+     * label-class, error-class, help-class, inner-div-class, outer-div-class
+     * input, filter, category, lists, option, pleaseSelect
+     * 
      * 
      * {{Formaker::title()}}
      * {{Formaker::email()}}
@@ -52,28 +58,26 @@ return [
     'driver-front' => 'TwitterBootstrapV3',
 
 
-    'loadingNamespace' => [
-        'Sharenjoy\Cmsharenjoy\Service\Formaker\Inputs',
+    'loadFormsNamespace' => [
+        'Sharenjoy\Cmsharenjoy\Service\Formaker\Forms\\',
     ],
 
 
-    'backend' => [
+    'backEnd' => [
         'TwitterBootstrapV3' => [
-            'class' => [
-                'label'     => 'col-sm-2 control-label',
-                'error'     => 'validate-has-error',
-                'help'      => 'help-block',
-                'input'     => 'form-control',
-                'inner-div' => 'col-sm-7',
-                'outer-div' => 'form-group',
-                'filter'    => 'list-filter col-md-3 col-sm-6'
-            ],
+            'label-class'     => 'col-sm-2 control-label',
+            'error-class'     => 'has-error',
+            'help-class'      => 'help-block',
+            'input-class'     => 'form-control',
+            'inner-div-class' => 'col-sm-7',
+            'outer-div-class' => 'form-group',
+            'filter-class'    => 'list-filter col-md-3 col-sm-6',
         ],
     ],
 
-    'froentend' => [
+
+    'frontEnd' => [
         'TwitterBootstrapV3' => [
-            
         ],
     ],
 
@@ -98,7 +102,7 @@ return [
         'body'                  => 'textarea',
         
         // For wysiwyg
-        'content'               => 'wysiwyg-advanced',
+        'content'               => 'wysiwygAdvanced',
         
         // For password
         'password'              => 'password',
