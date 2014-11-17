@@ -29,7 +29,7 @@ Route::filter('csrfFilter', function() use ($urlSegment)
 {
     $token = Request::ajax() ? Request::header('X-CSRF-Token') : Input::get('_token');
     
-    if (Session::token() != $token)
+    if (Session::token() !== $token)
     {
         if ($this->whichEnd == 'backEnd')
         {
