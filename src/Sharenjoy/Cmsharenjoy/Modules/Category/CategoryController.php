@@ -1,7 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Modules\Category;
 
 use Sharenjoy\Cmsharenjoy\Controllers\ObjectBaseController;
-use Response, Input, Request, Categorize, Session, Message;
+use Response, Input, Request, Categorize, Session, Message, Config, View;
 
 class CategoryController extends ObjectBaseController {
 
@@ -20,43 +20,39 @@ class CategoryController extends ObjectBaseController {
 
     protected $type;
 
-    protected $categoryLevelNumber = [
-        'product' => 1,
-        'post'    => 1
-    ];
+    protected $categoryLayerNumber;
 
-    public function __construct(CategoryInterface $repo)
+    public function __construct(CategoryInterface $handler)
     {
-        $this->repo = $repo;
+        $this->handler = $handler;
+
+        $this->categoryLayerNumber = Config::get('cmsharenjoy::module.category.layer');
 
         if (Request::segment(3) == 'index')
         {
-            Session::put('categoryType', Request::segment(4));
+            Session::put('sharenjoy.categoryType', Request::segment(4));
         }
-        $this->type = Session::get('categoryType');
+
+        $this->type = Session::get('sharenjoy.categoryType');
 
         parent::__construct();
 
-        $this->repo->pushForm([
-            'type' => [
-                'args'  => ['value'=>ucfirst($this->type), 'readonly'=>'readonly'],
-                'order' => '10'
-            ]
-        ]);
-
+        View::share('specifyName', pick_trans('app.menu.'.$this->type.'_category'));
     }
 
     protected function setHandyUrls()
     {
-        $this->objectUrl = url('/admin/'.$this->onController.'/index/'.$this->type);
-        $this->createUrl = url('/admin/'.$this->onController.'/create/'.$this->type);
-        $this->updateUrl = url('/admin/'.$this->onController.'/update/').'/';
-        $this->deleteUrl = url('/admin/'.$this->onController.'/delete/').'/';
+        $admin = Config::get('cmsharenjoy::app.access_url');
+
+        $this->objectUrl = url('/'.$admin.'/'.$this->onController.'/index/'.$this->type);
+        $this->createUrl = url('/'.$admin.'/'.$this->onController.'/create/'.$this->type);
+        $this->updateUrl = url('/'.$admin.'/'.$this->onController.'/update/').'/';
+        $this->deleteUrl = url('/'.$admin.'/'.$this->onController.'/delete/').'/';
     }
 
-    protected function getCategoryLevelNumber($type)
+    protected function getCategoryLayerNumber($type)
     {
-        return array_get($this->categoryLevelNumber, $type);
+        return array_get($this->categoryLayerNumber, $type);
     }
 
     public function getIndex()
@@ -64,14 +60,14 @@ class CategoryController extends ObjectBaseController {
         $this->setGoBackPrevious();
 
         $type    = $this->type;
-        $model   = $this->repo->getModel();
+        $model   = $this->handler->getModel();
         $model   = $model->whereType($type)->orderBy('sort');
         $perPage = $model->count();
 
         // Set Pagination of data 
         $items = $model->paginate($perPage);
 
-        $num = $this->getCategoryLevelNumber($type);
+        $num = $this->getCategoryLayerNumber($type);
 
         $categories = Categorize::getCategoryProvider()->root()->whereType($type)->orderBy('sort')->get();
         $categories = Categorize::tree($categories)->toArray();
@@ -121,9 +117,33 @@ class CategoryController extends ObjectBaseController {
         return Response::json(Message::result('success', trans('cmsharenjoy::app.success_ordered')), 200);
     }
 
+    public function getCreate()
+    {
+        $this->handler->pushForm([
+            'type' => [
+                'args'  => ['value'=>ucfirst($this->type), 'readonly'=>'readonly'],
+                'order' => '10'
+            ]
+        ]);
+
+        parent::getCreate();
+    }
+
+    public function getUpdate($id)
+    {
+        $this->handler->pushForm([
+            'type' => [
+                'args'  => ['value'=>ucfirst($this->type), 'readonly'=>'readonly'],
+                'order' => '10'
+            ]
+        ]);
+
+        parent::getUpdate($id);
+    }
+
     protected function storeSortById($model, $sortNum)
     {
-        $this->repo->edit($model->id, ['sort' => $sortNum]);
+        $this->handler->edit($model->id, ['sort' => $sortNum]);
     }
 
 }

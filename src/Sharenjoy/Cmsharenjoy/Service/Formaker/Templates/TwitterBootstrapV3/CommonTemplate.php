@@ -9,7 +9,7 @@ class CommonTemplate extends TemplateAbstract implements TemplateInterface {
     
     protected $data;
 
-    protected $template = '<div class="{outer-class}">
+    protected $template = '<div class="{outer-class}"{style}>
                                {label}
                                <div class="{inner-class}">
                                    {field}
@@ -28,6 +28,7 @@ class CommonTemplate extends TemplateAbstract implements TemplateInterface {
 
         $data['outer-class'] = $this->getSettingOrConfig('outer-div-class');
         $data['inner-class'] = $this->getSettingOrConfig('inner-div-class');
+        $data['style'] = $this->data['type'] == 'hidden' ? ' style="display:none"' : '';
 
         if ( ! is_null($data['error']))
         {

@@ -11,7 +11,7 @@
             
                 <div class="panel-heading">
                     <div class="panel-title">
-                        <h3>{{pick_trans('app.add')}}</h3>
+                        <h3>{{pick_trans('app.add')}} {{$specifyName or ''}}</h3>
                     </div>
                     
                     <!-- <div class="panel-options">

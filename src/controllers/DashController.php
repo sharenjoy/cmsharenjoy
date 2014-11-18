@@ -79,8 +79,8 @@ class DashController extends BaseController {
             return Redirect::to($this->urlSegment.'/login')->withInput();
         }
 
-        $repo = App::make('Sharenjoy\Cmsharenjoy\User\UserInterface');
-        $result = $repo->login($input);
+        $handler = App::make('Sharenjoy\Cmsharenjoy\User\UserInterface');
+        $result = $handler->login($input);
 
         if ( ! $result['status'])
         {
@@ -98,8 +98,8 @@ class DashController extends BaseController {
      */
     public function getActivate($id, $code)
     {
-        $repo  = App::make('Sharenjoy\Cmsharenjoy\User\UserInterface');
-        $result = $repo->activate($id, $code);
+        $handler = App::make('Sharenjoy\Cmsharenjoy\User\UserInterface');
+        $result = $handler->activate($id, $code);
 
         Message::{$result['status']}($result['message']);
         return Redirect::to($this->urlSegment.'/login');
@@ -119,8 +119,8 @@ class DashController extends BaseController {
     public function postResetpassword()
     {
         $input = Input::all();
-        $repo  = App::make('Sharenjoy\Cmsharenjoy\User\UserInterface');
-        $result = $repo->resetPassword($input);
+        $handler = App::make('Sharenjoy\Cmsharenjoy\User\UserInterface');
+        $result = $handler->resetPassword($input);
 
         if ( ! $result['status'])
         {
@@ -140,8 +140,8 @@ class DashController extends BaseController {
     public function postRemindpassword()
     {
         $email = Input::get('email');
-        $repo  = App::make('Sharenjoy\Cmsharenjoy\User\UserInterface');
-        $result = $repo->remindPassword($email);
+        $handler = App::make('Sharenjoy\Cmsharenjoy\User\UserInterface');
+        $result = $handler->remindPassword($email);
 
         if ( ! $result['status'])
         {

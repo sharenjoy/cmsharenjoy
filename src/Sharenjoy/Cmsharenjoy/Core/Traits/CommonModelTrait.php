@@ -26,6 +26,18 @@ trait CommonModelTrait {
      */
     public function setInput(array $input)
     {
+        $input = $this->parseCheckboxValue($input);
+
+        self::$inputData = $input;
+    }
+
+    public function getInput()
+    {
+        return self::$inputData;
+    }
+
+    protected function parseCheckboxValue($input)
+    {
         /**
          * If the field of input is an array
          * To convert the array to string
@@ -56,12 +68,7 @@ trait CommonModelTrait {
             }
         }
 
-        self::$inputData = $input;
-    }
-
-    public function getInput()
-    {
-        return self::$inputData;
+        return $input;
     }
 
     /**

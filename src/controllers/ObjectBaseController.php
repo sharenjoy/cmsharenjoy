@@ -9,13 +9,13 @@ abstract class ObjectBaseController extends BaseController {
     /**
      * The model to work with for editing stuff
      */
-    protected $repo;
+    protected $handler;
 
     /**
      * The default number of pagination
      * @var integer
      */
-    protected $paginationCount = 15;
+    protected $paginationCount;
 
     /**
      * These are the data of array that don't need to filter
@@ -29,6 +29,8 @@ abstract class ObjectBaseController extends BaseController {
     public function __construct()
     {
         parent::__construct();
+
+        $this->paginationCount = Config::get('cmsharenjoy::app.paginationCount');
     }
 
     /**
@@ -54,17 +56,17 @@ abstract class ObjectBaseController extends BaseController {
         $page  = Input::get('page', 1);
         $query = Request::query();
 
-        $model = $this->repo->makeQuery();
+        $model = $this->handler->makeQuery();
 
         if (isset($input['filter']))
         {
             $filter = array_except($query, $this->filterExcept);
-            $this->repo->filter($filter, $model);
+            $this->handler->filter($filter, $model);
         }
 
-        $items = $this->repo->showByPage($limit, $page, array_except($query, ['page']), $model);
+        $items = $this->handler->showByPage($limit, $page, array_except($query, ['page']), $model);
 
-        $filterForm = $this->repo->makeForm($input, 'filter');
+        $filterForm = $this->handler->formaker($input, 'filter');
 
         $this->layout->with('paginationCount', $limit)
                      ->with('sortable', false)
@@ -86,11 +88,11 @@ abstract class ObjectBaseController extends BaseController {
         $page  = Input::get('page', 1);
         $query = Request::query();
 
-        $model = $this->repo->makeQuery();
+        $model = $this->handler->makeQuery();
 
-        $items = $this->repo->showByPage($limit, $page, array_except($query, ['page']), $model);
+        $items = $this->handler->showByPage($limit, $page, array_except($query, ['page']), $model);
 
-        $filterForm = $this->repo->makeForm($input, 'filter');
+        $filterForm = $this->handler->formaker($input, 'filter');
 
         $this->layout->with('paginationCount', $limit)
                      ->with('sortable', true)
@@ -104,7 +106,7 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function getCreate()
     {
-        $this->layout->with('fieldsForm', $this->repo->makeForm());
+        $this->layout->with('fieldsForm', $this->handler->formaker());
     }
 
     /**
@@ -113,7 +115,7 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function getUpdate($id)
     {
-        $model = $this->repo->showById($id);
+        $model = $this->handler->showById($id);
 
         if ( ! $model)
         {
@@ -122,7 +124,7 @@ abstract class ObjectBaseController extends BaseController {
             return Redirect::to(Session::get('goBackPrevious'));
         }
 
-        $fieldsForm = $this->repo->makeForm($model);
+        $fieldsForm = $this->handler->formaker($model);
 
         $this->layout->with('item' , $model)
                      ->with('fieldsForm', $fieldsForm);
@@ -137,12 +139,12 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function postCreate()
     {
-        if ( ! $this->repo->setInput(Input::all())->validate())
+        if ( ! $this->handler->setInput(Input::all())->validate())
         {
             return Redirect::to($this->createUrl)->withInput();
         }
 
-        $result   = $this->repo->create();    
+        $result   = $this->handler->create();    
         
         $redirect = Input::has('exit') ? $this->objectUrl
                                        : $this->updateUrl.$result['data']->id;
@@ -159,12 +161,12 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function postUpdate($id)
     {
-        if ( ! $this->repo->setInput(Input::all())->validate($id))
+        if ( ! $this->handler->setInput(Input::all())->validate($id))
         {
             return Redirect::to($this->updateUrl.$id)->withInput();
         }
 
-        $result   = $this->repo->update($id);
+        $result   = $this->handler->update($id);
 
         $redirect = Input::has('exit') ? Session::get('goBackPrevious')
                                        : $this->updateUrl.$id;
@@ -182,7 +184,7 @@ abstract class ObjectBaseController extends BaseController {
     public function postDelete()
     {
         $id     = Input::get('id');
-        $result = $this->repo->delete($id);
+        $result = $this->handler->delete($id);
 
         if ( ! $result['status'])
         {
@@ -205,7 +207,7 @@ abstract class ObjectBaseController extends BaseController {
         if( ! Request::ajax()) Response::json('error', 400);
 
         $id    = Input::get('id');
-        $model = $this->repo->showById($id);
+        $model = $this->handler->showById($id);
 
         if ( ! $model)
         {
@@ -240,7 +242,7 @@ abstract class ObjectBaseController extends BaseController {
                 try
                 {
                     $sort = $sort_value[$key];
-                    $this->repo->edit($id, array('sort' => $sort));
+                    $this->handler->edit($id, array('sort' => $sort));
                 }
                 catch (\Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException $e)
                 {
@@ -276,10 +278,10 @@ abstract class ObjectBaseController extends BaseController {
         $action = $this->onAction == 'get-sort' ? 'index' : $action;
         
         // Get reop directory from config
-        $commonRepoLayout = Config::get('cmsharenjoy::app.commonRepoLayoutDirectory');
+        $commonLayout = Config::get('cmsharenjoy::app.commonLayoutDirectory');
         
         $pathA = $this->onController.'.'.$action;
-        $pathB = $commonRepoLayout.'.'.$action;
+        $pathB = $commonLayout.'.'.$action;
 
         if (View::exists($this->urlSegment.'.'.$pathA))
         {

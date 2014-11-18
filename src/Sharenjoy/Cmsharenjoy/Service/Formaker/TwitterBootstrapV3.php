@@ -22,6 +22,7 @@ class TwitterBootstrapV3 extends FormakerAbstract implements FormakerInterface {
             'value'  => $this->value,
             'class'  => $this->inputClass(),
             'others' => [
+                'type'     => $this->type,
                 'config'   => $this->config,
                 'setting'  => $this->setting,
                 'option'   => $this->option,
@@ -73,6 +74,7 @@ class TwitterBootstrapV3 extends FormakerAbstract implements FormakerInterface {
 
         $data = [
             'name'    => $this->name,
+            'type'    => $this->type,
             'help'    => $this->getFormText('help'),
             'field'   => $this->field(),
             'setting' => $this->setting,

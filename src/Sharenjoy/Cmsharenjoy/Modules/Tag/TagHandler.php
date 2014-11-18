@@ -1,9 +1,9 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Modules\Tag;
 
-use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
+use Sharenjoy\Cmsharenjoy\Core\EloquentBaseHandler;
 use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;
 
-class TagRepository extends EloquentBaseRepository implements TagInterface {
+class TagHandler extends EloquentBaseHandler implements TagInterface {
 
     public function __construct(Tag $model, ValidableInterface $validator)
     {

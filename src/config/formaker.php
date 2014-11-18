@@ -10,7 +10,7 @@ return [
      * // The attrubutes can be allowed the following
      * value, type, help, placeholder, label, args
      * label-class, error-class, help-class, inner-div-class, outer-div-class
-     * input, filter, category, lists, option, pleaseSelect
+     * input, filter, category, option, method, pleaseSelect
      * 
      * 
      * {{Formaker::title()}}
@@ -33,7 +33,7 @@ return [
      * {{Formaker::category_id([category' => 'News'])}}
      * {{Formaker::category_id([category' => 'News', 'pleaseSelect' => true])}}
      * {{Formaker::category(['type' => 'category', 'category' => 'Product'])}}
-     * // The following setting will triger the method of Model $this->model->categoryLists();
+     * // The following setting will triger the method of Model $this->model->categoryLists() and return array;
      * {{Formaker::category(['type' => 'select', 'lists' => 'category_lists'])}}
      * {{Formaker::delivery_time_zone_id(['type' => 'select', 'option' => 'delivery_time_zone'])}}
      * {{Formaker::language(['type' => 'select', 'value' => 'tw', 'option' => ['tw'=>'中文', 'en'=>'英文']])}}

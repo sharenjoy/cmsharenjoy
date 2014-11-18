@@ -1,24 +1,23 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Modules\Tag;
+<?php namespace Sharenjoy\Cmsharenjoy\Modules\Post;
 
 use Sharenjoy\Cmsharenjoy\Controllers\ObjectBaseController;
 
-class TagController extends ObjectBaseController {
+class PostController extends ObjectBaseController {
 
     protected $functionRules = [
         'list'   => true,
         'create' => true,
         'update' => true,
         'delete' => true,
-        'order'  => false,
+        'order'  => true,
     ];
 
     protected $listConfig = [
-        'tag'          => ['name'=>'tag',          'align'=>'',       'width'=>''   ],
-        'count'        => ['name'=>'quantity',     'align'=>'right',  'width'=>'10%'],
+        'title'        => ['name'=>'title',        'align'=>'',       'width'=>''   ],
         'created_at'   => ['name'=>'created',      'align'=>'center', 'width'=>'20%'],
     ];
 
-    public function __construct(TagInterface $handler)
+    public function __construct(PostInterface $handler)
     {
         $this->handler = $handler;
         parent::__construct();

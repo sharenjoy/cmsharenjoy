@@ -51,7 +51,7 @@ class Tag extends EloquentBaseModel {
 
     public static function withAllRelation()
     {
-        $taggableModel = Config::get('cmsharenjoy::tag.taggableModel');
+        $taggableModel = Config::get('cmsharenjoy::module.tag.taggableModel');
         
         $keys = array_keys($taggableModel);
 
@@ -60,7 +60,7 @@ class Tag extends EloquentBaseModel {
 
     public function __call($method, $parameters)
     {
-        $taggableModel = Config::get('cmsharenjoy::tag.taggableModel');
+        $taggableModel = Config::get('cmsharenjoy::module.tag.taggableModel');
 
         if (array_key_exists($method, $taggableModel))
         {

@@ -2,7 +2,7 @@
 
 use Session, Formaker, Paginator, StdClass, Message;
 
-abstract class EloquentBaseRepository implements EloquentBaseInterface {
+abstract class EloquentBaseHandler implements EloquentBaseInterface {
 
     /**
      * The instance of model
@@ -203,10 +203,10 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
             foreach ($formConfig as $name => $config)
             {
                 // To get the options of select element from the Model
-                if (isset($config['lists']))
+                if (isset($config['method']))
                 {
-                    $method = camel_case($config['lists']);
-                    $formConfig[$name]['option'] = $this->model->$method();
+                    $method = camel_case($config['method']);
+                    $formConfig[$name] = array_merge($formConfig[$name], $this->model->$method());
                 }
 
                 // If use key that the name is input of value otherwise use the $key
@@ -214,7 +214,6 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
                     $formConfig[$name]['value'] = $input[$config['input']];
                 elseif (isset($input[$name]))
                     $formConfig[$name]['value'] = $input[$name];
-                
             }
         }
 
@@ -228,10 +227,10 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
      * @param  array  $config This is you can customise form config
      * @return array  Build from Formaker
      */
-    public function makeForm($input = array(), $formType = null, array $config = array())
+    public function formaker($input = array(), $formType = null, array $config = array())
     {
-        $formConfig = [];
-
+        $formConfig = $config;
+        
         if ( ! count($config))
         {
             $type          = $formType ?: Session::get('doAction');
@@ -241,8 +240,11 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
 
             switch ($type)
             {
-                case 'create':
-                case 'update':
+                case 'filter':
+                    $formConfig = $typeConfig;
+                    break;
+
+                default:
                     $formConfig = array_merge($this->model->formConfig, $typeConfig);
 
                     // Deny some fields
@@ -258,18 +260,10 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
                         return $value['order'];
                     });
                     break;
-
-                case 'filter':
-                    $formConfig = $typeConfig;
-                    break;
             }
         }
-        else
-        {
-            $formConfig = $config;
-        }
 
-        // To do other process that needs to be
+        // To do other process that needs to be done
         $formConfig = $this->processFormConfig($formConfig, $input);
 
         return Formaker::form($formConfig, $type);

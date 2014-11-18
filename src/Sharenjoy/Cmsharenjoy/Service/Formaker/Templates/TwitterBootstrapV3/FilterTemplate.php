@@ -8,7 +8,7 @@ class FilterTemplate extends TemplateAbstract implements TemplateInterface {
 
     protected $data;
     
-    protected $template = '<div class="{filter-class}">
+    protected $template = '<div class="{filter-class}"{style}>
                                {label}
                                {field}
                                {help}
@@ -19,6 +19,7 @@ class FilterTemplate extends TemplateAbstract implements TemplateInterface {
         $this->data = $data;
 
         $data['filter-class'] = $this->getSettingOrConfig('filter-class');
+        $data['style'] = $this->data['type'] == 'hidden' ? ' style="display:none"' : '';
         
         $data['label'] = $this->label();
 

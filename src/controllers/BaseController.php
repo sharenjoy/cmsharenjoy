@@ -211,10 +211,10 @@ abstract class BaseController extends Controller {
      */
     protected function setupLayout()
     {
-        $commonRepoLayout = Config::get('cmsharenjoy::app.commonRepoLayoutDirectory');
+        $commonLayout = Config::get('cmsharenjoy::app.commonLayoutDirectory');
         
         $pathA = $this->onController.'.'.$this->doAction;
-        $pathB = $commonRepoLayout.'.'.$this->doAction;
+        $pathB = $commonLayout.'.'.$this->doAction;
 
         if (View::exists($this->urlSegment.'.'.$pathA))
         {

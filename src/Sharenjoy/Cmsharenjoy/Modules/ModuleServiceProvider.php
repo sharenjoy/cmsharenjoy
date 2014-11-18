@@ -20,19 +20,24 @@ class ModuleServiceProvider extends ServiceProvider {
     {
         $app = $this->app;
 
+        // The Post Binding
+        $app->bind('Sharenjoy\Cmsharenjoy\Modules\Post\PostInterface', function($app)
+        {
+            return new Post\PostHandler(new Post\Post, new Post\PostValidator);
+        });
+
         // The Category Binding
         $app->bind('Sharenjoy\Cmsharenjoy\Modules\Category\CategoryInterface', function($app)
         {
-            return new Category\CategoryRepository(
+            return new Category\CategoryHandler(
                 new \Sharenjoy\Cmsharenjoy\Service\Categorize\Categories\Category,
-                new Category\CategoryValidator
-            );
+                new Category\CategoryValidator);
         });
 
         // The Tag Binding
         $app->bind('Sharenjoy\Cmsharenjoy\Modules\Tag\TagInterface', function($app)
         {
-            return new Tag\TagRepository(new Tag\Tag, new Tag\TagValidator);
+            return new Tag\TagHandler(new Tag\Tag, new Tag\TagValidator);
         });
 
     }
