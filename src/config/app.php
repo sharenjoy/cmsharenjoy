@@ -24,7 +24,12 @@ return [
     /**
      * The common directory of layout
      */
-    'commonRepoLayoutDirectory' => 'common',
+    'commonLayoutDirectory' => 'common',
+
+    /**
+     * The item amount of page
+     */
+    'paginationCount' => 15,
 
     /**
      * The menu items shown at the top and side 

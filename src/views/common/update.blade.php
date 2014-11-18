@@ -11,7 +11,7 @@
             
                 <div class="panel-heading">
                     <div class="panel-title">
-                        <h3>{{pick_trans('app.edit')}}</h3>
+                        <h3>{{pick_trans('app.edit')}} {{$specifyName or ''}}</h3>
                     </div>
                     
                     <!-- <div class="panel-options">
@@ -26,10 +26,8 @@
                     
                     {{Form::open(['url'=>$updateUrl.$item->id, 'class'=>'form-horizontal form-groups-bordered', 'role'=>'form', 'id'=>'updated-form'])}}
                     
-                        @if(isset($fieldsForm))
-                            @foreach($fieldsForm as $key => $value)
-                                {{$value}}
-                            @endforeach
+                        @if(isset($fieldsForm) AND ! is_null($fieldsForm))
+                            {{$fieldsForm}}
                         @endif
                         
                         <div class="form-group">

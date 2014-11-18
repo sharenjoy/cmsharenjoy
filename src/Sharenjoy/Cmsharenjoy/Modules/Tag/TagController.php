@@ -18,9 +18,9 @@ class TagController extends ObjectBaseController {
         'created_at'   => ['name'=>'created',      'align'=>'center', 'width'=>'20%'],
     ];
 
-    public function __construct(TagInterface $repo)
+    public function __construct(TagInterface $handler)
     {
-        $this->repo = $repo;
+        $this->handler = $handler;
         parent::__construct();
     }
 

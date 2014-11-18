@@ -6,21 +6,37 @@ return [
      * --------------------------------------------------------------------------
      *  How to use
      * --------------------------------------------------------------------------
+     *
+     * // The attrubutes can be allowed the following
+     * value, type, help, placeholder, label, args
+     * label-class, error-class, help-class, inner-div-class, outer-div-class
+     * input, filter, category, option, method, pleaseSelect
+     * 
      * 
      * {{Formaker::title()}}
      * {{Formaker::email()}}
      * {{Formaker::url()}}
      * {{Formaker::description(['value' => 'This is value'])}}
-     * {{Formaker::description(['type' => 'wysihtml5'])}}
-     * {{Formaker::tag(['help' => 'This is tag', 'placeholder' => 'You can use "," sperate every tag'])}}
-     * {{Formaker::language(['type' => 'select', 'value' => 'tw', 'option' => ['tw' => '中文', 'en' => '英文']])}}
+     * {{Formaker::description(['type' => 'wysiwyg-simple'])}}
+     * {{Formaker::tag(['help' => 'This is tag', 'placeholder' => 'You can use "," to sperate every tag'])}}
+     * {{Formaker::name(['args' => ['class'=>'options', 'id'=>'name']])}}
+     * 
      * {{Formaker::status(['type' => 'checkbox', 'value' => '1,2'])}}
-     * {{Formaker::category(['type' => 'category', 'args' => ['category' => 'Product']])}}
-     * {{Formaker::category_id(['args' => ['category' => 'News']])}}
-     * {{Formaker::content(['input' => 'title'])}}  // If set input key the means is the data form title input
+     * 
+     * // If set key that the name is input the means the data form title input
+     * {{Formaker::content(['input' => 'title'])}}
+     *
+     * // If set the key that the name is filter means will filter from the value
+     * {{Formaker::keyword(['filter' => 'title,title_jp,description'])}}
+     *
+     * // The following setting is for select element option
+     * {{Formaker::category_id([category' => 'News'])}}
+     * {{Formaker::category_id([category' => 'News', 'pleaseSelect' => true])}}
+     * {{Formaker::category(['type' => 'category', 'category' => 'Product'])}}
+     * // The following setting will triger the method of Model $this->model->categoryLists() and return array;
+     * {{Formaker::category(['type' => 'select', 'lists' => 'category_lists'])}}
      * {{Formaker::delivery_time_zone_id(['type' => 'select', 'option' => 'delivery_time_zone'])}}
-     * {{Formaker::keyword(['args' => ['data-filter' => 'title,title_jp,description']])}}
-     * {{Formaker::category(['type' => 'select', 'lists' => 'category_lists'])}} // $this->model->category_lists();
+     * {{Formaker::language(['type' => 'select', 'value' => 'tw', 'option' => ['tw'=>'中文', 'en'=>'英文']])}}
      * 
      */
     
@@ -31,18 +47,39 @@ return [
      * 
      *  This option controls the formaker driver that will be utilized.
      * 
-     *  Supported: 
-     *  back-end: "bootstrap-v3"
-     *  fore-end: "bootstrap-v3"
+     *  Supported: "TwitterBootstrapV3"
      * 
     */
 
     // back-end
-    'driver-back'  => 'bootstrap-v3',
+    'driver-back'  => 'TwitterBootstrapV3',
 
     // fore-end
-    'driver-front' => 'bootstrap-v3',
+    'driver-front' => 'TwitterBootstrapV3',
 
+
+    'loadFormsNamespace' => [
+        'Sharenjoy\Cmsharenjoy\Service\Formaker\Forms\\',
+    ],
+
+
+    'backEnd' => [
+        'TwitterBootstrapV3' => [
+            'label-class'     => 'col-sm-2 control-label',
+            'error-class'     => 'has-error',
+            'help-class'      => 'help-block',
+            'input-class'     => 'form-control',
+            'inner-div-class' => 'col-sm-7',
+            'outer-div-class' => 'form-group',
+            'filter-class'    => 'list-filter col-md-3 col-sm-6',
+        ],
+    ],
+
+
+    'frontEnd' => [
+        'TwitterBootstrapV3' => [
+        ],
+    ],
 
     /**
      * Frequent input names can map
@@ -65,7 +102,7 @@ return [
         'body'                  => 'textarea',
         
         // For wysiwyg
-        'content'               => 'wysiwyg-advanced',
+        'content'               => 'wysiwygAdvanced',
         
         // For password
         'password'              => 'password',

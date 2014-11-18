@@ -29,18 +29,16 @@ Route::filter('csrfFilter', function() use ($urlSegment)
 {
     $token = Request::ajax() ? Request::header('X-CSRF-Token') : Input::get('_token');
     
-    if (Session::token() != $token)
+    if (Session::token() !== $token)
     {
         if ($this->whichEnd == 'backEnd')
         {
             Message::error('可能閒置太久，或是某些地方發生錯誤囉！');
             return Redirect::to($urlSegment.'/login');            
         }
-        else
-        {
-            Message::error('某些地方發生錯誤囉！');
-            return Redirect::to('/'); 
-        }
+        
+        Message::error('某些地方發生錯誤囉！');
+        return Redirect::to('/'); 
     }
 });
 

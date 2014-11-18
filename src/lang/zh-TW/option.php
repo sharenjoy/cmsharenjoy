@@ -1,13 +1,18 @@
 <?php
 
 return [
-
+    
+    'pleaseSelect'      => '請選擇',
+    
     // gender
     'male'              => '男性',
     'female'            => '女性',
 
+    // yesno
+    'yes'               => '是',
+    'no'                => '否',
+
     // status
-    'pleaseSelect'      => '請選擇',
     'enable'            => '開啟',
     'disable'           => '關閉',
     

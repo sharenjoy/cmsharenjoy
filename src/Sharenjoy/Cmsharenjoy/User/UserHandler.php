@@ -1,10 +1,10 @@
 <?php namespace Sharenjoy\Cmsharenjoy\User;
 
-use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
+use Sharenjoy\Cmsharenjoy\Core\EloquentBaseHandler;
 use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;
 use Sentry, Mail, Config, Message;
 
-class UserRepository extends EloquentBaseRepository implements UserInterface {
+class UserHandler extends EloquentBaseHandler implements UserInterface {
 
     public function __construct(User $model, ValidableInterface $validator)
     {

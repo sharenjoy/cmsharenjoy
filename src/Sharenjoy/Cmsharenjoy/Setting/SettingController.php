@@ -5,9 +5,9 @@ use Input, Redirect, Message, Form, Response, Request;
 
 class SettingController extends BaseController {
 
-    public function __construct(SettingInterface $repo)
+    public function __construct(SettingInterface $handler)
     {
-        $this->repo = $repo;
+        $this->handler = $handler;
         parent::__construct();
     }
 
@@ -41,7 +41,7 @@ class SettingController extends BaseController {
 
         try
         {
-            $this->repo->edit($data['item'], ['value' => $data['value']], 'key');
+            $this->handler->edit($data['item'], ['value' => $data['value']], 'key');
         }
         catch (\Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException $e)
         {
@@ -54,7 +54,7 @@ class SettingController extends BaseController {
 
     protected function item()
     {
-        $model = $this->repo->getModel();
+        $model = $this->handler->getModel();
 
         $items['general']['item'] = $model->where('module', 'general')->orderBy('sort')->get();
         $items['file']['item']    = $model->where('module', 'file')->orderBy('sort')->get();

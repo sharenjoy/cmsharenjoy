@@ -290,10 +290,12 @@ if ( ! function_exists('pick_trans'))
         {
             return Lang::get($item, $options);
         }
-        else
+        elseif (Lang::has('cmsharenjoy::'.$item))
         {
             return Lang::get('cmsharenjoy::'.$item, $options);
         }
+
+        return;
     }
 }
 
@@ -342,6 +344,34 @@ if ( ! function_exists('stop'))
     function stop($name = 'Custom vendor')
     {
         return Debugbar::stopMeasure($name);
+    }
+}
+
+if ( ! function_exists('set_package_asset_to_view'))
+{
+    /**
+     * To set the asset to View
+     */
+    function set_package_asset_to_view($asset)
+    {
+        $path    = Config::get('cmsharenjoy::assets.path');
+        $package = Config::get('cmsharenjoy::assets.package.'.$asset);
+
+        if (count($package))
+        {
+            foreach ($package as $key => $value)
+            {
+                if ($value['queue'])
+                {
+                    Theme::asset()->queue($value['type'])
+                                  ->add($key, $path.$value['file']);
+                }
+                else
+                {
+                    Theme::asset()->add($key, $path.$value['file']);
+                }
+            }
+        }
     }
 }
 

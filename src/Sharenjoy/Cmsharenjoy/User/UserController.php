@@ -20,15 +20,15 @@ class UserController extends ObjectBaseController {
         'created_at'   => ['name'=>'created',      'align'=>'center', 'width'=>'20%'],
     ];
 
-    public function __construct(UserInterface $repo)
+    public function __construct(UserInterface $handler)
     {
-        $this->repo = $repo;
+        $this->handler = $handler;
         parent::__construct();
     }
 
     public function getRemindpassword($id)
     {
-        $result = $this->repo->remindPassword($id);
+        $result = $this->handler->remindPassword($id);
 
         if ( ! $result['status'])
         {

@@ -1,9 +1,9 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Setting;
 
-use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
+use Sharenjoy\Cmsharenjoy\Core\EloquentBaseHandler;
 use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;
 
-class SettingRepository extends EloquentBaseRepository implements SettingInterface {
+class SettingHandler extends EloquentBaseHandler implements SettingInterface {
 
     public function __construct(Setting $model, ValidableInterface $validator)
     {
