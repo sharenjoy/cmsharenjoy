@@ -30,10 +30,7 @@ class Post extends EloquentBaseModel {
     ];
 
     public $filterFormConfig = [
-        'category_id'       => ['category' => 'Product'],
-        'created_range'     => ['type' => 'daterange'],
-        'hide'              => ['type' => 'hidden', 'value'=>'rodlld'],
-        'keyword'           => ['filter' => 'products.title,products.title_jp,products.description'],
+        'keyword'     => ['filter' => 'posts.title,posts.content'],
     ];
 
     public $formConfig = [
@@ -41,7 +38,6 @@ class Post extends EloquentBaseModel {
         'tag'         => ['order' => '20', 'inner-div-class'=>'col-sm-5'],
         'process_id'  => ['order' => '25', 'type'=>'file', 'inner-div-class'=>'col-sm-5'],
         'content'     => ['order' => '30', 'inner-div-class'=>'col-sm-9'],
-        'hide'        => ['order' => '22', 'type'=>'hidden', 'value'=>'Ronald'],
     ];
 
     public $reviewFormConfig = [];
