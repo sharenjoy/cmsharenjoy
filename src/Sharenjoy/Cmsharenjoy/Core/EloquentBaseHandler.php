@@ -233,7 +233,7 @@ abstract class EloquentBaseHandler implements EloquentBaseInterface {
         
         if ( ! count($config))
         {
-            $type          = $formType ?: Session::get('doAction');
+            $type          = $formType ?: Session::get('onAction');
             $typeConfigStr = $type.'FormConfig';
             $typeDenyStr   = $type.'FormDeny';
             $typeConfig    = $this->model->$typeConfigStr ?: [];

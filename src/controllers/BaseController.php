@@ -72,13 +72,13 @@ abstract class BaseController extends Controller {
      * The action active right away
      * @var string
      */
-    protected $onAction;
+    protected $onMethod;
 
     /**
      * The action active right away
      * @var string
      */
-    protected $doAction;
+    protected $onAction;
 
     /**
      * The layout
@@ -141,18 +141,18 @@ abstract class BaseController extends Controller {
             Session::put('onController', $this->onController);
 
             // get-create, post-create
-            $this->onAction = Str::slug(Request::method(). '-' .$action);
-            Session::put('onAction', $this->onAction);
+            $this->onMethod = Str::slug(Request::method(). '-' .$action);
+            Session::put('onMethod', $this->onMethod);
 
             // create, update
-            $this->doAction = strtolower($action);
-            Session::put('doAction', $this->doAction);
+            $this->onAction = strtolower($action);
+            Session::put('onAction', $this->onAction);
         }
 
         // Get the login user
-        $user = Sentry::getUser();
-        if ($user)
+        if (Sentry::check())
         {
+            $user = Sentry::getUser();
             Session::put('user', $user);
             View::share('user', $user);
         }
@@ -213,8 +213,8 @@ abstract class BaseController extends Controller {
     {
         $commonLayout = Config::get('cmsharenjoy::app.commonLayoutDirectory');
         
-        $pathA = $this->onController.'.'.$this->doAction;
-        $pathB = $commonLayout.'.'.$this->doAction;
+        $pathA = $this->onController.'.'.$this->onAction;
+        $pathB = $commonLayout.'.'.$this->onAction;
 
         if (View::exists($this->urlSegment.'.'.$pathA))
         {

@@ -17,7 +17,7 @@
     <div class="panel-body fun-box">
     
         @if(isset($functionRules['list']) AND $functionRules['list'] == true)
-            @if(Session::has('goBackPrevious') AND Session::get('doAction') != 'index' AND Session::get('doAction') != 'sort')
+            @if(Session::has('goBackPrevious') AND Session::get('onAction') != 'index' AND Session::get('onAction') != 'sort')
             <div class="pull-left">
                 <a href="{{Session::get('goBackPrevious')}}" class="btn btn-info btn-icon icon-left">
                     <i class="fa fa-arrow-left"></i>{{pick_trans('buttons.return')}}

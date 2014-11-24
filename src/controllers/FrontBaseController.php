@@ -22,13 +22,13 @@ abstract class FrontBaseController extends Controller {
      * The action active right away
      * @var string
      */
-    protected $onAction;
+    protected $onMethod;
 
     /**
      * The action active right away
      * @var string
      */
-    protected $doAction;
+    protected $onAction;
 
     /**
      * The layout
@@ -83,12 +83,12 @@ abstract class FrontBaseController extends Controller {
             Session::put('onController', $this->onController);
 
             // get-create, post-create
-            $this->onAction = Str::slug(Request::method(). '-' .$action);
-            Session::put('onAction', $this->onAction);
+            $this->onMethod = Str::slug(Request::method(). '-' .$action);
+            Session::put('onMethod', $this->onMethod);
 
             // create, update
-            $this->doAction = strtolower($action);
-            Session::put('doAction', $this->doAction);
+            $this->onAction = strtolower($action);
+            Session::put('onAction', $this->onAction);
         }
 
         // Get the login user
@@ -120,40 +120,22 @@ abstract class FrontBaseController extends Controller {
      */
     protected function setupLayout()
     {
-        if (View::exists($this->onController.'.'.$this->doAction))
+        if (View::exists($this->onController.'.'.$this->onAction))
         {
-            $this->layout = View::make($this->onController.'.'.$this->doAction);
+            $this->layout = View::make($this->onController.'.'.$this->onAction);
         }
-        elseif (View::exists($this->onController.'-'.$this->doAction))
+        elseif (View::exists($this->onController.'-'.$this->onAction))
         {
-            $this->layout = View::make($this->onController.'-'.$this->doAction);
+            $this->layout = View::make($this->onController.'-'.$this->onAction);
         }
-        elseif ($this->doAction == 'index' && View::exists($this->onController))
+        elseif ($this->onAction == 'index' && View::exists($this->onController))
         {
             $this->layout = View::make($this->onController);
         }
-        elseif (View::exists($this->doAction))
+        elseif (View::exists($this->onAction))
         {
-            $this->layout = View::make($this->doAction);
+            $this->layout = View::make($this->onAction);
         }
     }
-
-    /**
-     * Handle dynamic method calls
-     * @param string $name
-     * @param array $args
-     */
-    // public function __call($name, $args)
-    // {
-    //     $args = empty($args) ? [] : $args[0];
-    //     $action = 'get'.$name;
-    //     \Debugbar::info($name);
-    //     if ($this->layout == null)
-    //     {
-    //         App::abort(404);
-    //     }
-
-    //     return Redirect::to($this->object);
-    // }
 
 }

@@ -6,7 +6,7 @@ class ControllerAfterActionEvent {
     
     public function handle($data)
     {
-        switch (Session::get('onAction'))
+        switch (Session::get('onMethod'))
         {
             case 'get-update':
 

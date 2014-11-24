@@ -272,10 +272,10 @@ abstract class ObjectBaseController extends BaseController {
      */
     protected function setupLayout()
     {
-        $action = $this->doAction;
+        $action = $this->onAction;
 
         // If action equat sort so that set the action to index
-        $action = $this->onAction == 'get-sort' ? 'index' : $action;
+        $action = $this->onMethod == 'get-sort' ? 'index' : $action;
         
         // Get reop directory from config
         $commonLayout = Config::get('cmsharenjoy::app.commonLayoutDirectory');

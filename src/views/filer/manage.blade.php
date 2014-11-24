@@ -4,7 +4,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        @if(Session::get('doAction') != 'filealbum')
+                        @if(Session::get('onAction') != 'filealbum')
                         <th width="25%"><i class="fa fa-folder"></i> {{trans('cmsharenjoy::files.folders')}}</th>
                         @endif
                         <th><i class="fa fa-file-text"></i> {{trans('cmsharenjoy::files.files_title')}}&nbsp;&nbsp;<span id="file-point"><b></b></span></th>
@@ -13,7 +13,7 @@
 
                 <tfoot>
                     <tr>
-                        @if(Session::get('doAction') != 'filealbum')
+                        @if(Session::get('onAction') != 'filealbum')
                         <th width="25%"><i class="fa fa-folder"></i> {{trans('cmsharenjoy::files.folders')}}</th>
                         @endif
                         <th><i class="fa fa-file-text"></i> {{trans('cmsharenjoy::files.files_title')}}</th>
@@ -23,7 +23,7 @@
                 <tbody>
                     
                     <tr>
-                        @if(Session::get('doAction') != 'filealbum')
+                        @if(Session::get('onAction') != 'filealbum')
                         <td>
                             <div id="list-1" class="nested-list dd with-margins">
                                 <ul class="dd-list folders-folder">
