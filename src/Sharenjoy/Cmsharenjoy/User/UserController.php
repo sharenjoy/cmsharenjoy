@@ -23,6 +23,7 @@ class UserController extends ObjectBaseController {
     public function __construct(UserInterface $handler)
     {
         $this->handler = $handler;
+        
         parent::__construct();
     }
 
@@ -33,10 +34,12 @@ class UserController extends ObjectBaseController {
         if ( ! $result['status'])
         {
             Message::error($result['message']);
+
             return Redirect::back();
         }
 
         Message::success($result['message']);
+
         return Redirect::to($this->objectUrl);
     }
 
