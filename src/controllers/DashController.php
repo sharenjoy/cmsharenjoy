@@ -42,7 +42,7 @@ class DashController extends BaseController {
         Sentry::logout();
 
         Message::success(trans('cmsharenjoy::app.success_logout'));
-        return Redirect::to($this->urlSegment.'/login');
+        return Redirect::to($this->accessUrl.'/login');
     }
 
     /**
@@ -56,7 +56,7 @@ class DashController extends BaseController {
         // If logged in, redirect to admin area
         if (Sentry::check())
         {
-            return Redirect::to($this->urlSegment);
+            return Redirect::to($this->accessUrl);
         }
 
         return View::make('cmsharenjoy::login');
@@ -76,7 +76,7 @@ class DashController extends BaseController {
 
         if ( ! $validator->setRule('loginRules')->valid($input, 'flash'))
         {
-            return Redirect::to($this->urlSegment.'/login')->withInput();
+            return Redirect::to($this->accessUrl.'/login')->withInput();
         }
 
         $handler = App::make('Sharenjoy\Cmsharenjoy\User\UserInterface');
@@ -85,11 +85,11 @@ class DashController extends BaseController {
         if ( ! $result['status'])
         {
             Message::error($result['message']);
-            return Redirect::to($this->urlSegment.'/login')->withInput();
+            return Redirect::to($this->accessUrl.'/login')->withInput();
         }
 
         Message::success($result['message']);
-        return Redirect::to($this->urlSegment);
+        return Redirect::to($this->accessUrl);
     }
 
     /**
@@ -102,7 +102,7 @@ class DashController extends BaseController {
         $result = $handler->activate($id, $code);
 
         Message::{$result['status']}($result['message']);
-        return Redirect::to($this->urlSegment.'/login');
+        return Redirect::to($this->accessUrl.'/login');
     }
 
     /**
@@ -129,7 +129,7 @@ class DashController extends BaseController {
         }
 
         Message::success($result['message']);
-        return Redirect::to($this->urlSegment.'/login');
+        return Redirect::to($this->accessUrl.'/login');
     }
 
     public function getRemindpassword()
@@ -150,7 +150,7 @@ class DashController extends BaseController {
         }
 
         Message::success($result['message']);
-        return Redirect::to($this->urlSegment.'/remindpassword');
+        return Redirect::to($this->accessUrl.'/remindpassword');
     }
 
 }

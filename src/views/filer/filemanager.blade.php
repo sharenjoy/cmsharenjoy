@@ -70,7 +70,7 @@
 
     <script type="text/javascript">
         var sharenjoy          = {};
-        sharenjoy.APPURL       = "{{Config::get('app.url')}}/{{$urlSegment}}/{{Session::get('onController')}}";
+        sharenjoy.APPURL       = "{{Config::get('app.url')}}/{{$accessUrl}}/{{Session::get('onController')}}";
         sharenjoy.OBJURL       = "{{$objectUrl}}";
         sharenjoy.SITEURL      = "{{Config::get('app.url')}}";
         sharenjoy.BASEURI      = "{{base_path()}}";

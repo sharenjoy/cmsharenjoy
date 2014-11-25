@@ -82,7 +82,7 @@
             <div class="modal-body">
               <div class="row">
                 <div class="col-md-12">
-                  <iframe src="{{url($urlSegment.'/filer/filemanager')}}" id="iframe-modal-filemanager" width="100%" height="560" frameborder="0" scrolling="no"></iframe>
+                  <iframe src="{{url($accessUrl.'/filer/filemanager')}}" id="iframe-modal-filemanager" width="100%" height="560" frameborder="0" scrolling="no"></iframe>
                 </div>
               </div>
             </div>
@@ -108,7 +108,7 @@
               <div class="modal-body">
                 <div class="row">
                   <div class="col-md-12">
-                    <iframe src="{{url($urlSegment.'/filer/filealbum/'.$albumId)}}" id="iframe-modal-file-album" width="100%" height="560" frameborder="0" scrolling="no"></iframe>
+                    <iframe src="{{url($accessUrl.'/filer/filealbum/'.$albumId)}}" id="iframe-modal-file-album" width="100%" height="560" frameborder="0" scrolling="no"></iframe>
                   </div>
                 </div>
               </div>

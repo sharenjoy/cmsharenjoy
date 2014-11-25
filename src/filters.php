@@ -8,9 +8,9 @@
 
 
 // Filter all requests ensuring a user is logged in when this filter is called
-Route::filter('adminFilter', function() use ($urlSegment)
+Route::filter('adminFilter', function() use ($accessUrl)
 {
-    if ( ! Sentry::check()) return Redirect::to($urlSegment.'/login');
+    if ( ! Sentry::check()) return Redirect::to($accessUrl.'/login');
 });
 
 // Filter cache
@@ -25,7 +25,7 @@ Route::filter('cache.put'  , 'Sharenjoy\Cmsharenjoy\Filters\CacheFilter@put');
  *     headers: { 'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content'); }
  * });
  */
-Route::filter('csrfFilter', function() use ($urlSegment)
+Route::filter('csrfFilter', function() use ($accessUrl)
 {
     $token = Request::ajax() ? Request::header('X-CSRF-Token') : Input::get('_token');
     
@@ -34,7 +34,7 @@ Route::filter('csrfFilter', function() use ($urlSegment)
         if ($this->whichEnd == 'backEnd')
         {
             Message::error('可能閒置太久，或是某些地方發生錯誤囉！');
-            return Redirect::to($urlSegment.'/login');            
+            return Redirect::to($accessUrl.'/login');            
         }
         
         Message::error('某些地方發生錯誤囉！');

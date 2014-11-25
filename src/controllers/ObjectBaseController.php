@@ -283,17 +283,17 @@ abstract class ObjectBaseController extends BaseController {
         $pathA = $this->onController.'.'.$action;
         $pathB = $commonLayout.'.'.$action;
 
-        if (View::exists($this->urlSegment.'.'.$pathA))
+        if (View::exists($this->accessUrl.'.'.$pathA))
         {
-            $this->layout = View::make($this->urlSegment.'.'.$pathA);
+            $this->layout = View::make($this->accessUrl.'.'.$pathA);
         }
         elseif (View::exists('cmsharenjoy::'.$pathA))
         {
             $this->layout = View::make('cmsharenjoy::'.$pathA);
         }
-        else if(View::exists($this->urlSegment.'.'.$pathB))
+        else if(View::exists($this->accessUrl.'.'.$pathB))
         {
-            $this->layout = View::make($this->urlSegment.'.'.$pathB);
+            $this->layout = View::make($this->accessUrl.'.'.$pathB);
         }
         else if(View::exists('cmsharenjoy::'.$pathB))
         {

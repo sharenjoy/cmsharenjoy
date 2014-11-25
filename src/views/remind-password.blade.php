@@ -6,7 +6,7 @@
 
 @section('content')
 
-    {{Form::open(array('url'=>$urlSegment.'/remindpassword', 'method'=>'POST', 'role'=>'form'))}}
+    {{Form::open(array('url'=>$accessUrl.'/remindpassword', 'method'=>'POST', 'role'=>'form'))}}
                     
         @include('cmsharenjoy::partials.messaging')
 
@@ -30,7 +30,7 @@
         </div>
 
         <div class="form-group">
-            <a href="{{url($urlSegment.'/login')}}" class="link">{{pick_trans('app.back_login')}}</a>
+            <a href="{{url($accessUrl.'/login')}}" class="link">{{pick_trans('app.back_login')}}</a>
         </div>
                      
     {{Form::close()}}
