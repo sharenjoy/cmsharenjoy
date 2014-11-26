@@ -23,9 +23,13 @@ return [
     ],
 
     /**
-     * The path of logo
+     * The path and size of logo
      */
-    'logo' => 'img/logo.png',
+    'logo' => [
+        'path' => 'img/logo.png',
+        'sizeIndex' => '100',
+        'sizeLogin' => '160',
+    ],
 
     /**
      * The common directory of layout
