@@ -127,7 +127,7 @@ trait CommonModelTrait {
     public function isAlbumable()
     {
         return in_array(
-            'Sharenjoy\Cmsharenjoy\Filer\Traits\AlbumModelTrait',
+            'Sharenjoy\Cmsharenjoy\Filer\AlbumTrait',
             (new ReflectionClass($this))->getTraitNames()
         );
     }

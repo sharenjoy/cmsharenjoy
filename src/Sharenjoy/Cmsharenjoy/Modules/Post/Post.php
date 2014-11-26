@@ -2,12 +2,12 @@
 
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseModel;
 use Sharenjoy\Cmsharenjoy\Modules\Tag\TaggableTrait;
-use Sharenjoy\Cmsharenjoy\Filer\Traits\AlbumModelTrait;
+use Sharenjoy\Cmsharenjoy\Filer\AlbumTrait;
 
 class Post extends EloquentBaseModel {
 
     use TaggableTrait;
-    use AlbumModelTrait;
+    use AlbumTrait;
 
     protected $table    = 'posts';
 
