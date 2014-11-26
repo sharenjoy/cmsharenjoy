@@ -1,7 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Controllers;
 
 use Sharenjoy\Cmsharenjoy\User\UserValidator;
-use Sentry, App, View, Redirect, Input, Message;
+use Sentry, App, View, Redirect, Input, Message, Session;
 
 class DashController extends BaseController {
 
@@ -41,7 +41,10 @@ class DashController extends BaseController {
     {
         Sentry::logout();
 
+        Session::flush();
+
         Message::success(trans('cmsharenjoy::app.success_logout'));
+
         return Redirect::to($this->accessUrl.'/login');
     }
 
@@ -85,10 +88,12 @@ class DashController extends BaseController {
         if ( ! $result['status'])
         {
             Message::error($result['message']);
+
             return Redirect::to($this->accessUrl.'/login')->withInput();
         }
 
         Message::success($result['message']);
+
         return Redirect::to($this->accessUrl);
     }
 
@@ -102,6 +107,7 @@ class DashController extends BaseController {
         $result = $handler->activate($id, $code);
 
         Message::{$result['status']}($result['message']);
+
         return Redirect::to($this->accessUrl.'/login');
     }
 
@@ -125,10 +131,12 @@ class DashController extends BaseController {
         if ( ! $result['status'])
         {
             Message::error($result['message']);
+
             return Redirect::back();
         }
 
         Message::success($result['message']);
+
         return Redirect::to($this->accessUrl.'/login');
     }
 
@@ -146,10 +154,12 @@ class DashController extends BaseController {
         if ( ! $result['status'])
         {
             Message::error($result['message']);
+
             return Redirect::back();
         }
 
         Message::success($result['message']);
+
         return Redirect::to($this->accessUrl.'/remindpassword');
     }
 
