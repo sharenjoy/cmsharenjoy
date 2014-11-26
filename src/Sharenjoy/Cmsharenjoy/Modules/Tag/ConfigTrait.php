@@ -11,12 +11,12 @@ trait ConfigTrait {
         'count'        => ['type'  => 'text', 'order' => '20']
     ];
 
-    public $viewFormConfig   = [];
-    public $createFormConfig = [];
-    public $updateFormConfig = [];
+    public $previewFormConfig = [];
+    public $createFormConfig  = [];
+    public $updateFormConfig  = [];
 
-    public $viewFormDeny     = [];
-    public $createFormDeny   = [];
-    public $updateFormDeny   = [];
+    public $previewFormDeny   = [];
+    public $createFormDeny    = [];
+    public $updateFormDeny    = [];
 
 }
