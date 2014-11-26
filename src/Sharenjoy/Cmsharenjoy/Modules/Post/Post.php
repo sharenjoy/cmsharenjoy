@@ -1,7 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Modules\Post;
 
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseModel;
-use Sharenjoy\Cmsharenjoy\Modules\Tag\Traits\TaggableTrait;
+use Sharenjoy\Cmsharenjoy\Modules\Tag\TaggableTrait;
 use Sharenjoy\Cmsharenjoy\Filer\Traits\AlbumModelTrait;
 
 class Post extends EloquentBaseModel {

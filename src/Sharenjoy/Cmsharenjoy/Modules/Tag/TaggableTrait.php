@@ -1,4 +1,4 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Modules\Tag\Traits;
+<?php namespace Sharenjoy\Cmsharenjoy\Modules\Tag;
 
 use Sharenjoy\Cmsharenjoy\Modules\Tag\TagUtil;
 use Sharenjoy\Cmsharenjoy\Modules\Tag\Tag;
