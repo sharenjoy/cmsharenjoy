@@ -7,6 +7,7 @@ use Sharenjoy\Cmsharenjoy\Core\Traits\CommonModelTrait;
 
 class User extends SentryUserModel implements LaravelUserInterface, RemindableInterface {
 
+    use ConfigTrait;
     use CommonModelTrait;
 
     protected $table  = 'users';
@@ -16,25 +17,9 @@ class User extends SentryUserModel implements LaravelUserInterface, RemindableIn
         'password',
         'name',
         'phone',
+        'avatar',
         'description'
     ];
-
-    protected $eventItem = [];
-
-    public $formConfig = [
-        'name'                  => ['order' => '10'],
-        'email'                 => ['order' => '20'],
-        'phone'                 => ['order' => '30'],
-        'password'              => ['order' => '40'],
-        'password_confirmation' => ['order' => '50'],
-        'description'           => ['order' => '60'],
-    ];
-
-    public $createFormConfig = [];
-    public $updateFormConfig = [];
-
-    public $createFormDeny   = [];
-    public $updateFormDeny   = ['password', 'password_confirmation'];
 
     protected $hidden = ['password'];
 

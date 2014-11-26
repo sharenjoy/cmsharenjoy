@@ -18,7 +18,7 @@ abstract class BaseController extends Controller {
      * The URL segment that can be used to access the system
      * @var string
      */
-    protected $urlSegment;
+    protected $accessUrl;
 
     /**
      * The brand name
@@ -72,13 +72,13 @@ abstract class BaseController extends Controller {
      * The action active right away
      * @var string
      */
-    protected $onAction;
+    protected $onMethod;
 
     /**
      * The action active right away
      * @var string
      */
-    protected $doAction;
+    protected $onAction;
 
     /**
      * The layout
@@ -123,7 +123,7 @@ abstract class BaseController extends Controller {
     protected function setCommonVariable()
     {
         // Achieve that segment
-        $this->urlSegment = Config::get('cmsharenjoy::app.access_url');
+        $this->accessUrl = Config::get('cmsharenjoy::app.access_url');
 
         // Get the action name
         $routeArray = Str::parseCallback(Route::currentRouteAction(), null);
@@ -141,18 +141,18 @@ abstract class BaseController extends Controller {
             Session::put('onController', $this->onController);
 
             // get-create, post-create
-            $this->onAction = Str::slug(Request::method(). '-' .$action);
-            Session::put('onAction', $this->onAction);
+            $this->onMethod = Str::slug(Request::method(). '-' .$action);
+            Session::put('onMethod', $this->onMethod);
 
             // create, update
-            $this->doAction = strtolower($action);
-            Session::put('doAction', $this->doAction);
+            $this->onAction = strtolower($action);
+            Session::put('onAction', $this->onAction);
         }
 
         // Get the login user
-        $user = Sentry::getUser();
-        if ($user)
+        if (Sentry::check())
         {
+            $user = Sentry::getUser();
             Session::put('user', $user);
             View::share('user', $user);
         }
@@ -182,7 +182,7 @@ abstract class BaseController extends Controller {
      */
     protected function setHandyUrls()
     {
-        $this->objectUrl = is_null($this->objectUrl) ? url($this->urlSegment.'/'.$this->onController) : null;
+        $this->objectUrl = is_null($this->objectUrl) ? url($this->accessUrl.'/'.$this->onController) : null;
         $this->updateUrl = is_null($this->updateUrl) ? $this->objectUrl.'/update/' : null;
         $this->createUrl = is_null($this->createUrl) ? $this->objectUrl.'/create' : null;
         $this->deleteUrl = is_null($this->deleteUrl) ? $this->objectUrl.'/delete/' : null;
@@ -213,20 +213,20 @@ abstract class BaseController extends Controller {
     {
         $commonLayout = Config::get('cmsharenjoy::app.commonLayoutDirectory');
         
-        $pathA = $this->onController.'.'.$this->doAction;
-        $pathB = $commonLayout.'.'.$this->doAction;
+        $pathA = $this->onController.'.'.$this->onAction;
+        $pathB = $commonLayout.'.'.$this->onAction;
 
-        if (View::exists($this->urlSegment.'.'.$pathA))
+        if (View::exists($this->accessUrl.'.'.$pathA))
         {
-            $this->layout = View::make($this->urlSegment.'.'.$pathA);
+            $this->layout = View::make($this->accessUrl.'.'.$pathA);
         }
         elseif (View::exists('cmsharenjoy::'.$pathA))
         {
             $this->layout = View::make('cmsharenjoy::'.$pathA);
         }
-        elseif (View::exists($this->urlSegment.'.'.$pathB))
+        elseif (View::exists($this->accessUrl.'.'.$pathB))
         {
-            $this->layout = View::make($this->urlSegment.'.'.$pathB);
+            $this->layout = View::make($this->accessUrl.'.'.$pathB);
         }
         elseif (View::exists('cmsharenjoy::'.$pathB))
         {

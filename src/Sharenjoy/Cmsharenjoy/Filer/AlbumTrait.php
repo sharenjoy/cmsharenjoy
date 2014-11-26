@@ -1,9 +1,9 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Filer\Traits;
+<?php namespace Sharenjoy\Cmsharenjoy\Filer;
 
 use Sharenjoy\Cmsharenjoy\Utilities\Transformer;
 use Event, Filer;
 
-trait AlbumModelTrait {
+trait AlbumTrait {
 
     public function album()
     {

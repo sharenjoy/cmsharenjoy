@@ -1,4 +1,4 @@
-<?php namespace Impl\Pagination;
+<?php namespace Sharenjoy\Cmsharenjoy\Service\Pagination;
 
 use Illuminate\Pagination\Paginator;
 

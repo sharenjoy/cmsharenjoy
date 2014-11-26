@@ -1,5 +1,5 @@
 <div class="modal fade custom-width" id="modal-new-folder">
-    <form action="{{$objectUrl.'/newfolder/'.Session::get('doAction')}}" method="POST">
+    <form action="{{$objectUrl.'/newfolder/'.Session::get('onAction')}}" method="POST">
         <div class="modal-dialog" style="width: 650px;">
             <div class="modal-content">
                 
@@ -100,7 +100,7 @@
 
 <div class="modal fade custom-width" id="modal-file-detail">
     <div class="modal-dialog" style="width: 650px;">
-        <form action="{{$objectUrl.'/updatefile/'.Session::get('doAction')}}" method="POST">
+        <form action="{{$objectUrl.'/updatefile/'.Session::get('onAction')}}" method="POST">
             <div class="modal-content">
                 
                 <div class="modal-header">

@@ -46,10 +46,10 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
 
         // To define which end it is now
         $this->whichEnd = Request::segment(1) == 'admin' ? 'backEnd' : 'frontEnd';
-        Session::set('sharenjoy.environment.whichEnd', $this->whichEnd);
+        Session::set('sharenjoy.whichEnd', $this->whichEnd);
 
 		// Get the URL segment to use for routing
-        $urlSegment = $config->get('cmsharenjoy::app.access_url');
+        $accessUrl = $config->get('cmsharenjoy::app.access_url');
 
 		// Binding a bunch of handler
         $this->bindHandler($app, $config);
@@ -58,7 +58,7 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
         $this->makeAlias();
 
         // Loading some of files
-		$this->loadIncludes($urlSegment);
+		$this->loadIncludes($accessUrl);
 	}
 
 	protected function bindHandler($app, $config)
@@ -114,7 +114,7 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
      * Include some specific files from the src-root.
      * @return void
      */
-    protected function loadIncludes($urlSegment)
+    protected function loadIncludes($accessUrl)
     {
         // Add file names without the `php` extension to this list as needed.
         $filesToLoad = [

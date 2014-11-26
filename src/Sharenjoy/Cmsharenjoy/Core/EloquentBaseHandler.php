@@ -233,7 +233,7 @@ abstract class EloquentBaseHandler implements EloquentBaseInterface {
         
         if ( ! count($config))
         {
-            $type          = $formType ?: Session::get('doAction');
+            $type          = $formType ?: Session::get('onAction');
             $typeConfigStr = $type.'FormConfig';
             $typeDenyStr   = $type.'FormDeny';
             $typeConfig    = $this->model->$typeConfigStr ?: [];
@@ -307,6 +307,9 @@ abstract class EloquentBaseHandler implements EloquentBaseInterface {
         $items = $rows->all();
 
         // Set Pagination of data 
+        if (Session::get('sharenjoy.whichEnd') == 'backEnd')
+            Paginator::setViewName('pagination::slider-3');
+        
         $result = Paginator::make($items, $total, $limit);
 
         if ($query)

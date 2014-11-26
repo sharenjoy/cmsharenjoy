@@ -10,7 +10,7 @@
     <p>We confirm your account creation, but it must be activated before being used.</p>
     <p>Click the link below to activate your account.</p>
 
-    <p><a href="{{url($urlSegment.'/activate/'.$id.'/'.$code)}}">Activate your account</a></p>
+    <p><a href="{{url($accessUrl.'/activate/'.$id.'/'.$code)}}">Activate your account</a></p>
 
     <p>Admin</p>
 </body>

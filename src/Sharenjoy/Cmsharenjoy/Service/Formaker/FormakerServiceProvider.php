@@ -28,7 +28,7 @@ class FormakerServiceProvider extends ServiceProvider {
      */
     protected function registerFormakerTransport($config)
     {
-        $end = Session::get('sharenjoy.environment.whichEnd');
+        $end = Session::get('sharenjoy.whichEnd');
 
         if ($end == 'frontEnd')
         {

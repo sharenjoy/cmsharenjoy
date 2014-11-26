@@ -52,7 +52,7 @@
                     <!-- logo -->
                     <div class="logo">
                         <a href="{{url('/')}}" target="_blank">
-                            <img src="{{asset('images/logo.png')}}" width="60" alt="" />
+                            <img src="{{asset(Config::get('cmsharenjoy::app.logo'))}}" width="120" alt="" />
                         </a>
                     </div>
                     
@@ -88,8 +88,8 @@
                         </form>
                     </li> -->
 
-                    <li class="{{ Request::is( "$urlSegment" ) ? 'active' : '' }}">
-                        <a href="{{ url( $urlSegment ) }}">
+                    <li class="{{ Request::is( "$accessUrl" ) ? 'active' : '' }}">
+                        <a href="{{ url( $accessUrl ) }}">
                             <i class="entypo-gauge"></i>
                             <span>{{pick_trans('app.menu.dash')}}</span>
                         </a>
@@ -97,20 +97,20 @@
                     
                     @foreach($menu_items as $url => $item)
                         @if(isset($item['sub']))
-                        <li class="{{ Request::is( "$urlSegment/$url*" ) ? 'opened active' : '' }}">
+                        <li class="{{ Request::is( "$accessUrl/$url*" ) ? 'opened active' : '' }}">
                         @else
-                        <li class="{{ Request::is( "$urlSegment/$url*" ) ? 'active' : '' }}">
+                        <li class="{{ Request::is( "$accessUrl/$url*" ) ? 'active' : '' }}">
                         @endif
-                            <a href="{{ url( $urlSegment.'/'.$url ) }}">
+                            <a href="{{ url( $accessUrl.'/'.$url ) }}">
                                 <i class="{{$item['icon']}}"></i>
                                 <span>{{pick_trans($item['name'])}}</span>
                             </a>
 
                             @if(isset($item['sub']))
-                                <ul class="{{ Request::is( "$urlSegment/$url*" ) ? 'visible' : '' }}">
+                                <ul class="{{ Request::is( "$accessUrl/$url*" ) ? 'visible' : '' }}">
                                     @foreach($item['sub'] as $subUrl => $subItem)
-                                        <li class="{{ Request::is( "$urlSegment/$subUrl*" ) ? 'active' : '' }}">
-                                            <a href="{{ url( $urlSegment.'/'.$subUrl ) }}">
+                                        <li class="{{ Request::is( "$accessUrl/$subUrl*" ) ? 'active' : '' }}">
+                                            <a href="{{ url( $accessUrl.'/'.$subUrl ) }}">
                                                 <span>{{pick_trans($subItem['name'])}}</span>
                                             </a>
                                         </li>
@@ -143,10 +143,10 @@
                             <li class="profile-info dropdown"><!-- add class "pull-right" if you want to place this from right -->
                                 
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    @if($user->img != '')
-                                        <img src="{{asset('uploads/'.$user->img)}}" width="45" height="45" class="img-circle" />
+                                    @if($user->avatar != '')
+                                        <img src="{{asset('uploads/'.$user->avatar)}}" width="45" height="45" class="img-circle" />
                                     @else
-                                        <img src="{{asset('img/logo.png')}}" width="45" height="45" class="img-circle" />
+                                        <img src="{{asset('packages/sharenjoy/cmsharenjoy/images/avatar.jpg')}}" width="45" height="45" class="img-circle" />
                                     @endif
                                     {{$user->name}}
                                     <!-- <b class="caret"></b> -->
@@ -206,7 +206,7 @@
                             </li>
                             <li class="sep"></li> -->
                             <li>
-                                <a href="{{ url( $urlSegment.'/logout' ) }}">
+                                <a href="{{ url( $accessUrl.'/logout' ) }}">
                                     {{ Lang::get('cmsharenjoy::app.logout') }} <i class="entypo-logout right"></i>
                                 </a>
                             </li>
@@ -249,7 +249,7 @@
                                 </li>
                                 <!-- <li class="sep"></li>
                                 <li>
-                                    <a href="{{ url( $urlSegment.'/logout' ) }}">
+                                    <a href="{{ url( $accessUrl.'/logout' ) }}">
                                         Log Out <i class="entypo-logout right"></i>
                                     </a>
                                 </li> -->
@@ -272,7 +272,7 @@
         <script type="text/javascript">
         @section('main-scripts')
             var sharenjoy = {
-                "APPURL": "{{Config::get('app.url')}}/{{$urlSegment}}/{{Session::get('onController')}}",
+                "APPURL": "{{Config::get('app.url')}}/{{$accessUrl}}/{{Session::get('onController')}}",
                 "OBJURL": "{{$objectUrl}}",
                 "SITEURL": "{{Config::get('app.url')}}",
                 "BASEURI": "{{base_path()}}",

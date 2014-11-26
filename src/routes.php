@@ -6,7 +6,7 @@
 
 /* ====================================== */
 
-Route::get($urlSegment.'/language/{lang}' , function($lang)
+Route::get($accessUrl.'/language/{lang}' , function($lang)
 {
     if (array_key_exists($lang, Config::get('cmsharenjoy::app.locales')))
     {
@@ -16,10 +16,8 @@ Route::get($urlSegment.'/language/{lang}' , function($lang)
 });
 
 
-Route::group(['prefix' => $urlSegment], function()
+Route::group(['prefix' => $accessUrl], function()
 {
-    Route::controller('test'      , 'Sharenjoy\Cmsharenjoy\Controllers\TestableController');
-
     Route::controller('post'      , 'Sharenjoy\Cmsharenjoy\Modules\Post\PostController');
     Route::controller('tag'       , 'Sharenjoy\Cmsharenjoy\Modules\Tag\TagController');
     Route::controller('category'  , 'Sharenjoy\Cmsharenjoy\Modules\Category\CategoryController');

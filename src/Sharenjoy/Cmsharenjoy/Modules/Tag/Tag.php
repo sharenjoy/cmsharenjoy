@@ -6,26 +6,13 @@ use Str, Config, DB;
 
 class Tag extends EloquentBaseModel {
 
+    use ConfigTrait;
+
     protected $table = 'tags';
 
     protected $fillable = [
         'tag'
     ];
-
-    protected $eventItem = [];
-
-    public $filterFormConfig = [];
-
-    public $formConfig = [
-        'tag'          => ['type'  => 'text', 'order' => '10'],
-        'count'        => ['type'  => 'text', 'order' => '20']
-    ];
-
-    public $createFormConfig = [];
-    public $updateFormConfig = [];
-
-    public $createFormDeny   = [];
-    public $updateFormDeny   = [];
 
     public function listQuery()
     {

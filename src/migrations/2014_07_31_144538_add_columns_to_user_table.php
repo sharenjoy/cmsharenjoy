@@ -16,7 +16,8 @@ class AddColumnsToUserTable extends Migration {
 		{
 		    $table->string('name')->after('password');
 		    $table->string('phone')->after('name');
-		    $table->text('description')->after('phone');
+		    $table->string('avatar')->after('phone');
+		    $table->text('description')->after('avatar');
 		});
 	}
 
@@ -31,6 +32,7 @@ class AddColumnsToUserTable extends Migration {
 		{
 		    $table->dropColumn('name');
 		    $table->dropColumn('phone');
+		    $table->dropColumn('avatar');
 		    $table->dropColumn('description');
 		});
 	}

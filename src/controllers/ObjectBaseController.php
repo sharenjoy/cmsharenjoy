@@ -66,12 +66,12 @@ abstract class ObjectBaseController extends BaseController {
 
         $items = $this->handler->showByPage($limit, $page, array_except($query, ['page']), $model);
 
-        $filterForm = $this->handler->formaker($input, 'filter');
+        $forms = $this->handler->formaker($input, 'filter');
 
         $this->layout->with('paginationCount', $limit)
                      ->with('sortable', false)
                      ->with('listConfig', $this->listConfig)
-                     ->with('filterForm', $filterForm)
+                     ->with('filterForm', $forms)
                      ->with('items', $items);
     }
 
@@ -272,10 +272,10 @@ abstract class ObjectBaseController extends BaseController {
      */
     protected function setupLayout()
     {
-        $action = $this->doAction;
+        $action = $this->onAction;
 
         // If action equat sort so that set the action to index
-        $action = $this->onAction == 'get-sort' ? 'index' : $action;
+        $action = $this->onMethod == 'get-sort' ? 'index' : $action;
         
         // Get reop directory from config
         $commonLayout = Config::get('cmsharenjoy::app.commonLayoutDirectory');
@@ -283,17 +283,17 @@ abstract class ObjectBaseController extends BaseController {
         $pathA = $this->onController.'.'.$action;
         $pathB = $commonLayout.'.'.$action;
 
-        if (View::exists($this->urlSegment.'.'.$pathA))
+        if (View::exists($this->accessUrl.'.'.$pathA))
         {
-            $this->layout = View::make($this->urlSegment.'.'.$pathA);
+            $this->layout = View::make($this->accessUrl.'.'.$pathA);
         }
         elseif (View::exists('cmsharenjoy::'.$pathA))
         {
             $this->layout = View::make('cmsharenjoy::'.$pathA);
         }
-        else if(View::exists($this->urlSegment.'.'.$pathB))
+        else if(View::exists($this->accessUrl.'.'.$pathB))
         {
-            $this->layout = View::make($this->urlSegment.'.'.$pathB);
+            $this->layout = View::make($this->accessUrl.'.'.$pathB);
         }
         else if(View::exists('cmsharenjoy::'.$pathB))
         {

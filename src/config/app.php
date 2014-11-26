@@ -7,7 +7,8 @@
 return [
 
     /**
-     * The URL key to access the main admin area
+     * The key defines the url of
+     * access of the main admin area
      */
     'access_url' => 'admin',
 
@@ -22,6 +23,11 @@ return [
     ],
 
     /**
+     * The path of logo
+     */
+    'logo' => 'img/logo.png',
+
+    /**
      * The common directory of layout
      */
     'commonLayoutDirectory' => 'common',
@@ -32,8 +38,8 @@ return [
     'paginationCount' => 15,
 
     /**
-     * The menu items shown at the top and side 
-     * of the application
+     * The menu items shown at the top
+     * and side of the application
      */
     'menu_items' => [
         'post' => [
