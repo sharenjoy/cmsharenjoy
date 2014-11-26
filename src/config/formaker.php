@@ -20,6 +20,7 @@ return [
      * {{Formaker::description(['type' => 'wysiwyg-simple'])}}
      * {{Formaker::tag(['help' => 'This is tag', 'placeholder' => 'You can use "," to sperate every tag'])}}
      * {{Formaker::name(['args' => ['class'=>'options', 'id'=>'name']])}}
+     * {{Formaker::avatar(['type'=>'image', 'size' => '180x180'])}}
      * 
      * {{Formaker::status(['type' => 'checkbox', 'value' => '1,2'])}}
      * 
@@ -129,6 +130,7 @@ return [
         'img5'                  => 'image',
         'image'                 => 'image',
         'imagename'             => 'image',
+        'avatar'                => 'image',
 
         // For file
         'file'                  => 'file',

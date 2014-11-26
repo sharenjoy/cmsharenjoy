@@ -157,6 +157,7 @@ return [
         'password_confirmation'   => '確認密碼',
         'img'                     => '圖片',
         'image'                   => '圖片',
+        'avatar'                  => '大頭貼',
         'file'                    => '檔案',
         'filename'                => '檔案',
         'album'                   => '相簿',

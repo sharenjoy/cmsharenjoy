@@ -52,7 +52,7 @@
                     <!-- logo -->
                     <div class="logo">
                         <a href="{{url('/')}}" target="_blank">
-                            <img src="{{asset('images/logo.png')}}" width="60" alt="" />
+                            <img src="{{asset(Config::get('cmsharenjoy::app.logo'))}}" width="120" alt="" />
                         </a>
                     </div>
                     
@@ -143,10 +143,10 @@
                             <li class="profile-info dropdown"><!-- add class "pull-right" if you want to place this from right -->
                                 
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    @if($user->img != '')
-                                        <img src="{{asset('uploads/'.$user->img)}}" width="45" height="45" class="img-circle" />
+                                    @if($user->avatar != '')
+                                        <img src="{{asset('uploads/'.$user->avatar)}}" width="45" height="45" class="img-circle" />
                                     @else
-                                        <img src="{{asset('img/logo.png')}}" width="45" height="45" class="img-circle" />
+                                        <img src="{{asset('packages/sharenjoy/cmsharenjoy/images/avatar.jpg')}}" width="45" height="45" class="img-circle" />
                                     @endif
                                     {{$user->name}}
                                     <!-- <b class="caret"></b> -->

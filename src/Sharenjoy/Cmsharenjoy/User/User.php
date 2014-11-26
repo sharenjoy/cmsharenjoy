@@ -16,12 +16,14 @@ class User extends SentryUserModel implements LaravelUserInterface, RemindableIn
         'password',
         'name',
         'phone',
+        'avatar',
         'description'
     ];
 
     protected $eventItem = [];
 
     public $formConfig = [
+        'avatar'                => ['order' => '5', 'help'=>'建議尺寸180x180px', 'size'=>'180x180'],
         'name'                  => ['order' => '10'],
         'email'                 => ['order' => '20'],
         'phone'                 => ['order' => '30'],

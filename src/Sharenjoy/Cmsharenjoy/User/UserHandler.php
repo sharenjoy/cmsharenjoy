@@ -25,6 +25,7 @@ class UserHandler extends EloquentBaseHandler implements UserInterface {
                 'password'    => $input['password'],
                 'name'        => $input['name'],
                 'phone'       => $input['phone'],
+                'avatar'      => $input['avatar'],
                 'description' => $input['description'],
                 // 'permissions' => $permissions
             ));
@@ -90,6 +91,7 @@ class UserHandler extends EloquentBaseHandler implements UserInterface {
             $user->email       = $input['email'];
             $user->name        = $input['name'];
             $user->phone       = $input['phone'];
+            $user->avatar      = $input['avatar'];
             $user->description = $input['description'];
 
             // Update the user
@@ -110,7 +112,7 @@ class UserHandler extends EloquentBaseHandler implements UserInterface {
             return false;
         }
 
-        return Message::result(true, trans('cmsharenjoy::app.success_created'), $user);
+        return Message::result(true, trans('cmsharenjoy::app.success_updated'), $user);
     }
 
     public function activate($id, $code)
