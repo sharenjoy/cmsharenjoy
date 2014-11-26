@@ -66,12 +66,12 @@ abstract class ObjectBaseController extends BaseController {
 
         $items = $this->handler->showByPage($limit, $page, array_except($query, ['page']), $model);
 
-        $filterForm = $this->handler->formaker($input, 'filter');
+        $forms = $this->handler->formaker($input, 'filter');
 
         $this->layout->with('paginationCount', $limit)
                      ->with('sortable', false)
                      ->with('listConfig', $this->listConfig)
-                     ->with('filterForm', $filterForm)
+                     ->with('filterForm', $forms)
                      ->with('items', $items);
     }
 
