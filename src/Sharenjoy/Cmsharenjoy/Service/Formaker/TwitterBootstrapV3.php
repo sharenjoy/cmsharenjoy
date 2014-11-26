@@ -9,7 +9,7 @@ class TwitterBootstrapV3 extends FormakerAbstract implements FormakerInterface {
 
     public function __construct()
     {
-        $end = Session::get('sharenjoy.environment.whichEnd');
+        $end = Session::get('sharenjoy.whichEnd');
         $this->config = Config::get('cmsharenjoy::formaker.'.$end.'.TwitterBootstrapV3');
     }
 

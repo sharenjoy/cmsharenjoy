@@ -46,7 +46,7 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
 
         // To define which end it is now
         $this->whichEnd = Request::segment(1) == 'admin' ? 'backEnd' : 'frontEnd';
-        Session::set('sharenjoy.environment.whichEnd', $this->whichEnd);
+        Session::set('sharenjoy.whichEnd', $this->whichEnd);
 
 		// Get the URL segment to use for routing
         $accessUrl = $config->get('cmsharenjoy::app.access_url');

@@ -307,6 +307,9 @@ abstract class EloquentBaseHandler implements EloquentBaseInterface {
         $items = $rows->all();
 
         // Set Pagination of data 
+        if (Session::get('sharenjoy.whichEnd') == 'backEnd')
+            Paginator::setViewName('pagination::slider-3');
+        
         $result = Paginator::make($items, $total, $limit);
 
         if ($query)

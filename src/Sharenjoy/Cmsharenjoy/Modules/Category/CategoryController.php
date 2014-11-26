@@ -1,7 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Modules\Category;
 
 use Sharenjoy\Cmsharenjoy\Controllers\ObjectBaseController;
-use Response, Input, Request, Categorize, Session, Message, Config, View;
+use Response, Input, Request, Categorize, Session, Message, Config, View, Paginator;
 
 class CategoryController extends ObjectBaseController {
 
@@ -64,7 +64,8 @@ class CategoryController extends ObjectBaseController {
         $model   = $model->whereType($type)->orderBy('sort');
         $perPage = $model->count();
 
-        // Set Pagination of data 
+        // Set Pagination of data
+        Paginator::setViewName('pagination::slider-3');
         $items = $model->paginate($perPage);
 
         $num = $this->getCategoryLayerNumber($type);
