@@ -2,8 +2,11 @@
 
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseModel;
 use Sharenjoy\Cmsharenjoy\Service\Categorize\Categories\CategoryInterface;
+use Sharenjoy\Cmsharenjoy\Modules\Category\ConfigTrait;
 
 class Category extends EloquentBaseModel implements CategoryInterface {
+
+    use ConfigTrait;
 
     protected $table = 'categories';
 
@@ -13,24 +16,6 @@ class Category extends EloquentBaseModel implements CategoryInterface {
         'title',
         'description'
     ];
-
-    protected $eventItem = [
-        'creating'    => ['user_id'],
-        'updating'    => ['user_id'],
-    ];
-
-    public $filterFormConfig = [];
-
-    public $formConfig = [
-        'title'              => ['order' => '20'],
-        'description'        => ['order' => '30']
-    ];
-
-    public $createFormConfig = [];
-    public $updateFormConfig = [];
-
-    public $createFormDeny   = [];
-    public $updateFormDeny   = [];
 
     /**
      * Model event.
