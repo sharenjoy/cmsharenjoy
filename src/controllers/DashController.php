@@ -6,12 +6,13 @@ use Sentry, App, View, Redirect, Input, Message, Session;
 class DashController extends BaseController {
 
     /**
-     * Let's whitelist all the methods we want to allow guests to visit!
+     * Let's whitelist all the methods
+     * we want to allow guests to visit!
      *
      * @access   protected
      * @var      array
      */
-    protected $whitelist = array(
+    protected $whitelist = [
         'getLogin',
         'getLogout',
         'postLogin',
@@ -20,7 +21,7 @@ class DashController extends BaseController {
         'postResetpassword',
         'getRemindpassword',
         'postRemindpassword'
-    );
+    ];
 
     /**
      * Main users page.
@@ -30,11 +31,12 @@ class DashController extends BaseController {
      */
     public function getIndex()
     {
-        return View::make('cmsharenjoy::dashboard');
+        return View::make('cmsharenjoy::unity.dashboard');
     }
 
     /**
      * Log the user out
+     * 
      * @return Redirect
      */
     public function getLogout()
@@ -62,7 +64,7 @@ class DashController extends BaseController {
             return Redirect::to($this->accessUrl);
         }
 
-        return View::make('cmsharenjoy::login');
+        return View::make('cmsharenjoy::unity.login');
     }
 
     /**
@@ -119,7 +121,7 @@ class DashController extends BaseController {
      */
     public function getResetpassword($code)
     {
-        return View::make('cmsharenjoy::reset-password')->with('code', $code);
+        return View::make('cmsharenjoy::unity.reset-password')->with('code', $code);
     }
 
     public function postResetpassword()
@@ -142,7 +144,7 @@ class DashController extends BaseController {
 
     public function getRemindpassword()
     {
-        return View::make('cmsharenjoy::remind-password');
+        return View::make('cmsharenjoy::unity.remind-password');
     }
 
     public function postRemindpassword()
