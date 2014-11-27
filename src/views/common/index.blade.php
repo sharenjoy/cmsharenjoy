@@ -1,17 +1,12 @@
 @extends('cmsharenjoy::layouts.interface')
 
 @section('title')
-{{pick_trans('app.manage')}}{{pick_trans("app.$appName")}}
+    {{pick_trans('app.manage')}}{{pick_trans("app.$appName")}}
 @stop
 
 @section('content')
-    <div class="row">
-        <div class="col-md-12">
-            <div class="sorted">
-                @include('cmsharenjoy::partials.function')
-            </div>
-        </div>
-    </div>
+
+    @include('cmsharenjoy::partials.function')
 
     @include('cmsharenjoy::partials.messaging')
     

@@ -110,7 +110,7 @@ abstract class BaseController extends Controller {
         // Define 404 page
         App::missing(function($exception)
         {
-            return Response::view('cmsharenjoy::errors.missing', array(), 404);
+            return Response::view('cmsharenjoy::unity.missing', array(), 404);
         });
         
         // Setup composed views and the variables that they require
