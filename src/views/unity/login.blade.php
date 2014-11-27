@@ -17,7 +17,7 @@
                     <i class="entypo-user"></i>
                 </div>
                 
-                {{ Form::text('email', Input::old('email') , array( 'placeholder'=>'Your Email Address' , 'class'=>'form-control' ) ) }}
+                {{ Form::text('email', Input::old('email') , array( 'placeholder'=>pick_trans('app.insert_account') , 'class'=>'form-control' ) ) }}
             </div>
             
         </div>
@@ -29,7 +29,7 @@
                     <i class="entypo-key"></i>
                 </div>
                 
-                {{ Form::password('password', array( 'placeholder'=>'Your Password' , 'class'=>'form-control' , 'autocomplete'=>'off' ) ) }}
+                {{ Form::password('password', array( 'placeholder'=>pick_trans('app.insert_password') , 'class'=>'form-control' , 'autocomplete'=>'off' ) ) }}
                 
             </div>
         </div>

@@ -17,7 +17,7 @@
                     <i class="entypo-user"></i>
                 </div>
                 
-                {{Form::text('email', Input::old('email'), array('placeholder'=>'Your Email Address', 'class'=>'form-control'))}}
+                {{Form::text('email', Input::old('email'), array('placeholder'=>pick_trans('app.insert_email'), 'class'=>'form-control'))}}
             </div>
             
         </div>

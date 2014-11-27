@@ -12,10 +12,8 @@
             </div>
         </div>
     </div>
-
      
     <table class="table table-bordered table-hover table-responsive" @if($sortable == true)id="sortable"@endif>
-        
         <thead>
             <tr>
                 <th>&nbsp;</th>

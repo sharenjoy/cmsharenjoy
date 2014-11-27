@@ -14,12 +14,12 @@ trait ConfigTrait {
         'description'           => ['order' => '60'],
     ];
 
-    public $viewFormConfig   = [];
-    public $createFormConfig = [];
-    public $updateFormConfig = [];
+    public $previewFormConfig = [];
+    public $createFormConfig  = [];
+    public $updateFormConfig  = [];
 
-    public $viewFormDeny     = [];
-    public $createFormDeny   = [];
-    public $updateFormDeny   = ['password', 'password_confirmation'];
+    public $previewFormDeny   = [];
+    public $createFormDeny    = [];
+    public $updateFormDeny    = ['password', 'password_confirmation'];
 
 }

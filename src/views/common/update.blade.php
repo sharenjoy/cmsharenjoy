@@ -1,69 +1,61 @@
-@extends('cmsharenjoy::layouts.interface-update')
+@extends('cmsharenjoy::layouts.interface')
 
 @section('title')
-{{pick_trans('app.edit')}}{{pick_trans("app.$appName")}}
+  {{pick_trans('app.edit')}}{{pick_trans("app.$appName")}}
 @stop
 
-@section('form-items')
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-primary" data-collapsed="0">
-            
-                <div class="panel-heading">
-                    <div class="panel-title">
-                        <h3>{{pick_trans('app.edit')}} {{$specifyName or ''}}</h3>
-                    </div>
-                    
-                    <!-- <div class="panel-options">
-                        <a href="#sample-modal" data-toggle="modal" data-target="#sample-modal-dialog-1" class="bg"><i class="entypo-cog"></i></a>
-                        <a href="#" data-rel="collapse"><i class="entypo-down-open"></i></a>
-                        <a href="#" data-rel="reload"><i class="entypo-arrows-ccw"></i></a>
-                        <a href="#" data-rel="close"><i class="entypo-cancel"></i></a>
-                    </div> -->
-                </div>
-                
-                <div class="panel-body">
-                    
-                    {{Form::open(['url'=>$updateUrl.$item->id, 'class'=>'form-horizontal form-groups-bordered', 'role'=>'form', 'id'=>'updated-form'])}}
-                    
-                        @if(isset($fieldsForm) AND ! is_null($fieldsForm))
-                            {{$fieldsForm}}
-                        @endif
-                        
-                        <div class="form-group">
-                            <div class="col-sm-12">
-                                @include('cmsharenjoy::partials.button-update')
-                            </div>
-                        </div>
+@section('content')
 
-                    {{Form::close()}}
+  @include('cmsharenjoy::partials.function')
 
-                </div>
-            </div>
-        </div>
+  @include('cmsharenjoy::partials.messaging')
+  
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-primary" data-collapsed="0">
         
-        <!-- <div class="col-md-4">
-            <div class="panel panel-primary" data-collapsed="0">
+        <div class="panel-heading">
+          <div class="panel-title">
+            <h3>{{pick_trans('app.edit')}} {{$specifyName or ''}}</h3>
+          </div>
+          
+          <!-- <div class="panel-options pull-left">
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#profile-1" data-toggle="tab">First Tab</a></li>
+              <li><a href="#profile-2" data-toggle="tab">Second Tab</a></li>
+            </ul>
+          </div> -->
+        </div>
             
-                <div class="panel-heading">
-                    <div class="panel-title">
-                        <h3>{{pick_trans('app.add')}}</h3>
-                    </div>
-                </div>
+        <div class="panel-body">
+          <div class="tab-content">
+            
+            <div class="tab-pane active" id="profile-1">
+              {{Form::open(['url'=>$updateUrl.$item->id, 'class'=>'form-horizontal form-groups-bordered', 'role'=>'form', 'id'=>'updated-form'])}}
+          
+                @if(isset($fieldsForm) AND ! is_null($fieldsForm))
+                    {{$fieldsForm}}
+                @endif
                 
-                <div class="panel-body">
-                    
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            @include('cmsharenjoy::partials.button-update')
-                        </div>
+                <div class="form-group">
+                    <div class="col-sm-12">
+                        @include('cmsharenjoy::partials.button-update')
                     </div>
-                    
                 </div>
-            </div>
-        </div> -->
 
+              {{Form::close()}}
+            </div>
+            
+            <!-- <div class="tab-pane" id="profile-2">
+              <strong>Entire any had depend and figure winter</strong>
+              <p>Met whose marry under the merit. In it do continual consulted no listening. Devonshire sir sex motionless travelling six themselves. So colonel as greatly shewing herself observe ashamed. Demands minutes regular ye to detract is.</p>
+            </div> -->
+
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 @stop
 
 @section('modal')

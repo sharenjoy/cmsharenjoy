@@ -21,14 +21,14 @@ trait ConfigTrait {
         'content'     => ['order' => '30', 'inner-div-class'=>'col-sm-9'],
     ];
 
-    public $viewFormConfig   = [];
-    public $createFormConfig = [];
-    public $updateFormConfig = [
+    public $previewFormConfig = [];
+    public $createFormConfig  = [];
+    public $updateFormConfig  = [
         'album'       => ['order' => '25'],
     ];
 
-    public $viewFormDeny     = [];
-    public $createFormDeny   = [];
-    public $updateFormDeny   = [];
+    public $previewFormDeny   = [];
+    public $createFormDeny    = [];
+    public $updateFormDeny    = [];
 
 }

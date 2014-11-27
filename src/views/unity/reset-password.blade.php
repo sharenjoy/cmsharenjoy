@@ -17,7 +17,7 @@
                     <i class="entypo-key"></i>
                 </div>
                 
-                {{Form::text('email', '', array('placeholder'=>'Your email address.', 'class'=>'form-control'))}}
+                {{Form::text('email', '', array('placeholder'=>pick_trans('app.insert_email'), 'class'=>'form-control'))}}
             </div>
             
         </div>
@@ -29,7 +29,7 @@
                     <i class="entypo-key"></i>
                 </div>
                 
-                {{ Form::password('password' , array( 'placeholder'=>'This is new password you want to reset.' , 'class'=>'form-control' ) ) }}
+                {{ Form::password('password' , array( 'placeholder'=>pick_trans('app.insert_reset_password') , 'class'=>'form-control' ) ) }}
             </div>
             
         </div>
@@ -41,7 +41,7 @@
                     <i class="entypo-key"></i>
                 </div>
                 
-                {{ Form::password('password_confirmation' , array( 'placeholder'=>'To confirm new password.' , 'class'=>'form-control' ) ) }}
+                {{ Form::password('password_confirmation' , array( 'placeholder'=>pick_trans('app.insert_confirm_password') , 'class'=>'form-control' ) ) }}
             </div>
             
         </div>
