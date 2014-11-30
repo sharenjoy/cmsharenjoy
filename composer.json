@@ -1,16 +1,14 @@
 {
     "name": "sharenjoy/cmsharenjoy",
-    "description": "This is a cms",
-    "license": "MIT",
+    "description": "This is cms",
     "authors": [
         {
             "name": "Ronald Jian",
-            "email": "ronald.jina@gmail.com"
+            "email": "ronald.jian@gmail.com"
         }
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/support": "4.2.*",
         "twilio/sdk": "3.12.*",
         "intervention/image": "1.*",
         "cartalyst/sentry": "2.1.*",
@@ -25,12 +23,8 @@
         "fzaninotto/faker": "1.*"
     },
     "autoload": {
-        "classmap": [
-            "src/migrations",
-            "src/controllers"
-        ],
         "psr-0": {
-            "Sharenjoy\\Cmsharenjoy\\": "src/"
+            "Sharenjoy\\Cmsharenjoy": "src/"
         }
     },
     "minimum-stability": "dev"
