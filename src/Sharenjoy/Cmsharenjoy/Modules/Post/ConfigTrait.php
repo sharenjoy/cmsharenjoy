@@ -17,7 +17,7 @@ trait ConfigTrait {
     public $formConfig = [
         'title'       => ['order' => '10', 'inner-div-class'=>'col-sm-5'],
         'tag'         => ['order' => '20', 'inner-div-class'=>'col-sm-5'],
-        'process_id'  => ['order' => '25', 'type'=>'file', 'inner-div-class'=>'col-sm-5'],
+        'process_id'  => ['order' => '25', 'type'=>'checkbox', 'option'=>'process', 'inner-div-class'=>'col-sm-5'],
         'content'     => ['order' => '30', 'inner-div-class'=>'col-sm-9'],
     ];
 

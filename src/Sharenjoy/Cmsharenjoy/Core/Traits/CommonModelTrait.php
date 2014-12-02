@@ -59,9 +59,11 @@ trait CommonModelTrait {
          */
         if (count($this->formConfig))
         {
+            $check_type = ['checkbox'];
+
             foreach ($this->formConfig as $key => $value)
             {
-                if ( ! isset($input[$key]))
+                if ( ! isset($input[$key]) && in_array($value['type'], $check_type))
                 {
                     $input[$key] = '';
                 }

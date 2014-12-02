@@ -18,7 +18,7 @@ class CreateFilesTable extends Migration {
 
             $table->increments('id')->unsigned()->index();
             $table->integer('folder_id')->index()->unsigned()->default(0);
-		    $table->foreign('folder_id')->references('id')->on('file_folders')->onDelete('cascade')->onUpdate('cascade');
+		$table->foreign('folder_id')->references('id')->on('file_folders')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('user_id')->unsigned()->default(1);
             $table->enum('type', array('a', 'v', 'd', 'i', 'o'))->nullable();
             $table->string('name', 255);
