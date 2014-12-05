@@ -23,6 +23,7 @@ class CreateCategoriesTable extends Migration {
 		    $table->integer('weight')->index();
             $table->integer('sort')->unsigned()->nullable()->default(0);
 		    $table->timestamps();
+		    $table->softDeletes();
 		});
 	}
 

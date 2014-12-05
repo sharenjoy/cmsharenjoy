@@ -3,10 +3,12 @@
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseModel;
 use Sharenjoy\Cmsharenjoy\Service\Categorize\Categories\CategoryInterface;
 use Sharenjoy\Cmsharenjoy\Modules\Category\ConfigTrait;
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
 
 class Category extends EloquentBaseModel implements CategoryInterface {
 
     use ConfigTrait;
+    use SoftDeletingTrait;
 
     protected $table = 'categories';
 
@@ -29,6 +31,8 @@ class Category extends EloquentBaseModel implements CategoryInterface {
         // Delete hierarchies first.
         static::deleting(function($model)
         {
+            $model->eventProcess('deleting', $model);
+
             $model->children()->detach();
 
             $model->parents()->detach();
