@@ -292,10 +292,42 @@ class FilerHandler implements FilerInterface {
         if ( File::findByFolder($id)->isEmpty() and Folder::findByParent($id)->isEmpty()) {
             $folder->delete($id);
 
-            return $this->result(true, trans('cmsharenjoy::files.item_deleted'), $folder->name);
+            return $this->result(
+                true,
+                trans('cmsharenjoy::files.folder_deleted', ['name'=>$folder->name]),
+                $folder->name
+            );
+
         } else {
-            return $this->result(false, trans('cmsharenjoy::files.folder_not_empty'), $folder->name);
+            return $this->result(
+                false,
+                trans('cmsharenjoy::files.folder_not_empty', ['name'=>$folder->name]),
+                $folder->name
+            );
         }
+    }
+
+    /**
+     * Delete an folder and inside of files
+     *
+     * @param   int     $id     The id of the folder
+     * @return  array
+     *
+    **/
+    public function deleteFolderDoNotConfirm($id = 0)
+    {
+        $folder = Folder::find($id);
+        
+        $files = File::findByFolder($id);
+
+        foreach ($files as $value)
+        {
+            $this->deleteFile($value->id);
+        }
+
+        $folder->delete($id);
+
+        return $this->result(true, trans('cmsharenjoy::files.item_deleted'), $folder->name);
     }
 
     /**
@@ -1104,7 +1136,6 @@ class FilerHandler implements FilerInterface {
     /**
      * Physically delete a file
      *
-     *
      * @return	bool
      *
     **/
@@ -1114,15 +1145,11 @@ class FilerHandler implements FilerInterface {
             return false;
         }
 
-        $folder = $file->folder;
+        @unlink($this->path.'/'.$file->filename.'.'.$file->extension);
 
-        if ($folder->location === 'local') {
-            @unlink($this->path.'/'.$file->filename.'.'.$file->extension);
-
-            if ($file->type == 'i')
-            {
-                @unlink($this->thumbPath.'/'.$file->filename.'.'.$file->extension);
-            }
+        if ($file->type == 'i')
+        {
+            @unlink($this->thumbPath.'/'.$file->filename.'.'.$file->extension);
         }
 
         return true;

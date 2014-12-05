@@ -25,6 +25,7 @@
                 <div class="panel-body">
                     <button type="button" id="new-folder" class="btn btn-blue btn-lg" onclick="jQuery('#modal-new-folder').modal('show', {backdrop: 'static'});">{{trans('cmsharenjoy::files.new_folder')}}</button>
                     <button type="button" id="new-file" class="btn btn-blue btn-lg" onclick="jQuery('#modal-create-file').modal('show', {backdrop: 'static'});">{{trans('cmsharenjoy::files.role_upload')}}</button>
+                    <button type="button" id="delete-folder" class="btn btn-danger btn-lg">{{trans('cmsharenjoy::files.role_delete_folder')}}</button>
                     <button type="button" id="file-detail" class="btn btn-success btn-lg" style="display:none">{{trans('cmsharenjoy::files.role_edit_file')}}</button>
                     <button type="button" id="delete-file" class="btn btn-danger btn-lg" style="display:none">{{trans('cmsharenjoy::files.role_delete_file')}}</button>
                 </div>
@@ -62,8 +63,10 @@
 
             var $new_folder_button  = $('#new-folder');
             var $new_file_button    = $('#new-file');
+            var $delete_folder_button = $('#delete-folder');
             var $delete_file_button = $('#delete-file');
             var $file_detail_button = $('#file-detail');
+            var $modal_delete_folder = $('#modal-delete-folder');
             var $modal_delete_file  = $('#modal-delete-file');
             var $modal_file_detail  = $('#modal-file-detail');
             var unselected_blank    = ['UL', 'TD', 'TH', 'DIV'];
@@ -116,6 +119,16 @@
                 $('.folders-center li').removeClass('selected');
             }
 
+            var hide_some_button = function(){
+                $delete_folder_button.hide();
+                $new_folder_button.hide();
+            }
+
+            var show_some_button = function(){
+                $delete_folder_button.fadeIn();
+                $new_folder_button.fadeIn();
+            }
+
             $('.folders-center').on('click', 'li', function (e) {
                 e.preventDefault();
 
@@ -127,7 +140,8 @@
                 $('#file-point b').html($(this).find('span').html());
 
                 show_something();
-                
+
+                hide_some_button();
             });
 
             $('.file-manage').on('click', function(e){
@@ -135,6 +149,7 @@
                 if (jQuery.inArray(e.target.tagName, unselected_blank) !== -1){
                     $(this).find('li').removeClass('selected');
                     hide_something();
+                    show_some_button();
                 }
             });
 
@@ -157,6 +172,12 @@
                     }
                 });
 
+            });
+
+            $delete_folder_button.on('click', function(){
+                $modal_delete_folder.find('#modal-folder-name').text($('.folders-folder div.selected span').html());
+                $modal_delete_folder.find('#delete_folder_id').val($('.folders-folder div.selected').parent().parent().attr('data-id'));
+                $modal_delete_folder.modal('show', {backdrop: 'static'});
             });
 
             $delete_file_button.on('click', function(){

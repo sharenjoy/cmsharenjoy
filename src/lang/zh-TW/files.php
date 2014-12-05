@@ -14,6 +14,7 @@ return [
     'item_not_found'           => '對不起. 未能發現 "%s"',
     'sort_saved'               => '新排序保存成功',
     'folder_created'           => '文件夾建立成功',
+    'folder_deleted'           => '文件夾 ":name" 刪除成功',
     'no_permissions'           => '您未有足夠權限',
     
     // Labels
@@ -68,7 +69,7 @@ return [
     'subfolders'               => '子目錄',
     'root'                     => '根目錄',
     'no_subfolders'            => '無子目錄',
-    'folder_not_empty'         => '您必須先刪除 "%s" ',
+    'folder_not_empty'         => '如果您要刪除此文件夾 ":name" 您必須先刪除此文件夾內的所有檔案',
     'mkdir_error'              => '無法創建 %s. 您必須手動操作。',
     'chmod_error'              => '上傳目錄不可寫。請確認權限是 0777',
     'location_saved'           => '目錄位置保存成功',

@@ -31,6 +31,9 @@ abstract class ObjectBaseController extends BaseController {
         parent::__construct();
 
         $this->paginationCount = Config::get('cmsharenjoy::app.paginationCount');
+
+        ii(\Sharenjoy\Cmsharenjoy\Filer\File::findByFolder('13'));
+        ii(\Sharenjoy\Cmsharenjoy\Filer\Folder::findByParent('13')->isEmpty());
     }
 
     /**
@@ -184,6 +187,7 @@ abstract class ObjectBaseController extends BaseController {
     public function postDelete()
     {
         $id     = Input::get('id');
+        $model = $this->handler->showById($id);
         $result = $this->handler->delete($id);
 
         if ( ! $result['status'])
@@ -194,6 +198,8 @@ abstract class ObjectBaseController extends BaseController {
         }
 
         Message::success($result['message']);
+        
+        Event::fire('cmsharenjoy.afterAction', [$model]);
 
         return Redirect::to(Session::get('goBackPrevious'));
     }

@@ -172,3 +172,29 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade custom-width" id="modal-delete-folder">
+    <div class="modal-dialog" style="width: 650px;">
+        {{Form::open(array('url'=>$objectUrl.'/deletefolder'))}}
+        <div class="modal-content">
+            
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">{{trans('cmsharenjoy::files.role_delete_folder')}}</h4>
+            </div>
+            
+            <div class="modal-body">
+                {{trans('cmsharenjoy::files.role_delete_folder')}}
+                <span id="modal-folder-name"></span>
+                <input type="hidden" name="delete_folder_id" id="delete_folder_id" value="">
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('cmsharenjoy::buttons.cancel')}}</button>
+                {{Form::button(trans('cmsharenjoy::buttons.delete'), array('type'=>'submit', 'class'=>"btn btn-info delete-button"))}}
+            </div>
+
+        </div>
+        {{Form::close()}}
+    </div>
+</div>

@@ -54,7 +54,7 @@ class FilerController extends BaseController {
         $parser = App::make('Sharenjoy\Cmsharenjoy\Utilities\Parser');
         $folderTreeBuilder = $parser->treeBuilder(
             $folderTree, 
-            '<li class="dd-item" data-id="{id}"><a href="'.$this->objectUrl.'/index/{id}"><div class="dd-handle"><i class="fa fa-folder-o"></i>&nbsp;&nbsp;&nbsp;{name}</div></a> {children} </li>',
+            '<li class="dd-item" data-id="{id}"><a href="'.$this->objectUrl.'/index/{id}"><div class="dd-handle"><i class="fa fa-folder-o"></i>&nbsp;&nbsp;&nbsp;<span>{name}</span></div></a> {children} </li>',
             'ul class="dd-list"'
         );
 
@@ -471,6 +471,31 @@ EOE;
         $result = Filer::getFile($id);
 
         return Response::json($result, 200);
+    }
+
+    /**
+     * Delete a file
+     *
+     * @access  public
+     * @return  void
+     */
+    public function postDeletefolder()
+    {
+
+        $id = Input::get('delete_folder_id');
+
+        $result = Filer::deleteFolder($id);
+        
+        if ( ! $result['status'])
+        {
+            Message::error($result['message']);
+
+            return Redirect::to($this->objectUrl.'/index/'.$id);
+        }
+
+        Message::success($result['message']);
+
+        return Redirect::to($this->objectUrl);
     }
 
     /**

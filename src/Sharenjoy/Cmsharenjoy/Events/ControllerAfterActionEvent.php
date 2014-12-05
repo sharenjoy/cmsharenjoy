@@ -1,6 +1,6 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Events;
 
-use Session, View;
+use Session, View, Filer;
 
 class ControllerAfterActionEvent {
     
@@ -11,6 +11,12 @@ class ControllerAfterActionEvent {
             case 'get-update':
 
                 $this->outputAlbumIdToView($data);
+
+                break;
+
+            case 'post-delete':
+
+                $this->deleteAlbum($data);
 
                 break;
             
@@ -24,6 +30,14 @@ class ControllerAfterActionEvent {
         if ($data->isAlbumable())
         {
             View::share('albumId', $data->album_id);
+        }
+    }
+
+    private function deleteAlbum($data)
+    {
+        if ($data->isAlbumable())
+        {
+            Filer::deleteFolderDoNotConfirm($data->album_id);
         }
     }
 
