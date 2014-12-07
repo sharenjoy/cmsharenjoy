@@ -10,9 +10,7 @@ class FormakerServiceProvider extends ServiceProvider {
 
     public function boot()
     {
-        $config = $this->app['config'];
-
-        $this->registerFormakerTransport($config);
+        $this->registerFormakerTransport();
 
         // Adding an Aliac in app/config/app.php
         AliasLoader::getInstance()->alias('Formaker', 'Sharenjoy\Cmsharenjoy\Service\Formaker\Facades\Formaker');
@@ -26,20 +24,22 @@ class FormakerServiceProvider extends ServiceProvider {
      *
      * @throws \InvalidArgumentException
      */
-    protected function registerFormakerTransport($config)
+    protected function registerFormakerTransport()
     {
         $end = Session::get('sharenjoy.whichEnd');
 
+        $config = $this->app['config']->get('cmsharenjoy::formaker');
+
         if ($end == 'frontEnd')
         {
-            $driver = $config->get('cmsharenjoy::formaker.driver-front');
+            $driver = $config['driver-front'];
         }
         elseif ($end == 'backEnd')
         {
-            $driver = $config->get('cmsharenjoy::formaker.driver-back');
+            $driver = $config['driver-back'];
         }
         
-        $this->app->bind(
+        $this->app->bindShared(
             'Sharenjoy\Cmsharenjoy\Service\Formaker\FormakerInterface',
             function() use ($driver)
             {

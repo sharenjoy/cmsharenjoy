@@ -9,9 +9,7 @@ class NotificationServiceProvider extends ServiceProvider {
 
     public function boot()
     {
-        $config = $this->app['config'];
-
-        $this->registerTransport($config);
+        $this->registerTransport();
 
         // Adding an Aliac in app/config/app.php
         AliasLoader::getInstance()->alias('Notify', 'Sharenjoy\Cmsharenjoy\Service\Notification\Facades\Notification');
@@ -25,13 +23,13 @@ class NotificationServiceProvider extends ServiceProvider {
      *
      * @throws \InvalidArgumentException
      */
-    protected function registerTransport($config)
+    protected function registerTransport()
     {
-        $driver = $config->get('cmsharenjoy::notification.driver');
+        $driver = $this->app['config']->get('cmsharenjoy::notification.driver');
         
-        $this->app->bind(
+        $this->app->bindShared(
             'Sharenjoy\Cmsharenjoy\Service\Notification\NotificationInterface',
-            function() use ($driver, $config)
+            function() use ($driver)
             {
                 switch ($driver)
                 {

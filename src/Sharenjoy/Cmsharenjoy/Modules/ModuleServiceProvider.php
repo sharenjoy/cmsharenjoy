@@ -18,16 +18,14 @@ class ModuleServiceProvider extends ServiceProvider {
      */
     public function boot()
     {
-        $app = $this->app;
-
         // The Post Binding
-        $app->bind('Sharenjoy\Cmsharenjoy\Modules\Post\PostInterface', function($app)
+        $this->app->bindShared('Sharenjoy\Cmsharenjoy\Modules\Post\PostInterface', function()
         {
             return new Post\PostHandler(new Post\Post, new Post\PostValidator);
         });
 
         // The Category Binding
-        $app->bind('Sharenjoy\Cmsharenjoy\Modules\Category\CategoryInterface', function($app)
+        $this->app->bindShared('Sharenjoy\Cmsharenjoy\Modules\Category\CategoryInterface', function()
         {
             return new Category\CategoryHandler(
                 new \Sharenjoy\Cmsharenjoy\Service\Categorize\Categories\Category,
@@ -35,7 +33,7 @@ class ModuleServiceProvider extends ServiceProvider {
         });
 
         // The Tag Binding
-        $app->bind('Sharenjoy\Cmsharenjoy\Modules\Tag\TagInterface', function($app)
+        $this->app->bindShared('Sharenjoy\Cmsharenjoy\Modules\Tag\TagInterface', function()
         {
             return new Tag\TagHandler(new Tag\Tag, new Tag\TagValidator);
         });

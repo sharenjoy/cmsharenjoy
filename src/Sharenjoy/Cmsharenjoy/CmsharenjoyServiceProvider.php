@@ -33,15 +33,12 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$app    = $this->app;
-        $config = $app['config'];
-
 		$this->package('sharenjoy/cmsharenjoy');
 
 		// Setting the locale langage
         if (Session::has('sharenjoy.backEndLanguage'))
         {
-            $app->setLocale(Session::get('sharenjoy.backEndLanguage'));
+            $this->app->setLocale(Session::get('sharenjoy.backEndLanguage'));
         }
 
         // To define which end it is now
@@ -49,10 +46,10 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
         Session::set('sharenjoy.whichEnd', $this->whichEnd);
 
 		// Get the URL segment to use for routing
-        $accessUrl = $config->get('cmsharenjoy::app.access_url');
+        $accessUrl = $this->app['config']->get('cmsharenjoy::app.access_url');
 
 		// Binding a bunch of handler
-        $this->bindHandler($app, $config);
+        $this->bindHandler();
 
         // Make some alias
         $this->makeAlias();
@@ -61,30 +58,30 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
 		$this->loadIncludes($accessUrl);
 	}
 
-	protected function bindHandler($app, $config)
+	protected function bindHandler()
 	{
 		// The Users Binding
-		$app->bind('Sharenjoy\Cmsharenjoy\User\UserInterface', function($app)
+		$this->app->bindShared('Sharenjoy\Cmsharenjoy\User\UserInterface', function()
 		{
 		    return new User\UserHandler(new User\User, new User\UserValidator);
 		});
 
 		// The Setting Bindings
-		$app->bind('Sharenjoy\Cmsharenjoy\Setting\SettingInterface', function($app)
+		$this->app->bindShared('Sharenjoy\Cmsharenjoy\Setting\SettingInterface', function()
 		{
 		    return new Setting\SettingHandler(new Setting\Setting, new Setting\SettingValidator);
 		});
 
         // The parser binding
-        $app->bind('Sharenjoy\Cmsharenjoy\Utilities\Parser', function($app)
+        $this->app->bindShared('Sharenjoy\Cmsharenjoy\Utilities\Parser', function()
         {
             return new Utilities\Parser;
         });
 
         // The Filer binding
-        $driver = $config->get('cmsharenjoy::filer.driver');
+        $driver = $this->app['config']->get('cmsharenjoy::filer.driver');
         
-        $app->bind('Sharenjoy\Cmsharenjoy\Filer\FilerInterface', function($app) use ($driver)
+        $this->app->bindShared('Sharenjoy\Cmsharenjoy\Filer\FilerInterface', function() use ($driver)
         {
             switch ($driver)
             {

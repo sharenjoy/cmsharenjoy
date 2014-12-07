@@ -10,16 +10,16 @@ class MessageServiceProvider extends ServiceProvider {
      *
      * @return void
      */
-    public function register()
-    {
-        $app = $this->app;
+    public function register() {}
 
-        $app->bind(
+    public function boot()
+    {
+        $this->app->bindShared(
             'Illuminate\Support\Contracts\MessageProviderInterface',
-            function() use ($app)
+            function()
             {
                 return new FlashMessageBag(
-                    $app->make('session.store')
+                    $this->app->make('session.store')
                 );
             }
         );
