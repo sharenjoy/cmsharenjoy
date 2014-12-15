@@ -145,8 +145,8 @@ trait CommonModelTrait {
                 // If use key that the name is input of value otherwise use the $key
                 if (isset($config['input']) && isset($input[$config['input']]))
                     $formConfig[$name]['value'] = $input[$config['input']];
-                elseif ($name == 'tag')
-                    $formConfig[$name]['value'] = $input->tag;
+                elseif ($name == 'tag' && isset($input['tag']))
+                    $formConfig['tag']['value'] = $input->tag;
                 elseif (isset($input[$name]))
                     $formConfig[$name]['value'] = $input[$name];
             }
