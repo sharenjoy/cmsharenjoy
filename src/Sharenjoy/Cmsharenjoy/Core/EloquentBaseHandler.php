@@ -16,8 +16,6 @@ abstract class EloquentBaseHandler implements EloquentBaseInterface {
      */
     protected $validator;
 
-    public function __construct() {}
-
     /**
      * Return a instance of model
      * @return Eloquent
@@ -65,20 +63,17 @@ abstract class EloquentBaseHandler implements EloquentBaseInterface {
      */
     public function validate($id = null, $rule = 'updateRules', $errorType = 'error')
     {
-        if ($id != null)
+        if ($id !== null)
         {
             if (isset($this->validator->$rule))
             {
                 $this->validator->setRule($rule);
             }
-            $result = $this->validator->setUnique($id)->valid($this->getInput(), $errorType);
-        }
-        else
-        {
-            $result = $this->validator->valid($this->getInput(), $errorType);
+            
+            return $this->validator->setUnique($id)->valid($this->getInput(), $errorType);
         }
 
-        return $result;
+        return $this->validator->valid($this->getInput(), $errorType);
     }
 
     /**
@@ -179,94 +174,6 @@ abstract class EloquentBaseHandler implements EloquentBaseInterface {
         }
         
         return Message::result(true, trans('cmsharenjoy::app.success_deleted'));
-    }
-
-    /**
-     * What this method doing is can dynamic push
-     * some form data config to model's form config
-     * @param  array  $data
-     * @param  string $form
-     * @return void
-     */
-    public function pushForm(array $data, $form = 'formConfig')
-    {
-        if (isset($this->model->$form))
-        {
-            $this->model->$form = array_merge($this->model->$form, $data);
-        }
-    }
-
-    protected function processFormConfig($formConfig, $input)
-    {
-        if (count($formConfig))
-        {
-            foreach ($formConfig as $name => $config)
-            {
-                // To get the options of select element from the Model
-                if (isset($config['method']))
-                {
-                    $method = camel_case($config['method']);
-                    $formConfig[$name] = array_merge($formConfig[$name], $this->model->$method());
-                }
-
-                // If use key that the name is input of value otherwise use the $key
-                if (isset($config['input']) && isset($input[$config['input']]))
-                    $formConfig[$name]['value'] = $input[$config['input']];
-                elseif (isset($input[$name]))
-                    $formConfig[$name]['value'] = $input[$name];
-            }
-        }
-
-        return $formConfig;
-    }
-
-    /**
-     * To make a form fields
-     * @param  array  $input
-     * @param  String $formType
-     * @param  array  $config This is you can customise form config
-     * @return array  Build from Formaker
-     */
-    public function formaker($input = array(), $formType = null, array $config = array())
-    {
-        $formConfig = $config;
-        
-        if ( ! count($config))
-        {
-            $type          = $formType ?: Session::get('onAction');
-            $typeConfigStr = $type.'FormConfig';
-            $typeDenyStr   = $type.'FormDeny';
-            $typeConfig    = $this->model->$typeConfigStr ?: [];
-
-            switch ($type)
-            {
-                case 'filter':
-                    $formConfig = $typeConfig;
-                    break;
-
-                default:
-                    $formConfig = array_merge($this->model->formConfig, $typeConfig);
-
-                    // Deny some fields
-                    if(count($this->model->$typeDenyStr))
-                    {
-                        foreach ($this->model->$typeDenyStr as $value)
-                            unset($formConfig[$value]);
-                    }
-
-                    // To order the form config
-                    $formConfig = array_sort($formConfig, function($value)
-                    {
-                        return $value['order'];
-                    });
-                    break;
-            }
-        }
-
-        // To do other process that needs to be done
-        $formConfig = $this->processFormConfig($formConfig, $input);
-
-        return Formaker::form($formConfig, $type);
     }
 
     /**
@@ -377,6 +284,67 @@ abstract class EloquentBaseHandler implements EloquentBaseInterface {
         $model = $model ?: $this->model;
 
         return $model->count();
+    }
+
+    /**
+     * What this method doing is can dynamic push
+     * some form data config to model's form config
+     * @param  array  $data
+     * @param  string $form
+     * @return void
+     */
+    public function pushForm(array $data, $form = 'formConfig')
+    {
+        $this->model->pushForm($data, $form);
+    }
+
+    /**
+     * To make a form fields
+     * @param  array  $input
+     * @param  String $formType
+     * @param  array  $config This is you can customise form config
+     * @return array  Build from Formaker
+     */
+    public function formaker($input = array(), $formType = null, array $config = array())
+    {
+        $formConfig = $config;
+        
+        if ( ! count($config))
+        {
+            $type          = $formType ?: Session::get('onAction');
+            $typeConfigStr = $type.'FormConfig';
+            $typeDenyStr   = $type.'FormDeny';
+            $typeConfig    = $this->model->$typeConfigStr ?: [];
+
+            switch ($type)
+            {
+                case 'filter':
+                    $formConfig = $typeConfig;
+                    break;
+
+                default:
+                    $formConfig = array_merge($this->model->formConfig, $typeConfig);
+
+                    // Deny some fields
+                    if(count($this->model->$typeDenyStr))
+                    {
+                        foreach ($this->model->$typeDenyStr as $value)
+                            unset($formConfig[$value]);
+                    }
+
+                    // To order the form config
+                    $formConfig = array_sort($formConfig, function($value)
+                    {
+                        return $value['order'];
+                    });
+                    break;
+            }
+        }
+
+        // To do other process that needs to be done
+        $formConfig = $this->model->processForm($formConfig, $input);
+
+        return Formaker::form($formConfig, $type);
     }
 
 }

@@ -9,8 +9,6 @@ class PostHandler extends EloquentBaseHandler implements PostInterface {
     {
         $this->validator = $validator;
         $this->model     = $model;
-
-        parent::__construct();
     }
 
 }

@@ -34,6 +34,14 @@ abstract class ObjectBaseController extends BaseController {
     }
 
     /**
+     * Set go back previous session
+     */
+    protected function setGoBackPrevious()
+    {
+        Session::put('goBackPrevious', Request::fullUrl());
+    }
+
+    /**
      * Main users page.
      * @return   View
      */
@@ -259,14 +267,6 @@ abstract class ObjectBaseController extends BaseController {
         $data = ['success' => trans('cmsharenjoy::app.success')];
         
         return Response::json(Message::result('success', $message, $data), 200);
-    }
-
-    /**
-     * Set go back previous session
-     */
-    protected function setGoBackPrevious()
-    {
-        Session::put('goBackPrevious', Request::fullUrl());
     }
 
     /**

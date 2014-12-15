@@ -12,8 +12,6 @@ class CategoryHandler extends EloquentBaseHandler implements CategoryInterface {
     {
         $this->validator = $validator;
         $this->model     = $model;
-
-        parent::__construct();
     }
 
     /**

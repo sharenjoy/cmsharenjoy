@@ -1,10 +1,12 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Core\Traits;
 
-use Session, ReflectionClass, Event;
+use ReflectionClass;
 
 trait CommonModelTrait {
 
     protected static $inputData = [];
+
+    protected static $reflection = null;
 
     public static function boot()
     {
@@ -111,6 +113,59 @@ trait CommonModelTrait {
     }
 
     /**
+     * What this method doing is can dynamic push
+     * some form data config to model's form config
+     * @param  array  $data
+     * @param  string $form
+     * @return void
+     */
+    public function pushForm(array $data, $form = 'formConfig')
+    {
+        if (isset($this->$form))
+        {
+            return $this->$form = array_merge($this->$form, $data);
+        }
+
+        throw new \InvalidArgumentException("The model doesn't exist the {$form} property.");
+    }
+
+    public function processForm($formConfig, $input)
+    {
+        if (count($formConfig))
+        {
+            foreach ($formConfig as $name => $config)
+            {
+                // To get the options of select element from the Model
+                if (isset($config['method']))
+                {
+                    $method = camel_case($config['method']);
+                    $formConfig[$name] = array_merge($formConfig[$name], $this->$method());
+                }
+
+                // If use key that the name is input of value otherwise use the $key
+                if (isset($config['input']) && isset($input[$config['input']]))
+                    $formConfig[$name]['value'] = $input[$config['input']];
+                elseif ($name == 'tag')
+                    $formConfig[$name]['value'] = $input->tag;
+                elseif (isset($input[$name]))
+                    $formConfig[$name]['value'] = $input[$name];
+            }
+        }
+
+        return $formConfig;
+    }
+
+    public function getReflection()
+    {
+        if (is_null(static::$reflection))
+        {
+            static::$reflection = new ReflectionClass($this);
+        }
+
+        return static::$reflection;
+    }
+
+    /**
      * Figure out if tags can be used on the model
      * @return boolean
      */
@@ -118,7 +173,7 @@ trait CommonModelTrait {
     {
         return in_array(
             'Sharenjoy\Cmsharenjoy\Modules\Tag\TaggableTrait', 
-            (new ReflectionClass($this))->getTraitNames()
+            $this->getReflection()->getTraitNames()
         );
     }
 
@@ -130,7 +185,7 @@ trait CommonModelTrait {
     {
         return in_array(
             'Sharenjoy\Cmsharenjoy\Filer\AlbumTrait',
-            (new ReflectionClass($this))->getTraitNames()
+            $this->getReflection()->getTraitNames()
         );
     }
 

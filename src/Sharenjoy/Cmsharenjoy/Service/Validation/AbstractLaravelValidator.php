@@ -238,7 +238,7 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
      * @param  array The type of message, it can be 'messageBeg'
      * @return boolean|Message
      */
-    public function valid(array $input, $errorType = 'error')
+    public function valid(array $input, $errorType)
     {
         $result = $this->with($input)->passes();
 
@@ -246,11 +246,6 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
         {
             switch ($errorType)
             {
-                case 'error':
-                    Session::flash('sharenjoy.validation.errors', $this->errors());
-                    Message::error(trans('cmsharenjoy::app.check_some_wrong'));
-                    break;
-
                 case 'flash':
                     $this->getErrorsToFlashMessageBag();
                     break;
@@ -264,6 +259,8 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
                     break;
                 
                 default:
+                    Session::flash('sharenjoy.validation.errors', $this->errors());
+                    Message::error(trans('cmsharenjoy::app.check_some_wrong'));
                     break;
             }
         }

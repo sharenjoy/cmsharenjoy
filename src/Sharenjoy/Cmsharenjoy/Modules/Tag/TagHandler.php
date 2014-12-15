@@ -9,8 +9,6 @@ class TagHandler extends EloquentBaseHandler implements TagInterface {
     {
         $this->validator = $validator;
         $this->model     = $model;
-
-        parent::__construct();
     }
 
     /**

@@ -24,7 +24,7 @@ trait ConfigTrait {
     public $previewFormConfig = [];
     public $createFormConfig  = [];
     public $updateFormConfig  = [
-        'album'       => ['order' => '25'],
+        'album'       => ['order' => '28'],
     ];
 
     public $previewFormDeny   = [];

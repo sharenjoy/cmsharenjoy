@@ -10,8 +10,6 @@ class UserHandler extends EloquentBaseHandler implements UserInterface {
     {
         $this->validator = $validator;
         $this->model     = $model;
-
-        parent::__construct();
     }
 
     public function create()
