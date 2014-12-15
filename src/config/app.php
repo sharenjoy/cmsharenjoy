@@ -50,27 +50,6 @@ return [
             'name' => 'app.menu.post',
             'icon' => 'entypo-doc-text',
         ],
-        'organization' => [
-            'name' =>'app.menu.organization',
-            'icon' =>'entypo-flow-tree',
-            'sub'  => [
-                'company' => [
-                    'name' => 'app.menu.company'
-                ],
-                'department' => [
-                    'name' => 'app.menu.department'
-                ],
-                'position' => [
-                    'name' => 'app.menu.position'
-                ],
-                'role' => [
-                    'name' => 'app.menu.role'
-                ],
-                'employee' => [
-                    'name' => 'app.menu.employee'
-                ],
-            ]
-        ],
         'category' => [
             'name' =>'app.menu.category',
             'icon' =>'entypo-flow-tree',
