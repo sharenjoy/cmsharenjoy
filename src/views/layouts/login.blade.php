@@ -22,8 +22,8 @@
     <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/neon-core.css')}}">
     <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/neon-theme.css')}}">
     <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/neon-forms.css')}}">
-    <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/custom.css')}}">
     <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/skins/white.css')}}">
+    <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/sharenjoy/custom.css')}}">
     @show
 
     <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/jquery-1.11.0.min.js')}}"></script>
@@ -90,7 +90,6 @@
     <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/jquery.validate.min.js')}}"></script>
     <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/neon-login.js')}}"></script>
     <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/neon-custom.js')}}"></script>
-    <script src="{{asset('packages/sharenjoy/cmsharenjoy/js/neon-demo.js')}}"></script>
     @show
 
 </body>

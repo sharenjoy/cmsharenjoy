@@ -30,6 +30,10 @@ abstract class ObjectBaseController extends BaseController {
     {
         parent::__construct();
 
+        // $model = \Flower::getModel()->find(1)->processors;
+
+        // ii($model->toArray());
+
         $this->paginationCount = Config::get('cmsharenjoy::app.paginationCount');
     }
 

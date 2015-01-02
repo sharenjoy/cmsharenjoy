@@ -17,7 +17,7 @@ class CreateTaggablesTable extends Migration {
             $table->engine = 'InnoDB';
 
 			$table->integer('tag_id')->index();
-			$table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
+			// $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
 
 			$table->string('taggable_id', 36)->index();
 			$table->string('taggable_type', 255)->index();

@@ -13,7 +13,6 @@
         "intervention/image": "1.*",
         "cartalyst/sentry": "2.1.*",
         "teepluss/theme": "dev-master",
-        "moltin/laravel-cart": "dev-master",
         "guzzlehttp/guzzle": "~4.0",
         "pda/pheanstalk": "~3.0"
     },
@@ -23,6 +22,9 @@
         "fzaninotto/faker": "1.*"
     },
     "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
         "psr-0": {
             "Sharenjoy\\Cmsharenjoy": "src/"
         }
