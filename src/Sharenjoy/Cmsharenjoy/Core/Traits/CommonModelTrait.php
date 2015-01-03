@@ -28,7 +28,7 @@ trait CommonModelTrait {
      */
     public function setInput(array $input)
     {
-        $input = $this->parseCheckboxValue($input);
+        $input = $this->parseInputValue($input);
 
         self::$inputData = $input;
     }
@@ -38,7 +38,7 @@ trait CommonModelTrait {
         return self::$inputData;
     }
 
-    protected function parseCheckboxValue($input)
+    protected function parseInputValue($input)
     {
         /**
          * If the field of input is an array
@@ -65,7 +65,7 @@ trait CommonModelTrait {
 
             foreach ($this->formConfig as $key => $value)
             {
-                if ( ! isset($input[$key]) && in_array($value['type'], $check_type))
+                if ( ! isset($input[$key]) && (isset($value['type']) && in_array($value['type'], $check_type)))
                 {
                     $input[$key] = '';
                 }
