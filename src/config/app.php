@@ -26,6 +26,10 @@ return [
      * The path and size of logo
      */
     'logo' => [
+        'favicon' => [
+            'path' => 'img/favicon.ico',
+            'width' => '16',
+        ],
         'login' => [
             'path' => 'img/logo.png',
             'width' => '160',

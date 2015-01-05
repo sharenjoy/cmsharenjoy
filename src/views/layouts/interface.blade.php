@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+        <link rel="shortcut icon" href="{{asset(Config::get('cmsharenjoy::app.logo.favicon.path'))}}">
         
         <meta http-equiv="expires" content="-1">
         <meta name="robots" content="none">

@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <link rel="shortcut icon" href="{{asset(Config::get('cmsharenjoy::app.logo.favicon.path'))}}">
     
     <meta http-equiv="expires" content="-1">
     <meta name="robots" content="none">
