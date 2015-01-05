@@ -28,11 +28,11 @@ return [
     'logo' => [
         'login' => [
             'path' => 'img/logo.png',
-            'size' => '160',
+            'width' => '160',
         ],
         'index' => [
             'path' => 'img/logo.png',
-            'size' => '100',
+            'width' => '100',
         ]
     ],
 
