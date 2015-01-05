@@ -44,7 +44,7 @@
     
     <div class="login-logo">
         <a href="{{url('admin')}}" class="logo">
-            <img src="{{asset(Config::get('cmsharenjoy::app.logo.path'))}}" width="{{Config::get('cmsharenjoy::app.logo.sizeLogin')}}" alt="" />
+            <img src="{{asset(Config::get('cmsharenjoy::app.logo.login.path'))}}" width="{{Config::get('cmsharenjoy::app.logo.login.width')}}" alt="" />
         </a>
     </div>
     

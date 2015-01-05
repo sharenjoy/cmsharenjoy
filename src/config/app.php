@@ -26,9 +26,14 @@ return [
      * The path and size of logo
      */
     'logo' => [
-        'path' => 'img/logo.png',
-        'sizeIndex' => '100',
-        'sizeLogin' => '160',
+        'login' => [
+            'path' => 'img/logo.png',
+            'size' => '160',
+        ],
+        'index' => [
+            'path' => 'img/logo.png',
+            'size' => '100',
+        ]
     ],
 
     /**

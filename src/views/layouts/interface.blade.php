@@ -52,7 +52,7 @@
                     <!-- logo -->
                     <div class="logo">
                         <a href="{{url('/')}}" target="_blank">
-                            <img src="{{asset(Config::get('cmsharenjoy::app.logo.path'))}}" width="{{Config::get('cmsharenjoy::app.logo.sizeIndex')}}" alt="" />
+                            <img src="{{asset(Config::get('cmsharenjoy::app.logo.index.path'))}}" width="{{Config::get('cmsharenjoy::app.logo.index.width')}}" alt="" />
                         </a>
                     </div>
                     
