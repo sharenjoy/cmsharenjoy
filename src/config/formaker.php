@@ -101,6 +101,7 @@ return [
         'description'           => 'textarea',
         'bio'                   => 'textarea',
         'body'                  => 'textarea',
+        'notes'                 => 'textarea',
         
         // For wysiwyg
         'content'               => 'wysiwygAdvanced',
