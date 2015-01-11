@@ -6,7 +6,7 @@
         <!-- panel head -->
         <div class="panel-heading">
             <div class="panel-title">
-                <h2>{{pick_trans("app.$appName")}}</h2>
+                <h3>{{pick_trans("app.$appName")}}</h3>
             </div>
             <div class="panel-options">
                 <!-- <a href="#sample-modal" data-toggle="modal" data-target="#sample-modal-dialog-1" class="bg"><i class="entypo-cog"></i></a> -->

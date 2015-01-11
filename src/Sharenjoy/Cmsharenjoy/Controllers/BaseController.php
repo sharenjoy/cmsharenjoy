@@ -124,7 +124,8 @@ abstract class BaseController extends Controller {
     {
         // Achieve that segment
         $this->accessUrl = Config::get('cmsharenjoy::app.access_url');
-
+        View::share('accessUrl', $this->accessUrl);
+        
         // Get the action name
         $routeArray = Str::parseCallback(Route::currentRouteAction(), null);
         
@@ -165,9 +166,11 @@ abstract class BaseController extends Controller {
         View::share('appName' , $this->onController);
         View::share('functionRules', $this->functionRules);
         View::share('langLocales', Config::get('cmsharenjoy::app.locales'));
+        View::share('menu_items', Config::get('cmsharenjoy::app.menu_items'));
+        View::share('active_language', Session::get('sharenjoy.backEndLanguage'));
 
-        $composed_views = array('cmsharenjoy::*');
-        View::composer($composed_views, 'Sharenjoy\Cmsharenjoy\Composers\Page');
+        // $composed_views = array('cmsharenjoy::*');
+        // View::composer($composed_views, 'Sharenjoy\Cmsharenjoy\Composers\Page');
 
         // Set the theme
         $this->theme = Theme::uses('admin');

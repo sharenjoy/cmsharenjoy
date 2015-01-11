@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-xs-8 col-left">
             <div class="dataTables_length">
-                <h3>{{pick_trans('app.manage')}} {{$specifyName or ''}}</h3>
+                <h3>{{pick_trans('app.manage')}}</h3>
             </div>
         </div>
         <div class="col-xs-4 col-right">

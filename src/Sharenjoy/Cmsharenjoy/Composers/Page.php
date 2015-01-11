@@ -12,8 +12,7 @@ class Page {
      */
     public function compose($view)
     {
-        $view->with('accessUrl', Config::get('cmsharenjoy::app.access_url'))
-             ->with('menu_items', Config::get('cmsharenjoy::app.menu_items'))
+        $view->with('menu_items', Config::get('cmsharenjoy::app.menu_items'))
              ->with('active_language', Session::get('sharenjoy.backEndLanguage'));
     }
 
