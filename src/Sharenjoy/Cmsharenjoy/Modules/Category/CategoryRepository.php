@@ -1,11 +1,11 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Modules\Category;
 
-use Sharenjoy\Cmsharenjoy\Core\EloquentBaseHandler;
+use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
 use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;
 use Sharenjoy\Cmsharenjoy\Service\Categorize\Categories\Category;
 use Message;
 
-class CategoryHandler extends EloquentBaseHandler implements CategoryInterface {
+class CategoryRepository extends EloquentBaseRepository implements CategoryInterface {
 
     // Class expects an Eloquent model
     public function __construct(Category $model, ValidableInterface $validator)

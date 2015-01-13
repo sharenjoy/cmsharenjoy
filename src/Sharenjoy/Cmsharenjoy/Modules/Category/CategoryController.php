@@ -22,9 +22,9 @@ class CategoryController extends ObjectBaseController {
 
     protected $categoryLayerNumber;
 
-    public function __construct(CategoryInterface $handler)
+    public function __construct(CategoryInterface $repo)
     {
-        $this->handler = $handler;
+        $this->repo = $repo;
 
         $this->categoryLayerNumber = Config::get('cmsharenjoy::module.category.layer');
 
@@ -60,7 +60,7 @@ class CategoryController extends ObjectBaseController {
         $this->setGoBackPrevious();
 
         $type    = $this->type;
-        $model   = $this->handler->getModel();
+        $model   = $this->repo->getModel();
         $model   = $model->whereType($type)->orderBy('sort');
         $perPage = $model->count();
 
@@ -120,9 +120,9 @@ class CategoryController extends ObjectBaseController {
 
     public function getCreate()
     {
-        $this->handler->pushForm([
+        $this->repo->pushForm([
             'type' => [
-                'args'  => ['value'=>ucfirst($this->type), 'readonly'=>'readonly'],
+                'args'  => ['value'=>$this->type, 'readonly'=>'readonly'],
                 'order' => '10'
             ]
         ]);
@@ -132,9 +132,9 @@ class CategoryController extends ObjectBaseController {
 
     public function getUpdate($id)
     {
-        $this->handler->pushForm([
+        $this->repo->pushForm([
             'type' => [
-                'args'  => ['value'=>ucfirst($this->type), 'readonly'=>'readonly'],
+                'args'  => ['value'=>$this->type, 'readonly'=>'readonly'],
                 'order' => '10'
             ]
         ]);
@@ -144,7 +144,7 @@ class CategoryController extends ObjectBaseController {
 
     protected function storeSortById($model, $sortNum)
     {
-        $this->handler->edit($model->id, ['sort' => $sortNum]);
+        $this->repo->edit($model->id, ['sort' => $sortNum]);
     }
 
 }

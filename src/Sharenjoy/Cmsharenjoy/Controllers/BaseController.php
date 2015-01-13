@@ -169,9 +169,6 @@ abstract class BaseController extends Controller {
         View::share('menu_items', Config::get('cmsharenjoy::app.menu_items'));
         View::share('active_language', Session::get('sharenjoy.backEndLanguage'));
 
-        // $composed_views = array('cmsharenjoy::*');
-        // View::composer($composed_views, 'Sharenjoy\Cmsharenjoy\Composers\Page');
-
         // Set the theme
         $this->theme = Theme::uses('admin');
 

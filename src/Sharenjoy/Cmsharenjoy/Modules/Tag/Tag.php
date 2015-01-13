@@ -11,7 +11,8 @@ class Tag extends EloquentBaseModel {
     protected $table = 'tags';
 
     protected $fillable = [
-        'tag'
+        'tag',
+        'count'
     ];
 
     public function listQuery()

@@ -35,7 +35,7 @@ return [
     'category' => [
 
         'layer' => [
-            'product' => 1,
+            'customermood' => 1,
         ],
     ],
 

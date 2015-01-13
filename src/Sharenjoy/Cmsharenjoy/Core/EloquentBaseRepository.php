@@ -2,7 +2,7 @@
 
 use Session, Formaker, Paginator, StdClass, Message;
 
-abstract class EloquentBaseHandler implements EloquentBaseInterface {
+abstract class EloquentBaseRepository implements EloquentBaseInterface {
 
     /**
      * The instance of model
@@ -74,21 +74,6 @@ abstract class EloquentBaseHandler implements EloquentBaseInterface {
         }
 
         return $this->validator->valid($this->getInput(), $errorType);
-    }
-
-    /**
-     * To make query from model setting
-     * @param  string $type
-     * @param  Model $model
-     * @return Model
-     */
-    public function makeQuery($type = 'listQuery', $model = null)
-    {
-        $model = $model ?: $this->model;
-
-        $model = $model->$type();
-
-        return $model;
     }
 
     /**
@@ -192,6 +177,19 @@ abstract class EloquentBaseHandler implements EloquentBaseInterface {
     }
 
     /**
+     * To make query from model setting
+     * @param  string $method
+     * @param  Model $model
+     * @return Model
+     */
+    public function makeQuery($method = 'listQuery', $model = null)
+    {
+        $model = $model ?: $this->model;
+
+        return $model->$method();
+    }
+
+    /**
      * Get paginated articles
      * @param int $limit Results per page
      * @param int $page Number of articles per page
@@ -205,7 +203,7 @@ abstract class EloquentBaseHandler implements EloquentBaseInterface {
 
         // Get the total rows of model
         $total = $model->count();
-
+        
         // get the pagenation
         $rows  = $model->skip($limit * ($page-1))
                        ->take($limit)
@@ -215,46 +213,13 @@ abstract class EloquentBaseHandler implements EloquentBaseInterface {
 
         // Set Pagination of data 
         if (Session::get('sharenjoy.whichEnd') == 'backEnd')
+        {
             Paginator::setViewName('pagination::slider-3');
+        }
         
         $result = Paginator::make($items, $total, $limit);
 
-        if ($query)
-            $result = $result->appends($query);
-
-        return $result;
-    }
-
-    /**
-     * Get articles by their tag
-     * @param string  URL slug of tag
-     * @param int Number of articles per page
-     * @return StdClass Object with $items and $totalItems for pagination
-     */
-    public function showByTag($tag, $page = 1, $limit)
-    {
-        $foundTag = $this->model->where('slug', $tag)->first();
-
-        $result = new StdClass;
-        $result->page = $page;
-        $result->limit = $limit;
-        $result->totalItems = 0;
-        $result->items = array();
-
-        if( !$foundTag )
-        {
-            return $result;
-        }
-
-        $articles = $this->tag->articles()
-                        ->where('articles.status_id', 1)
-                        ->orderBy('articles.created_at', 'desc')
-                        ->skip( $limit * ($page-1) )
-                        ->take($limit)
-                        ->get();
-
-        $result->totalItems = $this->totalByTag();
-        $result->items = $articles->all();
+        if ($query) $result = $result->appends($query);
 
         return $result;
     }
@@ -266,11 +231,11 @@ abstract class EloquentBaseHandler implements EloquentBaseInterface {
      * @param  Model $model
      * @return Model
      */
-    public function showAll($sort = 'sort', $order = 'desc', $model = null)
+    public function showAll($model = null)
     {
         $model = $model ?: $this->model;
-
-        return $model->orderBy($sort, $order)->get();
+                       
+        return $model->get();
     }
 
     /**

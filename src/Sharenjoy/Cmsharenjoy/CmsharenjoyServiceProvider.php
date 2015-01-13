@@ -48,8 +48,8 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
 		// Get the URL segment to use for routing
         $accessUrl = $this->app['config']->get('cmsharenjoy::app.access_url');
 
-		// Binding a bunch of handler
-        $this->bindHandler();
+		// Binding a bunch of repository
+        $this->bindRepository();
 
         // Make some alias
         $this->makeAlias();
@@ -58,18 +58,18 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
 		$this->loadIncludes($accessUrl);
 	}
 
-	protected function bindHandler()
+	protected function bindRepository()
 	{
 		// The Users Binding
 		$this->app->bindShared('Sharenjoy\Cmsharenjoy\User\UserInterface', function()
 		{
-		    return new User\UserHandler(new User\User, new User\UserValidator);
+		    return new User\UserRepository(new User\User, new User\UserValidator);
 		});
 
 		// The Setting Bindings
 		$this->app->bindShared('Sharenjoy\Cmsharenjoy\Setting\SettingInterface', function()
 		{
-		    return new Setting\SettingHandler(new Setting\Setting, new Setting\SettingValidator);
+		    return new Setting\SettingRepository(new Setting\Setting, new Setting\SettingValidator);
 		});
 
         // The parser binding
@@ -86,7 +86,7 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
             switch ($driver)
             {
                 case 'file':
-                    return new Filer\FilerHandler;                  
+                    return new Filer\FilerRepository;                  
                 
                 default:
                     throw new \InvalidArgumentException('Invalid file driver.');

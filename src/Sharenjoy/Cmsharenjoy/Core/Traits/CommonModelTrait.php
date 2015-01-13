@@ -82,7 +82,7 @@ trait CommonModelTrait {
      */
     public function listQuery()
     {
-        return $this->orderBy('sort', 'DESC');
+        return $this->orderBy('sort', 'desc');
     }
 
     /**
