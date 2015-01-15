@@ -268,40 +268,5 @@ abstract class ObjectBaseController extends BaseController {
         
         return Response::json(Message::result('success', $message, $data), 200);
     }
-
-    /**
-     * Setting the output layout priority
-     * @return view
-     */
-    protected function setupLayout()
-    {
-        $action = $this->onAction;
-
-        // If action equat sort so that set the action to index
-        $action = $this->onMethod == 'get-sort' ? 'index' : $action;
-        
-        // Get reop directory from config
-        $commonLayout = Config::get('cmsharenjoy::app.commonLayoutDirectory');
-        
-        $pathA = $this->onController.'.'.$action;
-        $pathB = $commonLayout.'.'.$action;
-
-        if (View::exists($this->accessUrl.'.'.$pathA))
-        {
-            $this->layout = View::make($this->accessUrl.'.'.$pathA);
-        }
-        elseif (View::exists('cmsharenjoy::'.$pathA))
-        {
-            $this->layout = View::make('cmsharenjoy::'.$pathA);
-        }
-        else if(View::exists($this->accessUrl.'.'.$pathB))
-        {
-            $this->layout = View::make($this->accessUrl.'.'.$pathB);
-        }
-        else if(View::exists('cmsharenjoy::'.$pathB))
-        {
-            $this->layout = View::make('cmsharenjoy::'.$pathB);
-        }
-    }
     
 }

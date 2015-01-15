@@ -134,6 +134,7 @@ return [
     'qna'                         => '問答Q&A',
     'process'                     => '處理進度',
     'quantity'                    => '數量',
+    'slug'                        => '唯一判別值',
 
 
     // For form    
@@ -147,6 +148,7 @@ return [
         'status'                  => '狀態',
         'keyword'                 => '關鍵字',
         'tag'                     => '標籤',
+        'slug'                    => '唯一判別值',
         'start_date'              => '起始日期',
         'end_date'                => '結束日期',
         'color'                   => '顏色',
@@ -180,11 +182,14 @@ return [
         'delivery_time_zone_id'   => '配送時段',
         'process_id'              => '處理進度',
         'folder_name'             => '文件夾名稱',
+        'quantity'                => '數量',
+        'count'                   => '數量',
 
 
         'placeholder' => [
             'title'               => '請輸入標題',
             'link'                => 'http://www.example.com.tw',
+            'slug'                => '例如 google',
             'keyword'             => '請輸入您想要篩選的關鍵字',
             'user' => [
                 'first_name'      => '請輸入您的名字',
@@ -197,6 +202,7 @@ return [
         
         'help' => [
             'link'                => '請輸入以 http:// 為開頭的連結網址',
+            'slug'                => '這是一個只能使用英文字母組成且唯一的判別值',
             'tag'                 => '請使用Enter鍵或使用半型逗號分隔',
             'album'               => '點開啟按鈕開啟管理相簿視窗。可管理附屬於此項目的相簿內容。',
             'user' => [

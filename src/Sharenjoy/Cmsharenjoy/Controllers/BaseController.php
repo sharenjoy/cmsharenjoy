@@ -12,7 +12,7 @@ abstract class BaseController extends Controller {
      * This is the whitelist which allow some entries can enter.
      * @var array
      */
-    protected $whitelist = array();
+    protected $whitelist = [];
 
     /**
      * The URL segment that can be used to access the system
@@ -81,6 +81,12 @@ abstract class BaseController extends Controller {
     protected $onAction;
 
     /**
+     * The package active right away
+     * @var string
+     */
+    protected $onPackage;
+
+    /**
      * The layout
      * @var string
      */
@@ -101,6 +107,8 @@ abstract class BaseController extends Controller {
     {
         $this->filterProcess();
         $this->setCommonVariable();
+        $this->getAuthInfo();
+        $this->setPackageInfo();
         $this->setHandyUrls();
         $this->shareHandyUrls();
         $this->parseMenuItems();
@@ -153,14 +161,6 @@ abstract class BaseController extends Controller {
             View::share('onAction', $this->onAction);
         }
 
-        // Get the login user
-        if (Sentry::check())
-        {
-            $user = Sentry::getUser();
-            Session::put('user', $user);
-            View::share('user', $user);
-        }
-
         // Brand name from setting
         $this->brandName = Setting::get('brand_name');
         
@@ -175,6 +175,31 @@ abstract class BaseController extends Controller {
 
         // Message
         View::share('messages', Message::getMessageBag());
+    }
+
+    protected function getAuthInfo()
+    {
+        // Get the login user
+        if (Sentry::check())
+        {
+            $user = Sentry::getUser();
+            Session::put('user', $user);
+            View::share('user', $user);
+        }
+    }
+
+    protected function getPackageInfo()
+    {
+        return 'cmsharenjoy';
+    }
+
+    protected function setPackageInfo()
+    {
+        $this->onPackage = $this->getPackageInfo();
+        
+        // active package
+        Session::put('onPackage', $this->onPackage);
+        View::share('onPackage', $this->onPackage);
     }
 
     /**
@@ -250,23 +275,38 @@ abstract class BaseController extends Controller {
      */
     protected function setupLayout()
     {
+        $action = $this->onAction;
+
+        // If action equat sort so that set the action to index
+        $action = $this->onMethod == 'get-sort' ? 'index' : $action;
+        
+        // Get reop directory from config
         $commonLayout = Config::get('cmsharenjoy::app.commonLayoutDirectory');
         
-        $pathA = $this->onController.'.'.$this->onAction;
-        $pathB = $commonLayout.'.'.$this->onAction;
+        $pathA = $this->onController.'.'.$action;
+        $pathB = $commonLayout.'.'.$action;
 
+        // app/views/admin/member/create
         if (View::exists($this->accessUrl.'.'.$pathA))
         {
             $this->layout = View::make($this->accessUrl.'.'.$pathA);
         }
-        elseif (View::exists('cmsharenjoy::'.$pathA))
-        {
-            $this->layout = View::make('cmsharenjoy::'.$pathA);
-        }
+        // app/views/admin/common/create
         elseif (View::exists($this->accessUrl.'.'.$pathB))
         {
             $this->layout = View::make($this->accessUrl.'.'.$pathB);
         }
+        // organization/views/member/create
+        elseif (View::exists($this->onPackage.'::'.$pathA))
+        {
+            $this->layout = View::make($this->onPackage.'::'.$pathA);
+        }
+        // organization/views/common/create
+        elseif (View::exists($this->onPackage.'::'.$pathB))
+        {
+            $this->layout = View::make($this->onPackage.'::'.$pathB);
+        }
+        // cmsharenjoy/views/common/create
         elseif (View::exists('cmsharenjoy::'.$pathB))
         {
             $this->layout = View::make('cmsharenjoy::'.$pathB);

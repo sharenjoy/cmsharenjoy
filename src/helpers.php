@@ -290,12 +290,12 @@ if ( ! function_exists('pick_trans'))
         {
             return Lang::get($item, $options);
         }
-        elseif (Lang::has('cmsharenjoy::'.$item))
+        elseif (Lang::has(Session::get('onPackage').'::'.$item))
         {
-            return Lang::get('cmsharenjoy::'.$item, $options);
+            return Lang::get(Session::get('onPackage').'::'.$item, $options);
         }
 
-        return;
+        return Lang::get('cmsharenjoy::'.$item, $options);
     }
 }
 
