@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.interface')
 
 @section('title')
-{{trans('cmsharenjoy::app.manage')}}{{trans("cmsharenjoy::app.$appName")}}
+{{trans('cmsharenjoy::app.manage')}}{{trans("cmsharenjoy::app.$onController")}}
 @stop
 
 @section('content')
@@ -12,7 +12,7 @@
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <div class="panel-title">
-                        <h3>{{trans("cmsharenjoy::app.$appName")}}</h3>
+                        <h3>{{trans("cmsharenjoy::app.$onController")}}</h3>
                     </div>
                     <div class="panel-options">
                         <!-- <a href="#sample-modal" data-toggle="modal" data-target="#sample-modal-dialog-1" class="bg"><i class="entypo-cog"></i></a> -->

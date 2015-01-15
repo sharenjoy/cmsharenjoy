@@ -124,7 +124,6 @@ abstract class BaseController extends Controller {
     {
         // Achieve that segment
         $this->accessUrl = Config::get('cmsharenjoy::app.access_url');
-        View::share('accessUrl', $this->accessUrl);
         
         // Get the action name
         $routeArray = Str::parseCallback(Route::currentRouteAction(), null);
@@ -140,14 +139,17 @@ abstract class BaseController extends Controller {
             // post, report
             $this->onController = strtolower($controller);
             Session::put('onController', $this->onController);
+            View::share('onController', $this->onController);
 
             // get-create, post-create
             $this->onMethod = Str::slug(Request::method(). '-' .$action);
             Session::put('onMethod', $this->onMethod);
+            View::share('onMethod', $this->onMethod);
 
             // create, update
             $this->onAction = strtolower($action);
             Session::put('onAction', $this->onAction);
+            View::share('onAction', $this->onAction);
         }
 
         // Get the login user
@@ -162,12 +164,11 @@ abstract class BaseController extends Controller {
         $this->brandName = Setting::get('brand_name');
         
         // Share some variables to views
-        View::share('brandName', $this->brandName);
-        View::share('appName' , $this->onController);
-        View::share('functionRules', $this->functionRules);
-        View::share('langLocales', Config::get('cmsharenjoy::app.locales'));
-        View::share('menu_items', Config::get('cmsharenjoy::app.menu_items'));
-        View::share('active_language', Session::get('sharenjoy.backEndLanguage'));
+        View::share('brandName'     , $this->brandName);
+        View::share('functionRules' , $this->functionRules);
+        View::share('langLocales'   , Config::get('cmsharenjoy::app.locales'));
+        View::share('menuItems'     , Config::get('cmsharenjoy::app.menu_items'));
+        View::share('activeLanguage', Session::get('sharenjoy.backEndLanguage'));
 
         // Set the theme
         $this->theme = Theme::uses('admin');
@@ -198,6 +199,7 @@ abstract class BaseController extends Controller {
     protected function shareHandyUrls()
     {
         // Share these variables with any views
+        View::share('accessUrl', $this->accessUrl);        
         View::share('objectUrl', $this->objectUrl);
         View::share('createUrl', $this->createUrl);
         View::share('updateUrl', $this->updateUrl);

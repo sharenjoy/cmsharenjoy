@@ -73,7 +73,7 @@
                     
                 </header>
 
-                @if($menu_items)
+                @if($menuItems)
                 <!-- main-menu Starts -->
                 <ul id="main-menu" class="">
                 <!-- add class "multiple-expanded" to allow multiple submenus to open -->
@@ -96,30 +96,32 @@
                         </a>
                     </li>
                     
-                    @foreach($menu_items as $url => $item)
+                    @foreach($menuItems as $url => $item)
                         @if(isset($item['sub']))
-                        <li class="{{ Request::is( "$accessUrl/$url*" ) ? 'opened active' : '' }}">
-                        @else
-                        <li class="{{ Request::is( "$accessUrl/$url*" ) ? 'active' : '' }}">
-                        @endif
-                            <a href="{{ url( $accessUrl.'/'.$url ) }}">
-                                <i class="{{$item['icon']}}"></i>
-                                <span>{{pick_trans($item['name'])}}</span>
-                            </a>
+                            <li class="{{Request::is("$accessUrl/$url*") ? 'opened active' : '' }}">
+                                <a href="{{ url( $accessUrl.'/'.$url ) }}">
+                                    <i class="{{$item['icon']}}"></i>
+                                    <span>{{pick_trans($item['name'])}}</span>
+                                </a>
 
-                            @if(isset($item['sub']))
-                                <ul class="{{ Request::is( "$accessUrl/$url*" ) ? 'visible' : '' }}">
+                                <ul class="{{Request::is("$accessUrl/$url*") ? 'visible' : '' }}">
                                     @foreach($item['sub'] as $subUrl => $subItem)
-                                        <li class="{{ Request::is( "$accessUrl/$subUrl*" ) ? 'active' : '' }}">
-                                            <a href="{{ url( $accessUrl.'/'.$subUrl ) }}">
+                                        <li class="{{Request::is("$accessUrl/$subUrl*") ? 'active' : '' }}">
+                                            <a href="{{url($accessUrl.'/'.$subUrl)}}">
                                                 <span>{{pick_trans($subItem['name'])}}</span>
                                             </a>
                                         </li>
                                     @endforeach
                                 </ul>
-                            @endif
-
-                        </li>
+                            </li>
+                        @else
+                            <li class="{{Request::is("$accessUrl/$url*") ? 'active' : '' }}">
+                                <a href="{{url($accessUrl.'/'.$url)}}">
+                                    <i class="{{$item['icon']}}"></i>
+                                    <span>{{pick_trans($item['name'])}}</span>
+                                </a>
+                            </li>
+                        @endif
                     @endforeach
 
                 </ul>
@@ -244,7 +246,7 @@
                                     {{ Form::select(
                                         'language', 
                                         $langLocales, 
-                                        $active_language,
+                                        $activeLanguage,
                                         array('class'=>'form-control', 'id'=>'admin_language')
                                     )}}
                                 </li>

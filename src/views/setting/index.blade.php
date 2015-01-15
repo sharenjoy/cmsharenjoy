@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.interface')
 
 @section('title')
-{{pick_trans('app.'.$appName)}}
+{{pick_trans('app.'.$onController)}}
 @stop
 
 @section('content')
@@ -15,7 +15,7 @@
                     <!-- panel head -->
                     <div class="panel-heading">
                         <div class="panel-title">
-                            <h3>{{ Lang::get("cmsharenjoy::app.$appName") }}</h3>
+                            <h3>{{ Lang::get("cmsharenjoy::app.$onController") }}</h3>
                         </div>
                         <div class="panel-options">
                             <!-- <a href="#sample-modal" data-toggle="modal" data-target="#sample-modal-dialog-1" class="bg"><i class="entypo-cog"></i></a> -->
