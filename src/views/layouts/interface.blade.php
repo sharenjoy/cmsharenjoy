@@ -98,15 +98,15 @@
                     
                     @foreach($menuItems as $url => $item)
                         @if(isset($item['sub']))
-                            <li class="{{Request::is("$accessUrl/$url*") ? 'opened active' : '' }}">
+                            <li class="{{$url == $masterMenu ? 'opened active' : '' }}">
                                 <a href="{{ url( $accessUrl.'/'.$url ) }}">
                                     <i class="{{$item['icon']}}"></i>
                                     <span>{{pick_trans($item['name'])}}</span>
                                 </a>
 
-                                <ul class="{{Request::is("$accessUrl/$url*") ? 'visible' : '' }}">
+                                <ul class="{{$url == $masterMenu ? 'visible' : '' }}">
                                     @foreach($item['sub'] as $subUrl => $subItem)
-                                        <li class="{{Request::is("$accessUrl/$subUrl*") ? 'active' : '' }}">
+                                        <li class="{{$subUrl == $subMenu ? 'active' : '' }}">
                                             <a href="{{url($accessUrl.'/'.$subUrl)}}">
                                                 <span>{{pick_trans($subItem['name'])}}</span>
                                             </a>
@@ -115,7 +115,7 @@
                                 </ul>
                             </li>
                         @else
-                            <li class="{{Request::is("$accessUrl/$url*") ? 'active' : '' }}">
+                            <li class="{{$url == $masterMenu ? 'active' : '' }}">
                                 <a href="{{url($accessUrl.'/'.$url)}}">
                                     <i class="{{$item['icon']}}"></i>
                                     <span>{{pick_trans($item['name'])}}</span>

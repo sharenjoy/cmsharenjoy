@@ -103,6 +103,7 @@ abstract class BaseController extends Controller {
         $this->setCommonVariable();
         $this->setHandyUrls();
         $this->shareHandyUrls();
+        $this->parseMenuItems();
     }
 
     protected function filterProcess()
@@ -167,7 +168,6 @@ abstract class BaseController extends Controller {
         View::share('brandName'     , $this->brandName);
         View::share('functionRules' , $this->functionRules);
         View::share('langLocales'   , Config::get('cmsharenjoy::app.locales'));
-        View::share('menuItems'     , Config::get('cmsharenjoy::app.menu_items'));
         View::share('activeLanguage', Session::get('sharenjoy.backEndLanguage'));
 
         // Set the theme
@@ -205,6 +205,43 @@ abstract class BaseController extends Controller {
         View::share('updateUrl', $this->updateUrl);
         View::share('deleteUrl', $this->deleteUrl);
         View::share('sortUrl',   $this->sortUrl);
+    }
+
+    /**
+     * To parse the menu which one is actived
+     * @return View share variable
+     */
+    protected function parseMenuItems()
+    {
+        $menuItems = Config::get('cmsharenjoy::app.menu_items');
+        $masterMenu = null;
+        $subMenu = null;
+
+        foreach ($menuItems as $url => $items)
+        {
+            if (isset($items['sub']))
+            {
+                foreach ($items['sub'] as $suburl => $item)
+                {
+                    if (Request::is("$this->accessUrl/$suburl*"))
+                    {
+                        $masterMenu = $url;
+                        $subMenu = $suburl;
+                    }
+                }
+            }
+            else
+            {
+                if (Request::is("$this->accessUrl/$url*"))
+                {
+                    $masterMenu = $url;
+                }
+            }
+        }
+
+        View::share('masterMenu', $masterMenu);
+        View::share('subMenu', $subMenu);
+        View::share('menuItems', $menuItems);
     }
 
     /**
