@@ -14,7 +14,7 @@
             )}}
             {{$_SERVER['QUERY_STRING'] != '' ? Form::hidden('query_string', $_SERVER['QUERY_STRING']) : ''}}
             &nbsp;&nbsp;
-            {{pick_trans('app.pagination_desc', array('from'=>$items->getFrom(), 'to'=>$items->getTo(), 'total'=>$items->getTotal()))}}
+            {{pick_trans('pagination_desc', array('from'=>$items->getFrom(), 'to'=>$items->getTo(), 'total'=>$items->getTotal()))}}
         {{Form::close()}}
     </div>
 </div>

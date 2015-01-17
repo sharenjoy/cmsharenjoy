@@ -45,7 +45,7 @@ class DashController extends BaseController {
 
         Session::flush();
 
-        Message::success(trans('cmsharenjoy::app.success_logout'));
+        Message::success(pick_trans('success_logout'));
 
         return Redirect::to($this->accessUrl.'/login');
     }

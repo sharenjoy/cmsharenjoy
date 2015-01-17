@@ -111,7 +111,7 @@ abstract class FormakerAbstract {
 
         if (isset($this->setting['pleaseSelect']) && $this->setting['pleaseSelect'] === true)
         {
-            array_unshift($this->option, trans('cmsharenjoy::option.pleaseSelect'));
+            array_unshift($this->option, pick_trans('option.pleaseSelect'));
         }
     }
 
@@ -136,20 +136,20 @@ abstract class FormakerAbstract {
     protected function getFormText($type)
     {
         // Set the lang of placeholder from config
-        $targetA = 'app.form.'.$type.'.'.Session::get('onController').'.'.$this->name;
-        $targetB = 'app.form.'.$type.'.'.$this->name;
+        $targetA = 'form.'.$type.'.'.Session::get('onController').'.'.$this->name;
+        $targetB = 'form.'.$type.'.'.$this->name;
 
         if (isset($this->setting[$type]) && ! is_null($this->setting[$type]))
         {
             return $this->setting[$type];
         }
         
-        if (Lang::has('cmsharenjoy::'.$targetA) || Lang::has($targetA))
+        if (pick_trans($targetA))
         {
             return pick_trans($targetA);
         }
 
-        if (Lang::has('cmsharenjoy::'.$targetB) || Lang::has($targetB))
+        if (pick_trans($targetB))
         {
             return pick_trans($targetB);
         }

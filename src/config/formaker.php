@@ -38,6 +38,9 @@ return [
      * {{Formaker::category(['type' => 'select', 'lists' => 'category_lists'])}}
      * {{Formaker::delivery_time_zone_id(['type' => 'select', 'option' => 'delivery_time_zone'])}}
      * {{Formaker::language(['type' => 'select', 'value' => 'tw', 'option' => ['tw'=>'中文', 'en'=>'英文']])}}
+     *
+     * {{Formaker::delivery_time_zone_id(['type'=>'select', 'preview'=>[], 'create'=>'deny', 'update'=>['args'=>['readonly'=>'readonly']]])}}
+     * 
      * 
      */
     

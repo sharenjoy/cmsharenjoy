@@ -286,16 +286,49 @@ if ( ! function_exists('pick_trans'))
      */
     function pick_trans($item, $options = array())
     {
+        if (strpos($item, '::') !== false)
+        {
+            return Lang::get($item, $options);
+        }
+
+        $pkg = Session::get('onPackage');
+        $loc_reference = "{$pkg}.{$item}";
+        $pkg_reference = "{$pkg}::{$pkg}.{$item}";
+
+        if ($pkg != 'cmsharenjoy')
+        {
+            if (Lang::has('cmsharenjoy.'.$item))
+            {
+                return Lang::get('cmsharenjoy.'.$item, $options);
+            }
+
+            if (Lang::has('cmsharenjoy::cmsharenjoy.'.$item))
+            {
+                return Lang::get('cmsharenjoy::cmsharenjoy.'.$item, $options);
+            }
+        }
+
+        if (Lang::has($loc_reference))
+        {
+            return Lang::get($loc_reference, $options);
+        }
+        
+        if (Lang::has($pkg_reference))
+        {
+            return Lang::get($pkg_reference, $options);
+        }
+
         if (Lang::has($item))
         {
             return Lang::get($item, $options);
         }
-        elseif (Lang::has(Session::get('onPackage').'::'.$item))
-        {
-            return Lang::get(Session::get('onPackage').'::'.$item, $options);
-        }
 
-        return Lang::get('cmsharenjoy::'.$item, $options);
+        if (Lang::has('cmsharenjoy::'.$item))
+        {
+            return Lang::get('cmsharenjoy::'.$item, $options);
+        }
+        
+        return false;
     }
 }
 

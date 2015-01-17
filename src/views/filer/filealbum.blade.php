@@ -12,7 +12,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     
-    <title>{{trans('cmsharenjoy::app.menu.file')}}</title>
+    <title>{{pick_trans('menu.file')}}</title>
     
     <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css')}}">
     <link rel="stylesheet" href="{{asset('packages/sharenjoy/cmsharenjoy/css/font-icons/entypo/css/entypo.css')}}">
@@ -48,9 +48,9 @@
 
                     <div class="panel panel-primary">
                         <div class="panel-body">
-                            <button type="button" id="new-file" class="btn btn-blue btn-lg" onclick="jQuery('#modal-create-file').modal('show', {backdrop: 'static'});">{{trans('cmsharenjoy::files.role_upload')}}</button>
-                            <button type="button" id="file-detail" class="btn btn-success btn-lg" style="display:none">{{trans('cmsharenjoy::files.role_edit_file')}}</button>
-                            <button type="button" id="delete-file" class="btn btn-danger btn-lg" style="display:none">{{trans('cmsharenjoy::files.role_delete_file')}}</button>
+                            <button type="button" id="new-file" class="btn btn-blue btn-lg" onclick="jQuery('#modal-create-file').modal('show', {backdrop: 'static'});">{{pick_trans('files.role_upload')}}</button>
+                            <button type="button" id="file-detail" class="btn btn-success btn-lg" style="display:none">{{pick_trans('files.role_edit_file')}}</button>
+                            <button type="button" id="delete-file" class="btn btn-danger btn-lg" style="display:none">{{pick_trans('files.role_delete_file')}}</button>
                         </div>
                     </div>
                     
@@ -218,7 +218,7 @@
                     if (result.status == true) {
                         $selected.remove();
                         hide_something();
-                        toastr.success(result.message, "{{trans('cmsharenjoy::app.success')}}", opts);
+                        toastr.success(result.message, "{{pick_trans('success')}}", opts);
                     }
                 });
             });
@@ -277,7 +277,7 @@
                     $.post(sharenjoy.APPURL + "/order", send_result, function(result, status) {
                         // console.log(result);
                         if (result.status == 'success') {
-                            toastr.success(result.message, "{{trans('cmsharenjoy::app.success')}}", opts);
+                            toastr.success(result.message, "{{pick_trans('success')}}", opts);
                         }
                     });
                 }

@@ -73,7 +73,7 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
             return false;
         }
 
-        return Message::result(true, trans('cmsharenjoy::app.success_created'), $user);
+        return Message::result(true, pick_trans('success_created'), $user);
     }
 
     public function update($id)
@@ -110,7 +110,7 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
             return false;
         }
 
-        return Message::result(true, trans('cmsharenjoy::app.success_updated'), $user);
+        return Message::result(true, pick_trans('success_updated'), $user);
     }
 
     public function activate($id, $code)
@@ -123,20 +123,20 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
             // Attempt to activate the user
             if ($user->attemptActivation($code))
             {
-                return Message::result('success', trans('cmsharenjoy::app.user_actived'));
+                return Message::result('success', pick_trans('user_actived'));
             }
             else
             {
-                return Message::result('error', trans('cmsharenjoy::app.error_active'));
+                return Message::result('error', pick_trans('error_active'));
             }
         }
         catch (\Cartalyst\Sentry\Users\UserNotFoundException $e)
         {
-            return Message::result('error', trans('cmsharenjoy::app.user_not_found'));
+            return Message::result('error', pick_trans('user_not_found'));
         }
         catch (\Cartalyst\Sentry\Users\UserAlreadyActivatedException $e)
         {
-            return Message::result('warning', trans('cmsharenjoy::app.user_already_actived'));
+            return Message::result('warning', pick_trans('user_already_actived'));
         }
     }
 
@@ -166,16 +166,16 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
             Mail::queue('cmsharenjoy::emails.auth.user-reset-password', $data, function($message) use ($user)
             {
                 $message->from(Config::get('mail.from.address'), Config::get('mail.from.name'))
-                        ->subject(trans('cmsharenjoy::app.reset_password'));
+                        ->subject(pick_trans('reset_password'));
                 $message->to($user->email);
             });
         }
         catch (\Cartalyst\Sentry\Users\UserNotFoundException $e)
         {
-            return Message::result(false, trans('cmsharenjoy::app.user_not_found'));
+            return Message::result(false, pick_trans('user_not_found'));
         }
 
-        return Message::result(true, trans('cmsharenjoy::app.sent_reset_code'));
+        return Message::result(true, pick_trans('sent_reset_code'));
     }
 
     public function resetPassword($input)
@@ -187,12 +187,12 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
 
             if ($input['email'] !== $user->email)
             {
-                return Message::result(false, trans('cmsharenjoy::app.error_active'));
+                return Message::result(false, pick_trans('error_active'));
             }
 
             if ($input['password'] !== $input['password_confirmation'])
             {
-                return Message::result(false, trans('cmsharenjoy::app.password_no_match'));
+                return Message::result(false, pick_trans('password_no_match'));
             }
 
             // Check if the reset password code is valid
@@ -202,21 +202,21 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
                 if ($user->attemptResetPassword($input['code'], $input['password']))
                 {
                     Sentry::logout();
-                    return Message::result(true, trans('cmsharenjoy::app.password_reset_success'));
+                    return Message::result(true, pick_trans('password_reset_success'));
                 }
                 else
                 {
-                    return Message::result(false, trans('cmsharenjoy::app.password_reset_failed'));
+                    return Message::result(false, pick_trans('password_reset_failed'));
                 }
             }
             else
             {
-                return Message::result(false, trans('cmsharenjoy::app.password_reset_code_invalid'));
+                return Message::result(false, pick_trans('password_reset_code_invalid'));
             }
         }
         catch (\Cartalyst\Sentry\Users\UserNotFoundException $e)
         {
-            return Message::result(false, trans('cmsharenjoy::app.user_not_found'));
+            return Message::result(false, pick_trans('user_not_found'));
         }
     }
 
@@ -234,14 +234,14 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
         }
         catch(\Cartalyst\Sentry\Throttling\UserBannedException $e)
         {   
-            return Message::result(false, trans('cmsharenjoy::app.invalid_email_password'));
+            return Message::result(false, pick_trans('invalid_email_password'));
         }
         catch (\RuntimeException $e)
         {
-            return Message::result(false, trans('cmsharenjoy::app.invalid_email_password'));
+            return Message::result(false, pick_trans('invalid_email_password'));
         }
 
-        return Message::result(true, trans('cmsharenjoy::app.success_login'));
+        return Message::result(true, pick_trans('success_login'));
     }
 
 }

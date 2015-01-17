@@ -5,7 +5,7 @@
                 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">{{trans('cmsharenjoy::files.role_create_folder')}}</h4>
+                    <h4 class="modal-title">{{pick_trans('files.role_create_folder')}}</h4>
                 </div>
                 
                 <div class="modal-body">
@@ -14,8 +14,8 @@
                         <div class="col-md-12">
                             
                             <div class="form-group">
-                                {{Form::label('folder_name', trans('cmsharenjoy::files.folder_name'), array('class'=>'control-label'))}}
-                                {{Form::text('folder_name', '', array('placeholder'=>trans('cmsharenjoy::files.folder_placeholder'), 'class'=>'form-control', 'id'=>'folder_name'))}}
+                                {{Form::label('folder_name', pick_trans('files.folder_name'), array('class'=>'control-label'))}}
+                                {{Form::text('folder_name', '', array('placeholder'=>pick_trans('files.folder_placeholder'), 'class'=>'form-control', 'id'=>'folder_name'))}}
                             </div>  
                             
                         </div>
@@ -25,8 +25,8 @@
                 
                 <div class="modal-footer">
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('cmsharenjoy::buttons.close')}}</button>
-                    {{Form::button(trans('cmsharenjoy::buttons.create'), array('type'=>'submit', 'class'=>"btn btn-info"))}}
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{pick_trans('buttons.close')}}</button>
+                    {{Form::button(pick_trans('buttons.create'), array('type'=>'submit', 'class'=>"btn btn-info"))}}
                 </div>
             </div>
         </div>
@@ -39,7 +39,7 @@
             
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">{{trans('cmsharenjoy::files.role_upload')}}</h4>
+                <h4 class="modal-title">{{pick_trans('files.role_upload')}}</h4>
             </div>
             
             <div class="modal-body">
@@ -58,7 +58,7 @@
                     </div>
                 </div>
 
-                <h4 class="text-danger">{{trans('cmsharenjoy::files.uploader')}}</h4>
+                <h4 class="text-danger">{{pick_trans('files.uploader')}}</h4>
                 
             </div>
 
@@ -91,7 +91,7 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('cmsharenjoy::buttons.close')}}</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{pick_trans('buttons.close')}}</button>
             </div>
 
         </div>
@@ -105,7 +105,7 @@
                 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">{{trans('cmsharenjoy::files.role_edit_file')}}</h4>
+                    <h4 class="modal-title">{{pick_trans('files.role_edit_file')}}</h4>
                 </div>
                 
                 <div class="modal-body">
@@ -143,8 +143,8 @@
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
                     <input type="hidden" id="file_id" name="id" value="">
                     <input type="hidden" id="folder_id" name="folder_id" value="">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('cmsharenjoy::buttons.cancel')}}</button>
-                    {{Form::button(trans('cmsharenjoy::buttons.update'), array('type'=>'submit', 'class'=>"btn btn-info"))}}
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{pick_trans('buttons.cancel')}}</button>
+                    {{Form::button(pick_trans('buttons.update'), array('type'=>'submit', 'class'=>"btn btn-info"))}}
                 </div>
             </div>
         </form>
@@ -157,17 +157,17 @@
             
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">{{trans('cmsharenjoy::files.role_delete_file')}}</h4>
+                <h4 class="modal-title">{{pick_trans('files.role_delete_file')}}</h4>
             </div>
             
             <div class="modal-body">
-                {{trans('cmsharenjoy::files.role_delete_file')}}
+                {{pick_trans('files.role_delete_file')}}
                 <span id="modal-file-name"></span>
             </div>
             
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('cmsharenjoy::buttons.cancel')}}</button>
-                <button type="button" class="btn btn-info delete-button">{{trans('cmsharenjoy::buttons.delete')}}</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{pick_trans('buttons.cancel')}}</button>
+                <button type="button" class="btn btn-info delete-button">{{pick_trans('buttons.delete')}}</button>
             </div>
         </div>
     </div>
@@ -180,18 +180,18 @@
             
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">{{trans('cmsharenjoy::files.role_delete_folder')}}</h4>
+                <h4 class="modal-title">{{pick_trans('files.role_delete_folder')}}</h4>
             </div>
             
             <div class="modal-body">
-                {{trans('cmsharenjoy::files.role_delete_folder')}}
+                {{pick_trans('files.role_delete_folder')}}
                 <span id="modal-folder-name"></span>
                 <input type="hidden" name="delete_folder_id" id="delete_folder_id" value="">
             </div>
             
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">{{trans('cmsharenjoy::buttons.cancel')}}</button>
-                {{Form::button(trans('cmsharenjoy::buttons.delete'), array('type'=>'submit', 'class'=>"btn btn-info delete-button"))}}
+                <button type="button" class="btn btn-default" data-dismiss="modal">{{pick_trans('buttons.cancel')}}</button>
+                {{Form::button(pick_trans('buttons.delete'), array('type'=>'submit', 'class'=>"btn btn-info delete-button"))}}
             </div>
 
         </div>

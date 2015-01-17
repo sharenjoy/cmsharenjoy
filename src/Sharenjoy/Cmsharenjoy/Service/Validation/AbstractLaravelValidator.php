@@ -137,14 +137,16 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
     protected function messages()
     {
         $messages = [];
+        $pkg = Session::get('onPackage');
 
-        if (Lang::has('cmsharenjoy::app.form.validation'))
+        if (Lang::has($pkg.'::'.$pkg.'.form.validation'))
         {
-            $messages = array_merge($messages, Lang::get('cmsharenjoy::app.form.validation'));
+            $messages = array_merge($messages, Lang::get($pkg.'::'.$pkg.'.form.validation'));
         }
-        if (Lang::has('app.form.validation'))
+
+        if (Lang::has($pkg.'.form.validation'))
         {
-            $messages = array_merge($messages, Lang::get('app.form.validation'));
+            $messages = array_merge($messages, Lang::get($pkg.'.form.validation'));
         }
 
         return $messages;
@@ -157,16 +159,17 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
     protected function attributes()
     {
         $attributes = [];
+        $pkg = Session::get('onPackage');
 
         foreach ($this->rules as $key => $value)
         {
-            if (Lang::has('app.form.'.$key))
+            if (Lang::has($pkg.'.form.'.$key))
             {
-                $attributes[$key] = Lang::get('app.form.'.$key);
+                $attributes[$key] = Lang::get($pkg.'.form.'.$key);
             }
-            elseif (Lang::has('cmsharenjoy::app.form.'.$key))
+            elseif (Lang::has($pkg.'::'.$pkg.'.form.'.$key))
             {
-                $attributes[$key] = Lang::get('cmsharenjoy::app.form.'.$key);
+                $attributes[$key] = Lang::get($pkg.'::'.$pkg.'.form.'.$key);
             }
         }
 
@@ -253,14 +256,14 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
                 case 'json':
                     return Message::result(
                         false,
-                        trans('cmsharenjoy::app.check_some_wrong'),
+                        pick_trans('check_some_wrong'),
                         $this->errors()->toArray()
                     );
                     break;
                 
                 default:
                     Session::flash('sharenjoy.validation.errors', $this->errors());
-                    Message::error(trans('cmsharenjoy::app.check_some_wrong'));
+                    Message::error(pick_trans('check_some_wrong'));
                     break;
             }
         }

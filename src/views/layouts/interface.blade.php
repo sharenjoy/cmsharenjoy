@@ -92,7 +92,7 @@
                     <li class="{{ Request::is( "$accessUrl" ) ? 'active' : '' }}">
                         <a href="{{ url( $accessUrl ) }}">
                             <i class="entypo-gauge"></i>
-                            <span>{{pick_trans('app.menu.dash')}}</span>
+                            <span>{{pick_trans('menu.dash')}}</span>
                         </a>
                     </li>
                     

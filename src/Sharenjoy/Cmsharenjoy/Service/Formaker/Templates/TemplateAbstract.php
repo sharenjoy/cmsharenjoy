@@ -1,6 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Service\Formaker\Templates;
 
 use Sharenjoy\Cmsharenjoy\Utilities\Parser;
+use Session;
 
 abstract class TemplateAbstract {
 
@@ -21,11 +22,17 @@ abstract class TemplateAbstract {
     protected function prettifyFieldName()
     {
         $name = $this->data['name'];
+        $reference = 'form.'.Session::get('onController').'.'.$name;
 
         // If doesn't set the config of lang
-        if (pick_trans('app.form.'.$name))
+        if (pick_trans($reference))
         {
-            return pick_trans('app.form.'.$name);
+            return pick_trans($reference);
+        }
+
+        if (pick_trans('form.'.$name))
+        {
+            return pick_trans('form.'.$name);
         }
         
         // convert foo_boo to fooBoo and then convert to Foo Boo

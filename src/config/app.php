@@ -56,32 +56,32 @@ return [
      */
     'menu_items' => [
         'post' => [
-            'name' => 'app.menu.post',
+            'name' => 'cmsharenjoy::cmsharenjoy.menu.post',
             'icon' => 'entypo-doc-text',
         ],
         'category' => [
-            'name' =>'app.menu.category',
-            'icon' =>'entypo-flow-tree',
+            'name' =>'cmsharenjoy::cmsharenjoy.menu.category',
+            'icon' =>'entypo-share',
             'sub'  => [
                 'category/index/product' => [
-                    'name' => 'app.menu.product_category'
+                    'name' => 'cmsharenjoy::cmsharenjoy.menu.product_category'
                 ],
             ]
         ],
         'tag' => [
-            'name' => 'app.menu.tag',
+            'name' => 'cmsharenjoy::cmsharenjoy.menu.tag',
             'icon' => 'entypo-tag',
         ],
         'filer' => [
-            'name' => 'app.menu.file',
+            'name' => 'cmsharenjoy::cmsharenjoy.menu.file',
             'icon' => 'entypo-box',
         ],
         'user' => [
-            'name' => 'app.menu.user',
+            'name' => 'cmsharenjoy::cmsharenjoy.menu.user',
             'icon' => 'entypo-key',
         ],
         'setting' => [
-            'name' => 'app.menu.setting',
+            'name' => 'cmsharenjoy::cmsharenjoy.menu.setting',
             'icon' => 'entypo-cog',
         ]
     ],

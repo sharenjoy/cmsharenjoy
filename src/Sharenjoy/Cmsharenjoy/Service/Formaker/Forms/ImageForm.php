@@ -10,9 +10,9 @@ class ImageForm extends FormAbstract implements FormInterface {
 
         $size = array_get($otherSetting['setting'], 'size') ?: '/200x150&text=-';
         $img = $value ? asset('uploads/'.$value) : "http://placehold.it/{$size}";
-        $select_image = pick_trans('cmsharenjoy::buttons.select_image');
-        $change       = pick_trans('cmsharenjoy::buttons.change');
-        $remove       = pick_trans('cmsharenjoy::buttons.remove');
+        $select_image = pick_trans('buttons.select_image');
+        $change       = pick_trans('buttons.change');
+        $remove       = pick_trans('buttons.remove');
         $form         = <<<EOE
             <div class="fileinput fileinput-new file-pick-open-manager">
                 <div data-type="image" class="fileinput-new thumbnail" id="image-{$name}" style="width: 200px; height: 150px;">

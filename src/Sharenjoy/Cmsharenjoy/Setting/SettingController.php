@@ -13,8 +13,8 @@ class SettingController extends BaseController {
 
     public function getIndex()
     {
-        $buttons = Form::button(trans('cmsharenjoy::buttons.save'), ['class'=>'btn btn-success btn-save']).'&nbsp;'.
-                   Form::button(trans('cmsharenjoy::buttons.reset'), ['class'=>'btn btn-reset']);
+        $buttons = Form::button(pick_trans('buttons.save'), ['class'=>'btn btn-success btn-save']).'&nbsp;'.
+                   Form::button(pick_trans('buttons.reset'), ['class'=>'btn btn-reset']);
 
         return $this->layout->with('items', $this->item())
                             ->with('buttons', $buttons);
@@ -45,11 +45,11 @@ class SettingController extends BaseController {
         }
         catch (\Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException $e)
         {
-            Message::error(trans('cmsharenjoy::exception.not_found', ['id' => $data['id']]));
+            Message::error(pick_trans('exception.not_found', ['id' => $data['id']]));
             return Redirect::to($this->objectUrl);
         }
 
-        return Response::json(Message::result('success', trans('cmsharenjoy::app.success_updated'), $data), 200);
+        return Response::json(Message::result('success', pick_trans('success_updated'), $data), 200);
     }
 
     protected function item()

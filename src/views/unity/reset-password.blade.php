@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.login')
 
 @section('title')
-{{pick_trans('app.reset_password')}} - {{$brandName}}
+{{pick_trans('reset_password')}} - {{$brandName}}
 @stop
 
 @section('content')
@@ -17,7 +17,7 @@
                     <i class="entypo-key"></i>
                 </div>
                 
-                {{Form::text('email', '', array('placeholder'=>pick_trans('app.insert_email'), 'class'=>'form-control'))}}
+                {{Form::text('email', '', array('placeholder'=>pick_trans('insert_email'), 'class'=>'form-control'))}}
             </div>
             
         </div>
@@ -29,7 +29,7 @@
                     <i class="entypo-key"></i>
                 </div>
                 
-                {{ Form::password('password' , array( 'placeholder'=>pick_trans('app.insert_reset_password') , 'class'=>'form-control' ) ) }}
+                {{ Form::password('password' , array( 'placeholder'=>pick_trans('insert_reset_password') , 'class'=>'form-control' ) ) }}
             </div>
             
         </div>
@@ -41,7 +41,7 @@
                     <i class="entypo-key"></i>
                 </div>
                 
-                {{ Form::password('password_confirmation' , array( 'placeholder'=>pick_trans('app.insert_confirm_password') , 'class'=>'form-control' ) ) }}
+                {{ Form::password('password_confirmation' , array( 'placeholder'=>pick_trans('insert_confirm_password') , 'class'=>'form-control' ) ) }}
             </div>
             
         </div>
@@ -55,7 +55,7 @@
         </div>
 
         <div class="form-group">
-            <a href="{{url($accessUrl.'/login')}}" class="link">{{pick_trans('app.back_login')}}</a>
+            <a href="{{url($accessUrl.'/login')}}" class="link">{{pick_trans('back_login')}}</a>
         </div>
                      
     {{ Form::close() }}

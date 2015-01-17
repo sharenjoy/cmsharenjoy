@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.interface')
 
 @section('title')
-{{trans('cmsharenjoy::app.manage')}}{{trans("cmsharenjoy::app.$onController")}}
+{{pick_trans('manage')}}{{pick_trans($onController)}}
 @stop
 
 @section('content')
@@ -12,7 +12,7 @@
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <div class="panel-title">
-                        <h3>{{trans("cmsharenjoy::app.$onController")}}</h3>
+                        <h3>{{pick_trans("$onPackage.$onController")}}</h3>
                     </div>
                     <div class="panel-options">
                         <!-- <a href="#sample-modal" data-toggle="modal" data-target="#sample-modal-dialog-1" class="bg"><i class="entypo-cog"></i></a> -->
@@ -23,11 +23,11 @@
                 </div>
 
                 <div class="panel-body">
-                    <button type="button" id="new-folder" class="btn btn-blue btn-lg" onclick="jQuery('#modal-new-folder').modal('show', {backdrop: 'static'});">{{trans('cmsharenjoy::files.new_folder')}}</button>
-                    <button type="button" id="new-file" class="btn btn-blue btn-lg" onclick="jQuery('#modal-create-file').modal('show', {backdrop: 'static'});">{{trans('cmsharenjoy::files.role_upload')}}</button>
-                    <button type="button" id="delete-folder" class="btn btn-danger btn-lg">{{trans('cmsharenjoy::files.role_delete_folder')}}</button>
-                    <button type="button" id="file-detail" class="btn btn-success btn-lg" style="display:none">{{trans('cmsharenjoy::files.role_edit_file')}}</button>
-                    <button type="button" id="delete-file" class="btn btn-danger btn-lg" style="display:none">{{trans('cmsharenjoy::files.role_delete_file')}}</button>
+                    <button type="button" id="new-folder" class="btn btn-blue btn-lg" onclick="jQuery('#modal-new-folder').modal('show', {backdrop: 'static'});">{{pick_trans('files.new_folder')}}</button>
+                    <button type="button" id="new-file" class="btn btn-blue btn-lg" onclick="jQuery('#modal-create-file').modal('show', {backdrop: 'static'});">{{pick_trans('files.role_upload')}}</button>
+                    <button type="button" id="delete-folder" class="btn btn-danger btn-lg">{{pick_trans('files.role_delete_folder')}}</button>
+                    <button type="button" id="file-detail" class="btn btn-success btn-lg" style="display:none">{{pick_trans('files.role_edit_file')}}</button>
+                    <button type="button" id="delete-file" class="btn btn-danger btn-lg" style="display:none">{{pick_trans('files.role_delete_file')}}</button>
                 </div>
 
             </div>
@@ -198,7 +198,7 @@
                     if (result.status == true) {
                         $selected.remove();
                         hide_something();
-                        toastr.success(result.message, "{{trans('cmsharenjoy::app.success')}}", opts);
+                        toastr.success(result.message, "{{pick_trans('success')}}", opts);
                     }
                 });
             });
@@ -304,7 +304,7 @@
                     $.post(sharenjoy.APPURL + "/order", send_result, function(result, status) {
                         // console.log(result);
                         if (result.status == 'success') {
-                            toastr.success(result.message, "{{trans('cmsharenjoy::app.success')}}", opts);
+                            toastr.success(result.message, "{{pick_trans('success')}}", opts);
                         }
                     });
                 }

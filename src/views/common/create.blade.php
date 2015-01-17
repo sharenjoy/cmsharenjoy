@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.interface')
 
 @section('title')
-{{pick_trans('app.add')}}{{pick_trans('app.'.$onController)}}
+{{pick_trans('add')}}{{pick_trans($onController)}}
 @stop
 
 @section('content')
@@ -16,7 +16,7 @@
       
         <div class="panel-heading">
           <div class="panel-title">
-              <h3>{{pick_trans('app.add')}} {{$specifyName or ''}}</h3>
+              <h3>{{pick_trans('add')}}</h3>
           </div>
 
           <!-- <div class="panel-options pull-left">
@@ -67,7 +67,7 @@
             
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title">{{pick_trans('app.menu.file')}}</h4>
+              <h4 class="modal-title">{{pick_trans('menu.file')}}</h4>
             </div>
             
             <div class="modal-body">
@@ -93,7 +93,7 @@
               
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">{{pick_trans('app.menu.file')}}</h4>
+                <h4 class="modal-title">{{pick_trans('menu.file')}}</h4>
               </div>
               
               <div class="modal-body">

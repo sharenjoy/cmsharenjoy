@@ -127,7 +127,7 @@ abstract class ObjectBaseController extends BaseController {
 
         if ( ! $model)
         {
-            Message::error(trans('cmsharenjoy::exception.not_found', ['id' => $id]));
+            Message::error(pick_trans('exception.not_found', ['id' => $id]));
 
             return Redirect::to(Session::get('goBackPrevious'));
         }
@@ -222,14 +222,14 @@ abstract class ObjectBaseController extends BaseController {
 
         if ( ! $model)
         {
-            $message = trans('cmsharenjoy::exception.not_found', ['id' => $id]);
-            $subject = trans('cmsharenjoy::app.some_wrong');
+            $message = pick_trans('exception.not_found', ['id' => $id]);
+            $subject = pick_trans('some_wrong');
 
             return Response::json(Message::result('error', $message, $subject), 200);
         }
 
         $result['title']   = Transformer::title($model->toArray());
-        $result['subject'] = trans('cmsharenjoy::app.confirm_deleted');
+        $result['subject'] = pick_trans('confirm_deleted');
 
         return Response::json(Message::result('success', '', $result), 200);
     }
@@ -257,14 +257,14 @@ abstract class ObjectBaseController extends BaseController {
                 }
                 catch (\Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException $e)
                 {
-                    Message::error(trans('cmsharenjoy::exception.not_found', ['id' => $id]));
+                    Message::error(pick_trans('exception.not_found', ['id' => $id]));
                     return Redirect::to($this->objectUrl);
                 }
             }
         }
 
-        $message = trans('cmsharenjoy::app.success_ordered');
-        $data = ['success' => trans('cmsharenjoy::app.success')];
+        $message = pick_trans('success_ordered');
+        $data = ['success' => pick_trans('success')];
         
         return Response::json(Message::result('success', $message, $data), 200);
     }

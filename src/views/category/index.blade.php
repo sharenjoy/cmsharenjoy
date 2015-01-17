@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.interface')
 
 @section('title')
-    {{pick_trans('app.manage')}}{{pick_trans('app.'.$onController)}}
+    {{pick_trans('manage')}}{{pick_trans($onController)}}
 @stop
 
 @section('content')
@@ -22,7 +22,7 @@
             
                     <div class="panel-heading">
                         <div class="panel-title">
-                            {{pick_trans('app.please_drag')}}
+                            {{pick_trans('please_drag')}}
                         </div>
                         
                         <div class="panel-options">
@@ -71,7 +71,7 @@
         </div>
     @else
         <div class="alert alert-info">
-            {{pick_trans('app.no_item_yet')}}
+            {{pick_trans('no_item_yet')}}
         </div>
     @endif
 @stop
@@ -98,7 +98,7 @@
 
                 $.post("../order", result, function(result, status) {
                     if (result.status == 'success') {
-                        toastr.success(result.message, "{{pick_trans('app.success')}}", opts);
+                        toastr.success(result.message, "{{pick_trans('success')}}", opts);
                     }
                 });
             });

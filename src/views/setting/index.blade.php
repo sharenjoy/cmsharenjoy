@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.interface')
 
 @section('title')
-{{pick_trans('app.'.$onController)}}
+{{pick_trans($onController)}}
 @stop
 
 @section('content')
@@ -15,7 +15,7 @@
                     <!-- panel head -->
                     <div class="panel-heading">
                         <div class="panel-title">
-                            <h3>{{ Lang::get("cmsharenjoy::app.$onController") }}</h3>
+                            <h3>{{pick_trans($onController)}}</h3>
                         </div>
                         <div class="panel-options">
                             <!-- <a href="#sample-modal" data-toggle="modal" data-target="#sample-modal-dialog-1" class="bg"><i class="entypo-cog"></i></a> -->
@@ -219,7 +219,7 @@
                 $.post(sharenjoy.APPURL + "/store", send_data, function(data, status) {
                     // console.log(data);
                     if (data.status == 'success') {
-                        toastr.success("{{pick_trans('app.success_updated')}}", "{{pick_trans('app.success')}}", opts);
+                        toastr.success("{{pick_trans('success_updated')}}", "{{pick_trans('success')}}", opts);
                     }
                 });
 

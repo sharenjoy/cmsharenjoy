@@ -106,7 +106,7 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
     {
         $model = $this->model->create($this->getInput());
 
-        $result = Message::result(true, trans('cmsharenjoy::app.success_created'), $model);
+        $result = Message::result(true, pick_trans('success_created'), $model);
 
         return $result;
     }
@@ -122,7 +122,7 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
 
         $model->save();
 
-        $result = Message::result(true, trans('cmsharenjoy::app.success_updated'), $model);
+        $result = Message::result(true, pick_trans('success_updated'), $model);
 
         return $result;
     }
@@ -155,10 +155,10 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
         }
         catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e)
         {
-            return Message::result(false, trans('cmsharenjoy::exception.not_found', ['id' => $id]));
+            return Message::result(false, pick_trans('exception.not_found', ['id' => $id]));
         }
         
-        return Message::result(true, trans('cmsharenjoy::app.success_deleted'));
+        return Message::result(true, pick_trans('success_deleted'));
     }
 
     /**
@@ -174,19 +174,6 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
         $model = $model->find($id);
 
         return $model;
-    }
-
-    /**
-     * To make query from model setting
-     * @param  string $method
-     * @param  Model $model
-     * @return Model
-     */
-    public function makeQuery($method = 'listQuery', $model = null)
-    {
-        $model = $model ?: $this->model;
-
-        return $model->$method();
     }
 
     /**
@@ -234,7 +221,9 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
     public function showAll($model = null)
     {
         $model = $model ?: $this->model;
-                       
+
+        $model = $model->listQuery();
+        
         return $model->get();
     }
 
@@ -249,6 +238,19 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
         $model = $model ?: $this->model;
 
         return $model->count();
+    }
+
+    /**
+     * To make query from model setting
+     * @param  string $method
+     * @param  Model $model
+     * @return Model
+     */
+    public function makeQuery($method = 'listQuery', $model = null)
+    {
+        $model = $model ?: $this->model;
+
+        return $model->$method();
     }
 
     /**
@@ -276,33 +278,36 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
         
         if ( ! count($config))
         {
-            $type          = $formType ?: Session::get('onAction');
-            $typeConfigStr = $type.'FormConfig';
-            $typeDenyStr   = $type.'FormDeny';
-            $typeConfig    = $this->model->$typeConfigStr ?: [];
+            $type = $formType ?: Session::get('onAction');
 
-            switch ($type)
+            if ($type == 'filter')
             {
-                case 'filter':
-                    $formConfig = $typeConfig;
-                    break;
+                $formConfig = $this->model->filterFormConfig ?: [];
+            }
+            else
+            {
+                $formConfig = $this->model->formConfig ?: [];
 
-                default:
-                    $formConfig = array_merge($this->model->formConfig, $typeConfig);
-
-                    // Deny some fields
-                    if(count($this->model->$typeDenyStr))
+                foreach ($formConfig as $key => $item)
+                {
+                    if (isset($item[$type]))
                     {
-                        foreach ($this->model->$typeDenyStr as $value)
-                            unset($formConfig[$value]);
+                        if ($item[$type] == 'deny')
+                        {
+                            unset($formConfig[$key]);
+                        }
+                        elseif (is_array($item[$type]))
+                        {
+                            $formConfig[$key] = array_merge($formConfig[$key], $item[$type]);
+                        }
                     }
-
-                    // To order the form config
-                    $formConfig = array_sort($formConfig, function($value)
-                    {
-                        return $value['order'];
-                    });
-                    break;
+                }
+                
+                // To order the form config
+                $formConfig = array_sort($formConfig, function($value)
+                {
+                    return $value['order'];
+                });
             }
         }
 

@@ -1,7 +1,7 @@
 @extends('cmsharenjoy::layouts.login')
 
 @section('title')
-{{pick_trans('app.login')}} - {{$brandName}}
+{{pick_trans('login')}} - {{$brandName}}
 @stop
 
 @section('content')
@@ -17,7 +17,7 @@
                     <i class="entypo-user"></i>
                 </div>
                 
-                {{ Form::text('email', Input::old('email') , array( 'placeholder'=>pick_trans('app.insert_account') , 'class'=>'form-control' ) ) }}
+                {{ Form::text('email', Input::old('email') , array( 'placeholder'=>pick_trans('insert_account') , 'class'=>'form-control' ) ) }}
             </div>
             
         </div>
@@ -29,7 +29,7 @@
                     <i class="entypo-key"></i>
                 </div>
                 
-                {{ Form::password('password', array( 'placeholder'=>pick_trans('app.insert_password') , 'class'=>'form-control' , 'autocomplete'=>'off' ) ) }}
+                {{ Form::password('password', array( 'placeholder'=>pick_trans('insert_password') , 'class'=>'form-control' , 'autocomplete'=>'off' ) ) }}
                 
             </div>
         </div>
@@ -37,12 +37,12 @@
         <div class="form-group">
             <button type="submit" class="btn btn-primary btn-block btn-login">
                 <i class="entypo-login"></i>
-                {{pick_trans('app.login')}}
+                {{pick_trans('login')}}
             </button>
         </div>
 
         <div class="form-group">
-            <a href="{{url($accessUrl.'/remindpassword')}}">{{pick_trans('app.forgot_password')}} ?</a>
+            <a href="{{url($accessUrl.'/remindpassword')}}">{{pick_trans('forgot_password')}} ?</a>
         </div>
         
         <!-- Implemented in v1.1.4 -->              

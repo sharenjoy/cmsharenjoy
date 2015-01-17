@@ -5,18 +5,18 @@
                 <thead>
                     <tr>
                         @if(Session::get('onAction') != 'filealbum')
-                        <th width="25%"><i class="fa fa-folder"></i> {{trans('cmsharenjoy::files.folders')}}</th>
+                        <th width="25%"><i class="fa fa-folder"></i> {{pick_trans('files.folders')}}</th>
                         @endif
-                        <th><i class="fa fa-file-text"></i> {{trans('cmsharenjoy::files.files_title')}}&nbsp;&nbsp;<span id="file-point"><b></b></span></th>
+                        <th><i class="fa fa-file-text"></i> {{pick_trans('files.files_title')}}&nbsp;&nbsp;<span id="file-point"><b></b></span></th>
                     </tr>
                 </thead>
 
                 <tfoot>
                     <tr>
                         @if(Session::get('onAction') != 'filealbum')
-                        <th width="25%"><i class="fa fa-folder"></i> {{trans('cmsharenjoy::files.folders')}}</th>
+                        <th width="25%"><i class="fa fa-folder"></i> {{pick_trans('files.folders')}}</th>
                         @endif
-                        <th><i class="fa fa-file-text"></i> {{trans('cmsharenjoy::files.files_title')}}</th>
+                        <th><i class="fa fa-file-text"></i> {{pick_trans('files.files_title')}}</th>
                     </tr>
                 </tfoot>
                 

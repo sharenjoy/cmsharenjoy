@@ -8,9 +8,9 @@ class FileForm extends FormAbstract implements FormInterface {
         $name         = $data['name'];
         $value        = $data['value'];
 
-        $select_image  = pick_trans('cmsharenjoy::buttons.select_file');
-        $change        = pick_trans('cmsharenjoy::buttons.change');
-        $remove        = pick_trans('cmsharenjoy::buttons.remove');
+        $select_image  = pick_trans('buttons.select_file');
+        $change        = pick_trans('buttons.change');
+        $remove        = pick_trans('buttons.remove');
         $form          = <<<EOE
             <div class="fileinput fileinput-new file-pick-open-manager">
                 <div data-type="file" class="fileinput-new thumbnail" id="file-{$name}" style="width: 100px; height: 100px;">

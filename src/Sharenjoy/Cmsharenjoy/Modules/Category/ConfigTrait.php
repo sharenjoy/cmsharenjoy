@@ -13,13 +13,5 @@ trait ConfigTrait {
         'title'              => ['order' => '20'],
         'description'        => ['order' => '30']
     ];
-
-    public $previewFormConfig = [];
-    public $createFormConfig  = [];
-    public $updateFormConfig  = [];
-
-    public $previewFormDeny   = [];
-    public $createFormDeny    = [];
-    public $updateFormDeny    = [];
     
 }

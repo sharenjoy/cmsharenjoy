@@ -37,7 +37,7 @@ class CategoryController extends ObjectBaseController {
 
         parent::__construct();
 
-        View::share('specifyName', pick_trans('app.menu.'.$this->type.'_category'));
+        View::share('specifyName', pick_trans('menu.'.$this->type.'_category'));
     }
 
     protected function setHandyUrls()
@@ -115,31 +115,29 @@ class CategoryController extends ObjectBaseController {
             }
         }
 
-        return Response::json(Message::result('success', trans('cmsharenjoy::app.success_ordered')), 200);
+        return Response::json(Message::result('success', pick_trans('success_ordered')), 200);
     }
 
     public function getCreate()
     {
-        $this->repo->pushForm([
-            'type' => [
-                'args'  => ['value'=>$this->type, 'readonly'=>'readonly'],
-                'order' => '10'
-            ]
-        ]);
-
+        $this->pushForm();
         parent::getCreate();
     }
 
     public function getUpdate($id)
     {
+        $this->pushForm();
+        parent::getUpdate($id);
+    }
+
+    private function pushForm()
+    {
         $this->repo->pushForm([
             'type' => [
                 'args'  => ['value'=>$this->type, 'readonly'=>'readonly'],
                 'order' => '10'
             ]
         ]);
-
-        parent::getUpdate($id);
     }
 
     protected function storeSortById($model, $sortNum)
