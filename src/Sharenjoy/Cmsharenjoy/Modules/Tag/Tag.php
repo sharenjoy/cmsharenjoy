@@ -18,8 +18,8 @@ class Tag extends EloquentBaseModel {
     public $filterFormConfig = [];
 
     public $formConfig = [
-        'tag'          => ['type'  => 'text', 'order' => '10', 'inner-div-class'=>'col-sm-5'],
-        'count'        => ['type'  => 'text', 'order' => '20', 'inner-div-class'=>'col-sm-5']
+        'tag'          => ['type'  => 'text', 'order' => '10'],
+        'count'        => ['type'  => 'text', 'order' => '20']
     ];
 
     public function listQuery()

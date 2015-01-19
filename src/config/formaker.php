@@ -75,7 +75,7 @@ return [
             'error-class'     => 'has-error',
             'help-class'      => 'help-block',
             'input-class'     => 'form-control',
-            'inner-div-class' => 'col-sm-7',
+            'inner-div-class' => 'col-sm-5',
             'outer-div-class' => 'form-group',
             'filter-class'    => 'list-filter col-md-3 col-sm-6',
         ],

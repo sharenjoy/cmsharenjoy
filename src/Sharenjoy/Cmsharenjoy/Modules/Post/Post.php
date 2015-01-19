@@ -34,9 +34,9 @@ class Post extends EloquentBaseModel {
     ];
 
     public $formConfig = [
-        'title'       => ['order' => '10', 'inner-div-class'=>'col-sm-5'],
-        'tag'         => ['order' => '20', 'inner-div-class'=>'col-sm-5'],
-        'process_id'  => ['order' => '25', 'type'=>'checkbox', 'option'=>'process', 'inner-div-class'=>'col-sm-5'],
+        'title'       => ['order' => '10'],
+        'tag'         => ['order' => '20'],
+        'process_id'  => ['order' => '25', 'type'=>'checkbox', 'option'=>'process'],
         'album'       => ['order' => '28', 'create'=>'deny', 'update'=>[]],
         'content'     => ['order' => '30', 'inner-div-class'=>'col-sm-9'],
     ];
