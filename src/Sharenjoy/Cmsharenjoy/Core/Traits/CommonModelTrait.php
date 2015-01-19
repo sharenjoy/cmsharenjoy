@@ -56,12 +56,12 @@ trait CommonModelTrait {
         }
 
         /**
-         * If the value of field is null
+         * If the value that has been sant is null
          * To set the value to null
          */
         if (count($this->formConfig))
         {
-            $check_type = ['checkbox'];
+            $check_type = ['checkbox', 'selectMultiList', 'selectMulti'];
 
             foreach ($this->formConfig as $key => $value)
             {
@@ -71,7 +71,7 @@ trait CommonModelTrait {
                 }
             }
         }
-
+        
         return $input;
     }
 
@@ -142,6 +142,13 @@ trait CommonModelTrait {
                     $formConfig[$name] = array_merge($formConfig[$name], $this->$method());
                 }
 
+                // To get the options of select element from the Model
+                if (isset($config['relation']))
+                {
+                    $relation = camel_case($config['relation']);
+                    $formConfig[$name] = array_merge($formConfig[$name], $this->$relation($input->id));
+                }
+
                 // If use key that the name is input of value otherwise use the $key
                 if (isset($config['input']) && isset($input[$config['input']]))
                     $formConfig[$name]['value'] = $input[$config['input']];
@@ -151,7 +158,7 @@ trait CommonModelTrait {
                     $formConfig[$name]['value'] = $input[$name];
             }
         }
-
+        
         return $formConfig;
     }
 

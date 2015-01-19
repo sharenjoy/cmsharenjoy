@@ -210,7 +210,7 @@
                             <li class="sep"></li> -->
                             <li>
                                 <a href="{{ url( $accessUrl.'/logout' ) }}">
-                                    {{ Lang::get('cmsharenjoy::app.logout') }} <i class="entypo-logout right"></i>
+                                    {{pick_trans('logout')}} <i class="entypo-logout right"></i>
                                 </a>
                             </li>
                         </ul>

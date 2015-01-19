@@ -159,17 +159,17 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
     protected function attributes()
     {
         $attributes = [];
-        $pkg = Session::get('onPackage');
+        $controller = Session::get('onController');
 
         foreach ($this->rules as $key => $value)
         {
-            if (Lang::has($pkg.'.form.'.$key))
+            if (pick_trans('form.'.$controller.'.'.$key))
             {
-                $attributes[$key] = Lang::get($pkg.'.form.'.$key);
+                $attributes[$key] = pick_trans('form.'.$controller.'.'.$key);
             }
-            elseif (Lang::has($pkg.'::'.$pkg.'.form.'.$key))
+            else
             {
-                $attributes[$key] = Lang::get($pkg.'::'.$pkg.'.form.'.$key);
+                $attributes[$key] = pick_trans('form.'.$key);
             }
         }
 

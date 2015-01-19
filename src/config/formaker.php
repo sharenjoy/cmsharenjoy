@@ -34,8 +34,10 @@ return [
      * {{Formaker::category_id([category' => 'News'])}}
      * {{Formaker::category_id([category' => 'News', 'pleaseSelect' => true])}}
      * {{Formaker::category(['type' => 'category', 'category' => 'Product'])}}
-     * // The following setting will triger the method of Model $this->model->categoryLists() and return array;
-     * {{Formaker::category(['type' => 'select', 'lists' => 'category_lists'])}}
+     * // This will triger the method of Model $this->model->categoryLists() and return what ever you set;
+     * {{Formaker::category(['type' => 'select', 'method' => 'category_lists'])}}
+     * // only different from above example is the relation well pass through the model id to method
+     * {{Formaker::category(['type' => 'select', 'relation' => 'fieldCompanies'])}}
      * {{Formaker::delivery_time_zone_id(['type' => 'select', 'option' => 'delivery_time_zone'])}}
      * {{Formaker::language(['type' => 'select', 'value' => 'tw', 'option' => ['tw'=>'中文', 'en'=>'英文']])}}
      *

@@ -108,10 +108,10 @@ abstract class FormakerAbstract {
                                 Config::get('cmsharenjoy::options.yesno');
             }
         }
-
+        
         if (isset($this->setting['pleaseSelect']) && $this->setting['pleaseSelect'] === true)
-        {
-            array_unshift($this->option, pick_trans('option.pleaseSelect'));
+        {              
+            $this->option = ['0' => pick_trans('option.pleaseSelect')] + $this->option;
         }
     }
 

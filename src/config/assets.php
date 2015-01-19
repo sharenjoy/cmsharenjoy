@@ -31,6 +31,27 @@ return [
                 'queue' => false,
             ]
         ],
+
+        'multi-select-list' => [
+            'multi-select-list-js' => [
+                'file'  => 'js/jquery.multi-select.js',
+                'type'  => 'script',
+                'queue' => false,
+            ]
+        ],
+
+        'multi-select2' => [
+            'multi-select2-js' => [
+                'file'  => 'js/select2/select2.min.js',
+                'type'  => 'script',
+                'queue' => false,
+            ],
+            'multi-select2-css' => [
+                'file'  => 'js/select2/select2.css',
+                'type'  => 'style',
+                'queue' => false,
+            ]
+        ],
         
         'datepicker' => [
             'bootstrap-datepicker' => [
