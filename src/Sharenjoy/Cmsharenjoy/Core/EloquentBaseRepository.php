@@ -317,4 +317,28 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
         return Formaker::form($formConfig, $type);
     }
 
+    /**
+     * To set all of the lists veriable to session
+     * form the all method of model
+     * If the method name if start to 'get' and end to 'Lists'
+     */
+    public function setAllLists()
+    {
+        $results = [];
+
+        foreach (get_class_methods($this->model) as $method)
+        {
+            if (preg_match('/^get(.+)Lists$/', $method, $matches))
+            {
+                $key = strtolower($matches[1]);
+                $results[$key] = $this->model->$method();
+            }
+        }
+
+        if (count($results))
+        {
+            Session::put('allLists', $results);
+        }
+    }
+
 }

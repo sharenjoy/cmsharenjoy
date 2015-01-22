@@ -25,8 +25,8 @@ class Post extends EloquentBaseModel {
         'creating'    => ['user_id', 'status_id', 'slug|title', 'sort'],
         'created'     => ['album'],
         'updating'    => ['user_id', 'status_id', 'slug|title'],
-        'saved'       => ['taggable'],
-        'deleted'     => ['un_taggable'],
+        'saved'       => ['syncToTags'],
+        'deleted'     => [],
     ];
 
     public $filterFormConfig = [
@@ -35,10 +35,32 @@ class Post extends EloquentBaseModel {
 
     public $formConfig = [
         'title'       => ['order' => '10'],
-        'tag'         => ['order' => '20'],
+        'tag'         => ['order' => '20', 'type'=>'selectMulti', 'relation'=>'fieldTags', 'args'=>['name'=>'tag[]']],
         'process_id'  => ['order' => '25', 'type'=>'checkbox', 'option'=>'process'],
         'album'       => ['order' => '28', 'create'=>'deny', 'update'=>[]],
         'content'     => ['order' => '30', 'inner-div-class'=>'col-sm-9'],
     ];
+
+    public function fieldTags($id)
+    {
+        $content['value'] = $id != '' ? $this->find($id)->tags->implode('id', ',') : '';
+        $content['option'] = $this->getTagLists();
+
+        return $content;
+    }
+
+    public function eventSyncToTags($key, $model)
+    {
+        if ( ! isset(self::$inputData['tag'])) return;
+
+        if (empty(self::$inputData['tag']))
+        {
+            return $model->tags()->detach();
+        }
+
+        $data = explode(',', self::$inputData['tag']);
+        
+        return $model->tags()->sync($data);
+    }
 
 }

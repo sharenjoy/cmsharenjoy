@@ -11,4 +11,11 @@ class PostRepository extends EloquentBaseRepository implements PostInterface {
         $this->model     = $model;
     }
 
+    public function makeQuery($method = 'listQuery', $model = null)
+    {
+        $model = $model ?: $this->model;
+        
+        return $model->$method()->with('tags');
+    }
+
 }

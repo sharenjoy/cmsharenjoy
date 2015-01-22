@@ -1,7 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Service\Lister\Templates;
 
 use Sharenjoy\Cmsharenjoy\Utilities\Parser;
-use Config;
+use Config, Session;
 
 abstract class TemplateAbstract {
 
@@ -23,14 +23,8 @@ abstract class TemplateAbstract {
         $this->functionsNamespace = Config::get('cmsharenjoy::lister.loadFunctionsNamespace');
     }
 
-    protected function getList($item, $key, $config)
+    protected function getList($item, $column, $config)
     {
-        $data = [
-            'item' => $item,
-            'key' => $key,
-            'config' => $config
-        ];
-
         foreach ($this->listsNamespace as $name)
         {
             $typeName  = isset($config['type']) ? ucfirst($config['type']).'List' : 'CommonList';
@@ -38,7 +32,7 @@ abstract class TemplateAbstract {
 
             if (class_exists($className))
             {
-                return (new $className())->make($data);
+                return (new $className())->make($item, $column, $config);
             }
         }
 
@@ -70,9 +64,9 @@ abstract class TemplateAbstract {
     {
         $content = '';
 
-        foreach ($this->data['listConfig'] as $key => $config)
+        foreach ($this->data['listConfig'] as $column => $config)
         {
-            $content .= $this->getList($item, $key, $config);
+            $content .= $this->getList($item, $column, $config);
         }
 
         return $content;

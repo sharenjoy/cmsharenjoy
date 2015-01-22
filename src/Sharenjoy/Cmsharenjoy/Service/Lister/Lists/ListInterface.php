@@ -2,6 +2,6 @@
 
 interface ListInterface {
 
-    public function make(Array $data);
+    public function make($item, $column, $config);
 
 }

@@ -58,6 +58,7 @@ abstract class ObjectBaseController extends BaseController {
         }
 
         $this->setGoBackPrevious();
+        $this->repo->setAllLists();
         
         $input = Input::all();
         $limit = Input::get('perPage', $this->paginationCount);
@@ -82,6 +83,8 @@ abstract class ObjectBaseController extends BaseController {
         $this->layout->with('filterForm', $forms)
                      ->with('listEmpty', $items->isEmpty())
                      ->with('lister', $lister);
+
+        Event::fire('cmsharenjoy.afterAction', ['']);
     }
 
     /**

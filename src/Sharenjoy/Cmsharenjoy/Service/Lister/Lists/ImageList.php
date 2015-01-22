@@ -2,17 +2,13 @@
 
 class ImageList extends ListAbstract implements ListInterface {
 
-    public function make(array $data)
+    public function make($item, $column, $config)
     {
-        $config = $data['config'];
-        $key    = $data['key'];
-        $item   = $data['item'];
-
         $content = '<td align="'.$config['align'].'" width="'.$config['width'].'">';
         
-        if ($item->$key != '')
+        if ($item->$column != '')
         {
-            $content .= '<img src="'.asset('uploads/thumbs/'.$item->$key).'" width="75">';
+            $content .= '<img src="'.asset('uploads/thumbs/'.$item->$column).'" width="75">';
         }
         else
         {

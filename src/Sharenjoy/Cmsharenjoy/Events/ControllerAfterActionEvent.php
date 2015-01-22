@@ -8,16 +8,16 @@ class ControllerAfterActionEvent {
     {
         switch (Session::get('onMethod'))
         {
+            case 'get-index':
+                Session::forget('allLists');
+                break;
+
             case 'get-update':
-
                 $this->outputAlbumIdToView($data);
-
                 break;
 
             case 'post-delete':
-
                 $this->deleteAlbum($data);
-
                 break;
             
             default:

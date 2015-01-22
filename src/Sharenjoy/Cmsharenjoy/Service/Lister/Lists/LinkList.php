@@ -2,17 +2,13 @@
 
 class LinkList extends ListAbstract implements ListInterface {
 
-    public function make(array $data)
+    public function make($item, $column, $config)
     {
-        $config = $data['config'];
-        $key    = $data['key'];
-        $item   = $data['item'];
-
         $content = '<td align="'.$config['align'].'" width="'.$config['width'].'">';
         
-        if ($item->$key != '')
+        if ($item->$column != '')
         {
-            $content .= '<a href="'.$item->$key.'" target="_blank">'.pick_trans('linkto').'</a>';
+            $content .= '<a href="'.$item->$column.'" target="_blank">'.pick_trans('linkto').'</a>';
         }
         else
         {

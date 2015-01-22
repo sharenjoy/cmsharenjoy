@@ -2,18 +2,20 @@
 
 class LabelList extends ListAbstract implements ListInterface {
 
-    public function make(array $data)
+    public function make($item, $column, $config)
     {
-        $config = $data['config'];
-        $key    = $data['key'];
-        $item   = $data['item'];
-
         $content = '<td align="'.$config['align'].'" width="'.$config['width'].'">';
         
-        $labels = explode(',', $item->$key);
-        foreach ($labels as $value)
+        if (isset($config['relation']))
         {
-            $content .= '<div class="label label-secondary">'.$value.'</div>';
+            foreach ($item->$config['relation'] as $value)
+            {
+                $content .= '<div class="label label-secondary">'.$value->$column.'</div>';
+            }
+        }
+        else
+        {
+            $content .= '<div class="label label-secondary">'.$item->$column.'</div>';
         }
 
         $content .= '</td>';

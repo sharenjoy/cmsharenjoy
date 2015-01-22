@@ -14,7 +14,7 @@ class PostController extends ObjectBaseController {
 
     protected $listConfig = [
         'title'        => ['name'=>'title',        'align'=>'',       'width'=>''   ],
-        'tag'          => ['name'=>'tag', 'type'=>'label',         'align'=>'',       'width'=>''   ],
+        'tag'          => ['name'=>'tag', 'type'=>'label', 'relation'=>'tags',   'align'=>'',       'width'=>''   ],
         'created_at'   => ['name'=>'created',      'align'=>'center', 'width'=>'20%'],
     ];
 

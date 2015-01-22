@@ -213,9 +213,9 @@ trait TaggableTrait {
 		return $query;
 	}
 
-	public function getTagAttribute()
+	public function getTagLists()
 	{
-		return $this->tags()->get()->implode('tag', ',');
-	}	
+		return $this->tags()->getRelated()->get()->lists('tag', 'id');
+	}
 
 }

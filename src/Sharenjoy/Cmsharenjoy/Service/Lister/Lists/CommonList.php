@@ -2,14 +2,10 @@
 
 class CommonList extends ListAbstract implements ListInterface {
 
-    public function make(array $data)
+    public function make($item, $column, $config)
     {
-        $config = $data['config'];
-        $key    = $data['key'];
-        $item   = $data['item'];
-
         $content = '<td align="'.$config['align'].'" width="'.$config['width'].'">';
-        $content .= $item->$key;
+        $content .= $item->$column;
         $content .= '</td>';
 
         return $content;
