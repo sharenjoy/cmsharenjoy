@@ -14,7 +14,6 @@ class Post extends EloquentBaseModel {
     protected $fillable = [
         'user_id',
         'status_id',
-        'process_id',
         'title',
         'slug',
         'content',
@@ -36,7 +35,6 @@ class Post extends EloquentBaseModel {
     public $formConfig = [
         'title'       => ['order' => '10'],
         'tag'         => ['order' => '20', 'type'=>'selectMulti', 'relation'=>'fieldTags', 'args'=>['name'=>'tag[]']],
-        'process_id'  => ['order' => '25', 'type'=>'checkbox', 'option'=>'process'],
         'album'       => ['order' => '28', 'create'=>'deny', 'update'=>[]],
         'content'     => ['order' => '30', 'inner-div-class'=>'col-sm-9'],
     ];
