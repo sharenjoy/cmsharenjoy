@@ -10,10 +10,28 @@
 
     @include('cmsharenjoy::partials.messaging')
     
-    @if( ! $items->isEmpty())
+    @if( ! $listEmpty)
         <div class="row">
             <div class="col-md-12">
-                @include('cmsharenjoy::partials.list-table')
+                <div class="dataTables_wrapper">
+                    <div class="row">
+                        <div class="col-xs-8 col-left">
+                            <div class="dataTables_length">
+                                <h3>{{pick_trans('manage')}}</h3>
+                            </div>
+                        </div>
+                        <div class="col-xs-4 col-right">
+                            <div class="dataTables_filter" id="table-1_filter">
+                                <!-- <label>{{pick_trans('search')}}: <input type="text" aria-controls="table-1"></label> -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="list-table">
+                        {{$lister}}
+                    </div>
+                    
+                </div>
             </div>
         </div>
     @else

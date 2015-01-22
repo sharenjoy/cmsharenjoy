@@ -63,7 +63,7 @@ return [
             'name' =>'cmsharenjoy::cmsharenjoy.menu.category',
             'icon' =>'entypo-share',
             'sub'  => [
-                'category/index/product' => [
+                'category?category=product' => [
                     'name' => 'cmsharenjoy::cmsharenjoy.menu.product_category'
                 ],
             ]

@@ -1,7 +1,8 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Modules\Category;
 
 use Sharenjoy\Cmsharenjoy\Controllers\ObjectBaseController;
-use Response, Input, Request, Categorize, Session, Message, Config, View, Paginator;
+use Response, Input, Request, Categorize, Session;
+use Message, Config, View, Paginator, Lister;
 
 class CategoryController extends ObjectBaseController {
 
@@ -28,9 +29,9 @@ class CategoryController extends ObjectBaseController {
 
         $this->categoryLayerNumber = Config::get('cmsharenjoy::module.category.layer');
 
-        if (Request::segment(3) == 'index')
+        if (Request::query('category'))
         {
-            Session::put('sharenjoy.categoryType', Request::segment(4));
+            Session::put('sharenjoy.categoryType', Request::query('category'));
         }
 
         $this->type = Session::get('sharenjoy.categoryType');
@@ -38,16 +39,6 @@ class CategoryController extends ObjectBaseController {
         parent::__construct();
 
         View::share('specifyName', pick_trans('menu.'.$this->type.'_category'));
-    }
-
-    protected function setHandyUrls()
-    {
-        $admin = Config::get('cmsharenjoy::app.access_url');
-
-        $this->objectUrl = url('/'.$admin.'/'.$this->onController.'/index/'.$this->type);
-        $this->createUrl = url('/'.$admin.'/'.$this->onController.'/create/'.$this->type);
-        $this->updateUrl = url('/'.$admin.'/'.$this->onController.'/update/').'/';
-        $this->deleteUrl = url('/'.$admin.'/'.$this->onController.'/delete/').'/';
     }
 
     protected function getCategoryLayerNumber($type)
@@ -73,12 +64,13 @@ class CategoryController extends ObjectBaseController {
         $categories = Categorize::getCategoryProvider()->root()->whereType($type)->orderBy('sort')->get();
         $categories = Categorize::tree($categories)->toArray();
 
-        $this->layout->with('paginationCount', $perPage)
-                     ->with('sortable', false)
-                     ->with('listConfig', $this->listConfig)
+        $data = ['paginationCount'=>$perPage, 'sortable'=>false, 'rules'=>$this->functionRules];
+        $lister = Lister::make($items, $this->listConfig, $data);
+
+        $this->layout->with('listEmpty', $items->isEmpty())
+                     ->with('lister', $lister)
                      ->with('categoryLevelNum', $num)
-                     ->with('categories', $categories)
-                     ->with('items', $items);
+                     ->with('categories', $categories);
     }
 
     public function postOrder()

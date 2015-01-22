@@ -39,6 +39,12 @@ abstract class BaseController extends Controller {
     protected $objectUrl;
 
     /**
+     * The URL to preview a new entry
+     * @var string
+     */
+    protected $previewUrl;
+
+    /**
      * The URL to create a new entry
      * @var string
      */
@@ -110,7 +116,6 @@ abstract class BaseController extends Controller {
         $this->getAuthInfo();
         $this->setPackageInfo();
         $this->setHandyUrls();
-        $this->shareHandyUrls();
         $this->parseMenuItems();
     }
 
@@ -208,24 +213,21 @@ abstract class BaseController extends Controller {
      */
     protected function setHandyUrls()
     {
-        $this->objectUrl = is_null($this->objectUrl) ? url($this->accessUrl.'/'.$this->onController) : null;
-        $this->updateUrl = is_null($this->updateUrl) ? $this->objectUrl.'/update/' : null;
-        $this->createUrl = is_null($this->createUrl) ? $this->objectUrl.'/create' : null;
-        $this->deleteUrl = is_null($this->deleteUrl) ? $this->objectUrl.'/delete/' : null;
-        $this->sortUrl   = is_null($this->sortUrl)   ? $this->objectUrl.'/sort' : null;
-    }
+        $this->objectUrl  = is_null($this->objectUrl)  ? url($this->accessUrl.'/'.$this->onController) : null;
+        $this->previewUrl = is_null($this->previewUrl) ? $this->objectUrl.'/preview/' : null;
+        $this->createUrl  = is_null($this->createUrl)  ? $this->objectUrl.'/create' : null;
+        $this->updateUrl  = is_null($this->updateUrl)  ? $this->objectUrl.'/update/' : null;
+        $this->deleteUrl  = is_null($this->deleteUrl)  ? $this->objectUrl.'/delete/' : null;
+        $this->sortUrl    = is_null($this->sortUrl)    ? $this->objectUrl.'/sort' : null;
 
-    /**
-     * Set the view to have variables detailing
-     * some of the key URL's used in the views
-     * Trying to keep views generic...
-     * @return void
-     */
-    protected function shareHandyUrls()
-    {
         // Share these variables with any views
-        View::share('accessUrl', $this->accessUrl);        
+        View::share('accessUrl', $this->accessUrl);
+        Session::put('accessUrl', $this->accessUrl);
+
         View::share('objectUrl', $this->objectUrl);
+        Session::put('objectUrl', $this->objectUrl);
+
+        View::share('previewUrl', $this->previewUrl);
         View::share('createUrl', $this->createUrl);
         View::share('updateUrl', $this->updateUrl);
         View::share('deleteUrl', $this->deleteUrl);
@@ -248,6 +250,11 @@ abstract class BaseController extends Controller {
             {
                 foreach ($items['sub'] as $suburl => $item)
                 {
+                    if (strpos($suburl, '?'))
+                    {
+                        $suburl = substr_replace($suburl, '', strpos($suburl, '?'));
+                    }
+
                     if (Request::is("$this->accessUrl/$suburl*"))
                     {
                         $masterMenu = $url;
@@ -257,6 +264,11 @@ abstract class BaseController extends Controller {
             }
             else
             {
+                if (strpos($url, '?'))
+                {
+                    $url = substr_replace($url, '', strpos($url, '?'));
+                }
+
                 if (Request::is("$this->accessUrl/$url*"))
                 {
                     $masterMenu = $url;

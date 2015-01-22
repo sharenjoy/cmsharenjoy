@@ -2,7 +2,7 @@
 
 use Sharenjoy\Cmsharenjoy\Utilities\Transformer;
 use View, Redirect, Input, Request, Config, Event;
-use Response, Paginator, Message, Session;
+use Response, Paginator, Message, Session, Lister;
 
 abstract class ObjectBaseController extends BaseController {
 
@@ -76,11 +76,12 @@ abstract class ObjectBaseController extends BaseController {
 
         $forms = $this->repo->formaker($input, 'filter');
 
-        $this->layout->with('paginationCount', $limit)
-                     ->with('sortable', false)
-                     ->with('listConfig', $this->listConfig)
-                     ->with('filterForm', $forms)
-                     ->with('items', $items);
+        $data = ['paginationCount'=>$limit, 'sortable'=>false, 'rules'=>$this->functionRules];
+        $lister = Lister::make($items, $this->listConfig, $data);
+        
+        $this->layout->with('filterForm', $forms)
+                     ->with('listEmpty', $items->isEmpty())
+                     ->with('lister', $lister);
     }
 
     /**
@@ -102,10 +103,11 @@ abstract class ObjectBaseController extends BaseController {
 
         $filterForm = $this->repo->formaker($input, 'filter');
 
-        $this->layout->with('paginationCount', $limit)
-                     ->with('sortable', true)
-                     ->with('listConfig', $this->listConfig)
-                     ->with('items', $items);       
+        $data = ['paginationCount'=>$limit, 'sortable'=>true, 'rules'=>$this->functionRules];
+        $lister = Lister::make($items, $this->listConfig, $data);
+        
+        $this->layout->with('listEmpty', $items->isEmpty())
+                     ->with('lister', $lister);      
     }
 
     /**
