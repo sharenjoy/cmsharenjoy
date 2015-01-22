@@ -14,7 +14,7 @@
         "cartalyst/sentry": "2.1.*",
         "teepluss/theme": "dev-master",
         "guzzlehttp/guzzle": "~4.0",
-        "pda/pheanstalk": "~3.0",
+        "pda/pheanstalk": "~2.0",
         "rcrowe/turbo": "0.2.*"
     },
     "require-dev": {
