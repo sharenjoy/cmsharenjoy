@@ -226,7 +226,6 @@
 
             $file_pick_button.on('click', function(){
                 var CKEDITOR = window.parent.CKEDITOR;
-                var img_float;
                 var file;
 
                 var $from_file = $('.folders-center li.selected');
@@ -240,7 +239,7 @@
                 }else{
                     file = sharenjoy.SITEURL + '/packages/sharenjoy/cmsharenjoy/css/fileupload/img/' + type + '.png';
                 }
-
+                
                 window.parent.instance.insertHtml('<img src="'+file+'" >');
                 
                 CKEDITOR.dialog.getCurrent().hide();

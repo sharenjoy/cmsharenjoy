@@ -130,7 +130,7 @@ class FilerController extends BaseController {
         $parser = App::make('Sharenjoy\Cmsharenjoy\Utilities\Parser');
         $folderTreeBuilder = $parser->treeBuilder(
             $folderTree, 
-            '<li class="dd-item" data-id="{id}"><a href="'.$this->objectUrl.'/filemanager/{id}"><div class="dd-handle"><i class="fa fa-folder-o"></i>&nbsp;&nbsp;&nbsp;{name}</div></a> {children} </li>',
+            '<li class="dd-item" data-id="{id}"><a href="'.$this->objectUrl.'/ckeditor/{id}"><div class="dd-handle"><i class="fa fa-folder-o"></i>&nbsp;&nbsp;&nbsp;{name}</div></a> {children} </li>',
             'ul class="dd-list"'
         );
 
