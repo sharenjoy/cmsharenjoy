@@ -2,7 +2,7 @@
 
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
 use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;
-use Sentry, Mail, Config, Message;
+use Sentry, Mail, Config, Message, Session;
 
 class UserRepository extends EloquentBaseRepository implements UserInterface {
 
