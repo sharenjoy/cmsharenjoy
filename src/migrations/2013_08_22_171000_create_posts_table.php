@@ -20,6 +20,7 @@ class CreatePostsTable extends Migration {
                 $table->increments('id')->index();
                 $table->integer('user_id')->unsigned()->nullable()->default(0);
                 $table->integer('status_id')->unsigned()->nullable()->default(0);
+                $table->integer('album_id')->unsigned()->nullable()->default(0);
                 $table->string('title', 255);
                 $table->string('slug', 255)->unique();
                 $table->text('content')->nullable();

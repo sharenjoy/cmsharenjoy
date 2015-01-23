@@ -159,7 +159,8 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
             $data = array(
                 'id'        => $user->id,
                 'username'  => $user->name,
-                'code'      => $resetCode
+                'code'      => $resetCode,
+                'accessUrl' => Session::get('accessUrl')
             );
 
             // send email
