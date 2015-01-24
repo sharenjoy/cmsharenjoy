@@ -56,6 +56,9 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
 
         // Loading some of files
 		$this->loadIncludes($accessUrl);
+
+        // Set service
+        $this->setServices();
 	}
 
 	protected function bindRepository()
@@ -128,6 +131,21 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
             $file = __DIR__ . '/../../' . $file . '.php';
             // If file exists, include.
             if (is_file($file)) include $file;
+        }
+    }
+
+    protected function setServices()
+    {
+        // For papertrail
+        if ($this->app->environment() == 'production')
+        {
+            $siteName  = str_replace(['http://', 'https://'], '', $this->app['config']->get('app.url'));
+            $monolog   = Log::getMonolog();
+            $syslog    = new \Monolog\Handler\SyslogHandler($siteName);
+            $formatter = new \Monolog\Formatter\LineFormatter('%channel%.%level_name%: %message% %extra%');
+            
+            $syslog->setFormatter($formatter);
+            $monolog->pushHandler($syslog);
         }
     }
 
