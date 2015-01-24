@@ -2,7 +2,7 @@
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
-use Session, Request;
+use Session, Request, Log;
 
 class CmsharenjoyServiceProvider extends ServiceProvider {
 
