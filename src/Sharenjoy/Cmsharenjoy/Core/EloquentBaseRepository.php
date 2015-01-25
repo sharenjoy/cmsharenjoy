@@ -325,13 +325,14 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
     public function setAllLists()
     {
         $results = [];
+        $className = strtolower($this->model->getReflection()->getShortName());
 
         foreach (get_class_methods($this->model) as $method)
         {
             if (preg_match('/^get(.+)Lists$/', $method, $matches))
             {
                 $key = strtolower($matches[1]);
-                $results[$key] = $this->model->$method();
+                $results[$className][$key] = $this->model->$method();
             }
         }
 
