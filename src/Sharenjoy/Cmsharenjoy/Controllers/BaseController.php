@@ -188,7 +188,14 @@ abstract class BaseController extends Controller {
         if (Sentry::check())
         {
             $user = Sentry::getUser();
-            ii($user->employee_id);
+
+            if ($user->employee_id)
+            {
+                $employee = \Employee::showById($user->employee_id);
+                Session::put('employee', $employee);
+                View::share('employee', $employee);
+            }
+            
             Session::put('user', $user);
             View::share('user', $user);
         }
