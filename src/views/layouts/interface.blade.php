@@ -146,12 +146,12 @@
                             <li class="profile-info dropdown"><!-- add class "pull-right" if you want to place this from right -->
                                 
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    @if($user->avatar != '')
-                                        <img src="{{asset('uploads/'.$user->avatar)}}" width="45" height="45" class="img-circle" />
+                                    @if($user['avatar'] != '')
+                                        <img src="{{asset('uploads/'.$user['avatar'])}}" width="45" height="45" class="img-circle" />
                                     @else
                                         <img src="{{asset('packages/sharenjoy/cmsharenjoy/images/avatar.jpg')}}" width="45" height="45" class="img-circle" />
                                     @endif
-                                    {{$user->name}}
+                                    {{$user['name']}}
                                     <!-- <b class="caret"></b> -->
                                 </a>
                                 

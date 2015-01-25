@@ -105,6 +105,18 @@ abstract class BaseController extends Controller {
     protected $theme;
 
     /**
+     * The login user
+     * @var object
+     */
+    protected $user;
+
+    /**
+     * The login employee
+     * @var object
+     */
+    protected $employee;
+
+    /**
      * Initializer.
      * @access   public
      * @return   void
@@ -187,17 +199,18 @@ abstract class BaseController extends Controller {
         // Get the login user
         if (Sentry::check())
         {
-            $user = Sentry::getUser();
+            $this->user = Sentry::getUser();
 
-            if ($user->employee_id)
+            Session::put('user', $this->user->toArray());
+            View::share('user', $this->user->toArray());
+
+            if ($this->user->employee_id)
             {
-                $employee = \Employee::showById($user->employee_id);
-                Session::put('employee', $employee);
-                View::share('employee', $employee);
+                $this->employee = \Employee::showById($this->user->employee_id);
+                
+                Session::put('employee', $this->employee->toArray());
+                View::share('employee', $this->employee->toArray());
             }
-            
-            Session::put('user', $user);
-            View::share('user', $user);
         }
     }
 
