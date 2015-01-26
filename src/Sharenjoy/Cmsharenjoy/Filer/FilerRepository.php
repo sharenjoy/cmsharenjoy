@@ -379,7 +379,7 @@ class FilerRepository implements FilerInterface {
 
                 $data = array(
                     'folder_id'		=> $folder_id,
-                    'user_id'		=> $user->id,
+                    'user_id'		=> $user['id'],
                     'type'			=> $this->_type,
                     'name'			=> $file_original_name,
                     'path'			=> '{site}/uploads/large/'.$file_name,
