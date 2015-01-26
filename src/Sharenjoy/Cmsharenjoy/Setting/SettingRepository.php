@@ -20,7 +20,7 @@ class SettingRepository extends EloquentBaseRepository implements SettingInterfa
     {
         $model = $this->model->where('key', $key)->first();
         
-        return $model->value ? true : false;
+        return isset($model->value) ? true : false;
     }
 
     /**
