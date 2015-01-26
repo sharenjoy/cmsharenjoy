@@ -313,5 +313,11 @@
         {{Theme::asset()->container('final')->scripts()}}
         <!-- Final scripts Ends -->
         
+        <!-- Backend Google Analytics Starts -->
+        @if (Setting::has('backend_google_analytics'))
+            {{Setting::get('backend_google_analytics')}}
+        @endif
+        <!-- Backend Google Analytics Ends -->
+        
     </body>
 </html>
