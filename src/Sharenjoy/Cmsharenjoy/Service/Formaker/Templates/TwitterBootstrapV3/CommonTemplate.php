@@ -10,8 +10,9 @@ class CommonTemplate extends TemplateAbstract implements TemplateInterface {
     protected $data;
 
     protected $template = '<div class="{outer-class}"{style}>
-                               {label}
+                               {label-outer}
                                <div class="{inner-class}">
+                                   {label-inner}
                                    {field}
                                    {error}
                                    {help}
@@ -22,7 +23,17 @@ class CommonTemplate extends TemplateAbstract implements TemplateInterface {
     {
         $this->data = $data;
 
-        $data['label'] = $this->label();
+        if (isset($data['setting']['label-inner']) && $data['setting']['label-inner'] === true)
+        {
+            $data['label-outer'] = '';
+            $data['label-inner'] = $this->label();
+        }
+        else 
+        {
+            $data['label-outer'] = $this->label();
+            $data['label-inner'] = '';
+        }
+
         $data['help']  = $this->help();
         $data['error'] = $this->error();
 
