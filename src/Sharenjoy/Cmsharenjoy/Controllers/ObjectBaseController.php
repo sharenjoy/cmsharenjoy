@@ -74,8 +74,8 @@ abstract class ObjectBaseController extends BaseController {
         }
 
         $items = $this->repo->showByPage($limit, $page, array_except($query, ['page']), $model);
-
-        $forms = Formaker::setModel($this->repo->getModel())->make($input, 'filter');
+        ii($input);
+        $forms = Formaker::setModel($this->repo->getModel())->make($input);
 
         $data = ['paginationCount'=>$limit, 'sortable'=>false, 'rules'=>$this->functionRules];
         $lister = Lister::make($items, $this->listConfig, $data);

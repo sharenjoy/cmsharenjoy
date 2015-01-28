@@ -29,7 +29,7 @@ class Post extends EloquentBaseModel {
     ];
 
     public $filterFormConfig = [
-        'keyword'     => ['filter' => 'posts.title,posts.content'],
+        'keyword'     => ['order'=>'10', 'filter' => 'posts.title,posts.content'],
     ];
 
     public $formConfig = [

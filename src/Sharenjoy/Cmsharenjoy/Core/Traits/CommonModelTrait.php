@@ -129,7 +129,7 @@ trait CommonModelTrait {
         throw new \InvalidArgumentException("The model doesn't exist the {$form} property.");
     }
 
-    public function processForm($formConfig, $input)
+    public function processForm($formConfig, $input = array())
     {
         if (count($formConfig))
         {
