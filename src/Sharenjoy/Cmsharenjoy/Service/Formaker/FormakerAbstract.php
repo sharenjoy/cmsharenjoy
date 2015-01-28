@@ -5,6 +5,12 @@ use Config, Lang, Session;
 abstract class FormakerAbstract {
 
     /**
+     * The model
+     * @var object
+     */
+    protected $model;
+
+    /**
      * The name of field
      * @var string
      */
@@ -51,6 +57,13 @@ abstract class FormakerAbstract {
      * @var string
      */
     protected $template;
+
+    public function setModel($model)
+    {
+        $this->model = $model;
+
+        return $this;
+    }
 
     protected function setType()
     {
@@ -173,15 +186,15 @@ abstract class FormakerAbstract {
             {
                 $this->name     = $name;
                 $this->setting  = $setting;
-                $this->template = $template;
+                $this->template = $template == 'index' ? 'filter' : $template;
 
                 $this->setType();
                 $this->setValue();
                 $this->setOption();
                 $this->setArgs();
 
-                // To make form
-                $form = $this->make();
+                // To fetch form
+                $form = $this->fetch();
 
                 switch ($format)
                 {
@@ -199,6 +212,63 @@ abstract class FormakerAbstract {
         }
 
         return $data;
+    }
+
+    /**
+     * To make a form fields
+     * @param  array  $input
+     * @param  String $formType
+     * @param  array  $config This is you can customise form config
+     * @return array  Build from Formaker
+     */
+    public function make($input = array(), string $config = null)
+    {
+        $onAction = Session::get('onAction');
+
+        if ($config != null)
+        {
+            if ( ! isset($this->model->$config))
+            {
+                throw new \InvalidArgumentException("The model property doesn't exist of the {$config} argument.");
+            }
+
+            $formConfig = $this->model->$config;
+        }
+        else
+        {
+            $formConfig = $onAction == 'index' 
+                        ? $this->model->filterFormConfig
+                        : $this->model->formConfig;
+        }
+
+        if (count($formConfig))
+        {
+            foreach ($formConfig as $key => $item)
+            {
+                if (isset($item[$onAction]))
+                {
+                    if ($item[$onAction] == 'deny')
+                    {
+                        unset($formConfig[$key]);
+                    }
+                    elseif (is_array($item[$onAction]))
+                    {
+                        $formConfig[$key] = array_merge($formConfig[$key], $item[$onAction]);
+                    }
+                }
+            }
+            
+            // To order the form config
+            $formConfig = array_sort($formConfig, function($value)
+            {
+                return $value['order'];
+            });
+        }
+
+        // To do other process that needs to be done
+        $formConfig = $this->model->processForm($formConfig, $input);
+
+        return $this->form($formConfig, $onAction);
     }
 
     /**

@@ -124,7 +124,7 @@ class CategoryController extends ObjectBaseController {
 
     private function pushForm()
     {
-        $this->repo->pushForm([
+        $this->repo->getModel()->pushForm([
             'type' => [
                 'args'  => ['value'=>$this->type, 'readonly'=>'readonly'],
                 'order' => '10'

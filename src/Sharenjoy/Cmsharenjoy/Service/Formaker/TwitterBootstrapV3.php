@@ -59,7 +59,7 @@ class TwitterBootstrapV3 extends FormakerAbstract implements FormakerInterface {
      * @param string $name
      * @param array $args
      */
-    public function make()
+    public function fetch()
     {
         switch ($this->template)
         {

@@ -145,16 +145,20 @@ trait CommonModelTrait {
                 // To get the options of select element from the Model
                 if (isset($config['relation']))
                 {
-                    $id = isset($input->id) ? $input->id : '';
+                    $id = isset($input['id']) ? $input['id'] : '';
                     $relation = camel_case($config['relation']);
                     $formConfig[$name] = array_merge($formConfig[$name], $this->$relation($id));
                 }
 
                 // If use key that the name is input of value otherwise use the $key
                 if (isset($config['input']) && isset($input[$config['input']]))
+                {
                     $formConfig[$name]['value'] = $input[$config['input']];
+                }
                 elseif (isset($input[$name]))
+                {
                     $formConfig[$name]['value'] = $input[$name];
+                }
             }
         }
         

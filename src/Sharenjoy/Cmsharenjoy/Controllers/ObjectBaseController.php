@@ -2,7 +2,7 @@
 
 use Sharenjoy\Cmsharenjoy\Utilities\Transformer;
 use View, Redirect, Input, Request, Config, Event;
-use Response, Paginator, Message, Session, Lister;
+use Response, Paginator, Message, Session, Lister, Formaker;
 
 abstract class ObjectBaseController extends BaseController {
 
@@ -75,7 +75,7 @@ abstract class ObjectBaseController extends BaseController {
 
         $items = $this->repo->showByPage($limit, $page, array_except($query, ['page']), $model);
 
-        $forms = $this->repo->formaker($input, 'filter');
+        $forms = Formaker::setModel($this->repo->getModel())->make($input, 'filter');
 
         $data = ['paginationCount'=>$limit, 'sortable'=>false, 'rules'=>$this->functionRules];
         $lister = Lister::make($items, $this->listConfig, $data);
@@ -104,13 +104,11 @@ abstract class ObjectBaseController extends BaseController {
 
         $items = $this->repo->showByPage($limit, $page, array_except($query, ['page']), $model);
 
-        $filterForm = $this->repo->formaker($input, 'filter');
-
         $data = ['paginationCount'=>$limit, 'sortable'=>true, 'rules'=>$this->functionRules];
         $lister = Lister::make($items, $this->listConfig, $data);
         
         $this->layout->with('listEmpty', $items->isEmpty())
-                     ->with('lister', $lister);      
+                     ->with('lister', $lister);
     }
 
     /**
@@ -119,7 +117,9 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function getCreate()
     {
-        $this->layout->with('fieldsForm', $this->repo->formaker());
+        $fields = Formaker::setModel($this->repo->getModel())->make();
+
+        $this->layout->with('fieldsForm', $fields);
     }
 
     /**
@@ -137,10 +137,10 @@ abstract class ObjectBaseController extends BaseController {
             return Redirect::to(Session::get('goBackPrevious'));
         }
 
-        $fieldsForm = $this->repo->formaker($model);
+        $fields = Formaker::setModel($this->repo->getModel())->make($model->toArray());
 
-        $this->layout->with('item' , $model)
-                     ->with('fieldsForm', $fieldsForm);
+        $this->layout->with('item', $model)
+                     ->with('fieldsForm', $fields);
 
         Event::fire('cmsharenjoy.afterAction', [$model]);
     }
