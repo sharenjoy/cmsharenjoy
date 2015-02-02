@@ -16,7 +16,6 @@
         "guzzlehttp/guzzle": "~4.0",
         "pda/pheanstalk": "~2.0",
         "rcrowe/turbo": "0.2.*",
-        "laracasts/utilities": "1.0.*",
         "laracasts/presenter": "0.1.*"
     },
     "autoload": {
