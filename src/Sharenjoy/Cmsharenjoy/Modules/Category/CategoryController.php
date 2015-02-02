@@ -107,7 +107,7 @@ class CategoryController extends ObjectBaseController {
             }
         }
 
-        return Response::json(Message::result('success', pick_trans('success_ordered')), 200);
+        return Message::json(200, pick_trans('success_ordered'));
     }
 
     public function getCreate()

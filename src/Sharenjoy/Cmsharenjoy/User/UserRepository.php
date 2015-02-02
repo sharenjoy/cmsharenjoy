@@ -73,7 +73,7 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
             return false;
         }
 
-        return Message::result(true, pick_trans('success_created'), $user);
+        return $user;
     }
 
     public function update($id)
@@ -93,7 +93,9 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
             $user->description = $input['description'];
 
             // Update the user
-            if ( ! $user->save())
+            $result = $user->save();
+            
+            if ( ! $result)
             {
                 Message::error('User information was not updated');
                 return false;
@@ -110,7 +112,7 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
             return false;
         }
 
-        return Message::result(true, pick_trans('success_updated'), $user);
+        return $result;
     }
 
     public function activate($id, $code)
@@ -123,20 +125,20 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
             // Attempt to activate the user
             if ($user->attemptActivation($code))
             {
-                return Message::result('success', pick_trans('user_actived'));
+                return ['status'=>'success', 'message'=>pick_trans('user_actived')];
             }
             else
             {
-                return Message::result('error', pick_trans('error_active'));
+                return ['status'=>'error', 'message'=>pick_trans('error_active')];
             }
         }
         catch (\Cartalyst\Sentry\Users\UserNotFoundException $e)
         {
-            return Message::result('error', pick_trans('user_not_found'));
+            return ['status'=>'error', 'message'=>pick_trans('user_not_found')];
         }
         catch (\Cartalyst\Sentry\Users\UserAlreadyActivatedException $e)
         {
-            return Message::result('warning', pick_trans('user_already_actived'));
+            return ['status'=>'warning', 'message'=>pick_trans('user_already_actived')];
         }
     }
 
@@ -173,10 +175,10 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
         }
         catch (\Cartalyst\Sentry\Users\UserNotFoundException $e)
         {
-            return Message::result(false, pick_trans('user_not_found'));
+            return ['status'=>false, 'message'=>pick_trans('user_not_found')];
         }
 
-        return Message::result(true, pick_trans('sent_reset_code'));
+        return ['status'=>true, 'message'=>pick_trans('sent_reset_code')];
     }
 
     public function resetPassword($input)
@@ -188,12 +190,12 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
 
             if ($input['email'] !== $user->email)
             {
-                return Message::result(false, pick_trans('error_active'));
+                return ['status'=>false, 'message'=>pick_trans('error_active')];
             }
 
             if ($input['password'] !== $input['password_confirmation'])
             {
-                return Message::result(false, pick_trans('password_no_match'));
+                return ['status'=>false, 'message'=>pick_trans('password_no_match')];
             }
 
             // Check if the reset password code is valid
@@ -203,11 +205,11 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
                 if ($user->attemptResetPassword($input['code'], $input['password']))
                 {
                     Sentry::logout();
-                    return Message::result(true, pick_trans('password_reset_success'));
+                    return ['status'=>true, 'message'=>pick_trans('password_reset_success')];
                 }
                 else
                 {
-                    return Message::result(false, pick_trans('password_reset_failed'));
+                    return ['status'=>false, 'message'=>pick_trans('password_reset_failed')];
                 }
             }
             else
@@ -217,7 +219,7 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
         }
         catch (\Cartalyst\Sentry\Users\UserNotFoundException $e)
         {
-            return Message::result(false, pick_trans('user_not_found'));
+            return ['status'=>false, 'message'=>pick_trans('user_not_found')];
         }
     }
 
@@ -235,14 +237,14 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
         }
         catch(\Cartalyst\Sentry\Throttling\UserBannedException $e)
         {   
-            return Message::result(false, pick_trans('invalid_email_password'));
+            return ['status'=>false, 'message'=>pick_trans('invalid_email_password')];
         }
         catch (\RuntimeException $e)
         {
-            return Message::result(false, pick_trans('invalid_email_password'));
+            return ['status'=>false, 'message'=>pick_trans('invalid_email_password')];
         }
 
-        return Message::result(true, pick_trans('success_login'));
+        return ['status'=>true, 'message'=>pick_trans('success_login')];
     }
 
 }

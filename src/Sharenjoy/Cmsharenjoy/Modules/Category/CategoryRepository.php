@@ -27,9 +27,7 @@ class CategoryRepository extends EloquentBaseRepository implements CategoryInter
         // make sort
         $this->edit($model->id, ['sort' => $model->id]);
 
-        $result = Message::result(true, pick_trans('success_created'), $model);
-
-        return $result;
+        return $model;
     }
 
 }

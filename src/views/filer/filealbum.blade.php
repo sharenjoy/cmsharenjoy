@@ -274,12 +274,13 @@
 
                     // console.log(send_result);
 
-                    $.post(sharenjoy.APPURL + "/order", send_result, function(result, status) {
-                        // console.log(result);
-                        if (result.status == 'success') {
+                    $.post(sharenjoy.APPURL + "/order", send_result)
+                        .done(function(result) {
                             toastr.success(result.message, "{{pick_trans('success')}}", opts);
+                        }).fail(function(result) {
+                            toastr.error(result.message, "{{pick_trans('fail')}}", opts);
                         }
-                    });
+                    );
                 }
             });
             $( "#sortable ul" ).disableSelection();

@@ -15,7 +15,7 @@ trait EventModelTrait {
 
     public function eventUserId($key, $model)
     {
-        $this->$key = Session::get('user')->id;
+        $this->$key = Session::get('user')['id'];
     }
 
     public function eventSort($key, $model)

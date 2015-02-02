@@ -215,13 +215,16 @@
                     send_data.value = $activeTag.val();
                 };
                 // console.log(send_data);
-                
-                $.post(sharenjoy.APPURL + "/store", send_data, function(data, status) {
-                    // console.log(data);
-                    if (data.status == 'success') {
-                        toastr.success("{{pick_trans('success_updated')}}", "{{pick_trans('success')}}", opts);
+
+                $.post(sharenjoy.APPURL + "/store", send_data)
+                    .done(function(result) {
+                        toastr.success(result.message, "{{pick_trans('success')}}", opts);
+                    }).fail(function(result) {
+                        toastr.error(result.message, "{{pick_trans('fail')}}", opts);
+                    }).always(function() {
+                      l.stop();
                     }
-                });
+                );
 
                 $(this).parent().fadeOut(function(){
                     $(this).remove();

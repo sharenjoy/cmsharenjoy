@@ -113,11 +113,13 @@
                 };
                 // console.log(result);
 
-                $.post("{{$objectUrl}}/order", result, function(result, status) {
-                    if (result.status == 'success') {
+                $.post("{{$objectUrl}}/order", result)
+                    .done(function(result) {
                         toastr.success(result.message, "{{pick_trans('success')}}", opts);
+                    }).fail(function(result) {
+                        toastr.error(result.message, "{{pick_trans('fail')}}", opts);
                     }
-                });
+                );
             });
         });
     </script>

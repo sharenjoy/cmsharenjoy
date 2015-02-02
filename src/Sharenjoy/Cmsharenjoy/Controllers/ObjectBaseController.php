@@ -74,7 +74,7 @@ abstract class ObjectBaseController extends BaseController {
         }
 
         $items = $this->repo->showByPage($limit, $page, array_except($query, ['page']), $model);
-        ii($input);
+        
         $forms = Formaker::setModel($this->repo->getModel())->make($input);
 
         $data = ['paginationCount'=>$limit, 'sortable'=>false, 'rules'=>$this->functionRules];
@@ -139,8 +139,7 @@ abstract class ObjectBaseController extends BaseController {
 
         $fields = Formaker::setModel($this->repo->getModel())->make($model->toArray());
 
-        $this->layout->with('item', $model)
-                     ->with('fieldsForm', $fields);
+        $this->layout->with('item', $model)->with('fieldsForm', $fields);
 
         Event::fire('cmsharenjoy.afterAction', [$model]);
     }
@@ -152,17 +151,19 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function postCreate()
     {
-        if ( ! $this->repo->setInput(Input::all())->validate())
+        $this->repo->setInput(Input::all());
+
+        if ( ! $this->repo->validate())
         {
             return Redirect::to($this->createUrl)->withInput();
         }
 
-        $result   = $this->repo->create();    
-        
-        $redirect = Input::has('exit') ? $this->objectUrl
-                                       : $this->updateUrl.$result['data']->id;
+        $model = $this->repo->create();
 
-        Message::success($result['message']);
+        $model ? Message::success(pick_trans('success_created'))
+               : Message::error(pick_trans('fail_created'));
+        
+        $redirect = Input::has('exit') ? $this->objectUrl : $this->updateUrl.$model->id;
 
         return Redirect::to($redirect);
     }
@@ -174,17 +175,19 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function postUpdate($id)
     {
-        if ( ! $this->repo->setInput(Input::all())->validate($id))
+        $this->repo->setInput(Input::all());
+
+        if ( ! $this->repo->validate($id))
         {
             return Redirect::to($this->updateUrl.$id)->withInput();
         }
 
-        $result   = $this->repo->update($id);
+        $result = $this->repo->update($id);
 
-        $redirect = Input::has('exit') ? Session::get('goBackPrevious')
-                                       : $this->updateUrl.$id;
+        $result ? Message::success(pick_trans('success_updated'))
+                : Message::error(pick_trans('fail_updated'));
 
-        Message::success($result['message']);
+        $redirect = Input::has('exit') ? Session::get('goBackPrevious') : $this->updateUrl.$id;
 
         return Redirect::to($redirect);
     }
@@ -200,14 +203,8 @@ abstract class ObjectBaseController extends BaseController {
         $model  = $this->repo->showById($id);
         $result = $this->repo->delete($id);
 
-        if ( ! $result['status'])
-        {
-            Message::error($result['message']);
-
-            return Redirect::to(Session::get('goBackPrevious'));
-        }
-
-        Message::success($result['message']);
+        $result ? Message::success(pick_trans('success_deleted'))
+                : Message::error(pick_trans('fail_deleted'));
         
         Event::fire('cmsharenjoy.afterAction', [$model]);
 
@@ -228,15 +225,14 @@ abstract class ObjectBaseController extends BaseController {
         if ( ! $model)
         {
             $message = pick_trans('exception.not_found', ['id' => $id]);
-            $subject = pick_trans('some_wrong');
 
-            return Response::json(Message::result('error', $message, $subject), 200);
+            return Message::json(404, $message);
         }
 
         $result['title']   = Transformer::title($model->toArray());
         $result['subject'] = pick_trans('confirm_deleted');
 
-        return Response::json(Message::result('success', '', $result), 200);
+        return Message::json(200, '', $result);
     }
 
     /**
@@ -271,7 +267,7 @@ abstract class ObjectBaseController extends BaseController {
         $message = pick_trans('success_ordered');
         $data = ['success' => pick_trans('success')];
         
-        return Response::json(Message::result('success', $message, $data), 200);
+        return Message::json(200, $message, $data);
     }
     
 }

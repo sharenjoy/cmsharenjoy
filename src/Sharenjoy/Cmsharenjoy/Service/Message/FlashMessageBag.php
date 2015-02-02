@@ -2,6 +2,7 @@
 
 use Illuminate\Support\MessageBag;
 use Illuminate\Session\Store;
+use Response;
 
 class FlashMessageBag extends MessageBag {
 
@@ -45,30 +46,63 @@ class FlashMessageBag extends MessageBag {
     }
 
     /**
-     * Output some message and status
+     * Output some message and status the format is json
      * @param  string $status  success, error, warning
      * @param  string $message This is message wants to output
      * @param  mixed  $date
-     * @return array
+     * @return Response
      */
-    public function result($status, $message, $data = null)
+    public function json($status, $message = null, $data = null)
     {
-        return [
-            'status'  => $status,
-            'message' => $message,
-            'data'    => $data
-        ];
+        switch ($status)
+        {
+            case 200:
+                $content = [
+                    'message' => $message ?: 'OK',
+                    'data'    => $data
+                ];
+                break;
+
+            case 201:
+                $content = [
+                    'message' => $message ?: 'Created',
+                    'data'    => $data
+                ];
+                break;
+
+            case 400:
+                $content = [
+                    'error' => [
+                        'message' => $message ?: 'Bad Request'
+                    ]
+                ];
+                break;
+
+            case 404:
+                $content = [
+                    'error' => [
+                        'message' => $message ?: 'Not found'
+                    ]
+                ];
+                break;
+
+            default:
+                throw new \InvalidArgumentException("The status code {$status} that you pass doesn't match.");
+                break;
+        }
+
+        return Response::json($content, $status);
     }
 
     public function __call($name, $args)
     {
-        if (count($args) == '1')
+        if (count($args) === 1)
         {
             $this->mergeMessage($name, $args[0]);
         }
         else
         {
-            throw new \Exception("It doesn't have right arguments");
+            throw new \InvalidArgumentException("It doesn't have right arguments");
         }
     }
 }

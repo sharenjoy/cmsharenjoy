@@ -41,6 +41,7 @@ return [
     'edit'                        => '編輯',
     'update'                      => '更新',
     'success'                     => '成功',
+    'fail'                        => '失敗',
     'warning'                     => '注意',
     'notice'                      => '提示',
     'info'                        => '提示',

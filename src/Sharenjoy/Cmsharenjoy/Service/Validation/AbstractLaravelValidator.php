@@ -254,8 +254,8 @@ abstract class AbstractLaravelValidator implements ValidableInterface {
                     break;
 
                 case 'json':
-                    return Message::result(
-                        false,
+                    return Message::json(
+                        400,
                         pick_trans('check_some_wrong'),
                         $this->errors()->toArray()
                     );

@@ -49,7 +49,7 @@ class SettingController extends BaseController {
             return Redirect::to($this->objectUrl);
         }
 
-        return Response::json(Message::result('success', pick_trans('success_updated'), $data), 200);
+        return Message::json(200, pick_trans('success_updated'), $data);
     }
 
     protected function item()

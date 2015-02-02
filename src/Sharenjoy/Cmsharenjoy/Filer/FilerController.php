@@ -240,10 +240,7 @@ class FilerController extends BaseController {
      */
     public function postOrder()
     {
-        if( ! Request::ajax())
-        {
-            Response::json('error', 400);
-        }
+        if( ! Request::ajax()) Response::json('error', 400);
 
         $id_value   = Input::get('id_value');
         $sort_value = Input::get('sort_value');
@@ -259,7 +256,7 @@ class FilerController extends BaseController {
         }
 
         // let the files library format the return array like all the others
-        return Response::json(Message::result('success', pick_trans('success_ordered')), 200);
+        return Message::json(200, pick_trans('success_ordered'));
     }
 
     /**

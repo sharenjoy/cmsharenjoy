@@ -1,6 +1,6 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Core;
 
-use Session, Formaker, Paginator, StdClass, Message;
+use Session, Paginator, StdClass, Message;
 
 abstract class EloquentBaseRepository implements EloquentBaseInterface {
 
@@ -100,29 +100,23 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
 
     /**
      * Create a new item
-     * @return array This array is from Message::result()
+     * @return Model
      */
     public function create()
     {
         $model = $this->model->create($this->getInput());
 
-        $result = Message::result(true, pick_trans('success_created'), $model);
-
-        return $result;
+        return $model;
     }
 
     /**
      * Update an existing item
      * @param  int  This variable is primary key that wants to update
-     * @return array This array is from Message::result()
+     * @return boolean
      */
     public function update($id)
     {
-        $model = $this->model->find($id)->fill($this->getInput());
-
-        $model->save();
-
-        $result = Message::result(true, pick_trans('success_updated'), $model);
+        $result = $this->model->find($id)->fill($this->getInput())->save();
 
         return $result;
     }
@@ -155,10 +149,11 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
         }
         catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e)
         {
-            return Message::result(false, pick_trans('exception.not_found', ['id' => $id]));
+            Message::error(pick_trans('exception.not_found', ['id' => $id]));
+            return false;
         }
         
-        return Message::result(true, pick_trans('success_deleted'));
+        return $result;
     }
 
     /**

@@ -50,6 +50,11 @@ trait CommonModelTrait {
             {
                 if (is_array($input[$key]))
                 {
+                    foreach ($value as $k => $item)
+                    {
+                        if ( ! $item) unset($value[$k]);
+                    }
+
                     $input[$key] = join(',', $value);
                 }
             }
