@@ -108,6 +108,7 @@ return [
     'nav_content'                 => '網站內容',
     'nav_misc'                    => '其他項目',
     'confirm_deleted'             => '是否確定要刪除此筆資料',
+    'description'                 => '描述',
     
     
     'email'                       => '電子信箱',

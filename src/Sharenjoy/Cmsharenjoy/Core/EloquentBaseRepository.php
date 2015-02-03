@@ -207,6 +207,21 @@ abstract class EloquentBaseRepository implements EloquentBaseInterface {
     }
 
     /**
+     * To where specific column and get values
+     * @param  string $field
+     * @param  string $value
+     * @return Model
+     */
+    public function showByWhere($field, $value)
+    {
+        $model = $this->model->listQuery();
+
+        $model = $model->where($field, $value)->get();
+        
+        return $model;
+    }
+
+    /**
      * To show all the rows form model
      * @param  string $sort
      * @param  string $order

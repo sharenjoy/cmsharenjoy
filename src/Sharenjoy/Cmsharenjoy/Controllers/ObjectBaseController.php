@@ -2,7 +2,7 @@
 
 use Sharenjoy\Cmsharenjoy\Utilities\Transformer;
 use View, Redirect, Input, Request, Config, Event;
-use Response, Paginator, Message, Session, Lister, Formaker;
+use Response, Message, Session, Lister, Formaker;
 
 abstract class ObjectBaseController extends BaseController {
 
@@ -108,6 +108,7 @@ abstract class ObjectBaseController extends BaseController {
         $lister = Lister::make($items, $this->listConfig, $data);
         
         $this->layout->with('listEmpty', $items->isEmpty())
+                     ->with('sortable', true)
                      ->with('lister', $lister);
     }
 

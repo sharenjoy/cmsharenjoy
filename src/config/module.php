@@ -36,6 +36,7 @@ return [
 
         'layer' => [
             'customermood' => 1,
+            'flowerstephandle' => 1,
         ],
     ],
 
