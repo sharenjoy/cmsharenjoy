@@ -273,6 +273,7 @@ abstract class BaseController extends Controller {
                 {
                     if (strpos($suburl, '?'))
                     {
+                        // earse behind and include of the '?'
                         $suburl = substr_replace($suburl, '', strpos($suburl, '?'));
                     }
 

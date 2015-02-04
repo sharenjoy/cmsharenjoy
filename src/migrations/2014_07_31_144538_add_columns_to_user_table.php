@@ -14,7 +14,7 @@ class AddColumnsToUserTable extends Migration {
 	{
 		Schema::table('users', function($table)
 		{
-		    $table->string('employee_id')->unsigned()->nullable()->default(0)->index()->after('id');
+		    $table->string('employee_id')->default(0)->index()->after('id');
 		    $table->string('name')->after('password');
 		    $table->string('phone')->after('name');
 		    $table->string('avatar')->after('phone');
