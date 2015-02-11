@@ -1,4 +1,8 @@
 /vendor
-composer.phar
-composer.lock
-.DS_Store
+/node_modules
+/public/packages
+/public/theme
+/public/uploads
+/resources/assets/vendor
+Envoy.blade.php
+.env
