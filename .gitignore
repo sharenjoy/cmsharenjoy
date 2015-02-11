@@ -1,8 +1,7 @@
 /vendor
 /node_modules
 /public/packages
-/public/theme
-/public/uploads
+/public/themes
 /resources/assets/vendor
 Envoy.blade.php
 .env
