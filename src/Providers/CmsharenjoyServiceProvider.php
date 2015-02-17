@@ -169,7 +169,7 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
         foreach ($filesToLoad as $file)
         {
             // Add needed database structure and file extension.
-            $file = __DIR__ . '/../' . $file . '.php';
+            $file = __DIR__ . '/../../' . $file . '.php';
             // If file exists, include.
             if (is_file($file)) include $file;
         }
