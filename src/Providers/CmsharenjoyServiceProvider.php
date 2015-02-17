@@ -29,10 +29,8 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
 	 */
 	public function register()
     {
-        $accessUrl = $this->app['config']->get('cmsharenjoy.access_url');
-        
         // To define which end it is now
-        $whichEnd = Request::segment(1) == $accessUrl ? 'backEnd' : 'frontEnd';
+        $whichEnd = Request::segment(1) == 'admin' ? 'backEnd' : 'frontEnd';
         
         Session::put('sharenjoy.whichEnd', $whichEnd);
 
@@ -93,8 +91,6 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
      */
     public function boot()
     {
-        $accessUrl = $this->app['config']->get('cmsharenjoy.access_url');
-
         $config = [
             'assets',
             'categorize',
@@ -126,6 +122,9 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
         {
             $this->app->setLocale(Session::get('sharenjoy.backEndLanguage'));
         }
+
+        // backend prefix
+        $accessUrl = $this->app['config']->get('cmsharenjoy.access_url');
 
         // Make some alias
         $this->makeAlias();
