@@ -31,7 +31,7 @@
 			"database"
 		],
 		"psr-4": {
-			"Sharenjoy\\Cmsharenjoy\\": "app/"
+            "App\\": "app/"
 		}
 	},
 	"autoload-dev": {

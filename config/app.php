@@ -139,11 +139,11 @@ return [
 		/*
 		 * Application Service Providers...
 		 */
-		'Sharenjoy\Cmsharenjoy\Providers\AppServiceProvider',
-		'Sharenjoy\Cmsharenjoy\Providers\BusServiceProvider',
-		'Sharenjoy\Cmsharenjoy\Providers\ConfigServiceProvider',
-		'Sharenjoy\Cmsharenjoy\Providers\EventServiceProvider',
-		'Sharenjoy\Cmsharenjoy\Providers\RouteServiceProvider',
+		'App\Providers\AppServiceProvider',
+		'App\Providers\BusServiceProvider',
+		'App\Providers\ConfigServiceProvider',
+		'App\Providers\EventServiceProvider',
+		'App\Providers\RouteServiceProvider',
 
 		'Illuminate\Html\HtmlServiceProvider',
 		'Barryvdh\Debugbar\ServiceProvider',

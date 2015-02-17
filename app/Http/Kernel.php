@@ -1,4 +1,4 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Http;
+<?php namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -15,7 +15,7 @@ class Kernel extends HttpKernel {
 		'Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse',
 		'Illuminate\Session\Middleware\StartSession',
 		'Illuminate\View\Middleware\ShareErrorsFromSession',
-		'Sharenjoy\Cmsharenjoy\Http\Middleware\VerifyCsrfToken',
+		'App\Http\Middleware\VerifyCsrfToken',
 	];
 
 	/**
@@ -24,13 +24,13 @@ class Kernel extends HttpKernel {
 	 * @var array
 	 */
 	protected $routeMiddleware = [
-		'auth' => 'Sharenjoy\Cmsharenjoy\Http\Middleware\Authenticate',
+		'auth' => 'App\Http\Middleware\Authenticate',
 		'auth.basic' => 'Illuminate\Auth\Middleware\AuthenticateWithBasicAuth',
-		'guest' => 'Sharenjoy\Cmsharenjoy\Http\Middleware\RedirectIfAuthenticated',
+		'guest' => 'App\Http\Middleware\RedirectIfAuthenticated',
 
 		// for backend
-		'admin.auth' => 'Sharenjoy\Cmsharenjoy\Http\Middleware\Admin\Authenticate',
-		'admin.guest' => 'Sharenjoy\Cmsharenjoy\Http\Middleware\Admin\RedirectIfAuthenticated',
+		'admin.auth' => 'Sharenjoy\Cmsharenjoy\Http\Middleware\Authenticate',
+		'admin.guest' => 'Sharenjoy\Cmsharenjoy\Http\Middleware\RedirectIfAuthenticated',
 	];
 
 }

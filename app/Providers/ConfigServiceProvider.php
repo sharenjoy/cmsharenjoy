@@ -1,4 +1,4 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Providers;
+<?php namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

@@ -1,6 +1,6 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Services;
+<?php namespace App\Services;
 
-use Sharenjoy\Cmsharenjoy\User;
+use App\Models\User;
 use Validator;
 use Illuminate\Contracts\Auth\Registrar as RegistrarContract;
 

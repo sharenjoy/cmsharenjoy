@@ -11,43 +11,11 @@
 |
 */
 
-Route::get('/', 'Http\Controllers\WelcomeController@index');
+Route::get('/', 'WelcomeController@index');
 
-Route::get('home', 'Http\Controllers\HomeController@index');
+Route::get('home', 'HomeController@index');
 
 Route::controllers([
-    'auth'     => 'Http\Controllers\Auth\AuthController',
-    'password' => 'Http\Controllers\Auth\PasswordController',
+    'auth'     => 'Auth\AuthController',
+    'password' => 'Auth\PasswordController',
 ]);
-
-// Backend
-Route::group(['prefix' => 'admin'], function()
-{
-    // Route::controller('customer'   , 'Axes\Modules\Customer\CustomerController');
-    
-    // Route::controller('flower'     , 'Sharenjoy\Flower\Controllers\FlowerController');
-    
-    // Route::controller('company'    , 'Axes\Modules\Organization\Company\CompanyController');
-    // Route::controller('department' , 'Axes\Modules\Organization\Department\DepartmentController');
-    // Route::controller('position'   , 'Axes\Modules\Organization\Position\PositionController');
-    // Route::controller('division'   , 'Axes\Modules\Organization\Division\DivisionController');
-    // Route::controller('role'       , 'Axes\Modules\Organization\Role\RoleController');
-    // Route::controller('employee'   , 'Axes\Modules\Organization\Employee\EmployeeController');
-
-    Route::controller('post'      , 'Modules\Post\PostController');
-    Route::controller('tag'       , 'Modules\Tag\TagController');
-    Route::controller('category'  , 'Modules\Category\CategoryController');
-    Route::controller('filer'     , 'Filer\FilerController');
-    Route::controller('user'      , 'User\UserController');
-    Route::controller('setting'   , 'Setting\SettingController');
-    Route::controller(''          , 'Http\Controllers\Admin\DashController');
-});
-
-// Route::get($accessUrl.'/language/{lang}' , function($lang)
-// {
-//     if (array_key_exists($lang, Config::get('cmsharenjoy.locales')))
-//     {
-//         Session::put('sharenjoy.backEndLanguage', $lang);
-//         return Redirect::back();
-//     }
-// });

@@ -1,6 +1,6 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Http\Controllers\Auth;
+<?php namespace App\Http\Controllers\Auth;
 
-use Sharenjoy\Cmsharenjoy\Http\Controllers\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\Registrar;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;

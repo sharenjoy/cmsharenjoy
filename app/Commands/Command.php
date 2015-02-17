@@ -1,4 +1,4 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Commands;
+<?php namespace App\Commands;
 
 abstract class Command {
 

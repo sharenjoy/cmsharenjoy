@@ -1,4 +1,4 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Events;
+<?php namespace App\Events;
 
 abstract class Event {
 
