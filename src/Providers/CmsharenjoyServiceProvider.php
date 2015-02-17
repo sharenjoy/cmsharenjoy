@@ -47,8 +47,10 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
             $this->mergeConfigFrom(__DIR__.'/../../config/'.$cfg.'.php', $cfg);
         }
 
+        $accessUrl = $this->app['config']->get('cmsharenjoy.access_url');
+        
         // To define which end it is now
-        $whichEnd = Request::segment(1) == 'admin' ? 'backEnd' : 'frontEnd';
+        $whichEnd = Request::segment(1) == $accessUrl ? 'backEnd' : 'frontEnd';
         
         Session::put('sharenjoy.whichEnd', $whichEnd);
 
