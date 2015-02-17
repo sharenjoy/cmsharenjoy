@@ -312,6 +312,11 @@ if ( ! function_exists('pick_trans'))
         {
             return Lang::get($item, $options);
         }
+
+        if (Lang::has('cmsharenjoy.'.$item))
+        {
+            return Lang::get('cmsharenjoy.'.$item, $options);
+        }
         
         return false;
     }
