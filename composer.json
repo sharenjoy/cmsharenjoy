@@ -24,15 +24,15 @@
 		"phpunit/phpunit": "~4.0",
 		"phpspec/phpspec": "~2.1",
 		"barryvdh/laravel-debugbar": "~2.0",
-		"fzaninotto/faker": "1.*",
-        "sharenjoy/cmsharenjoy": "dev-master"
+		"fzaninotto/faker": "1.*"
 	},
 	"autoload": {
 		"classmap": [
 			"database"
 		],
 		"psr-4": {
-            "App\\": "app/"
+            "App\\": "app/",
+            "Sharenjoy\\Cmsharenjoy\\": "repositories/cmsharenjoy/src"
 		}
 	},
 	"autoload-dev": {
