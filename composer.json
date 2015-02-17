@@ -51,6 +51,7 @@
         ],
         "post-create-project-cmd": [
             "php -r \"copy('.env.example', '.env');\"",
+            "php -r \"copy('Envoy.blade.php.example', 'Envoy.blade.php');\"",
             "php artisan key:generate"
         ]
     },
