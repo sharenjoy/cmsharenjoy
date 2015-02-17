@@ -12,7 +12,7 @@
 */
 
 // Backend
-Route::group(['prefix' => 'admin'], function()
+Route::group(['prefix' => $accessUrl], function()
 {
     Route::controller('post'      , 'Sharenjoy\Cmsharenjoy\Modules\Post\PostController');
     Route::controller('tag'       , 'Sharenjoy\Cmsharenjoy\Modules\Tag\TagController');
@@ -23,7 +23,7 @@ Route::group(['prefix' => 'admin'], function()
     Route::controller(''          , 'Sharenjoy\Cmsharenjoy\Http\Controllers\DashController');
 });
 
-Route::get('admin/language/{lang}' , function($lang)
+Route::get($accessUrl.'/language/{lang}' , function($lang)
 {
     if (array_key_exists($lang, config('cmsharenjoy.locales')))
     {

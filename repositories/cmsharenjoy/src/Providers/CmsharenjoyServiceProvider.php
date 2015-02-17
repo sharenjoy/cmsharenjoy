@@ -93,6 +93,8 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
      */
     public function boot()
     {
+        $accessUrl = $this->app['config']->get('cmsharenjoy.access_url');
+
         // Setting the locale langage
         if (Session::has('sharenjoy.backEndLanguage'))
         {
@@ -103,7 +105,7 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
         $this->makeAlias();
 
         // Loading some of files
-        $this->loadIncludes();
+        $this->loadIncludes($accessUrl);
         
         // Set service
         // $this->setServices();
@@ -129,7 +131,7 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
      * Include some specific files from the src-root.
      * @return void
      */
-    protected function loadIncludes()
+    protected function loadIncludes($accessUrl)
     {
         // Add file names without the `php` extension to this list as needed.
         $filesToLoad = [
