@@ -114,7 +114,7 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
         foreach ($config as $cfg)
         {
             // Merge config to allow user overwrite.
-            $this->mergeConfigFrom(__DIR__.'/../config/'.$cfg.'.php', $cfg);
+            $this->mergeConfigFrom(__DIR__.'/../../config/'.$cfg.'.php', $cfg);
         }
 
         $this->publishes([
@@ -169,7 +169,7 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
         foreach ($filesToLoad as $file)
         {
             // Add needed database structure and file extension.
-            $file = __DIR__ . '/../../config/' . $file . '.php';
+            $file = __DIR__ . '/../' . $file . '.php';
             // If file exists, include.
             if (is_file($file)) include $file;
         }
