@@ -14,17 +14,6 @@
 // Backend
 Route::group(['prefix' => 'admin'], function()
 {
-    // Route::controller('customer'   , 'Axes\Modules\Customer\CustomerController');
-    
-    // Route::controller('flower'     , 'App\Flower\Controllers\FlowerController');
-    
-    // Route::controller('company'    , 'Axes\Modules\Organization\Company\CompanyController');
-    // Route::controller('department' , 'Axes\Modules\Organization\Department\DepartmentController');
-    // Route::controller('position'   , 'Axes\Modules\Organization\Position\PositionController');
-    // Route::controller('division'   , 'Axes\Modules\Organization\Division\DivisionController');
-    // Route::controller('role'       , 'Axes\Modules\Organization\Role\RoleController');
-    // Route::controller('employee'   , 'Axes\Modules\Organization\Employee\EmployeeController');
-
     Route::controller('post'      , 'Sharenjoy\Cmsharenjoy\Modules\Post\PostController');
     Route::controller('tag'       , 'Sharenjoy\Cmsharenjoy\Modules\Tag\TagController');
     Route::controller('category'  , 'Sharenjoy\Cmsharenjoy\Modules\Category\CategoryController');
