@@ -29,6 +29,24 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
 	 */
 	public function register()
     {
+        $config = [
+            'assets',
+            'categorize',
+            'cmsharenjoy',
+            'filer',
+            'formaker',
+            'lister',
+            'module',
+            'notification',
+            'options',
+        ];
+
+        foreach ($config as $cfg)
+        {
+            // Merge config to allow user overwrite.
+            $this->mergeConfigFrom(__DIR__.'/../../config/'.$cfg.'.php', $cfg);
+        }
+
         // To define which end it is now
         $whichEnd = Request::segment(1) == 'admin' ? 'backEnd' : 'frontEnd';
         
@@ -91,27 +109,9 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
      */
     public function boot()
     {
-        $config = [
-            'assets',
-            'categorize',
-            'cmsharenjoy',
-            'filer',
-            'formaker',
-            'lister',
-            'module',
-            'notification',
-            'options',
-        ];
-
         $this->publishes([
             __DIR__.'/../config' => config_path(),
         ], 'config');
-
-        foreach ($config as $cfg)
-        {
-            // Merge config to allow user overwrite.
-            $this->mergeConfigFrom(__DIR__.'/../../config/'.$cfg.'.php', $cfg);
-        }
 
         $this->publishes([
             __DIR__ . '/../migrations' => base_path('/database/migrations')
