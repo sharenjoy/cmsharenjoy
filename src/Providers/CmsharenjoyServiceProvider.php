@@ -110,11 +110,11 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/../config' => config_path(),
+            __DIR__.'/../../config' => config_path(),
         ], 'config');
 
         $this->publishes([
-            __DIR__ . '/../migrations' => base_path('/database/migrations')
+            __DIR__ . '/../../migrations' => base_path('/database/migrations')
         ], 'migration');
 
         // Setting the locale langage
