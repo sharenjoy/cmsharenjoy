@@ -1,5 +1,0 @@
-suites:
-    main:
-        namespace: App\Cmsharenjoy
-        psr4_prefix: App\Cmsharenjoy
-        src_path: app
