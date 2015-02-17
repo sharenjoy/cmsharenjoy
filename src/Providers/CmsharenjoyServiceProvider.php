@@ -103,7 +103,7 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
             'formaker',
             'lister',
             'module',
-            'notifaction',
+            'notification',
             'options',
         ];
 
