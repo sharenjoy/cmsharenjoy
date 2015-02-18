@@ -293,36 +293,35 @@ abstract class BaseController extends Controller {
         $action = $this->onMethod == 'get-sort' ? 'index' : $action;
         
         // Get reop directory from config
-        $commonLayout = Config::get('cmsharenjoy.commonLayoutDirectory');
+        $commonLayout = config('cmsharenjoy.commonLayoutDirectory');
         
         $pathA = $this->onController.'.'.$action;
         $pathB = $commonLayout.'.'.$action;
+
+        // organization/views/member/create
+        if (view()->exists($this->onPackage.'::'.$pathA))
+        {
+            return view($this->onPackage.'::'.$pathA);
+        }
+        
+        // organization/views/common/create
+        if (view()->exists($this->onPackage.'::'.$pathB))
+        {
+            return view($this->onPackage.'::'.$pathB);
+        }
 
         // app/views/admin/member/create
         if (view()->exists($this->accessUrl.'.'.$pathA))
         {
             return view($this->accessUrl.'.'.$pathA);
         }
+        
         // app/views/admin/common/create
-        elseif (view()->exists($this->accessUrl.'.'.$pathB))
+        if (view()->exists($this->accessUrl.'.'.$pathB))
         {
             return view($this->accessUrl.'.'.$pathB);
         }
-        // organization/views/member/create
-        // elseif (view()->exists($this->onPackage.'::'.$pathA))
-        // {
-        //     $this->layout = view($this->onPackage.'::'.$pathA);
-        // }
-        // // organization/views/common/create
-        // elseif (view()->exists($this->onPackage.'::'.$pathB))
-        // {
-        //     $this->layout = view($this->onPackage.'::'.$pathB);
-        // }
-        // // cmsharenjoy/views/common/create
-        // elseif (view()->exists('cmsharenjoy::'.$pathB))
-        // {
-        //     $this->layout = view('cmsharenjoy::'.$pathB);
-        // }
+        
     }
 
 }
