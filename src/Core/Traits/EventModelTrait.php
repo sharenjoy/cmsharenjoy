@@ -1,7 +1,7 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Core\Traits;
 
 use Sharenjoy\Cmsharenjoy\Utilities\String;
-use Session, Hash;
+use Session;
 
 trait EventModelTrait {
 
@@ -31,9 +31,9 @@ trait EventModelTrait {
     public function eventPassword($args, $model)
     {
         if ($this->$args[1])
-            $this->$args[0] = Hash::make($this->$args[1]);
+            $this->$args[0] = bcrypt($this->$args[1]);
         else
-            $this->$args[0] = Hash::make($this->$args[0]);
+            $this->$args[0] = bcrypt($this->$args[0]);
     }
 
 }
