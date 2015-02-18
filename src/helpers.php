@@ -484,3 +484,15 @@ if ( ! function_exists('error'))
         return app('Illuminate\Support\Contracts\MessageProviderInterface')->error($message);
     }
 }
+
+if ( ! function_exists('json'))
+{
+    /**
+     * To output the message with json
+     */
+    function json($status, $message, $datas = array())
+    {
+        return app('Illuminate\Support\Contracts\MessageProviderInterface')
+                    ->json($status, $message, $datas);
+    }
+}
