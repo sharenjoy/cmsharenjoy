@@ -181,14 +181,6 @@ abstract class BaseController extends Controller {
 
             Session::put('user', $this->user->toArray());
             view()->share('user', $this->user->toArray());
-
-            if ($this->user->employee_id)
-            {
-                $this->employee = \Employee::showById($this->user->employee_id);
-                
-                Session::put('employee', $this->employee->toArray());
-                view()->share('employee', $this->employee->toArray());
-            }
         }
     }
 
