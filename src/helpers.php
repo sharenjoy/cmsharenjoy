@@ -451,3 +451,47 @@ if ( ! function_exists('trans_options'))
         return array_map($fun, $options);
     }
 }
+
+if ( ! function_exists('success'))
+{
+    /**
+     * To output the message with success
+     */
+    function success($message)
+    {
+        return Message::success($message);
+    }
+}
+
+if ( ! function_exists('info'))
+{
+    /**
+     * To output the message with info
+     */
+    function info($message)
+    {
+        return Message::info($message);
+    }
+}
+
+if ( ! function_exists('warning'))
+{
+    /**
+     * To output the message with warning
+     */
+    function warning($message)
+    {
+        return Message::warning($message);
+    }
+}
+
+if ( ! function_exists('error'))
+{
+    /**
+     * To output the message with error
+     */
+    function error($message)
+    {
+        return Message::error($message);
+    }
+}
