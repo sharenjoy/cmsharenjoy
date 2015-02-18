@@ -459,18 +459,7 @@ if ( ! function_exists('success'))
      */
     function success($message)
     {
-        return Message::success($message);
-    }
-}
-
-if ( ! function_exists('info'))
-{
-    /**
-     * To output the message with info
-     */
-    function info($message)
-    {
-        return Message::info($message);
+        return app('Illuminate\Support\Contracts\MessageProviderInterface')->success($message);
     }
 }
 
@@ -481,7 +470,7 @@ if ( ! function_exists('warning'))
      */
     function warning($message)
     {
-        return Message::warning($message);
+        return app('Illuminate\Support\Contracts\MessageProviderInterface')->warning($message);
     }
 }
 
@@ -492,6 +481,6 @@ if ( ! function_exists('error'))
      */
     function error($message)
     {
-        return Message::error($message);
+        return app('Illuminate\Support\Contracts\MessageProviderInterface')->error($message);
     }
 }
