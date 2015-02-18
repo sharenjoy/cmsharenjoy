@@ -298,6 +298,12 @@ abstract class BaseController extends Controller {
         $pathA = $this->onController.'.'.$action;
         $pathB = $commonLayout.'.'.$action;
 
+        // resources/views/admin/member/create
+        if (view()->exists($this->accessUrl.'.'.$pathA))
+        {
+            return view($this->accessUrl.'.'.$pathA);
+        }
+
         // organization/views/member/create
         if (view()->exists($this->onPackage.'::'.$pathA))
         {
@@ -309,14 +315,8 @@ abstract class BaseController extends Controller {
         {
             return view($this->onPackage.'::'.$pathB);
         }
-
-        // app/views/admin/member/create
-        if (view()->exists($this->accessUrl.'.'.$pathA))
-        {
-            return view($this->accessUrl.'.'.$pathA);
-        }
         
-        // app/views/admin/common/create
+        // resources/views/admin/common/create
         if (view()->exists($this->accessUrl.'.'.$pathB))
         {
             return view($this->accessUrl.'.'.$pathB);
