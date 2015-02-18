@@ -289,33 +289,33 @@ if ( ! function_exists('pick_trans'))
         // If the item includes :: symbol
         if (strpos($item, '::') !== false)
         {
-            return Lang::get($item, $options);
+            return app('translator')->trans($item, $options);
         }
 
         $pkg = Session::get('onPackage');
 
         $local_reference = "{$pkg}.{$item}";
 
-        if (Lang::has($local_reference))
+        if (app('translator')->has($local_reference))
         {
-            return Lang::get($local_reference, $options);
+            return app('translator')->trans($local_reference, $options);
         }
         
         $pkg_reference = "{$pkg}::{$pkg}.{$item}";
 
-        if (Lang::has($pkg_reference))
+        if (app('translator')->has($pkg_reference))
         {
-            return Lang::get($pkg_reference, $options);
+            return app('translator')->trans($pkg_reference, $options);
         }
 
-        if (Lang::has($item))
+        if (app('translator')->has($item))
         {
-            return Lang::get($item, $options);
+            return app('translator')->trans($item, $options);
         }
 
-        if (Lang::has('cmsharenjoy.'.$item))
+        if (app('translator')->has('cmsharenjoy.'.$item))
         {
-            return Lang::get('cmsharenjoy.'.$item, $options);
+            return app('translator')->trans('cmsharenjoy.'.$item, $options);
         }
         
         return false;
