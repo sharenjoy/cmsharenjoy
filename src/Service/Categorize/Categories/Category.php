@@ -19,6 +19,8 @@ class Category extends EloquentBaseModel implements CategoryInterface {
         'description'
     ];
 
+    protected $dates = ['deleted_at'];
+
     /**
      * Model event.
      *
