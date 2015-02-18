@@ -103,12 +103,6 @@ abstract class BaseController extends Controller {
     protected $user;
 
     /**
-     * The login employee
-     * @var object
-     */
-    protected $employee;
-
-    /**
      * Initializer.
      * @access   public
      * @return   void
