@@ -452,6 +452,17 @@ if ( ! function_exists('trans_options'))
     }
 }
 
+if ( ! function_exists('message'))
+{
+    /**
+     * To output the message object
+     */
+    function message()
+    {
+        return app('Illuminate\Support\Contracts\MessageProviderInterface');
+    }
+}
+
 if ( ! function_exists('success'))
 {
     /**
@@ -459,18 +470,7 @@ if ( ! function_exists('success'))
      */
     function success($message)
     {
-        return app('Illuminate\Support\Contracts\MessageProviderInterface')->success($message);
-    }
-}
-
-if ( ! function_exists('warning'))
-{
-    /**
-     * To output the message with warning
-     */
-    function warning($message)
-    {
-        return app('Illuminate\Support\Contracts\MessageProviderInterface')->warning($message);
+        return message()->success($message);
     }
 }
 
@@ -481,18 +481,6 @@ if ( ! function_exists('error'))
      */
     function error($message)
     {
-        return app('Illuminate\Support\Contracts\MessageProviderInterface')->error($message);
-    }
-}
-
-if ( ! function_exists('json'))
-{
-    /**
-     * To output the message with json
-     */
-    function json($status, $message, $datas = array())
-    {
-        return app('Illuminate\Support\Contracts\MessageProviderInterface')
-                    ->json($status, $message, $datas);
+        return message()->error($message);
     }
 }
