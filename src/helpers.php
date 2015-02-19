@@ -442,10 +442,10 @@ if ( ! function_exists('trans_options'))
      */
     function trans_options($name)
     {
-        $options = config('options.'.$name);
+        $options = config($name);
 
         $fun = function($value) {
-            return trans($value);
+            return pick_trans($value);
         };
 
         return array_map($fun, $options);

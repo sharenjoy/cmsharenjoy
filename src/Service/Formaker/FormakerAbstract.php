@@ -123,7 +123,7 @@ abstract class FormakerAbstract {
                 }
                 elseif (is_string($option))
                 {
-                    $this->option = trans_options($option);
+                    $this->option = trans_options('options.'.$option);
                 }
             }
             else
