@@ -5,8 +5,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Bus\DispatchesCommands;
 use Sharenjoy\Cmsharenjoy\User\User;
 use Illuminate\Support\Str;
-use App, Sentry, Session, Config;
-use Route, Request, Theme, Message, Setting;
+use Sentry, Route, Request, Theme, Message, Setting;
 
 abstract class BaseController extends Controller {
 
@@ -121,7 +120,7 @@ abstract class BaseController extends Controller {
     protected function setCommonVariable()
     {
         // Achieve that segment
-        $this->accessUrl = Config::get('cmsharenjoy.access_url');
+        $this->accessUrl = config('cmsharenjoy.access_url');
         
         // Get the action name
         $routeArray = Str::parseCallback(Route::currentRouteAction(), null);
@@ -136,17 +135,17 @@ abstract class BaseController extends Controller {
 
             // post, report
             $this->onController = strtolower($controller);
-            Session::put('onController', $this->onController);
+            session()->put('onController', $this->onController);
             view()->share('onController', $this->onController);
 
             // get-create, post-create
             $this->onMethod = Str::slug(Request::method(). '-' .$action);
-            Session::put('onMethod', $this->onMethod);
+            session()->put('onMethod', $this->onMethod);
             view()->share('onMethod', $this->onMethod);
 
             // create, update
             $this->onAction = strtolower($action);
-            Session::put('onAction', $this->onAction);
+            session()->put('onAction', $this->onAction);
             view()->share('onAction', $this->onAction);
         }
 
@@ -156,8 +155,8 @@ abstract class BaseController extends Controller {
         // Share some variables to views
         view()->share('brandName'     , $this->brandName);
         view()->share('functionRules' , $this->functionRules);
-        view()->share('langLocales'   , Config::get('cmsharenjoy.locales'));
-        view()->share('activeLanguage', Session::get('sharenjoy.backEndLanguage'));
+        view()->share('langLocales'   , config('cmsharenjoy.locales'));
+        view()->share('activeLanguage', session('sharenjoy.backEndLanguage'));
 
         // Set the theme
         $this->theme = Theme::uses('admin');
@@ -173,7 +172,7 @@ abstract class BaseController extends Controller {
         {
             $this->user = Sentry::getUser();
 
-            Session::put('user', $this->user->toArray());
+            session()->put('user', $this->user->toArray());
             view()->share('user', $this->user->toArray());
         }
     }
@@ -188,7 +187,7 @@ abstract class BaseController extends Controller {
         $this->onPackage = $this->getPackageInfo();
         
         // active package
-        Session::put('onPackage', $this->onPackage);
+        session()->put('onPackage', $this->onPackage);
         view()->share('onPackage', $this->onPackage);
     }
 
@@ -207,10 +206,10 @@ abstract class BaseController extends Controller {
 
         // Share these variables with any views
         view()->share('accessUrl', $this->accessUrl);
-        Session::put('accessUrl', $this->accessUrl);
+        session()->put('accessUrl', $this->accessUrl);
 
         view()->share('objectUrl', $this->objectUrl);
-        Session::put('objectUrl', $this->objectUrl);
+        session()->put('objectUrl', $this->objectUrl);
 
         view()->share('previewUrl', $this->previewUrl);
         view()->share('createUrl', $this->createUrl);
@@ -225,7 +224,7 @@ abstract class BaseController extends Controller {
      */
     protected function parseMenuItems()
     {
-        $menuItems = Config::get('cmsharenjoy.menu_items');
+        $menuItems = config('cmsharenjoy.menu_items');
         $masterMenu = null;
         $subMenu = null;
 
