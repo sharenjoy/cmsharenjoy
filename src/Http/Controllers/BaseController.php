@@ -234,7 +234,7 @@ abstract class BaseController extends Controller {
             {
                 foreach ($items['sub'] as $suburl => $item)
                 {
-                    if (strpos($suburl, '?'))
+                    if (strpos($suburl, '?') !== false)
                     {
                         // earse behind and include of the '?'
                         $suburl = substr_replace($suburl, '', strpos($suburl, '?'));
@@ -249,7 +249,7 @@ abstract class BaseController extends Controller {
             }
             else
             {
-                if (strpos($url, '?'))
+                if (strpos($url, '?') !== false)
                 {
                     $url = substr_replace($url, '', strpos($url, '?'));
                 }
