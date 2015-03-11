@@ -31,6 +31,7 @@ abstract class ObjectBaseController extends BaseController {
         parent::__construct();
 
         $this->middleware('admin.switchPaginationCount', ['only' => 'getIndex']);
+
         $this->middleware('admin.setGoBackPrevious', ['only' => ['getIndex', 'getSort']]);
 
         $this->paginationCount = config('cmsharenjoy.paginationCount');
@@ -44,8 +45,6 @@ abstract class ObjectBaseController extends BaseController {
     {
         $this->repo->grabAllLists();
         
-        $limit = $request->input('perPage', $this->paginationCount);
-
         $model = $this->repo->makeQuery();
 
         if ($request->has('filter'))
@@ -54,6 +53,8 @@ abstract class ObjectBaseController extends BaseController {
             $model = $this->repo->filter($filter, $model);
         }
 
+        $limit = $request->input('perPage', $this->paginationCount);
+        
         $items = $this->repo->showByPage($limit, $request->query(), $model);
         
         $forms = Formaker::setModel($this->repo->getModel())->make($request->all());
