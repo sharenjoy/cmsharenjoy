@@ -2,7 +2,7 @@
 
 use Sharenjoy\Cmsharenjoy\Http\Controllers\ObjectBaseController;
 use Illuminate\Http\Request;
-use Categorize, Session, Message, Config, Lister;
+use Categorize, Lister;
 
 class CategoryController extends ObjectBaseController {
 
@@ -27,14 +27,14 @@ class CategoryController extends ObjectBaseController {
     {
         $this->repo = $repo;
 
-        $this->categoryLayerNumber = Config::get('module.category.layer');
+        $this->categoryLayerNumber = config('module.category.layer');
 
         if ($request->query('category'))
         {
-            Session::put('sharenjoy.categoryType', $request->query('category'));
+            session()->put('sharenjoy.categoryType', $request->query('category'));
         }
 
-        $this->type = Session::get('sharenjoy.categoryType');
+        $this->type = session('sharenjoy.categoryType');
 
         parent::__construct();
 
@@ -48,8 +48,6 @@ class CategoryController extends ObjectBaseController {
 
     public function getIndex(Request $request)
     {
-        $this->setGoBackPrevious($request);
-
         $type  = $this->type;
         $limit = $this->repo->getModel()->whereType($type)->count();
         $num = $this->getCategoryLayerNumber($type);
@@ -103,7 +101,7 @@ class CategoryController extends ObjectBaseController {
             }
         }
 
-        return Message::json(200, pick_trans('success_ordered'));
+        return message()->json(200, pick_trans('success_ordered'));
     }
 
     public function getCreate()

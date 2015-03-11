@@ -1,7 +1,6 @@
 <?php namespace Sharenjoy\Cmsharenjoy\User;
 
 use Sharenjoy\Cmsharenjoy\Http\Controllers\ObjectBaseController;
-use Message;
 
 class UserController extends ObjectBaseController {
 
@@ -33,12 +32,12 @@ class UserController extends ObjectBaseController {
 
         if ( ! $result['status'])
         {
-            Message::error($result['message']);
+            error($result['message']);
 
             return redirect()->back();
         }
 
-        Message::success($result['message']);
+        success($result['message']);
 
         return redirect($this->objectUrl);
     }
