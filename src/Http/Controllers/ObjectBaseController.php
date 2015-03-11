@@ -2,8 +2,7 @@
 
 use Illuminate\Http\Request;
 use Sharenjoy\Cmsharenjoy\Utilities\Transformer;
-use View, Redirect, Input, Config, Event;
-use Response, Message, Session, Lister, Formaker;
+use Event, Message, Lister, Formaker;
 
 abstract class ObjectBaseController extends BaseController {
 
@@ -31,7 +30,7 @@ abstract class ObjectBaseController extends BaseController {
     {
         parent::__construct();
 
-        $this->paginationCount = Config::get('cmsharenjoy.paginationCount');
+        $this->paginationCount = config('cmsharenjoy.paginationCount');
     }
 
     /**
@@ -39,7 +38,7 @@ abstract class ObjectBaseController extends BaseController {
      */
     protected function setGoBackPrevious($request)
     {
-        Session::put('goBackPrevious', $request->fullUrl());
+        session()->put('goBackPrevious', $request->fullUrl());
     }
 
     /**
@@ -135,7 +134,7 @@ abstract class ObjectBaseController extends BaseController {
         {
             Message::error(pick_trans('exception.not_found', ['id' => $id]));
 
-            return redirect(Session::get('goBackPrevious'));
+            return redirect(session('goBackPrevious'));
         }
 
         $fields = Formaker::setModel($this->repo->getModel())->make($model->toArray());
@@ -188,7 +187,7 @@ abstract class ObjectBaseController extends BaseController {
         $result ? Message::success(pick_trans('success_updated'))
                 : Message::error(pick_trans('fail_updated'));
 
-        $redirect = $request->has('exit') ? Session::get('goBackPrevious') : $this->updateUrl.$id;
+        $redirect = $request->has('exit') ? session('goBackPrevious') : $this->updateUrl.$id;
 
         return redirect($redirect);
     }
@@ -209,7 +208,7 @@ abstract class ObjectBaseController extends BaseController {
         
         Event::fire('controllerAfterAction', [$model]);
 
-        return redirect(Session::get('goBackPrevious'));
+        return redirect(session('goBackPrevious'));
     }
 
     /**
