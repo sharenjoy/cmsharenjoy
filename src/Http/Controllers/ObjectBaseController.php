@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Sharenjoy\Cmsharenjoy\Utilities\Transformer;
-use Event, Message, Lister, Formaker;
+use Lister, Formaker;
 
 abstract class ObjectBaseController extends BaseController {
 
@@ -30,15 +30,10 @@ abstract class ObjectBaseController extends BaseController {
     {
         parent::__construct();
 
-        $this->paginationCount = config('cmsharenjoy.paginationCount');
-    }
+        $this->middleware('admin.switchPaginationCount', ['only' => 'index']);
+        $this->middleware('admin.setGoBackPrevious', ['only' => ['index', 'sort']]);
 
-    /**
-     * Set go back previous session
-     */
-    protected function setGoBackPrevious($request)
-    {
-        session()->put('goBackPrevious', $request->fullUrl());
+        $this->paginationCount = config('cmsharenjoy.paginationCount');
     }
 
     /**
@@ -47,40 +42,26 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function getIndex(Request $request)
     {
-        // switch pagination count
-        if ($request->has('query_string'))
-        {
-            parse_str($request->input('query_string'), $query);
-            $query['perPage'] = $request->input('perPage');
-            unset($query['page']);
-
-            return redirect($this->objectUrl.'?'.http_build_query($query));
-        }
-
-        $this->setGoBackPrevious($request);
-
         $this->repo->grabAllLists();
         
-        $input = $request->all();
         $limit = $request->input('perPage', $this->paginationCount);
-        $query = $request->query();
 
         $model = $this->repo->makeQuery();
 
-        if (isset($input['filter']))
+        if ($request->has('filter'))
         {
-            $filter = array_except($query, $this->filterExcept);
+            $filter = array_except($request->query(), $this->filterExcept);
             $model = $this->repo->filter($filter, $model);
         }
 
-        $items = $this->repo->showByPage($limit, $query, $model);
+        $items = $this->repo->showByPage($limit, $request->query(), $model);
         
-        $forms = Formaker::setModel($this->repo->getModel())->make($input);
+        $forms = Formaker::setModel($this->repo->getModel())->make($request->all());
 
         $data = ['paginationCount'=>$limit, 'sortable'=>false, 'rules'=>$this->functionRules];
         $lister = Lister::make($items, $this->listConfig, $data);
 
-        Event::fire('controllerAfterAction', ['']);
+        event('controllerAfterAction', ['']);
 
         return $this->layout()->with('filterForm', $forms)
                               ->with('listEmpty', $items->isEmpty())
@@ -93,15 +74,9 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function getSort(Request $request)
     {
-        $this->setGoBackPrevious($request);
-
-        $input = $request->all();
         $limit = $request->input('perPage', $this->paginationCount);
-        $query = $request->query();
 
-        $model = $this->repo->makeQuery();
-
-        $items = $this->repo->showByPage($limit, $query, $model);
+        $items = $this->repo->showByPage($limit, $request->query(), $this->repo->makeQuery());
 
         $data = ['paginationCount'=>$limit, 'sortable'=>true, 'rules'=>$this->functionRules];
         $lister = Lister::make($items, $this->listConfig, $data);
@@ -132,14 +107,14 @@ abstract class ObjectBaseController extends BaseController {
 
         if ( ! $model)
         {
-            Message::error(pick_trans('exception.not_found', ['id' => $id]));
+            error(pick_trans('exception.not_found', ['id' => $id]));
 
             return redirect(session('goBackPrevious'));
         }
 
         $fields = Formaker::setModel($this->repo->getModel())->make($model->toArray());
 
-        Event::fire('controllerAfterAction', [$model]);
+        event('controllerAfterAction', [$model]);
 
         return $this->layout()->with('item', $model)->with('fieldsForm', $fields);
     }
@@ -160,8 +135,8 @@ abstract class ObjectBaseController extends BaseController {
 
         $model = $this->repo->create();
 
-        $model ? Message::success(pick_trans('success_created'))
-               : Message::error(pick_trans('fail_created'));
+        $model ? success(pick_trans('success_created'))
+               : error(pick_trans('fail_created'));
         
         $redirect = $request->has('exit') ? $this->objectUrl : $this->updateUrl.$model->id;
 
@@ -184,8 +159,8 @@ abstract class ObjectBaseController extends BaseController {
 
         $result = $this->repo->update($id);
 
-        $result ? Message::success(pick_trans('success_updated'))
-                : Message::error(pick_trans('fail_updated'));
+        $result ? success(pick_trans('success_updated'))
+                : error(pick_trans('fail_updated'));
 
         $redirect = $request->has('exit') ? session('goBackPrevious') : $this->updateUrl.$id;
 
@@ -203,10 +178,10 @@ abstract class ObjectBaseController extends BaseController {
         $model  = $this->repo->showById($id);
         $result = $this->repo->delete($id);
 
-        $result ? Message::success(pick_trans('success_deleted'))
-                : Message::error(pick_trans('fail_deleted'));
+        $result ? success(pick_trans('success_deleted'))
+                : error(pick_trans('fail_deleted'));
         
-        Event::fire('controllerAfterAction', [$model]);
+        event('controllerAfterAction', [$model]);
 
         return redirect(session('goBackPrevious'));
     }
@@ -226,13 +201,13 @@ abstract class ObjectBaseController extends BaseController {
         {
             $message = pick_trans('exception.not_found', ['id' => $id]);
 
-            return Message::json(404, $message);
+            return message()->json(404, $message);
         }
 
         $result['title']   = Transformer::title($model->toArray());
         $result['subject'] = pick_trans('confirm_deleted');
 
-        return Message::json(200, '', $result);
+        return message()->json(200, '', $result);
     }
 
     /**
@@ -258,7 +233,7 @@ abstract class ObjectBaseController extends BaseController {
                 }
                 catch (\Sharenjoy\Cmsharenjoy\Exception\EntityNotFoundException $e)
                 {
-                    Message::error(pick_trans('exception.not_found', ['id' => $id]));
+                    error(pick_trans('exception.not_found', ['id' => $id]));
                     return redirect($this->objectUrl);
                 }
             }
@@ -267,7 +242,7 @@ abstract class ObjectBaseController extends BaseController {
         $message = pick_trans('success_ordered');
         $data = ['success' => pick_trans('success')];
         
-        return Message::json(200, $message, $data);
+        return message()->json(200, $message, $data);
     }
     
 }
