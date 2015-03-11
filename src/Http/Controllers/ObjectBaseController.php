@@ -30,8 +30,8 @@ abstract class ObjectBaseController extends BaseController {
     {
         parent::__construct();
 
-        $this->middleware('admin.switchPaginationCount', ['only' => 'index']);
-        $this->middleware('admin.setGoBackPrevious', ['only' => ['index', 'sort']]);
+        $this->middleware('admin.switchPaginationCount', ['only' => 'getIndex']);
+        $this->middleware('admin.setGoBackPrevious', ['only' => ['getIndex', 'getSort']]);
 
         $this->paginationCount = config('cmsharenjoy.paginationCount');
     }
