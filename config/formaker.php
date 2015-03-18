@@ -150,6 +150,9 @@ return [
 
         // For category
         'category_id'           => 'category',
+
+        // For customer
+        'customer_id'           => 'customer',
     ],
 
 ];

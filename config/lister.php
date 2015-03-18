@@ -48,7 +48,7 @@ return [
     |
     */
 
-    'exceptFunction' => ['list', 'create', 'order'],
+    'exceptFunction' => ['list', 'create', 'order', 'handle', 'trace'],
 
     /*
     |--------------------------------------------------------------------------
