@@ -9,7 +9,7 @@ class CustomerForm extends FormAbstract implements FormInterface {
     {
         $data['class'] .= ' typeahead';
         $data['data-remote'] = route('customerFilter')."?query=%QUERY";
-        $data['data-template'] = "<div class='thumb-entry'><span class='image'><img src='{{img}}' width=40 height=40 /></span><span class='text'><strong>{{value}}</strong><em>{{text}}</em></span></div>";
+        $data['data-template'] = "<div class='thumb-entry'><span class='image'><img src='{{img}}' width=40 height=40 /></span><span class='text'><strong>{{value}} {{sn}}</strong><em>{{text}}</em></span></div>";
 
         $value = $data['value'];
         $buttonStatus = 'none';
@@ -38,32 +38,34 @@ class CustomerForm extends FormAbstract implements FormInterface {
 
         Theme::asset()->writeScript('script', '
             $(function() {
+
                 $(".typeahead")
-                .on("typeahead:opened", function ($e) {
-                  // console.log("opened");
-                })
+                // .on("typeahead:initialized", function($e) {
+                //     console.log("initialized");
+                // })
+                // .on("typeahead:opened", function ($e) {
+                //     console.log("opened");
+                // })
+                // .on("typeahead:closed", function($e) {
+                //     console.log("closed");
+                // })
                 .on("typeahead:selected", function ($e, datum) {
-                  // console.log("autocompleted");
-                  // console.log(datum);
-                  $("#popoverCustomerHiddenTitle").html(datum.value+" "+datum.sn);
-                  $("#popoverCustomerHiddenContent").html(datum.value);
-                  $(".customer-field button").css("display", "block");
-                  $("#customer_id").val(datum.id);
-                })
-                .on("typeahead:autocompleted", function($e, datum) {
-                  // console.log("selected");
-                  // console.log(datum);
+                    // console.log("autocompleted");
+                    // console.log(datum);
+                    $("#popoverCustomerHiddenTitle").html(datum.value+" "+datum.sn);
+                    $("#popoverCustomerHiddenContent").html(datum.value);
+                    $(".customer-field button").css("display", "block");
+                    $("#customer_id").val(datum.id);
                 });
                 
-                $(".customer-field input[type=text]").on("change", function(e) {
-                    e.preventDefault();
-                    $("#customer_id").val("");
+                $(".customer-field input[type=text]").on("keyup", function(e) {
+                    if ($(this).val() == "") {
+                        $("#customer_id").val("");
+                    }
                 });
-                $(".customer-field button").on("click", function(e) {
-                    e.preventDefault();
-                });
+
                 $("#popoverCustomer").popover({
-                    html: true, 
+                    html: true,
                     trigger: "hover",
                     placement: "auto",
                     container: "body",
