@@ -1,7 +1,7 @@
 <?php
 
 return [
-	
+    
     /*
      * --------------------------------------------------------------------------
      *  How to use
@@ -153,6 +153,11 @@ return [
 
         // For customer
         'customer_id'           => 'customer',
+        'customer'              => 'customer',
+
+        // For employee
+        'employee_id'           => 'employee',
+        'employee'              => 'employee',
     ],
 
 ];

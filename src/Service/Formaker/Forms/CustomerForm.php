@@ -7,7 +7,8 @@ class CustomerForm extends FormAbstract implements FormInterface {
 
     public function make(array $data)
     {
-        $data['class'] .= ' typeahead';
+        $data['class'] = array_get($data, 'others.setting.args.class') ?: 
+                         'form-control typeahead';
         $data['data-remote'] = route('customerFilter')."?query=%QUERY";
         $data['data-template'] = "<div class='thumb-entry'><span class='image'><img src='{{img}}' width=40 height=40 /></span><span class='text'><strong>{{value}} {{sn}}</strong><em>{{text}}</em></span></div>";
 
