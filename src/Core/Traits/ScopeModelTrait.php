@@ -7,6 +7,11 @@ trait ScopeModelTrait {
         return $value ? $query->where('status_id', $value) : $query;
     }
 
+    public function scopeUserId($query, $value)
+    {
+        return $value ? $query->where('user_id', $value) : $query;
+    }
+
     public function scopeKeyword($query, $value)
     {
         if ($value)
