@@ -24,7 +24,7 @@ class CustomerSimpleForm extends FormAbstract implements FormInterface {
 
         $attributes = $this->attributes($data);
         
-        $form = '<div class="customer-field"><div class="input-group"><div class="input-group-addon"><i class="entypo-search fa-lg"></i></div><input type="text"'.$attributes.'><input type="hidden" id="customer_id" name="customer_id" value="'.$value.'"></div></div>';
+        $form = '<div class="customer-field"><input type="text"'.$attributes.'><input type="hidden" id="customer_id" name="customer_id" value="'.$value.'"></div>';
 
         Theme::asset()->add('typeahead', 'packages/sharenjoy/cmsharenjoy/js/typeahead.min.js');
 
