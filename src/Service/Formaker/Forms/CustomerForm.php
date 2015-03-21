@@ -30,8 +30,7 @@ class CustomerForm extends FormAbstract implements FormInterface {
 
         $attributes = $this->attributes($data);
         
-        $form = '<div class="customer-field"><input type="text"'.$attributes.'><input type="hidden" id="customer_id" name="customer_id" value="'.$value.'"><button type="button" class="btn" id="popoverCustomer"><i class="'.$buttonIcon.'"></i></button></div>';
-
+        $form = '<div class="customer-field"><input type="text"'.$attributes.'><input type="hidden" id="customer_id" name="customer_id" value="'.$value.'"><button type="button" class="btn" id="popoverCustomer" style="position: absolute;right: 7px;top: 1px;border: 0px none;background: none repeat scroll 0% 0% transparent;color: #737881;font-size: 16px;opacity: 0.7;transition: all 300ms ease-in-out 0s;"><i class="'.$buttonIcon.'"></i></button></div>';
         $form .= '<div id="popoverCustomerHiddenTitle" style="display: none;">'.$popoverTitle.'</div>
                   <div id="popoverCustomerHiddenContent" style="display: none;">'.$popoverContent.'</div>';
 
@@ -85,20 +84,6 @@ class CustomerForm extends FormAbstract implements FormInterface {
                     }
                 });
             });
-        ');
-
-        Theme::asset()->writeStyle('style', '
-            .customer-field button { 
-                position: absolute;
-                right: 7px;
-                top: 1px;
-                border: 0px none;
-                background: none repeat scroll 0% 0% transparent;
-                color: #737881;
-                font-size: 16px;
-                opacity: 0.7;
-                transition: all 300ms ease-in-out 0s;
-            }
         ');
         
         return $form;
