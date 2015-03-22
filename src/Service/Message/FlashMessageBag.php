@@ -58,6 +58,7 @@ class FlashMessageBag extends MessageBag {
         {
             case 200:
                 $content = [
+                    'title'   => pick_trans('success'),
                     'message' => $message ?: 'OK',
                     'data'    => $data
                 ];
@@ -65,6 +66,7 @@ class FlashMessageBag extends MessageBag {
 
             case 201:
                 $content = [
+                    'title'   => pick_trans('success'),
                     'message' => $message ?: 'Created',
                     'data'    => $data
                 ];
@@ -73,6 +75,7 @@ class FlashMessageBag extends MessageBag {
             case 400:
                 $content = [
                     'error' => [
+                        'title'   => pick_trans('fail'),
                         'message' => $message ?: 'Bad Request'
                     ]
                 ];
@@ -81,6 +84,7 @@ class FlashMessageBag extends MessageBag {
             case 404:
                 $content = [
                     'error' => [
+                        'title'   => pick_trans('fail'),
                         'message' => $message ?: 'Not found'
                     ]
                 ];
