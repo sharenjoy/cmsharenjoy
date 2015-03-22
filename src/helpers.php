@@ -516,3 +516,23 @@ if ( ! function_exists('unique_array'))
     }
 }
 
+if ( ! function_exists('diffForHumans'))
+{
+    /**
+     * To output the Humans times
+     */
+    function diffForHumans($time)
+    {
+        $string = $time->diffForHumans();
+
+        $string = str_replace(['seconds', 'second'], '秒', $string);
+        $string = str_replace(['minutes', 'minute'], '分鐘', $string);
+        $string = str_replace(['hours', 'hour'], '小時', $string);
+        $string = str_replace(['days', 'day'], '天', $string);
+        $string = str_replace('ago', '前', $string);
+        $string = str_replace(' ', '', $string);
+
+        return $string;
+    }
+}
+
