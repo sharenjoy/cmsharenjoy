@@ -165,8 +165,9 @@ abstract class FormakerAbstract {
     protected function getFormText($type)
     {
         // Set the lang of placeholder from config
-        $targetA = 'form.'.$type.'.'.Session::get('onController').'.'.$this->name;
-        $targetB = 'form.'.$type.'.'.$this->name;
+        $targetA = 'form.'.Session::get('onController').'.'.$type.'.'.$this->name;
+        $targetB = 'form.'.$type.'.'.Session::get('onController').'.'.$this->name;
+        $targetC = 'form.'.$type.'.'.$this->name;
 
         if (isset($this->setting[$type]) && ! is_null($this->setting[$type]))
         {
@@ -181,6 +182,11 @@ abstract class FormakerAbstract {
         if (pick_trans($targetB))
         {
             return pick_trans($targetB);
+        }
+
+        if (pick_trans($targetC))
+        {
+            return pick_trans($targetC);
         }
 
         return;
