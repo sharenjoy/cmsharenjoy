@@ -445,6 +445,7 @@ if ( ! function_exists('trans_options'))
         $options = config($name);
 
         $fun = function($value) {
+            if ( ! pick_trans($value)) {return $value;}
             return pick_trans($value);
         };
 
