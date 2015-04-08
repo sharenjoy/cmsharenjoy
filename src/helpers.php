@@ -532,6 +532,9 @@ if ( ! function_exists('diffForHumans'))
         $string = str_replace(['minutes', 'minute'], '分鐘', $string);
         $string = str_replace(['hours', 'hour'], '小時', $string);
         $string = str_replace(['days', 'day'], '天', $string);
+        $string = str_replace(['weeks', 'week'], '星期', $string);
+        $string = str_replace(['months', 'month'], '月', $string);
+        $string = str_replace(['years', 'year'], '年', $string);
         $string = str_replace('ago', '前', $string);
         $string = str_replace(' ', '', $string);
 
