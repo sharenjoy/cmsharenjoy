@@ -61,19 +61,19 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
 	protected function bindRepository()
 	{
 		// The Users Binding
-		$this->app->singleton('Sharenjoy\Cmsharenjoy\User\UserInterface', function()
+		$this->app->bind('Sharenjoy\Cmsharenjoy\User\UserInterface', function()
 		{
 		    return new UserRepository(new User, new UserValidator);
 		});
 
 		// The Setting Bindings
-		$this->app->singleton('Sharenjoy\Cmsharenjoy\Setting\SettingInterface', function()
+		$this->app->bind('Sharenjoy\Cmsharenjoy\Setting\SettingInterface', function()
 		{
 		    return new SettingRepository(new Setting, new SettingValidator);
 		});
 
         // The parser binding
-        $this->app->singleton('Sharenjoy\Cmsharenjoy\Utilities\Parser', function()
+        $this->app->bind('Sharenjoy\Cmsharenjoy\Utilities\Parser', function()
         {
             return new Parser;
         });
@@ -81,7 +81,7 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
         // The Filer binding
         $driver = $this->app['config']->get('filer.driver');
         
-        $this->app->singleton('Sharenjoy\Cmsharenjoy\Filer\FilerInterface', function() use ($driver)
+        $this->app->bind('Sharenjoy\Cmsharenjoy\Filer\FilerInterface', function() use ($driver)
         {
             switch ($driver)
             {
@@ -93,7 +93,7 @@ class CmsharenjoyServiceProvider extends ServiceProvider {
             }
         });
 
-        $this->app->singleton(
+        $this->app->bind(
             'Illuminate\Support\Contracts\MessageProviderInterface',
             function()
             {

@@ -33,19 +33,19 @@ class ModuleServiceProvider extends ServiceProvider {
     public function register()
     {
         // The Post Binding
-        $this->app->singleton('Sharenjoy\Cmsharenjoy\Modules\Post\PostInterface', function()
+        $this->app->bind('Sharenjoy\Cmsharenjoy\Modules\Post\PostInterface', function()
         {
             return new PostRepository(new Post, new PostValidator);
         });
 
         // The Tag Binding
-        $this->app->singleton('Sharenjoy\Cmsharenjoy\Modules\Tag\TagInterface', function()
+        $this->app->bind('Sharenjoy\Cmsharenjoy\Modules\Tag\TagInterface', function()
         {
             return new TagRepository(new Tag, new TagValidator);
         });
 
         // The Category Binding
-        $this->app->singleton('Sharenjoy\Cmsharenjoy\Modules\Category\CategoryInterface', function()
+        $this->app->bind('Sharenjoy\Cmsharenjoy\Modules\Category\CategoryInterface', function()
         {
             return new CategoryRepository(new Category, new CategoryValidator);
         });
