@@ -117,7 +117,7 @@ class DashController extends BaseController {
         {
             Message::error($result['message']);
 
-            return Redirect::back();
+            return redirect()->back();
         }
 
         Message::success($result['message']);
