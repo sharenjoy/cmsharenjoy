@@ -159,10 +159,9 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
             $resetCode = $user->getResetPasswordCode();
 
             $data = array(
-                'id'        => $user->id,
-                'username'  => $user->name,
                 'code'      => $resetCode,
-                'accessUrl' => Session::get('accessUrl')
+                'accessUrl' => Session::get('accessUrl'),
+                'user'      => $user,
             );
 
             // send email
