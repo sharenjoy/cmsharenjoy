@@ -8,7 +8,14 @@ class CommonList extends ListAbstract implements ListInterface {
 
         if (isset($config['lists']))
         {
-            $content .= session('allLists.'.$config['lists'])[$item[$column]];
+            if (isset(session('allLists.'.$config['lists'])[$item[$column]]))
+            {
+                $content .= session('allLists.'.$config['lists'])[$item[$column]];
+            }
+            else
+            {
+                $content .= $item[$column];
+            }
         }
         else
         {
