@@ -267,7 +267,7 @@ abstract class BaseController extends Controller {
         view()->share('menuItems', $menuItems);
     }
 
-    public function getModuleNamespace()
+    protected function getModuleNamespace()
     {
         return $this->getAppNamespace().config('cmsharenjoy.moduleNamespace');
     }
