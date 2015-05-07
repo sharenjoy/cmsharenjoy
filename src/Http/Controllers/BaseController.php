@@ -267,6 +267,11 @@ abstract class BaseController extends Controller {
         view()->share('menuItems', $menuItems);
     }
 
+    public function getModuleNamespace()
+    {
+        return $this->getAppNamespace().config('cmsharenjoy.moduleNamespace');
+    }
+
     /**
      * Setting the output layout priority
      * @return view
