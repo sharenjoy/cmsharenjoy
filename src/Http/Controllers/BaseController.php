@@ -1,15 +1,16 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Http\Controllers;
 
-use Illuminate\Routing\Controller;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Bus\DispatchesCommands;
-use Sharenjoy\Cmsharenjoy\User\User;
+use Illuminate\Console\AppNamespaceDetectorTrait;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
+use Sharenjoy\Cmsharenjoy\User\User;
 use Sentry, Route, Request, Theme, Message, Setting;
 
 abstract class BaseController extends Controller {
 
-    use DispatchesCommands, ValidatesRequests;
+    use DispatchesCommands, ValidatesRequests, AppNamespaceDetectorTrait;
     
     /**
      * The URL segment that can be used to access the system

@@ -13,6 +13,12 @@ return [
     'access_url' => 'admin',
 
     /**
+     * This is the namespace of modules
+     * It's into the app folder
+     */
+    'moduleNamespace' => 'Modules\\',
+
+    /**
      * The array of language
      */
     'locales' => [
