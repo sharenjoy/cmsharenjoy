@@ -1,10 +1,15 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Controllers;
+<?php namespace Sharenjoy\Cmsharenjoy\Http\Controllers;
 
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Bus\DispatchesCommands;
+use Illuminate\Console\AppNamespaceDetectorTrait;
 use Illuminate\Routing\Controller;
-use App, Auth, Session, View, Str, Route;
-use Response, Request, Theme, Message, Setting;
+use Illuminate\Support\Str;
+use Auth, Route, Request, Theme, Message, Setting;
 
 abstract class FrontBaseController extends Controller {
+
+    use DispatchesCommands, ValidatesRequests, AppNamespaceDetectorTrait;
 
     /**
      * The brand name
@@ -31,16 +36,16 @@ abstract class FrontBaseController extends Controller {
     protected $onAction;
 
     /**
-     * The layout
-     * @var string
-     */
-    protected $layout;
-
-    /**
      * The theme instancd
      * @var object
      */
     protected $theme;
+
+    /**
+     * The login member
+     * @var object
+     */
+    protected $member;
 
     /**
      * Initializer.
@@ -49,24 +54,15 @@ abstract class FrontBaseController extends Controller {
      */
     public function __construct()
     {
-        $this->filterProcess();
         $this->setCommonVariable();
-    }
-
-    protected function filterProcess()
-    {
-        // Define 404 page
-        App::missing(function($exception)
-        {
-            return Response::view('errors.missing', array(), 404);
-        });
-
-        // csrf and include ajax
-        $this->beforeFilter('csrfFilter', array('on' => 'post'));
+        $this->getAuthInfo();
     }
 
     protected function setCommonVariable()
     {
+        // Achieve that segment
+        $this->accessUrl = config('cmsharenjoy.access_url');
+        
         // Get the action name
         $routeArray = Str::parseCallback(Route::currentRouteAction(), null);
         
@@ -80,62 +76,100 @@ abstract class FrontBaseController extends Controller {
 
             // post, report
             $this->onController = strtolower($controller);
-            Session::put('onController', $this->onController);
+            session()->put('onController', $this->onController);
+            view()->share('onController', $this->onController);
 
             // get-create, post-create
             $this->onMethod = Str::slug(Request::method(). '-' .$action);
-            Session::put('onMethod', $this->onMethod);
+            session()->put('onMethod', $this->onMethod);
+            view()->share('onMethod', $this->onMethod);
 
             // create, update
             $this->onAction = strtolower($action);
-            Session::put('onAction', $this->onAction);
-        }
-
-        // Get the login user
-        if (Auth::check())
-        {
-            $member = Auth::user();
-            Session::put('member', $member->toArray());
-            View::share('member', $member);
+            session()->put('onAction', $this->onAction);
+            view()->share('onAction', $this->onAction);
         }
 
         // Brand name from setting
         $this->brandName = Setting::get('brand_name');
-        View::share('brandName', $this->brandName);
         
+        // Share some variables to views
+        view()->share('brandName'     , $this->brandName);
+        view()->share('functionRules' , $this->functionRules);
+        view()->share('langLocales'   , config('cmsharenjoy.locales'));
+        view()->share('activeLanguage', session('sharenjoy.backEndLanguage'));
+
         // Set the theme
         $this->theme = Theme::uses('front');
 
         // Message
-        View::share('messages', Message::getMessageBag());
+        view()->share('messages', Message::getMessageBag());
+    }
+
+    protected function getAuthInfo()
+    {
+        // Get the login member
+        if (Auth::check())
+        {
+            $this->member = Auth::user();
+
+            session()->put('member', $this->member->toArray());
+            view()->share('member', $this->member);
+        }
+    }
+
+    protected function getModuleNamespace()
+    {
+        return $this->getAppNamespace().config('cmsharenjoy.moduleNamespace');
     }
 
     /**
-     * This is the order that show layout
-     * 1. view/member/create.blade.php
-     * 2. view/member-index.blade.php
-     * 3. view/member.blade.php (action = index)
-     * 4. view/create.blade.php
-     * @return View
+     * Setting the output layout priority
+     * @return view
      */
-    protected function setupLayout()
+    protected function layout()
     {
-        if (View::exists($this->onController.'.'.$this->onAction))
+        $action = $this->onAction;
+
+        // If action equat sort so that set the action to index
+        $action = $this->onMethod == 'get-sort' ? 'index' : $action;
+        
+        // Get reop directory from config
+        $commonLayout = config('cmsharenjoy.commonLayoutDirectory');
+        
+        $pathA = $this->onController.'.'.$action;
+        $pathB = $commonLayout.'.'.$action;
+
+        // resources/views/member/create
+        if (view()->exists($pathA))
         {
-            $this->layout = View::make($this->onController.'.'.$this->onAction);
+            return view($pathA);
         }
-        elseif (View::exists($this->onController.'-'.$this->onAction))
+
+        // resources/views/create
+        if (view()->exists($action))
         {
-            $this->layout = View::make($this->onController.'-'.$this->onAction);
+            return view($action);
         }
-        elseif ($this->onAction == 'index' && View::exists($this->onController))
+
+        // organization/views/member/create
+        if (view()->exists($this->onPackage.'::'.$pathA))
         {
-            $this->layout = View::make($this->onController);
+            return view($this->onPackage.'::'.$pathA);
         }
-        elseif (View::exists($this->onAction))
+        
+        // organization/views/common/create
+        if (view()->exists($this->onPackage.'::'.$pathB))
         {
-            $this->layout = View::make($this->onAction);
+            return view($this->onPackage.'::'.$pathB);
         }
+        
+        // resources/views/common/create
+        if (view()->exists($pathB))
+        {
+            return view($pathB);
+        }
+        
     }
 
 }
