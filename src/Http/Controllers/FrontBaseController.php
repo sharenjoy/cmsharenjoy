@@ -95,12 +95,11 @@ abstract class FrontBaseController extends Controller {
         
         // Share some variables to views
         view()->share('brandName'     , $this->brandName);
-        view()->share('functionRules' , $this->functionRules);
         view()->share('langLocales'   , config('cmsharenjoy.locales'));
         view()->share('activeLanguage', session('sharenjoy.backEndLanguage'));
 
         // Set the theme
-        $this->theme = Theme::uses('front');
+        // $this->theme = Theme::uses('front');
 
         // Message
         view()->share('messages', Message::getMessageBag());
@@ -124,52 +123,31 @@ abstract class FrontBaseController extends Controller {
     }
 
     /**
-     * Setting the output layout priority
-     * @return view
+     * This is the order that show layout
+     * 1. view/member/create.blade.php
+     * 2. view/member-index.blade.php
+     * 3. view/member.blade.php (action = index)
+     * 4. view/create.blade.php
+     * @return View
      */
     protected function layout()
     {
-        $action = $this->onAction;
-
-        // If action equat sort so that set the action to index
-        $action = $this->onMethod == 'get-sort' ? 'index' : $action;
-        
-        // Get reop directory from config
-        $commonLayout = config('cmsharenjoy.commonLayoutDirectory');
-        
-        $pathA = $this->onController.'.'.$action;
-        $pathB = $commonLayout.'.'.$action;
-
-        // resources/views/member/create
-        if (view()->exists($pathA))
+        if (view()->exists($this->onController.'.'.$this->onAction))
         {
-            return view($pathA);
+            return view($this->onController.'.'.$this->onAction);
         }
-
-        // resources/views/create
-        if (view()->exists($action))
+        elseif (view()->exists($this->onController.'-'.$this->onAction))
         {
-            return view($action);
+            return view($this->onController.'-'.$this->onAction);
         }
-
-        // organization/views/member/create
-        if (view()->exists($this->onPackage.'::'.$pathA))
+        elseif ($this->onAction == 'index' && view()->exists($this->onController))
         {
-            return view($this->onPackage.'::'.$pathA);
+            return view($this->onController);
         }
-        
-        // organization/views/common/create
-        if (view()->exists($this->onPackage.'::'.$pathB))
+        elseif (view()->exists($this->onAction))
         {
-            return view($this->onPackage.'::'.$pathB);
+            return view($this->onAction);
         }
-        
-        // resources/views/common/create
-        if (view()->exists($pathB))
-        {
-            return view($pathB);
-        }
-        
     }
 
 }
