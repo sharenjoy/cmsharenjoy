@@ -8,7 +8,14 @@ class ImageList extends ListAbstract implements ListInterface {
         
         if ($item->$column != '')
         {
-            $content .= '<img src="'.asset('uploads/thumbs/'.$item[$column]).'" width="75">';
+            if (isset($config['imageWidth']))
+            {
+                $content .= '<img src="'.asset('uploads/'.$item[$column]).'" width="'.$config['imageWidth'].'">';
+            }
+            else
+            {
+                $content .= '<img src="'.asset('uploads/thumbs/'.$item[$column]).'" width="75">';
+            }
         }
         else
         {
