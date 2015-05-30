@@ -14,7 +14,7 @@ class AddColumnToCategoriesTable extends Migration {
 	{
 		Schema::table('categories', function($table)
 		{
-		    $table->string('slug')->unique()->after('title');
+		    $table->string('slug')->after('title');
 		});
 	}
 
