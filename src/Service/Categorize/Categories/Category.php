@@ -16,6 +16,7 @@ class Category extends EloquentBaseModel implements CategoryInterface {
         'user_id',
         'type',
         'title',
+        'slug',
         'description'
     ];
 

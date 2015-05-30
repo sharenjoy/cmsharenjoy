@@ -11,7 +11,8 @@ trait ConfigTrait {
 
     public $formConfig = [
         'title'              => ['order' => '20'],
-        'description'        => ['order' => '30']
+        'slug'               => ['order' => '30'],
+        'description'        => ['order' => '40']
     ];
-    
+
 }

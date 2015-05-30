@@ -4,11 +4,12 @@ use Sharenjoy\Cmsharenjoy\Service\Validation\AbstractLaravelValidator;
 
 class CategoryValidator extends AbstractLaravelValidator {
 
-    public $unique = [];
+    public $unique = ['slug'];
     
     public $rules = [
-        'type'       => 'required',
-        'title'      => 'required'
+        'type'  => 'required',
+        'title' => 'required',
+        'slug'  => 'required|unique:categories,slug',
     ];
 
 }
