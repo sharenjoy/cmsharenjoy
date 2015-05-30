@@ -12,6 +12,11 @@ trait ScopeModelTrait {
         return $value ? $query->where('user_id', $value) : $query;
     }
 
+    public function scopeCategoryId($query, $value)
+    {
+        return $value ? $query->where('category_id', $value) : $query;
+    }
+
     public function scopeKeyword($query, $value)
     {
         if ($value)
