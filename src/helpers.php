@@ -519,12 +519,12 @@ if ( ! function_exists('unique_array'))
     }
 }
 
-if ( ! function_exists('diffForHumans'))
+if ( ! function_exists('diff_for_humans'))
 {
     /**
      * To output the Humans times
      */
-    function diffForHumans($time)
+    function diff_for_humans($time)
     {
         $string = $time->diffForHumans();
 
@@ -542,12 +542,12 @@ if ( ! function_exists('diffForHumans'))
     }
 }
 
-if ( ! function_exists('categoryOptions'))
+if ( ! function_exists('category_options'))
 {
     /**
      * To output the Humans times
      */
-    function categoryOptions($category)
+    function category_options($category)
     {
         return \Categorize::getCategoryProvider()
                             ->whereType($category)
