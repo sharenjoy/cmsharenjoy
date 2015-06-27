@@ -542,3 +542,17 @@ if ( ! function_exists('diffForHumans'))
     }
 }
 
+if ( ! function_exists('categoryOptions'))
+{
+    /**
+     * To output the Humans times
+     */
+    function categoryOptions($category)
+    {
+        return \Categorize::getCategoryProvider()
+                            ->whereType($category)
+                            ->orderBy('sort')
+                            ->lists('title', 'id');
+    }
+}
+
