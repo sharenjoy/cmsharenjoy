@@ -9,6 +9,8 @@ class SelectMultiForm extends FormAbstract implements FormInterface {
         
         $otherSetting = $data['others'];
         
+        $data['value'] = is_array($data['value']) ? join(',', $data['value']) : $data['value'];
+        
         $attributes = $this->attributes($data);
         
         $form = '<select multiple="multiple"'.$attributes.'>';

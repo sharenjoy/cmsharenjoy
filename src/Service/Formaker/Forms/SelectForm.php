@@ -6,6 +6,10 @@ class SelectForm extends FormAbstract implements FormInterface {
     {
         $otherSetting = $data['others'];
         
+        $input = $data['value'];
+
+        unset($data['value']);
+
         $attributes = $this->attributes($data);
         
         $form = '<select'.$attributes.'>';
@@ -14,7 +18,7 @@ class SelectForm extends FormAbstract implements FormInterface {
         {
             foreach ($otherSetting['option'] as $key => $value)
             {
-                $selected = $key == $data['value'] ? ' selected' : null;
+                $selected = $key == $input ? ' selected' : null;
                 $form .= '<option value="'.e($key).'"'.$selected.'>'.e($value).'</option>';
             }
         }
