@@ -12,6 +12,12 @@ abstract class ObjectBaseController extends BaseController {
     protected $repo;
 
     /**
+     * The relations need to be fetch from the Eloquent
+     * @var array
+     */
+    protected $relations = [];
+
+    /**
      * The default number of pagination
      * @var integer
      */
@@ -55,7 +61,7 @@ abstract class ObjectBaseController extends BaseController {
 
         $limit = $request->input('perPage', $this->paginationCount);
         
-        $items = $this->repo->showByPage($limit, $request->query(), $model);
+        $items = $this->repo->showByPage($limit, $request->query(), $model->with($this->relations));
         
         $forms = Formaker::setModel($this->repo->getModel())->make($request->all());
 
