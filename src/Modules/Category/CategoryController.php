@@ -17,7 +17,6 @@ class CategoryController extends ObjectBaseController {
         'type'         => ['name'=>'type',         'align'=>'center', 'width'=>'25%'],
         'title'        => ['name'=>'title',        'align'=>'',       'width'=>''   ],
         'slug'         => ['name'=>'slug',         'align'=>'',       'width'=>''   ],
-        'created_at'   => ['name'=>'created',      'align'=>'center', 'width'=>'20%'],
     ];
 
     protected $type;
