@@ -64,11 +64,14 @@ trait CommonModelTrait {
          * If the value that has been sant is null
          * To set the value to null
          */
-        if (count($this->formConfig))
+        $configProperty = session('onAction').'FormConfig';
+        $formConfig = isset($this->$configProperty) ? $this->$configProperty : $this->formConfig;
+
+        if (count($formConfig))
         {
             $check_type = ['checkbox', 'selectMultiList', 'selectMulti'];
 
-            foreach ($this->formConfig as $key => $value)
+            foreach ($formConfig as $key => $value)
             {
                 if ( ! isset($input[$key]) && (isset($value['type']) && in_array($value['type'], $check_type)))
                 {
