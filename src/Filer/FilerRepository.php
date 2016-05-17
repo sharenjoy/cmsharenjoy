@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Str;
 use Cartalyst\Sentry\Users\Eloquent\User;
-use Sharenjoy\Cmsharenjoy\Utilities\String;
+use Sharenjoy\Cmsharenjoy\Utilities\CmsharenjoyString;
 use Config, Setting, Session, Image;
 
 /**
@@ -1031,7 +1031,7 @@ class FilerRepository implements FilerInterface {
     **/
     protected function createSlug($name)
     {
-        $name = String::slug($name);
+        $name = CmsharenjoyString::slug($name);
 
         return $name;
     }

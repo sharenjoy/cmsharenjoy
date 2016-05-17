@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Str;
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseModel;
-use Sharenjoy\Cmsharenjoy\Utilities\String;
+use Sharenjoy\Cmsharenjoy\Utilities\CmsharenjoyString;
 use Config, DB;
 
 class Tag extends EloquentBaseModel {
@@ -30,7 +30,7 @@ class Tag extends EloquentBaseModel {
     
     public function setTagAttribute($value)
     {
-        $this->attributes['tag'] = Str::title(String::slug(trim($value)));
+        $this->attributes['tag'] = Str::title(CmsharenjoyString::slug(trim($value)));
     }
 
     public function scopeSuggested($query)

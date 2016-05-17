@@ -3,7 +3,7 @@
 use Illuminate\Support\Str;
 use Sharenjoy\Cmsharenjoy\Modules\Tag\TagUtil;
 use Sharenjoy\Cmsharenjoy\Modules\Tag\Tag;
-use Sharenjoy\Cmsharenjoy\Utilities\String;
+use Sharenjoy\Cmsharenjoy\Utilities\CmsharenjoyString;
 
 trait TaggableTrait {
 
@@ -114,7 +114,7 @@ trait TaggableTrait {
 	 */
 	protected function format($tagName)
 	{
-		return Str::title(String::slug(trim($tagName)));
+		return Str::title(CmsharenjoyString::slug(trim($tagName)));
 	}
 	
 	/**

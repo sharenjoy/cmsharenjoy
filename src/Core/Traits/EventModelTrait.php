@@ -1,6 +1,6 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Core\Traits;
 
-use Sharenjoy\Cmsharenjoy\Utilities\String;
+use Sharenjoy\Cmsharenjoy\Utilities\CmsharenjoyString;
 use Session;
 
 trait EventModelTrait {
@@ -8,9 +8,9 @@ trait EventModelTrait {
     public function eventSlug($args, $model)
     {
         if ($this->$args[1])
-            $this->$args[0] = String::slug($this->$args[1]);
+            $this->$args[0] = CmsharenjoyString::slug($this->$args[1]);
         else
-            $this->$args[0] = String::slug($this->$args[0]);
+            $this->$args[0] = CmsharenjoyString::slug($this->$args[0]);
     }
 
     public function eventUserId($key, $model)
