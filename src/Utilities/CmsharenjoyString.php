@@ -1,6 +1,6 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Utilities;
 
-class String {
+class CmsharenjoyString {
 
 	/**
 	 * Create a web friendly URL slug from a string.
