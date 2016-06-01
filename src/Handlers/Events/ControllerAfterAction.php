@@ -14,6 +14,7 @@ class ControllerAfterAction {
 
             case 'get-update':
                 $this->outputAlbumIdToView($data);
+                $this->outputFilealbumIdToView($data);
                 break;
 
             case 'post-delete':
@@ -30,6 +31,14 @@ class ControllerAfterAction {
         if ($data->isAlbumable())
         {
             view()->share('albumId', $data->album_id);
+        }
+    }
+
+    private function outputFilealbumIdToView($data)
+    {
+        if ($data->isAlbumable())
+        {
+            view()->share('albumId', $data->filealbum_id);
         }
     }
 
