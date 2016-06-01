@@ -204,6 +204,10 @@ trait CommonModelTrait {
         return in_array(
             'Sharenjoy\Cmsharenjoy\Filer\AlbumTrait',
             $this->getReflection()->getTraitNames()
+        ) ||
+        in_array(
+            'Sharenjoy\Cmsharenjoy\Filer\FilealbumTrait',
+            $this->getReflection()->getTraitNames()
         );
     }
 
