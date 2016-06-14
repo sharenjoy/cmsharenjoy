@@ -50,12 +50,19 @@ trait CommonModelTrait {
             {
                 if (is_array($input[$key]))
                 {
-                    foreach ($value as $k => $item)
+                    if (strstr($key, 'serialize') !== false)
                     {
-                        if ( ! $item) unset($value[$k]);
+                        $input[$key] = serialize($value);
                     }
+                    else
+                    {
+                        foreach ($value as $k => $item)
+                        {
+                            if ( ! $item) unset($value[$k]);
+                        }
 
-                    $input[$key] = join(',', $value);
+                        $input[$key] = join(',', $value);
+                    }
                 }
             }
         }
