@@ -28,7 +28,7 @@ class ControllerAfterAction {
 
     private function outputAlbumIdToView($data)
     {
-        if ($data->isAlbumable())
+        if ($data->isAlbumable() && $data->album_id)
         {
             view()->share('albumId', $data->album_id);
         }
@@ -36,7 +36,7 @@ class ControllerAfterAction {
 
     private function outputFilealbumIdToView($data)
     {
-        if ($data->isAlbumable())
+        if ($data->isAlbumable() && $data->filealbum_id)
         {
             view()->share('albumId', $data->filealbum_id);
         }
