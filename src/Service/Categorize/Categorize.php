@@ -111,6 +111,10 @@ class Categorize {
     {
         $source->load(implode('.', array_fill(0, 20, 'children')));
 
+        $source->map(function ($item) {
+            $item->children->sortBy('sort');
+        });
+
         return $source;
     }
 
