@@ -25,7 +25,7 @@ class ListerServiceProvider extends ServiceProvider {
 
         $driver = $config['driver'];
         
-        $this->app->bindShared(
+        $this->app->singleton(
             'Sharenjoy\Cmsharenjoy\Service\Lister\ListerInterface',
             function() use ($driver)
             {
