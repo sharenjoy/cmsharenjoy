@@ -1,9 +1,9 @@
 <?php namespace Sharenjoy\Cmsharenjoy\User;
 
-use Cartalyst\Sentry\Users\Eloquent\User as SentryUserModel;
 use Sharenjoy\Cmsharenjoy\Core\Traits\CommonModelTrait;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends SentryUserModel {
+class User extends Authenticatable {
 
     use CommonModelTrait;
 
@@ -32,14 +32,7 @@ class User extends SentryUserModel {
         'description'           => ['order' => '60'],
     ];
 
-    protected $hidden = ['password'];
-
-    /**
-     * sentry methods
-     */
-    public function getAuthIdentifier(){ return $this->getKey(); }
-    public function getAuthPassword(){ return $this->password; }
-    public function getReminderEmail(){ return $this->email; }
+    protected $hidden = ['password', 'remember_token'];
 
     public function listQuery()
     {

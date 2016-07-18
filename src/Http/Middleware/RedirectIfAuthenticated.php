@@ -1,9 +1,11 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Http\Middleware;
+<?php
 
-use Closure, Sentry;
+namespace Sharenjoy\Cmsharenjoy\Http\Middleware;
 
-class RedirectIfAuthenticated {
+use Closure, Auth;
 
+class RedirectIfAuthenticated
+{
 	/**
 	 * Handle an incoming request.
 	 *
@@ -13,8 +15,7 @@ class RedirectIfAuthenticated {
 	 */
 	public function handle($request, Closure $next)
 	{
-		if (Sentry::check())
-		{
+		if (Auth::check()) {
 			return redirect($request->session()->get('accessUrl'));
 		}
 

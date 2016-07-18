@@ -1,9 +1,11 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Http\Middleware;
+<?php
 
-use Closure, Sentry;
+namespace Sharenjoy\Cmsharenjoy\Http\Middleware;
 
-class Authenticate {
+use Closure, Auth;
 
+class Authenticate
+{
 	/**
 	 * Handle an incoming request.
 	 *
@@ -13,14 +15,10 @@ class Authenticate {
 	 */
 	public function handle($request, Closure $next)
 	{
-		if ( ! Sentry::check())
-		{
-			if ($request->ajax())
-			{
+		if (! Auth::check()) {
+			if ($request->ajax()) {
 				return response('Unauthorized.', 401);
-			}
-			else
-			{
+			} else {
 				return redirect()->guest($request->session()->get('accessUrl').'/login');
 			}
 		}

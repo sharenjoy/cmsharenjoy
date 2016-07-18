@@ -2,7 +2,7 @@
 
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
 use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;
-use Sentry, Mail, Config, Message, Session;
+use Auth, Mail, Config, Message, Session;
 
 class UserRepository extends EloquentBaseRepository implements UserInterface {
 
@@ -224,26 +224,16 @@ class UserRepository extends EloquentBaseRepository implements UserInterface {
 
     public function login($input)
     {
-        try
-        {
-            $credentials = array(
-                'email'    => $input['email'],
-                'password' => $input['password'],
-            );
+        $credentials = array(
+            'email'    => $input['email'],
+            'password' => $input['password'],
+        );
 
-            // authenticate user
-            Sentry::authenticate($credentials, false);
-        }
-        catch(\Cartalyst\Sentry\Throttling\UserBannedException $e)
-        {   
+        if (Auth::attempt($credentials)) {
+            return ['status'=>true, 'message'=>pick_trans('success_login')];
+        } else {
             return ['status'=>false, 'message'=>pick_trans('invalid_email_password')];
         }
-        catch (\RuntimeException $e)
-        {
-            return ['status'=>false, 'message'=>pick_trans('invalid_email_password')];
-        }
-
-        return ['status'=>true, 'message'=>pick_trans('success_login')];
     }
 
 }

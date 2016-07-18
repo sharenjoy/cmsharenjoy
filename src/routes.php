@@ -10,24 +10,24 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+Route::group(['middleware' => ['web']], function () use ($accessUrl) {
+    
+    // Backend
+    Route::group(['prefix' => $accessUrl], function() {
+        Route::controller('post'      , 'Sharenjoy\Cmsharenjoy\Modules\Post\PostController');
+        Route::controller('tag'       , 'Sharenjoy\Cmsharenjoy\Modules\Tag\TagController');
+        Route::controller('category'  , 'Sharenjoy\Cmsharenjoy\Modules\Category\CategoryController');
+        Route::controller('filer'     , 'Sharenjoy\Cmsharenjoy\Filer\FilerController');
+        Route::controller('user'      , 'Sharenjoy\Cmsharenjoy\User\UserController');
+        Route::controller('setting'   , 'Sharenjoy\Cmsharenjoy\Setting\SettingController');
+        Route::controller(''          , 'Sharenjoy\Cmsharenjoy\Http\Controllers\DashController');
+    });
 
-// Backend
-Route::group(['prefix' => $accessUrl], function()
-{
-    Route::controller('post'      , 'Sharenjoy\Cmsharenjoy\Modules\Post\PostController');
-    Route::controller('tag'       , 'Sharenjoy\Cmsharenjoy\Modules\Tag\TagController');
-    Route::controller('category'  , 'Sharenjoy\Cmsharenjoy\Modules\Category\CategoryController');
-    Route::controller('filer'     , 'Sharenjoy\Cmsharenjoy\Filer\FilerController');
-    Route::controller('user'      , 'Sharenjoy\Cmsharenjoy\User\UserController');
-    Route::controller('setting'   , 'Sharenjoy\Cmsharenjoy\Setting\SettingController');
-    Route::controller(''          , 'Sharenjoy\Cmsharenjoy\Http\Controllers\DashController');
-});
+    Route::get($accessUrl.'/language/{lang}' , function ($lang) {
+        if (array_key_exists($lang, config('cmsharenjoy.locales'))) {
+            Session::put('sharenjoy.backEndLanguage', $lang);
+            return redirect()->back();
+        }
+    });
 
-Route::get($accessUrl.'/language/{lang}' , function($lang)
-{
-    if (array_key_exists($lang, config('cmsharenjoy.locales')))
-    {
-        Session::put('sharenjoy.backEndLanguage', $lang);
-        return redirect()->back();
-    }
 });

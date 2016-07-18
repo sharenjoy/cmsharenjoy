@@ -1,11 +1,13 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Http\Controllers;
+<?php
+
+namespace Sharenjoy\Cmsharenjoy\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Sharenjoy\Cmsharenjoy\User\UserInterface;
-use Sentry, Message, Session;
+use Auth, Message, Session;
 
-class DashController extends BaseController {
-
+class DashController extends BaseController
+{
     public function __construct()
     {
         parent::__construct();
@@ -32,7 +34,7 @@ class DashController extends BaseController {
      */
     public function getLogout()
     {
-        Sentry::logout();
+        Auth::logout();
 
         Session::flush();
 
@@ -50,7 +52,7 @@ class DashController extends BaseController {
     public function getLogin()
     {
         // If logged in, redirect to admin area
-        if (Sentry::check())
+        if (Auth::check())
         {
             return redirect($this->accessUrl);
         }

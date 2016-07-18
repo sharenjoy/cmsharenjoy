@@ -1,8 +1,9 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Filer;
 
+use Illuminate\Http\Request;
 use Sharenjoy\Cmsharenjoy\Http\Controllers\BaseController;
-use Config, Lang, Theme, Message, Session, Input;
-use Response, App, Redirect, Filer, Request;
+use Config, Lang, Theme, Message, Session;
+use Response, App, Redirect, Filer;
 
 /**
  * PyroCMS file Admin Controller
@@ -176,10 +177,10 @@ class FilerController extends BaseController {
      *
      * Grabs the parent id and the name of the folder from POST data.
      */
-    public function postNewfolder($toWhere = 'index')
+    public function postNewfolder($toWhere = 'index', Request $request)
     {
-        $parent_id = Input::get('parent', 0);
-        $input     = Input::all();
+        $parent_id = $request->input('parent', 0);
+        $input     = $request->all();
 
         $validator = new FilerValidator();
         $result = $validator->setRule('newFolderRules')->valid($input, 'flash');
@@ -238,12 +239,12 @@ class FilerController extends BaseController {
     /**
      * Set the order of files and folders
      */
-    public function postOrder()
+    public function postOrder(Request $request)
     {
         if( ! Request::ajax()) Response::json('error', 400);
 
-        $id_value   = Input::get('id_value');
-        $sort_value = Input::get('sort_value');
+        $id_value   = $request->input('id_value');
+        $sort_value = $request->input('sort_value');
         
         foreach($id_value as $key => $id)
         {
@@ -300,10 +301,10 @@ class FilerController extends BaseController {
     /**
      * Upload files
      */
-    public function postUpload()
+    public function postUpload(Request $request)
     {
-        $parentId = Input::get('parent_id');
-        $file     = Input::file('file');
+        $parentId = $request->input('parent_id');
+        $file     = $request->file('file');
 
         // upload file
         $result = Filer::upload($parentId, false, $file);
@@ -330,9 +331,9 @@ EOE;
         return Response::json($result, 200);
     }
 
-    public function postUpdatefile($toWhere = 'index')
+    public function postUpdatefile($toWhere = 'index', Request $request)
     {
-        $input = Input::all();
+        $input = $request->all();
 
         $validator = new FilerValidator();
         $result = $validator->setRule('fileUpdateRules')->valid($input, 'flash');
@@ -441,10 +442,10 @@ EOE;
      * @access  public
      * @return  void
      */
-    public function postDeletefile()
+    public function postDeletefile(Request $request)
     {
-        $id = Input::get('file_id');
-        $name = Input::get('file_name');
+        $id = $request->input('file_id');
+        $name = $request->input('file_name');
 
         if ($id) {
             $result = Filer::deleteFile($id);
@@ -456,14 +457,14 @@ EOE;
     /**
      * find for file
      */
-    public function postFind()
+    public function postFind(Request $request)
     {
         if( ! Request::ajax())
         {
             Response::json('error', 400);
         }
 
-        $id = Input::get('file_id');
+        $id = $request->input('file_id');
         
         $result = Filer::getFile($id);
 
@@ -476,10 +477,10 @@ EOE;
      * @access  public
      * @return  void
      */
-    public function postDeletefolder()
+    public function postDeletefolder(Request $request)
     {
 
-        $id = Input::get('delete_folder_id');
+        $id = $request->input('delete_folder_id');
 
         $result = Filer::deleteFolder($id);
         

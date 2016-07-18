@@ -1,16 +1,20 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Http\Controllers;
+<?php
 
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Bus\DispatchesCommands;
-use Illuminate\Console\AppNamespaceDetectorTrait;
-use Illuminate\Routing\Controller;
+namespace Sharenjoy\Cmsharenjoy\Http\Controllers;
+
 use Illuminate\Support\Str;
+use Illuminate\Routing\Controller;
 use Sharenjoy\Cmsharenjoy\User\User;
-use Sentry, Route, Request, Theme, Message, Setting;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Console\AppNamespaceDetectorTrait;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesResources;
+use Route, Request, Theme, Message, Setting, Auth;
 
-abstract class BaseController extends Controller {
-
-    use DispatchesCommands, ValidatesRequests, AppNamespaceDetectorTrait;
+abstract class BaseController extends Controller
+{
+    use DispatchesJobs, AppNamespaceDetectorTrait, ValidatesRequests, AuthorizesRequests, AuthorizesResources;
     
     /**
      * The URL segment that can be used to access the system
@@ -169,9 +173,9 @@ abstract class BaseController extends Controller {
     protected function getAuthInfo()
     {
         // Get the login user
-        if (Sentry::check())
+        if (Auth::check())
         {
-            $this->user = Sentry::getUser();
+            $this->user = Auth::user();
 
             session()->put('user', $this->user->toArray());
             view()->share('user', $this->user->toArray());
