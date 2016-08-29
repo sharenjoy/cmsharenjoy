@@ -158,6 +158,9 @@ return [
         // For employee
         'employee_id'           => 'employee',
         'employee'              => 'employee',
+
+        // For video
+        'video'                 => 'youtube'
     ],
 
 ];
