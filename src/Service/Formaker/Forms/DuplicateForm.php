@@ -84,7 +84,7 @@ class DuplicateForm extends FormAbstract implements FormInterface {
         set_package_asset_to_view('jquery-confirm');
         set_package_asset_to_view('ladda-bootstrap');
 
-        Theme::asset()->writeScript('script', '
+        Theme::asset()->writeScript('duplicateform-script', '
             $(function() {
 
                 $("#clone-section")
