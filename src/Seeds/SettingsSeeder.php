@@ -17,29 +17,37 @@ class SettingsSeeder extends Seeder {
                 'created_at'    => date('Y-m-d H:i:s')
             ],
             [
-                'key'           => 'files_enabled_providers',
+                'key'           => 'admin_email',
                 'type'          => 'text',
-                'value'         => 'local',
-                'module'        => 'file',
+                'value'         => 'ronald.jian@gmail.com',
+                'module'        => 'general',
                 'sort'          => '2',
                 'created_at'    => date('Y-m-d H:i:s')
             ],
-            [
-                'key'           => 'files_upload_limit',
-                'type'          => 'text',
-                'value'         => '4',
-                'module'        => 'file',
-                'sort'          => '3',
-                'created_at'    => date('Y-m-d H:i:s')
-            ],
-            [
-                'key'           => 'date_format',
-                'type'          => 'text',
-                'value'         => '',
-                'module'        => 'file',
-                'sort'          => '4',
-                'created_at'    => date('Y-m-d H:i:s')
-            ],
+            // [
+            //     'key'           => 'files_enabled_providers',
+            //     'type'          => 'text',
+            //     'value'         => 'local',
+            //     'module'        => 'file',
+            //     'sort'          => '2',
+            //     'created_at'    => date('Y-m-d H:i:s')
+            // ],
+            // [
+            //     'key'           => 'files_upload_limit',
+            //     'type'          => 'text',
+            //     'value'         => '4',
+            //     'module'        => 'file',
+            //     'sort'          => '3',
+            //     'created_at'    => date('Y-m-d H:i:s')
+            // ],
+            // [
+            //     'key'           => 'date_format',
+            //     'type'          => 'text',
+            //     'value'         => '',
+            //     'module'        => 'file',
+            //     'sort'          => '4',
+            //     'created_at'    => date('Y-m-d H:i:s')
+            // ],
 
         ];
         DB::table('settings')->insert($types);
