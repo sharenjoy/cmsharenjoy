@@ -146,7 +146,7 @@ return [
 
         // For album
         'album'                 => 'album',
-        'filealbum'             => 'album',
+        'filealbum'             => 'filealbum',
 
         // For category
         'category_id'           => 'category',
