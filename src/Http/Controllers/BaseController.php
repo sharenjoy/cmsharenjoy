@@ -176,9 +176,9 @@ abstract class BaseController extends Controller
     protected function getAuthInfo()
     {
         // Get the login user
-        if (Auth::check())
+        if (Auth::guard('admin')->check())
         {
-            $this->user = Auth::user();
+            $this->user = Auth::guard('admin')->user();
 
             session()->put('user', $this->user->toArray());
             view()->share('user', $this->user->toArray());
