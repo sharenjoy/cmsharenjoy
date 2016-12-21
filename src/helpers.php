@@ -602,6 +602,10 @@ if ( ! function_exists('img_resize'))
         $path      = config('filer.path');
         $thumbPath = config('filer.thumbPath');
 
+        if (! $filename) {
+            return;
+        }
+        
         $imageInfo      = pathinfo($filename);
         $targetFilename = "{$imageInfo['filename']}_{$width}x{$height}.{$imageInfo['extension']}";
 
