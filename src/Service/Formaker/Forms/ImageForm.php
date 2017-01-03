@@ -8,8 +8,7 @@ class ImageForm extends FormAbstract implements FormInterface {
         $name         = $data['name'];
         $value        = $data['value'];
 
-        $size = array_get($otherSetting['setting'], 'size') ?: '/200x150&text=-';
-        $img = $value ? asset('uploads/'.$value) : "http://placehold.it/{$size}";
+        $img = $value ? asset('uploads/'.$value) : url('packages/sharenjoy/cmsharenjoy/images/image_bg.jpg');
         $select_image = pick_trans('buttons.select_image');
         $change       = pick_trans('buttons.change');
         $remove       = pick_trans('buttons.remove');
