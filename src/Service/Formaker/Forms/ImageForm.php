@@ -8,11 +8,13 @@ class ImageForm extends FormAbstract implements FormInterface {
         $name         = $data['name'];
         $value        = $data['value'];
 
+        $helpBlock = array_get($otherSetting['setting'], 'size') ? '<span class="help-block" style="position: absolute; margin: 120px 0 0 210px">建議尺寸 '.array_get($otherSetting['setting'], 'size').'</span>' : '';
         $img = $value ? asset('uploads/'.$value) : url('packages/sharenjoy/cmsharenjoy/images/image_bg.jpg');
         $select_image = pick_trans('buttons.select_image');
         $change       = pick_trans('buttons.change');
         $remove       = pick_trans('buttons.remove');
         $form         = <<<EOE
+            {$helpBlock}
             <div class="fileinput fileinput-new file-pick-open-manager">
                 <div data-type="image" class="fileinput-new thumbnail" id="image-{$name}" style="width: 200px; height: 150px;">
 EOE;
