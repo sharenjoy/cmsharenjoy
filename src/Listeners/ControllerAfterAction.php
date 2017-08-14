@@ -1,13 +1,14 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Handlers\Events;
+<?php
+
+namespace Sharenjoy\Cmsharenjoy\Listeners;
 
 use Session, Filer;
 
-class ControllerAfterAction {
-    
+class ControllerAfterAction
+{    
     public function handle($data)
     {
-        switch (Session::get('onMethod'))
-        {
+        switch (Session::get('onMethod')) {
             case 'get-index':
             case 'get-sort':
                 Session::forget('allLists');
@@ -30,32 +31,28 @@ class ControllerAfterAction {
 
     private function outputAlbumIdToView($data)
     {
-        if ($data->album_id && $data->isAlbumable())
-        {
+        if ($data->album_id && $data->isAlbumable()) {
             view()->share('albumId', $data->album_id);
         }
     }
 
     private function outputFilealbumIdToView($data)
     {
-        if ($data->filealbum_id && $data->isFileAlbumable())
-        {
+        if ($data->filealbum_id && $data->isFileAlbumable()) {
             view()->share('fileAlbumId', $data->filealbum_id);
         }
     }
 
     private function deleteAlbum($data)
     {
-        if ($data->album_id && $data->isAlbumable())
-        {
+        if ($data->album_id && $data->isAlbumable()) {
             Filer::deleteFolderDoNotConfirm($data->album_id);
         }
     }
 
     private function deleteFileAlbum($data)
     {
-        if ($data->filealbum_id && $data->isFileAlbumable())
-        {
+        if ($data->filealbum_id && $data->isFileAlbumable()) {
             Filer::deleteFolderDoNotConfirm($data->filealbum_id);
         }
     }
