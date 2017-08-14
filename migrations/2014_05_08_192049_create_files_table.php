@@ -24,14 +24,14 @@ class CreateFilesTable extends Migration {
             $table->string('name', 255);
             $table->string('filename', 255);
             $table->string('path', 255);
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('extension', 10);
             $table->string('mimetype', 100);
-            $table->string('keywords', 32);
+            $table->string('keywords', 32)->nullable();
             $table->smallInteger('width')->unsigned()->nullable();
             $table->smallInteger('height')->unsigned()->nullable();
             $table->integer('filesize')->unsigned()->default(0);
-            $table->string('alt_attribute', 255);
+            $table->string('alt_attribute', 255)->nullable();
             $table->integer('download_count')->unsigned()->default(0);
             $table->integer('sort')->unsigned()->nullable()->default(0);
             $table->timestamps();

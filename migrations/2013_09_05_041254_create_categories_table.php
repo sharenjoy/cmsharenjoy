@@ -20,7 +20,7 @@ class CreateCategoriesTable extends Migration {
 		    $table->string('type', 100)->index();
 		    $table->string('title', 255);
 		    $table->string('slug', 255)->unique();
-		    $table->text('description');
+		    $table->text('description')->nullable();
 		    $table->integer('weight')->index();
             $table->integer('sort')->unsigned()->nullable()->default(0);
 		    $table->timestamps();

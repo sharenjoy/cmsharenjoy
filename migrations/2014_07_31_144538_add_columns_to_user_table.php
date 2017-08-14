@@ -15,8 +15,8 @@ class AddColumnsToUserTable extends Migration {
 		Schema::table('users', function($table)
 		{
 		    $table->string('phone')->after('password');
-		    $table->string('avatar')->after('phone');
-		    $table->text('description')->after('avatar');
+		    $table->string('avatar')->nullable()->after('phone');
+		    $table->text('description')->nullable()->after('avatar');
 		    $table->boolean('activated')->default(0)->after('description');
 			$table->string('activation_code')->nullable()->index()->after('activated');
 			$table->timestamp('activated_at')->nullable()->after('activation_code');

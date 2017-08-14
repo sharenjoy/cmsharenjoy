@@ -175,16 +175,7 @@ class CmsharenjoyServiceProvider extends ServiceProvider
 
     protected function setServices()
     {
-        // For papertrail
-        if ($this->app->environment() == 'production') {
-            $siteName  = str_replace(['http://', 'https://'], '', $this->app['config']->get('app.url'));
-            $monolog   = Log::getMonolog();
-            $syslog    = new \Monolog\Handler\SyslogHandler($siteName);
-            $formatter = new \Monolog\Formatter\LineFormatter('%channel%.%level_name%: %message% %extra%');
-            
-            $syslog->setFormatter($formatter);
-            $monolog->pushHandler($syslog);
-        }
+        //
     }
 
     /**
