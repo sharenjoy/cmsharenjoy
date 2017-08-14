@@ -104,8 +104,6 @@ class CmsharenjoyServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadRoutesFrom(__DIR__.'/../routes.php');
-
         $this->loadMigrationsFrom(__DIR__.'/../../migrations');
 
         $this->publishes([
@@ -163,6 +161,7 @@ class CmsharenjoyServiceProvider extends ServiceProvider
     {
         // Add file names without the `php` extension to this list as needed.
         $filesToLoad = [
+            'routes',
             'helpers'
         ];
 
