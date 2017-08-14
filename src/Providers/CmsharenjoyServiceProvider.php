@@ -39,7 +39,6 @@ class CmsharenjoyServiceProvider extends ServiceProvider
             'formaker',
             'lister',
             'module',
-            'notification',
             'options',
         ];
 
@@ -105,13 +104,17 @@ class CmsharenjoyServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->loadRoutesFrom(__DIR__.'/../routes.php');
+
+        $this->loadMigrationsFrom(__DIR__.'/../../migrations');
+
         $this->publishes([
             __DIR__.'/../../config' => config_path(),
         ], 'config');
 
         $this->publishes([
-            __DIR__ . '/../../migrations' => base_path('/database/migrations')
-        ], 'migration');
+            __DIR__.'/../../lang' => base_path('/resources/lang')
+        ], 'lang');
 
         // Setting the locale langage
         if (session()->has('sharenjoy.backEndLanguage')) {
@@ -160,7 +163,6 @@ class CmsharenjoyServiceProvider extends ServiceProvider
     {
         // Add file names without the `php` extension to this list as needed.
         $filesToLoad = [
-            'routes',
             'helpers'
         ];
 
