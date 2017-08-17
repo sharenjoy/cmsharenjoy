@@ -3,6 +3,7 @@
 namespace Sharenjoy\Cmsharenjoy\User;
 
 use Auth, Mail, Config, Message, Session;
+use Sharenjoy\Cmsharenjoy\Mail\UserPasswordReset;
 use Sharenjoy\Cmsharenjoy\Core\EloquentBaseRepository;
 use Sharenjoy\Cmsharenjoy\Service\Validation\ValidableInterface;
 
@@ -137,15 +138,14 @@ class UserRepository extends EloquentBaseRepository implements UserInterface
 
     public function remindPassword($var)
     {
-        try
-        {
-            if (is_numeric($var))
-            {
+        try {
+            if (is_numeric($var)) {
                 $user = $this->model->find($var);
             }
-            elseif (is_string($var))
-            {
+            elseif (is_string($var)) {
                 $user = $this->model->findByLogin($var);
+            } else {
+                return ['status'=>false, 'message'=>pick_trans('user_not_found')];
             }
 
             // Get the password reset code
@@ -158,12 +158,7 @@ class UserRepository extends EloquentBaseRepository implements UserInterface
             );
 
             // send email
-            Mail::queue('admin.emails.auth.user-reset-password', $data, function($message) use ($user)
-            {
-                $message->from(Config::get('mail.from.address'), Config::get('mail.from.name'))
-                        ->subject(pick_trans('reset_password'));
-                $message->to($user->email);
-            });
+            Mail::to($user->email)->queue(new UserPasswordReset($data));
         }
         catch (\Sharenjoy\Cmsharenjoy\User\UserNotFoundException $e)
         {

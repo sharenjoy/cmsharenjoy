@@ -2,21 +2,19 @@
 
 namespace Sharenjoy\Cmsharenjoy\Http\Controllers;
 
-use Route, Request, Theme;
-use Message, Setting, Auth;
+use Message, Request;
+use Route, Setting, Theme;
 use Illuminate\Support\Str;
 use Illuminate\Routing\Controller;
-use Sharenjoy\Cmsharenjoy\User\User;
 use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Console\AppNamespaceDetectorTrait;
+use Illuminate\Console\DetectsApplicationNamespace;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesResources;
 use Sharenjoy\Cmsharenjoy\Exception\ViewNotFoundException;
 
-abstract class BaseController extends Controller
+class BaseController extends Controller
 {
-    use DispatchesJobs, AppNamespaceDetectorTrait, ValidatesRequests, AuthorizesRequests, AuthorizesResources;
+    use DispatchesJobs, DetectsApplicationNamespace, ValidatesRequests, AuthorizesRequests;
     
     /**
      * The URL segment that can be used to access the system
@@ -97,22 +95,13 @@ abstract class BaseController extends Controller
     protected $theme;
 
     /**
-     * The login user
-     * @var object
-     */
-    protected $user;
-
-    /**
      * Initializer.
      * @access   public
      * @return   void
      */
     public function __construct()
     {
-        $this->middleware('admin.auth');
-
         $this->setCommonVariable();
-        $this->getAuthInfo();
         $this->setPackageInfo();
         $this->setHandyUrls();
         $this->setContentLanguage();
@@ -128,8 +117,7 @@ abstract class BaseController extends Controller
         // Get the action name
         $routeArray = Str::parseCallback(Route::currentRouteAction(), null);
         
-        if (last($routeArray) != null)
-        {
+        if (last($routeArray) != null) {
             // Remove 'controller' from the controller name.
             $controller = str_replace('Controller', '', class_basename(head($routeArray)));
 
@@ -154,25 +142,12 @@ abstract class BaseController extends Controller
 
         view()->share('functionRules' , $this->functionRules);
         view()->share('langLocales'   , config('cmsharenjoy.locales'));
-        view()->share('activeLanguage', session('sharenjoy.backEndLanguage'));
 
         // Set the theme
         $this->theme = Theme::uses('admin');
 
         // Message
         view()->share('messages', Message::getMessageBag());
-    }
-
-    protected function getAuthInfo()
-    {
-        // Get the login user
-        if (Auth::guard('admin')->check())
-        {
-            $this->user = Auth::guard('admin')->user();
-
-            session()->put('user', $this->user->toArray());
-            view()->share('user', $this->user->toArray());
-        }
     }
 
     protected function getPackageInfo()
@@ -204,7 +179,6 @@ abstract class BaseController extends Controller
 
         // Share these variables with any views
         view()->share('accessUrl', $this->accessUrl);
-        session()->put('accessUrl', $this->accessUrl);
 
         view()->share('objectUrl', $this->objectUrl);
         session()->put('objectUrl', $this->objectUrl);
@@ -233,34 +207,25 @@ abstract class BaseController extends Controller
         $masterMenu = null;
         $subMenu = null;
 
-        foreach ($menuItems as $url => $items)
-        {
-            if (isset($items['sub']))
-            {
-                foreach ($items['sub'] as $suburl => $item)
-                {
-                    if (strpos($suburl, '?') !== false)
-                    {
+        foreach ($menuItems as $url => $items) {
+            if (isset($items['sub'])) {
+                foreach ($items['sub'] as $suburl => $item) {
+                    if (strpos($suburl, '?') !== false) {
                         // earse behind and include of the '?'
                         $suburl = substr_replace($suburl, '', strpos($suburl, '?'));
                     }
 
-                    if (Request::is("$this->accessUrl/$suburl*"))
-                    {
+                    if (Request::is("$this->accessUrl/$suburl*")) {
                         $masterMenu = $url;
                         $subMenu = $suburl;
                     }
                 }
-            }
-            else
-            {
-                if (strpos($url, '?') !== false)
-                {
+            } else {
+                if (strpos($url, '?') !== false) {
                     $url = substr_replace($url, '', strpos($url, '?'));
                 }
 
-                if (Request::is("$this->accessUrl/$url*"))
-                {
+                if (Request::is("$this->accessUrl/$url*")) {
                     $masterMenu = $url;
                 }
             }
@@ -299,26 +264,22 @@ abstract class BaseController extends Controller
         $pathB = $commonLayout.'.'.$action;
 
         // resources/views/admin/member/create
-        if (view()->exists($this->accessUrl.'.'.$pathA))
-        {
+        if (view()->exists($this->accessUrl.'.'.$pathA)) {
             return view($this->accessUrl.'.'.$pathA);
         }
 
         // organization/views/member/create
-        if (view()->exists($this->onPackage.'::'.$pathA))
-        {
+        if (view()->exists($this->onPackage.'::'.$pathA)) {
             return view($this->onPackage.'::'.$pathA);
         }
         
         // organization/views/common/create
-        if (view()->exists($this->onPackage.'::'.$pathB))
-        {
+        if (view()->exists($this->onPackage.'::'.$pathB)) {
             return view($this->onPackage.'::'.$pathB);
         }
         
         // resources/views/admin/common/create
-        if (view()->exists($this->accessUrl.'.'.$pathB))
-        {
+        if (view()->exists($this->accessUrl.'.'.$pathB)) {
             return view($this->accessUrl.'.'.$pathB);
         }
 

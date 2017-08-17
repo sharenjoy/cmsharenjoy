@@ -104,6 +104,12 @@ class CmsharenjoyServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // backend prefix
+        $accessUrl = $this->app['config']->get('cmsharenjoy.access_url');
+        session()->put('accessUrl', $accessUrl);
+
+        $this->loadRoutesFrom(__DIR__.'/../routes.php');
+
         $this->loadMigrationsFrom(__DIR__.'/../../migrations');
 
         $this->publishes([
@@ -118,9 +124,6 @@ class CmsharenjoyServiceProvider extends ServiceProvider
         if (session()->has('sharenjoy.backEndLanguage')) {
             $this->app->setLocale(session()->get('sharenjoy.backEndLanguage'));
         }
-
-        // backend prefix
-        $accessUrl = $this->app['config']->get('cmsharenjoy.access_url');
         
         // To define which end it is now
         $whichEnd = Request::segment(1) == $accessUrl ? 'backEnd' : 'frontEnd';
@@ -161,7 +164,6 @@ class CmsharenjoyServiceProvider extends ServiceProvider
     {
         // Add file names without the `php` extension to this list as needed.
         $filesToLoad = [
-            'routes',
             'helpers'
         ];
 

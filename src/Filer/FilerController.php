@@ -1,4 +1,6 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Filer;
+<?php
+
+namespace Sharenjoy\Cmsharenjoy\Filer;
 
 use Config, Filer, Message;
 use App, Response, Redirect;
@@ -14,8 +16,8 @@ use Sharenjoy\Cmsharenjoy\Http\Controllers\BaseController;
  * @author      PyroCMS Dev Team
  * @package     PyroCMS\Core\Modules\Files\Controllers
  */
-class FilerController extends BaseController {
-
+class FilerController extends BaseController
+{
     protected $filer;
 
     private $_folders   = array();
@@ -27,6 +29,8 @@ class FilerController extends BaseController {
 
     public function __construct()
     {
+        $this->middleware('admin.auth');
+        
         parent::__construct();
 
         $allowed_extensions = array();

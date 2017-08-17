@@ -87,20 +87,24 @@ class DefaultTemplate extends TemplateAbstract implements TemplateInterface {
     protected function pagination()
     {
         $content = '<div class="row"><div class="'.$this->data['config']['pagecount-div-class'].'"><div class="dataTables_info">';
-        $content .= Form::open(['method'=>'get', 'role'=>'form', 'id'=>'pagination_count_form']);
-        $content .= Form::select(
-                        'perPage', 
-                        ['10'=>'10', '15'=>'15', '20'=>'20', '30'=>'30', '50'=>'50'],
-                        $this->data['data']['paginationCount'],
-                        ['class'=>'form-control pagination_count', 'id'=>'pagination_count']);
+        $content .= '<form method="GET" accept-charset="UTF-8" role="form" id="pagination_count_form">';
+        $content .= '<select class="form-control pagination_count" id="pagination_count" name="perPage">';
+        foreach (['10', '15', '20', '30', '50'] as $value) {
+            if ($this->data['data']['paginationCount'] == $value) {
+                $content .= '<option value="'.$value.'" selected="selected">'.$value.'</option>';
+            } else {
+                $content .= '<option value="'.$value.'">'.$value.'</option>';
+            }
+        }
+        $content .= '</select>';
 
         if ($_SERVER['QUERY_STRING'] != '')
         {
-            $content .= Form::hidden('query_string', $_SERVER['QUERY_STRING']);
+            $content .= '<input type="hidden" name="query_string" value="'.$_SERVER['QUERY_STRING'].'">';
         }
         // dd($this->data['items']);
         $content .= '&nbsp;&nbsp;'.pick_trans('pagination_desc', ['from'=>$this->data['items']->firstItem(), 'to'=>$this->data['items']->lastItem(), 'total'=>$this->data['items']->total()]);
-        $content .= Form::close();
+        $content .= '</form>';
         $content .= '</div></div><div class="'.$this->data['config']['pagination-div-class'].'"><div class="dataTables_paginate paging_bootstrap">'.$this->data['items']->render().'</div></div></div>';
 
         return $content;

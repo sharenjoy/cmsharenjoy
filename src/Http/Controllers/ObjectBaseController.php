@@ -1,11 +1,14 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Http\Controllers;
+<?php
 
+namespace Sharenjoy\Cmsharenjoy\Http\Controllers;
+
+use Lister, Formaker;
 use Illuminate\Http\Request;
 use Sharenjoy\Cmsharenjoy\Utilities\Transformer;
-use Lister, Formaker;
+use Sharenjoy\Cmsharenjoy\Http\Controllers\BaseController;
 
-abstract class ObjectBaseController extends BaseController {
-
+class ObjectBaseController extends BaseController
+{
     /**
      * The model to work with for editing stuff
      */
@@ -34,13 +37,15 @@ abstract class ObjectBaseController extends BaseController {
      */
     public function __construct()
     {
-        parent::__construct();
+        $this->middleware('admin.auth');
 
         $this->middleware('admin.switchPaginationCount', ['only' => 'getIndex']);
 
         $this->middleware('admin.setGoBackPrevious', ['only' => ['getIndex', 'getSort']]);
 
         $this->paginationCount = config('cmsharenjoy.paginationCount');
+
+        parent::__construct();
     }
 
     /**
@@ -180,7 +185,7 @@ abstract class ObjectBaseController extends BaseController {
      * @param  integer $id The ID of the object
      * @return Redirect
      */
-    public function postUpdate(Request $request, $id)
+    public function postUpdate($id, Request $request)
     {
         $this->repo->setInput($request->all(), $id);
 

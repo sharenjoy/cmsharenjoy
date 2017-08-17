@@ -2,7 +2,7 @@
 
 namespace Sharenjoy\Cmsharenjoy\Http\Middleware;
 
-use Closure, Auth;
+use Closure;
 
 class Authenticate
 {
@@ -15,14 +15,18 @@ class Authenticate
 	 */
 	public function handle($request, Closure $next)
 	{
-		if (! Auth::guard('admin')->check() || Auth::guard('admin')->user()->activated == false) {
+		if (! auth()->guard('admin')->check() || auth()->guard('admin')->user()->activated == false) {
 			if ($request->ajax()) {
 				return response('Unauthorized.', 401);
 			} else {
-				Auth::guard('admin')->logout();
+				auth()->guard('admin')->logout();
 				return redirect()->guest($request->session()->get('accessUrl').'/login');
 			}
 		}
+
+		$user = auth()->guard('admin')->user();
+		session()->put('user', $user->toArray());
+        view()->share('user', $user->toArray());
 
 		return $next($request);
 	}

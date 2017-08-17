@@ -1,21 +1,25 @@
-<?php namespace Sharenjoy\Cmsharenjoy\Setting;
+<?php
 
+namespace Sharenjoy\Cmsharenjoy\Setting;
+
+use Message, Form;
 use Illuminate\Http\Request;
 use Sharenjoy\Cmsharenjoy\Http\Controllers\BaseController;
-use Message, Form;
 
-class SettingController extends BaseController {
-
+class SettingController extends BaseController
+{
     public function __construct(SettingInterface $repo)
     {
-        $this->repo = $repo;
+        $this->middleware('admin.auth');
+        
         parent::__construct();
+
+        $this->repo = $repo;
     }
 
     public function getIndex()
     {
-        $buttons = Form::button(pick_trans('buttons.save'), ['class'=>'btn btn-success btn-save']).'&nbsp;'.
-                   Form::button(pick_trans('buttons.reset'), ['class'=>'btn btn-reset']);
+        $buttons = '<button class="btn btn-success btn-save" type="button">'.pick_trans('buttons.save').'</button>&nbsp;<button class="btn btn-reset" type="button">'.pick_trans('buttons.reset').'</button></div>';
 
         return $this->layout()->with('items', $this->item())
                               ->with('buttons', $buttons);

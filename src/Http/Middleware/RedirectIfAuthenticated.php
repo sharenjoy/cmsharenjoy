@@ -2,7 +2,8 @@
 
 namespace Sharenjoy\Cmsharenjoy\Http\Middleware;
 
-use Closure, Auth;
+use Closure;
+use Illuminate\Support\Facades\Auth;
 
 class RedirectIfAuthenticated
 {

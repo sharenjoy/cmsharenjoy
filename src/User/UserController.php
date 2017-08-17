@@ -1,9 +1,11 @@
-<?php namespace Sharenjoy\Cmsharenjoy\User;
+<?php
+
+namespace Sharenjoy\Cmsharenjoy\User;
 
 use Sharenjoy\Cmsharenjoy\Http\Controllers\ObjectBaseController;
 
-class UserController extends ObjectBaseController {
-
+class UserController extends ObjectBaseController
+{
     protected $functionRules = [
         'list'           => true,
         'create'         => true,
@@ -30,8 +32,7 @@ class UserController extends ObjectBaseController {
     {
         $result = $this->repo->remindPassword($id);
 
-        if ( ! $result['status'])
-        {
+        if ( ! $result['status']) {
             error($result['message']);
 
             return redirect()->back();
