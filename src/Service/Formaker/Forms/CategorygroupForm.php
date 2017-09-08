@@ -16,7 +16,7 @@ class CategorygroupForm extends FormAbstract implements FormInterface {
                                                        ->orderBy('sort', 'asc')
                                                        ->get();
 
-        $option = Categorize::tree($categories)->lists('title', 'id');
+        $option = Categorize::tree($categories)->pluck('title', 'id');
 
         $form = '<select'.$attributes.'><option value="0">'.pick_trans('option.pleaseSelect').'</option>';
 

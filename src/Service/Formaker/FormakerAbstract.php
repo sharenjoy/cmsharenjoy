@@ -139,7 +139,7 @@ abstract class FormakerAbstract {
         }
         
         if (isset($this->setting['pleaseSelect']) && $this->setting['pleaseSelect'] === true)
-        {              
+        {
             $this->option = ['0' => pick_trans('option.pleaseSelect')] + $this->option;
         }
     }

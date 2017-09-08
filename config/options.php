@@ -48,6 +48,22 @@ return [
         '4' => 'option.deliveryTimeZone4',
         '5' => 'option.deliveryTimeZone5',
     ],
+
+    'tag_type' => [
+        'product' => 'option.tagTypeProduct',
+        'post'    => 'option.tagTypePost',
+    ],
+
+    'carousel_type' => [
+        'image' => 'option.carouselTypeImage',
+        'video' => 'option.carouselTypeVideo',
+    ],
+
+    'post_type' => [
+        'image' => 'option.postTypeImage',
+        'video' => 'option.postTypeVideo',
+        'album' => 'option.postTypeAlbum',
+    ],
     
     
 ];

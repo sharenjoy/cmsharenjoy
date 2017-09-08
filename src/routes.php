@@ -24,6 +24,7 @@ Route::group(['middleware' => ['web']], function () use ($accessUrl) {
         });
 
         Route::get('/'                , 'Sharenjoy\Cmsharenjoy\Http\Controllers\DashController@getIndex');
+        Route::get('index'            , 'Sharenjoy\Cmsharenjoy\Http\Controllers\DashController@getIndex');
         Route::get('login'            , 'Sharenjoy\Cmsharenjoy\Http\Controllers\DashController@getLogin');
         Route::post('login'           , 'Sharenjoy\Cmsharenjoy\Http\Controllers\DashController@postLogin');
         Route::get('logout'           , 'Sharenjoy\Cmsharenjoy\Http\Controllers\DashController@getLogout');
@@ -33,7 +34,8 @@ Route::group(['middleware' => ['web']], function () use ($accessUrl) {
         Route::post('resetpassword'   , 'Sharenjoy\Cmsharenjoy\Http\Controllers\DashController@postResetPassword');
 
         Route::group(['prefix' => 'filer'], function() {
-            Route::get(''                       , 'Sharenjoy\Cmsharenjoy\Filer\FilerController@getIndex');
+            Route::get('/'                      , 'Sharenjoy\Cmsharenjoy\Filer\FilerController@getIndex');
+            Route::get('index'                  , 'Sharenjoy\Cmsharenjoy\Filer\FilerController@getIndex');
             Route::get('index/{parentId}'       , 'Sharenjoy\Cmsharenjoy\Filer\FilerController@getIndex');
             Route::get('filemanager'            , 'Sharenjoy\Cmsharenjoy\Filer\FilerController@getFilemanager');
             Route::get('filemanager/{parentId}' , 'Sharenjoy\Cmsharenjoy\Filer\FilerController@getFilemanager');
@@ -52,6 +54,7 @@ Route::group(['middleware' => ['web']], function () use ($accessUrl) {
 
         Route::group(['prefix' => 'user'], function() {
             Route::get('/'              , 'Sharenjoy\Cmsharenjoy\User\UserController@getIndex');
+            Route::get('index'          , 'Sharenjoy\Cmsharenjoy\User\UserController@getIndex');
             Route::get('sort'           , 'Sharenjoy\Cmsharenjoy\User\UserController@getSort');
             Route::get('create'         , 'Sharenjoy\Cmsharenjoy\User\UserController@getCreate');
             Route::get('update/{id}'    , 'Sharenjoy\Cmsharenjoy\User\UserController@getUpdate');

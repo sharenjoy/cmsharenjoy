@@ -17,6 +17,11 @@ trait ScopeModelTrait {
         return $value ? $query->where('category_id', $value) : $query;
     }
 
+    public function scopePublishedAt($query, $value)
+    {
+        return $value ? $query->whereDate('published_at', '=', $value) : $query;
+    }
+
     public function scopeKeyword($query, $value)
     {
         if ($value)

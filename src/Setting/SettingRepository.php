@@ -37,7 +37,7 @@ class SettingRepository extends EloquentBaseRepository implements SettingInterfa
                 {
                     $query->orWhere('key', $key[$i]);
                 }
-            })->get()->lists('value', 'key');
+            })->get()->pluck('value', 'key');
         }
         elseif(is_string($key))
         {
