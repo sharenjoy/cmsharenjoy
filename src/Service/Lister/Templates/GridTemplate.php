@@ -90,8 +90,8 @@ class GridTemplate extends TemplateAbstract implements TemplateInterface
         $play = false;
         if ($item['status_id'] == '1') {
             $play = true;
-            if (isset($item['start_at']) && isset($item['end_at'])) {
-                if (time() < $item['start_at']->timestamp || time() > $item['end_at']->timestamp) {
+            if (isset($item['started_at']) && isset($item['ended_at'])) {
+                if (time() < $item['started_at']->timestamp || time() > $item['ended_at']->timestamp) {
                     $play = false;
                 }
             }

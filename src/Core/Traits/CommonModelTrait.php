@@ -120,6 +120,26 @@ trait CommonModelTrait {
     }
 
     /**
+     * Many to Many relationship
+     * @param  Model $model
+     * @param  String $morph
+     * @return Model
+     */
+    public function syncMorph($model, $morph)
+    {
+        if ( ! isset(self::$inputData[$morph])) return;
+
+        if (empty(self::$inputData[$morph]))
+        {
+            return $model->$morph()->detach();
+        }
+
+        $data = explode(',', self::$inputData[$morph]);
+        
+        return $model->$morph()->sync($data);
+    }
+
+    /**
      * To process the event of model
      * @param  string $event
      * @param  object $model

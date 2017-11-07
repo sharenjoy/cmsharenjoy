@@ -1,6 +1,6 @@
 <?php namespace Sharenjoy\Cmsharenjoy\Service\Formaker\Forms;
 
-use Formaker, Form, Theme;
+use Formaker, Theme;
 
 class DuplicateForm extends FormAbstract implements FormInterface {
 
@@ -32,10 +32,10 @@ class DuplicateForm extends FormAbstract implements FormInterface {
                 
                 $fields .= '<div class="row"><div class="col-md-12">';
                 $fields .= '<div class="main-clone-button pull-left">';
-                $fields .= Form::button(pick_trans('buttons.clone'), ['class'=>'btn btn-xs btn-blue clone']);
+                $fields .= '<button type="button" class="btn btn-xs btn-blue clone">複製</button>';
                 $fields .= '</div>';
                 $fields .= '<div class="main-clone-button pull-left">';
-                $fields .= Form::button(pick_trans('buttons.delete'), ['class'=>'btn btn-xs btn-danger delete']);
+                $fields .= '<button type="button" class="btn btn-xs btn-danger delete">刪除</button>';
                 $fields .= '</div>';
                 $fields .= '</div></div><div class="clearfix visible-xs-block"></div><hr></div>';
             }
@@ -55,10 +55,10 @@ class DuplicateForm extends FormAbstract implements FormInterface {
             
             $fields .= '<div class="row"><div class="col-md-12">';
             $fields .= '<div class="main-clone-button pull-left">';
-            $fields .= Form::button(pick_trans('buttons.clone'), ['class'=>'btn btn-xs btn-blue clone']);
+            $fields .= '<button type="button" class="btn btn-xs btn-blue clone">複製</button>';
             $fields .= '</div>';
             $fields .= '<div class="main-clone-button pull-left">';
-            $fields .= Form::button(pick_trans('buttons.delete'), ['class'=>'btn btn-xs btn-danger delete']);
+            $fields .= '<button type="button" class="btn btn-xs btn-danger delete">刪除</button>';
             $fields .= '</div>';
             $fields .= '</div></div><div class="clearfix visible-xs-block"></div><hr></div>';
         }

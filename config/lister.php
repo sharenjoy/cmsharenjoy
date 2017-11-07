@@ -50,6 +50,7 @@ return [
     */
    
     'loadListsNamespace' => [
+        'App\Services\Lister\Lists\\',
         'Sharenjoy\Cmsharenjoy\Service\Lister\Lists\\',
     ],
 
@@ -63,7 +64,22 @@ return [
     */
    
     'loadFunctionsNamespace' => [
+        'App\Services\Lister\Functions\\',
         'Sharenjoy\Cmsharenjoy\Service\Lister\Functions\\',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | The templates
+    |--------------------------------------------------------------------------
+    |
+    | This is where the templates be loaded.
+    |
+    */
+   
+    'loadTemplatesNamespace' => [
+        'App\Services\Lister\Templates\\',
+        'Sharenjoy\Cmsharenjoy\Service\Lister\Templates\\',
     ],
 
     /*

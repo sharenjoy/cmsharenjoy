@@ -2,7 +2,7 @@
 
 namespace Sharenjoy\Cmsharenjoy\Service\Lister;
 
-use Config;
+use Config, Exception;
 use Sharenjoy\Cmsharenjoy\Service\Lister\Templates\GridTemplate;
 use Sharenjoy\Cmsharenjoy\Service\Lister\Templates\DefaultTemplate;
 
@@ -27,6 +27,14 @@ class Lister extends ListerAbstract implements ListerInterface
                 $config = Config::get('lister.grid');
                 $template = new GridTemplate();
                 break;
+            default:
+                $config = Config::get('lister.'.$lister);
+                
+                if (! $config) {
+                    throw new Exception('There is no '.$lister.' driver setting in the lister config.');
+                }
+
+                $template = $this->getTemplate($lister);
         }
 
         $data = [
@@ -37,6 +45,23 @@ class Lister extends ListerAbstract implements ListerInterface
         ];
 
         return $template->make($data);
+    }
+
+    protected function getTemplate($driver)
+    {
+        $templatesNamespace = Config::get('lister.loadTemplatesNamespace');
+
+        foreach ($templatesNamespace as $namespace)
+        {
+            $templateName  = ucfirst($driver).'Template';
+            $className = $namespace.$templateName;
+
+            if (class_exists($className)) {
+                return (new $className());
+            }
+        }
+
+        throw new \InvalidArgumentException("It doesn't have any '{$templateName}' class exists");
     }
 
 }

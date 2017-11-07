@@ -42,14 +42,14 @@ class Transformer
                 }
 
                 return $model[$value];
-            } else {
-                if (method_exists($model, 'getReflection')) {
-                    return $model->getReflection()->getShortName().'-'.$model->id;
-                }
-
-                return get_class($model).'-'.$model->id;
             }
         }
+
+        if (method_exists($model, 'getReflection')) {
+            return $model->getReflection()->getShortName().'-'.$model->id;
+        }
+
+        return get_class($model).'-'.$model->id;
 
         throw new \Exception("It doesn't match the variable of 'title'.");
     }
