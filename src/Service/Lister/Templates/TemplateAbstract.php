@@ -102,7 +102,7 @@ abstract class TemplateAbstract {
             if ($value === true) return $value;
         });
         
-        return (count($rulesCount)+1) * 50 .'px';
+        return (count($rulesCount)+1) * 35 .'px';
 
     }
 

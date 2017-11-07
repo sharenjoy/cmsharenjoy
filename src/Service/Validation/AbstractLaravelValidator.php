@@ -123,14 +123,20 @@ abstract class AbstractLaravelValidator implements ValidableInterface
         $id     = $id ?: $this->uniqueId;
         $unique = $unique ?: $this->unique;
 
-        if (count($unique) && $id != null)
-        {
-            foreach ($unique as $field)
-            {
-                if (isset($this->rules[$field]))
-                {
-                    $rules = $this->rules;
-                    $this->rules[$field] = $rules[$field].','.$id;
+        if (count($unique) && $id != null) {
+            foreach ($unique as $field) {
+                if (isset($this->rules[$field])) {
+                    if (is_array($this->rules[$field])) {
+                        foreach ($this->rules[$field] as $key => $ruleValue) {
+                            if (is_string($ruleValue) && strstr($ruleValue, 'unique:')) {
+                                $this->rules[$field][$key] = $ruleValue.','.$id;
+                                break;
+                            }
+                        }
+                    } else {
+                        $rules = $this->rules;
+                        $this->rules[$field] = $rules[$field].','.$id;
+                    }
                 }
             }
         }

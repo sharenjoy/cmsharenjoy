@@ -5,7 +5,7 @@ namespace Sharenjoy\Cmsharenjoy\Core\Scopes;
 use Request;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\ScopeInterface;
+use Illuminate\Database\Eloquent\Scope as ScopeInterface;
 
 class ContentLanguageScope implements ScopeInterface {
     

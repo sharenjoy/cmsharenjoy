@@ -36,7 +36,7 @@ trait CommonModelTrait {
 
         $input = $this->setTranslatableFields($input);
 
-        self::$inputData = $input;
+        self::$inputData = array_merge(self::$inputData, $input);
     }
 
     public function getInput()
