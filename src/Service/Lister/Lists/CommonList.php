@@ -16,7 +16,11 @@ class CommonList extends ListAbstract implements ListInterface {
                     $content .= '-';
                 }
             } else {
-                $content .= $item[$column];
+                if ($item[$column]) {
+                    $content .= $item[$column];
+                } else {
+                    $content .= '-';
+                }
             }
         }
 

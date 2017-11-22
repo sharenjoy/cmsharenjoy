@@ -106,7 +106,7 @@ class GridTemplate extends TemplateAbstract implements TemplateInterface
         $content .= Form::open(['method'=>'get', 'role'=>'form', 'id'=>'pagination_count_form']);
         $content .= Form::select(
                         'perPage', 
-                        ['10'=>'10', '15'=>'15', '20'=>'20', '30'=>'30', '50'=>'50'],
+                        ['10'=>'10', '15'=>'15', '20'=>'20', '30'=>'30', '50'=>'50', '100' => '100', '150' => '150'],
                         $this->data['data']['paginationCount'],
                         ['class'=>'form-control pagination_count', 'id'=>'pagination_count']);
 

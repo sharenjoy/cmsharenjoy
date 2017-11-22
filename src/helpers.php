@@ -597,7 +597,7 @@ if ( ! function_exists('img_resize'))
     /**
      * To resize the image
      */
-    function img_resize($filename, $width, $height)
+    function img_resize($filename, $width = null, $height = null)
     {
         $path = config('filer.path');
         $imagePath = public_path().$path.'/'.$filename;
@@ -606,16 +606,34 @@ if ( ! function_exists('img_resize'))
             return null;
         }
 
-        $imageInfo = pathinfo($filename);
-        $thumbPath = config('filer.thumbPath');
-        $targetFilename = "{$imageInfo['filename']}_{$width}x{$height}.{$imageInfo['extension']}";
-        $thumbImagePath = public_path().$thumbPath.'/'.$targetFilename;
+        list($oWidth, $oHeight) = getimagesize($imagePath);
 
-        if (! file_exists($thumbImagePath)) {
-            \Image::make($imagePath)->fit($width, $height)->save($thumbImagePath);
+        if ($width && $height) {
+            $thumbFolder = "{$width}x{$height}";
+        } elseif ($width && ! $height) {
+            $height = (string) round($oHeight / ($oWidth/$width));
+            $thumbFolder = "w_{$width}";
+        } elseif (! $width && $height) {
+            $width = (string) round($oWidth / ($oHeight/$height));
+            $thumbFolder = "h_{$height}";
+        }
+
+        // dd($width, $height);
+
+        $imageInfo = pathinfo($filename);
+        $thumbPath = config('filer.thumbPath')."/$thumbFolder";
+        $thumbImagePath = "{$thumbPath}/{$imageInfo['filename']}.{$imageInfo['extension']}";
+        $publicThumbImagePath = public_path().$thumbImagePath;
+
+        if (! is_dir(public_path().$thumbPath)) {
+            \File::makeDirectory(public_path().$thumbPath, $mode = 0777, true, true);
+        }
+
+        if (! file_exists($publicThumbImagePath)) {
+            \Image::make($imagePath)->fit($width, $height)->save($publicThumbImagePath);
         }
         
-        return asset($thumbPath.'/'.$targetFilename);
+        return $thumbImagePath;
     }
 }
 

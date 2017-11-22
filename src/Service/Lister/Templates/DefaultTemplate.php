@@ -89,7 +89,7 @@ class DefaultTemplate extends TemplateAbstract implements TemplateInterface {
         $content = '<div class="row"><div class="'.$this->data['config']['pagecount-div-class'].'"><div class="dataTables_info">';
         $content .= '<form method="GET" accept-charset="UTF-8" role="form" id="pagination_count_form">';
         $content .= '<select class="form-control pagination_count" id="pagination_count" name="perPage">';
-        foreach (['10', '15', '20', '30', '50'] as $value) {
+        foreach (['10', '15', '20', '30', '50', '100', '150'] as $value) {
             if ($this->data['data']['paginationCount'] == $value) {
                 $content .= '<option value="'.$value.'" selected="selected">'.$value.'</option>';
             } else {

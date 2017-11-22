@@ -3,14 +3,20 @@
 namespace Sharenjoy\Cmsharenjoy\Filer;
 
 use Event, Filer;
+use Sharenjoy\Cmsharenjoy\Filer\File;
 use Sharenjoy\Cmsharenjoy\Filer\Folder;
 use Sharenjoy\Cmsharenjoy\Utilities\Transformer;
 
 trait AlbumTrait
 {
-    public function album()
+    public function folder()
     {
         return $this->belongsTo(Folder::class, 'album_id');
+    }
+
+    public function album()
+    {
+        return $this->hasMany(File::class, 'folder_id', 'album_id')->orderBy('sort');
     }
 
     public function eventAlbum($key, $model)

@@ -94,7 +94,7 @@ class File extends Eloquent
      */
     public static function findByFolder($folder_id)
     {
-        return static::where('folder_id', $folder_id)->get();
+        return static::where('folder_id', $folder_id)->orderBy('sort')->get();
     }
 
     /**

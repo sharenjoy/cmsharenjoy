@@ -36,7 +36,7 @@ trait CommonModelTrait {
 
         $input = $this->setTranslatableFields($input);
 
-        self::$inputData = array_merge(self::$inputData, $input);
+        self::$inputData = $input;
     }
 
     public function getInput()
@@ -127,8 +127,8 @@ trait CommonModelTrait {
      */
     public function syncMorph($model, $morph)
     {
-        if ( ! isset(self::$inputData[$morph])) return;
-
+        if (! array_key_exists($morph, self::$inputData)) return;
+        
         if (empty(self::$inputData[$morph]))
         {
             return $model->$morph()->detach();
