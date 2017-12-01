@@ -29,7 +29,7 @@ class DashController extends BaseController
     {
         // App\Http\Traits\DashboardTrait
         $this->goDashboard();
-        
+
         return view('admin.unity.dashboard');
     }
 

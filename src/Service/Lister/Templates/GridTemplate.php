@@ -45,9 +45,9 @@ class GridTemplate extends TemplateAbstract implements TemplateInterface
         $content = '';
         foreach($this->data['items'] as $item)
         {
-            $content .= '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" id="'.$item['id'].'" style="height: 280px"><div class="panel panel-default panel-shadow" data-collapsed="0"><div class="panel-heading"><div class="panel-title list-fun-box">'.$this->combineFunctions($item).'</div>';
+            $content .= '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" id="'.$item['id'].'" style="height: 300px"><div class="panel panel-default panel-shadow" data-collapsed="0"><div class="panel-heading"><div class="panel-title list-fun-box">'.$this->combineFunctions($item).'</div>';
             $content .= '<div class="panel-options">'.$this->getItemStatusElement($item).'</div></div>';
-            $content .= '<div class="panel-body"><div class="scrollable" data-height="165" data-scroll-position="right" data-rail-color="#fff" data-rail-opacity=".9" data-rail-width="8" data-rail-radius="10" data-autohide="0">';
+            $content .= '<div class="panel-body"><div class="scrollable" data-height="185" data-scroll-position="right" data-rail-color="#fff" data-rail-opacity=".9" data-rail-width="8" data-rail-radius="10" data-autohide="0">';
 
             $content .= $this->getItemContentStatusElement($item);
 
@@ -84,14 +84,14 @@ class GridTemplate extends TemplateAbstract implements TemplateInterface
     protected function isItemStatusEnable($item)
     {
         if (! isset($item['status_id'])) {
-            throw new Exception('There is no status_id.');
+            throw new Exception('There is no status_id field.');
         }
 
         $play = false;
         if ($item['status_id'] == '1') {
             $play = true;
-            if (isset($item['start_at']) && isset($item['end_at'])) {
-                if (time() < $item['start_at']->timestamp || time() > $item['end_at']->timestamp) {
+            if (isset($item['started_at']) && isset($item['ended_at'])) {
+                if (time() < $item['started_at']->timestamp || time() > $item['ended_at']->timestamp) {
                     $play = false;
                 }
             }

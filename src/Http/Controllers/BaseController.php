@@ -3,8 +3,8 @@
 namespace Sharenjoy\Cmsharenjoy\Http\Controllers;
 
 use Route, Request, Theme;
-use Message, Setting, Auth;
 use Illuminate\Support\Str;
+use Message, Setting, Auth;
 use Illuminate\Routing\Controller;
 use Sharenjoy\Cmsharenjoy\User\User;
 use App\Http\Traits\AllRoadsLeadToRome;
