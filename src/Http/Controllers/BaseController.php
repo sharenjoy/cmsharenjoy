@@ -7,6 +7,7 @@ use Message, Setting, Auth;
 use Illuminate\Support\Str;
 use Illuminate\Routing\Controller;
 use Sharenjoy\Cmsharenjoy\User\User;
+use App\Http\Traits\AllRoadsLeadToRome;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Console\AppNamespaceDetectorTrait;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -16,7 +17,7 @@ use Sharenjoy\Cmsharenjoy\Exception\ViewNotFoundException;
 
 abstract class BaseController extends Controller
 {
-    use DispatchesJobs, AppNamespaceDetectorTrait, ValidatesRequests, AuthorizesRequests, AuthorizesResources;
+    use DispatchesJobs, AppNamespaceDetectorTrait, ValidatesRequests, AuthorizesRequests, AuthorizesResources, AllRoadsLeadToRome;
     
     /**
      * The URL segment that can be used to access the system
@@ -118,6 +119,9 @@ abstract class BaseController extends Controller
         $this->setContentLanguage();
         $this->parseMenuItems();
         $this->setSettings();
+        
+        // App\Http\Traits\AllRoadsLeadToRome
+        $this->goRome();
     }
 
     protected function setCommonVariable()

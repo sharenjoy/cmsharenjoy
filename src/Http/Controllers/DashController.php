@@ -2,12 +2,15 @@
 
 namespace Sharenjoy\Cmsharenjoy\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Sharenjoy\Cmsharenjoy\User\UserInterface;
 use Auth, Message, Session;
+use Illuminate\Http\Request;
+use App\Http\Traits\DashboardTrait;
+use Sharenjoy\Cmsharenjoy\User\UserInterface;
 
 class DashController extends BaseController
 {
+    use DashboardTrait;
+
     public function __construct()
     {
         parent::__construct();
@@ -24,6 +27,9 @@ class DashController extends BaseController
      */
     public function getIndex()
     {
+        // App\Http\Traits\DashboardTrait
+        $this->goDashboard();
+        
         return view('admin.unity.dashboard');
     }
 
