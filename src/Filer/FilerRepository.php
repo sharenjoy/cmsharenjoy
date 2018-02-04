@@ -1151,6 +1151,15 @@ class FilerRepository implements FilerInterface {
         if ($file->type == 'i')
         {
             @unlink($this->thumbPath.'/'.$file->filename.'.'.$file->extension);
+
+            $directories = \Storage::directories(config('filer.thumbPath'));
+            
+            foreach ($directories as $directory) {
+                $filepath = public_path($directory.'/'.$file->filename.'.'.$file->extension);
+                if (file_exists($filepath)) {
+                    @unlink($filepath);
+                }
+            }
         }
 
         return true;

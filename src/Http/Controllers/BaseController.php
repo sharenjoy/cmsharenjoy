@@ -192,8 +192,8 @@ class BaseController extends Controller
 
     protected function setContentLanguage()
     {
-        if (! session()->has('cmsharenjoy.language') && ! is_null(config('cmsharenjoy.language_default'))) {
-            session()->put('cmsharenjoy.language', config('cmsharenjoy.language_default'));
+        if (! session()->has('cmsharenjoy.language')) {
+            session()->put('cmsharenjoy.language', config('cmsharenjoy.backend_default_locale'));
         }
     }
 

@@ -124,7 +124,7 @@ if ( ! function_exists('current_backend_language'))
 {
     function current_backend_language()
     {
-        if (session()->has('cmsharenjoy.language') && !is_null(config('cmsharenjoy.language_default'))) {
+        if (session()->has('cmsharenjoy.language')) {
             return session('cmsharenjoy.language');
         }
 
@@ -141,15 +141,13 @@ if ( ! function_exists('current_language'))
         if ($whichEnd == 'backEnd') {
             return current_backend_language();
         } elseif ($whichEnd == 'frontEnd') {
-            if (config('cmsharenjoy.language_default')) {
-                $language = config('cmsharenjoy.language_default');
+            $language = app()->getLocale();
 
-                if (array_key_exists(strtolower(Request::segment(1)), config('cmsharenjoy.language'))) {
-                    $language = strtolower(Request::segment(1));
-                }
-
-                return $language;
+            if (array_key_exists(strtolower(Request::segment(1)), config('cmsharenjoy.language'))) {
+                $language = strtolower(Request::segment(1));
             }
+
+            return $language;
         }
 
         return null;
@@ -617,8 +615,6 @@ if ( ! function_exists('img_resize'))
             $width = (string) round($oWidth / ($oHeight/$height));
             $thumbFolder = "h_{$height}";
         }
-
-        // dd($width, $height);
 
         $imageInfo = pathinfo($filename);
         $thumbPath = config('filer.thumbPath')."/$thumbFolder";

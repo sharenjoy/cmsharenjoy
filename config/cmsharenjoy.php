@@ -22,19 +22,19 @@ return [
      * The array of language
      */
     'locales' => [
-        'zh-TW' => '繁體中文',
+        'cht' => '繁體中文',
         // 'en'    => 'English',
         // 'zh-CN' => '簡體中文',
         // 'ja'    => '日文',
     ],
 
     /**
-     * This is default language setting
+     * The default backend locale
      */
-    'language_default' => env('APP_LANGUAGE_DEFAULT', null),
+    'backend_default_locale' => 'cht',
 
     'language' => [
-        'tw' => [
+        'cht' => [
             'icon'  => 'flag-tw.png',
             'title' => '繁體中文',
         ],
@@ -47,6 +47,11 @@ return [
             'title' => '日本語',
         ],
     ],
+
+    /**
+     * This is for the database migration
+     */
+    'translatable' => true,
 
     /**
      * The path and size of logo

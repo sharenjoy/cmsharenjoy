@@ -48,6 +48,7 @@ Route::group(['middleware' => ['web']], function () use ($accessUrl) {
             Route::post('upload'                , 'Sharenjoy\Cmsharenjoy\Filer\FilerController@postUpload');
             Route::post('updatefile/{toWhere}'  , 'Sharenjoy\Cmsharenjoy\Filer\FilerController@postUpdatefile');
             Route::post('deletefile'            , 'Sharenjoy\Cmsharenjoy\Filer\FilerController@postDeletefile');
+            Route::post('deletefiles'           , 'Sharenjoy\Cmsharenjoy\Filer\FilerController@postDeletefiles');
             Route::post('deletefolder'          , 'Sharenjoy\Cmsharenjoy\Filer\FilerController@postDeletefolder');
             Route::post('find'                  , 'Sharenjoy\Cmsharenjoy\Filer\FilerController@postFind');
         });

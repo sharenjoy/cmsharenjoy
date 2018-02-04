@@ -448,6 +448,39 @@ EOE;
     }
 
     /**
+     * Delete multiple file
+     * @param  Request $request
+     * @return void
+     */
+    public function postDeletefiles(Request $request)
+    {
+        $multiResult = [
+            'status'  => null,
+            'message' => '',
+            'data'    => null
+        ];
+
+        $files = $request->input('files');
+
+        foreach ($files as $file) {
+            $id = $file['file_id'];
+            $name = $file['file_name'];
+
+            if ($id) {
+                $result = Filer::deleteFile($id);
+            }
+
+            if ($result['status']) {
+                $multiResult['status'] = true;
+                $multiResult['message'] .= $result['message'] . '<br />';
+                $multiResult['data'] = $result['data'];
+            }
+        }
+
+        return Response::json($multiResult, 200);        
+    }
+
+    /**
      * find for file
      */
     public function postFind(Request $request)
