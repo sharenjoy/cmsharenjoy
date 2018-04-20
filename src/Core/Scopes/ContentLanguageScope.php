@@ -23,8 +23,8 @@ class ContentLanguageScope implements ScopeInterface {
                 $builder->whereLanguage(session('cmsharenjoy.language'));
             }
         } else {
-            if (session()->has('content-language')) {
-                $builder->whereLanguage(session('content-language'));
+            if (session()->has('localeLanguage')) {
+                $builder->whereLanguage(session('localeLanguage'));
             }
         }
     }
