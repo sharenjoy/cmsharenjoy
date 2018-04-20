@@ -4,11 +4,14 @@ namespace Sharenjoy\Cmsharenjoy\Http\Controllers;
 
 use Message;
 use Illuminate\Http\Request;
+use App\Http\Traits\DashboardTrait;
 use Sharenjoy\Cmsharenjoy\User\UserInterface;
 use Sharenjoy\Cmsharenjoy\Http\Controllers\BaseController;
 
 class DashController extends BaseController
 {
+    use DashboardTrait;
+
     public function __construct()
     {
         $this->middleware('admin.auth',  ['only'=>['getIndex', 'getLogout']]);
@@ -25,6 +28,9 @@ class DashController extends BaseController
      */
     public function getIndex()
     {
+        // App\Http\Traits\DashboardTrait
+        $this->goDashboard();
+        
         return view('admin.unity.dashboard');
     }
 
